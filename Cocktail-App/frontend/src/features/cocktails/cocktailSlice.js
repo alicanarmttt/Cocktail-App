@@ -44,10 +44,23 @@ export const cocktailSlice = createSlice({
   },
 });
 
+// === SELECTORS ===
 // Selector'ler: Depodan (store) veri okumak için kısa yollar
 // (Bunları React bileşenlerimizde (component) kullanacağız)
 export const selectAllCocktails = (state) => state.cocktails.data;
 export const getCocktailsStatus = (state) => state.cocktails.status;
 export const getCocktailsError = (state) => state.cocktails.error;
+
+/**
+ * @desc Select singe cocktail from the sotre by its ID.
+ * @param {object} state - The entire Redux state object
+ * @param {number} cocktail_id  -The ID of the cocktail to find
+ * @param {object | undefined } - The cocktail object, or undefined if not found.
+ */
+export const selectCocktailById = (state, cocktail_id) => {
+  return state.cocktails.data.find(
+    (cocktail) => cocktail.cocktail_id === cocktail_id
+  );
+};
 
 export default cocktailSlice.reducer;
