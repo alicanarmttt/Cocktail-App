@@ -2,7 +2,6 @@ const knexConfig = require("../../../knexfile.js").development; // Knex will sta
 
 const db = require("knex")(knexConfig); //db object is tool to speak with database.
 
-//Tüm kokteylleri veritabanından getiren fonksiyon.
 /**
  * @desc    Fetches all cocktails from the database.
  * @returns {Promise<Array>} An array of cocktail objects
