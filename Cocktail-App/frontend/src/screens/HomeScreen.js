@@ -12,8 +12,8 @@ import {
 import {
   fetchCocktails,
   selectAllCocktails,
-  getCocktailsError,
-  getCocktailsStatus,
+  getCocktailsListError,
+  getCocktailsListStatus,
 } from "../features/cocktails/cocktailSlice";
 
 /**
@@ -25,8 +25,8 @@ const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const cocktails = useSelector(selectAllCocktails);
-  const status = useSelector(getCocktailsStatus);
-  const error = useSelector(getCocktailsError);
+  const status = useSelector(getCocktailsListStatus);
+  const error = useSelector(getCocktailsListError);
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchCocktails());

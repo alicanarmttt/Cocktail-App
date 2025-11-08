@@ -15,52 +15,98 @@ export const fetchCocktails = createAsyncThunk(
   }
 );
 
+/**
+ * @desc    Fetches a SINGLE detailed cocktail (detail view) by its ID
+ * @name    cocktails/fetchCocktailById
+ * @param   {number} cocktailId - The ID of the cocktail to fetch
+ */
+export const fetchCocktailById = createAsyncThunk(
+  "cocktails/fetchCocktailById",
+  async (cocktail_id) => {
+    // '/api/cocktails/:id' rotası backend'de getCocktailById (JOIN'lu) modelini çağırır
+    const response = await axios.get(
+      `${BASE_API_URL}/api/cocktails/${cocktail_id}`
+    );
+    return response.data;
+  }
+);
+
 const initialState = {
-  data: [],
-  status: "idle", // 'idle' (boşta), 'loading', 'succeeded' (başarılı), 'failed' (hatalı)
-  error: null,
+  // Ana sayfadaki (HomeScreen) tüm kokteyllerin listesi için
+  list: {
+    data: [],
+    status: "idle", // 'idle', 'loading', 'succeeded', 'failed'
+    error: null,
+  },
+  // Detay sayfasındaki (CocktailDetailScreen) seçili tek kokteyl için
+  detail: {
+    data: null, // Başlangıçta seçili kokteyl yok
+    status: "idle",
+    error: null,
+  },
 };
 
 export const cocktailSlice = createSlice({
   name: "cocktails",
   initialState,
+
   // 'reducers', 'dispatch(doSomething())' gibi doğrudan (senkron) eylemler içindir.
-  reducers: {},
+  reducers: {
+    //Resets the detail state to idle when leaving the detail screen.
+    clearDetail: (state) => {
+      state.detail.data = null;
+      state.detail.status = "idle";
+      state.detail.error = null;
+    },
+  },
+
   // 'extraReducers', 'createAsyncThunk' gibi dış (asenkron) eylemleri dinler
   extraReducers: (builder) => {
     builder
+      // --- 'fetchCocktails' (Liste) Durumları ---
       .addCase(fetchCocktails.pending, (state) => {
-        state.status = "loading";
+        state.list.status = "loading";
         state.error = null;
       })
       .addCase(fetchCocktails.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.data = action.payload;
+        state.list.status = "succeeded";
+        state.list.data = action.payload;
       })
       .addCase(fetchCocktails.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message;
+        state.list.status = "failed";
+        state.list.error = action.error.message;
+      })
+
+      // --- 'fetchCocktailById' (Detay) Durumları ---
+      .addCase(fetchCocktailById.pending, (state) => {
+        state.detail.status = "loading";
+        state.detail.error = null;
+      })
+      .addCase(fetchCocktailById.fulfilled, (state, action) => {
+        state.detail.status = "succeeded";
+        state.detail.data = action.payload;
+      })
+      .addCase(fetchCocktailById.rejected, (state, action) => {
+        state.detail.status = "failed";
+        state.detail.error = action.error.message;
       });
   },
 });
 
+// --- Eylemleri (Actions) Dışa Aktar ---
+export const { clearDetail } = cocktailSlice.actions;
+
 // === SELECTORS ===
 // Selector'ler: Depodan (store) veri okumak için kısa yollar
 // (Bunları React bileşenlerimizde (component) kullanacağız)
-export const selectAllCocktails = (state) => state.cocktails.data;
-export const getCocktailsStatus = (state) => state.cocktails.status;
-export const getCocktailsError = (state) => state.cocktails.error;
+export const selectAllCocktails = (state) => state.cocktails.list.data;
+export const getCocktailsListStatus = (state) => state.cocktails.list.status;
+export const getCocktailsListError = (state) => state.cocktails.list.error;
 
-/**
- * @desc Select singe cocktail from the sotre by its ID.
- * @param {object} state - The entire Redux state object
- * @param {number} cocktail_id  -The ID of the cocktail to find
- * @param {object | undefined } - The cocktail object, or undefined if not found.
- */
-export const selectCocktailById = (state, cocktail_id) => {
-  return state.cocktails.data.find(
-    (cocktail) => cocktail.cocktail_id === cocktail_id
-  );
-};
+// Detay (CocktailDetailScreen) için (Yeni selector'ler)
+export const selectDetailedCocktail = (state) => state.cocktails.detail.data;
+export const getDetailedCocktailStatus = (state) =>
+  state.cocktails.detail.status;
+export const getDetailedCocktailError = (state) => state.cocktails.detail.error;
 
 export default cocktailSlice.reducer;

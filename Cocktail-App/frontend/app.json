@@ -13,7 +13,16 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSExceptionDomains": {
+            "192.168.1.191": {
+              "NSExceptionAllowsInsecureHTTPLoads": true,
+              "NSIncludesSubdomains": true
+            }
+          }
+        }
     },
     "android": {
       "adaptiveIcon": {
@@ -26,4 +35,4 @@
       "favicon": "./assets/favicon.png"
     }
   }
-}
+  }}

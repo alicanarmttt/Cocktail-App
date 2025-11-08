@@ -1,7 +1,20 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
-import { selectCocktailById } from "../features/cocktails/cocktailSlice";
+import { React, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import {
+  fetchCocktailById,
+  selectDetailedCocktail,
+  getDetailedCocktailStatus,
+  getDetailedCocktailError,
+  clearDetail,
+} from "../features/cocktails/cocktailSlice";
 
 /**
  * @desc    Tek bir kokteylin detaylarını gösterir.
@@ -9,93 +22,143 @@ import { selectCocktailById } from "../features/cocktails/cocktailSlice";
  */
 const CocktailDetailScreen = ({ route }) => {
   const { cocktailId } = route.params;
-  console.log("Alınan 'cocktailId':", cocktailId);
-  const cocktail = useSelector((state) =>
-    selectCocktailById(state, Number(cocktailId))
-  );
-  // --- HATA AYIKLAMA 3: Redux'tan Gelen Veriyi Log'la ---
-  console.log("Redux'tan bulunan 'cocktail' objesi:", cocktail);
-  console.log("-----------------------------------------");
-  // -----------------------------------------------------
-  if (!cocktail) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Cocktail not found!</Text>
-      </View>
-    );
-  }
+  const dispatch = useDispatch();
 
-  return (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Tarif Detay Ekranı</Text>
-        <Image
-          source={{ url: cocktail.image_url }}
-          style={styles.image}
-          resizeMode="cover"
-        ></Image>
+  const cocktail = useSelector(selectDetailedCocktail);
+  const status = useSelector(getDetailedCocktailStatus);
+  const error = useSelector(getDetailedCocktailError);
+
+  // 3. Adım: Ekran yüklendiğinde (veya ID değiştiğinde) API isteğini tetikle
+  useEffect(() => {
+    // DÜZELTME: 'if (cocktailId)' kontrolü, ID '0' (sıfır) olduğunda
+    // 'false' (yanlış) döner ve API isteğini engeller.
+    // '0' sayısının geçerli bir ID olduğunu kontrol etmeliyiz.
+    if (cocktailId !== undefined && cocktailId !== null) {
+      dispatch(fetchCocktailById(cocktailId));
+    }
+
+    // 4. Adım (Cleanup): Ekran kapandığında (unmount) 'detail' state'ini temizle.
+    return () => {
+      dispatch(clearDetail());
+    };
+  }, [cocktailId, dispatch]); // Bu 'effect', ID değiştiğinde tekrar çalışır
+
+  // 5. Adım: Duruma göre içeriği render et
+  let content;
+  if (status === "loading" || status === "idle") {
+    // 'idle' durumunda da 'loading' gösteriyoruz, çünkü 'fetch' hemen başlayacak
+    content = <ActivityIndicator size="large" color="#f4511e" />;
+  } else if (status === "failed") {
+    content = <Text style={styles.errorText}>{error}</Text>;
+  } else if (status === "succeeded" && cocktail) {
+    // BAŞARILI: 'cocktail' objesi (içindeki 'ingredients' dizisiyle) elimizde!
+    content = (
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Resim */}
+        <Image source={{ uri: cocktail.image_url }} style={styles.image} />
+
+        {/* Başlık (Navigator'dan geliyor ama istersek buraya da koyabiliriz) */}
         <Text style={styles.title}>{cocktail.name}</Text>
 
-        {/* Tarihi Notlar */}
-        {cocktail.history_notes && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Tarihi:</Text>
-            <Text style={styles.sectionContent}>{cocktail.history_notes}</Text>
-          </View>
-        )}
-        {/* Hazırlanışı */}
-        {/* Hazırlanışı */}
+        {/* Bölüm: Malzemeler (Planımızın ana hedefi) */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Hazırlanışı:</Text>
-          <Text style={styles.sectionContent}>{cocktail.instructions}</Text>
+          <Text style={styles.sectionTitle}>Ingredients (Malzemeler)</Text>
+          {cocktail.ingredients.map((ing) => (
+            <View key={ing.name} style={styles.ingredientItem}>
+              {/* Renkli nokta (Önem seviyesine göre) */}
+              <View
+                style={[
+                  styles.colorDot,
+                  { backgroundColor: ing.color_code || "#ccc" },
+                ]}
+              />
+
+              <Text style={styles.ingredientText}>
+                {/* Örn: "50 ml Beyaz Rom (Kesin Şart)" */}
+                {ing.amount} {ing.name} ({ing.level_name})
+              </Text>
+            </View>
+          ))}
         </View>
-      </View>
-    </ScrollView>
-  );
+
+        {/* Bölüm: Hazırlanışı */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Instructions (Hazırlanışı)</Text>
+          <Text style={styles.text}>{cocktail.instructions}</Text>
+        </View>
+
+        {/* Bölüm: Tarihi */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>History & Notes</Text>
+          <Text style={styles.text}>{cocktail.history_notes}</Text>
+        </View>
+      </ScrollView>
+    );
+  } else if (!cocktail) {
+    // (Bu, 'succeeded' olmasına rağmen 'cocktail'in 'null' olduğu
+    // veya API'den boş döndüğü bir kenar durumdur)
+    content = <Text style={styles.errorText}>Cocktail not found!</Text>;
+  }
+
+  return <View style={styles.container}>{content}</View>;
 };
 
-// === Stil Dosyaları ===
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   container: {
     flex: 1,
     alignItems: "center",
-    paddingVertical: 20, // Üstten ve alttan boşluk
-    paddingHorizontal: 15, // Yanlardan boşluk
+    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  scrollContainer: {
+    paddingBottom: 30, // Kaydırmanın en altta bitmesi için
   },
   image: {
     width: "100%",
     height: 300,
-    borderRadius: 10,
-    marginBottom: 20,
+    resizeMode: "cover", // Resmi kaplayacak şekilde ayarla
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 20,
+    margin: 15,
     textAlign: "center",
   },
   section: {
-    width: "100%", // Tüm genişliği kullan
-    marginBottom: 20,
+    width: "90%",
+    alignSelf: "center",
+    marginBottom: 15,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "600",
     marginBottom: 10,
-    color: "#f4511e", // Ana renk (header ile uyumlu)
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+    paddingBottom: 5,
   },
-  sectionContent: {
+  ingredientItem: {
+    flexDirection: "row", // Nokta ve metni yan yana koy
+    alignItems: "center",
+    marginVertical: 4,
+  },
+  colorDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  ingredientText: {
     fontSize: 16,
-    lineHeight: 24, // Okunabilirlik için satır yüksekliği
+    flexShrink: 1, // Uzun metinlerin sığması için
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 24, // Okunabilirlik için satır aralığı
   },
   errorText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "red",
-    textAlign: "center",
   },
 });
 
