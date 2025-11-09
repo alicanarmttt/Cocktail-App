@@ -45,6 +45,7 @@ const HomeScreen = ({ navigation }) => {
       <FlatList
         data={cocktails}
         keyExtractor={(item) => item.cocktail_id.toString()} // Her eleman için benzersiz ID
+        style={styles.list}
         renderItem={({ item }) => (
           <View style={styles.cocktailItem}>
             <Text style={styles.cocktailName}>
@@ -64,19 +65,34 @@ const HomeScreen = ({ navigation }) => {
       ></FlatList>
     );
   } else if (status === "failed") {
-    content = <Text style={styles.errorText}>{error}</Text>;
+    content = (
+      <View style={styles.centeredContainer}>
+        <Text style={styles.errorText}>{error}</Text>;
+      </View>
+    );
   }
 
   return <View style={styles.container}>{content}</View>;
 };
 
-// === Stil Dosyaları ===
+// === Stil Dosyaları (DÜZELTİLDİ v2) ===
 const styles = StyleSheet.create({
-  container: {
-    flex: 1, // Ekranı kapla
+  // Bu stil, SADECE 'loading' ve 'failed' durumları için kullanılır
+  // (Ortalamak için)
+  centeredContainer: {
+    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  // Bu stil, SADECE 'succeeded' (liste) durumu için kullanılır
+  // (Yayılmak için)
+  listContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  list: {
+    width: "100%", // Listenin tüm genişliği kaplamasını sağla
   },
   cocktailItem: {
     padding: 15,
@@ -85,7 +101,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     width: "90%",
-    alignSelf: "center", // FlatList içinde kendini ortalaması için
+    alignSelf: "center",
   },
   cocktailName: {
     fontSize: 18,
