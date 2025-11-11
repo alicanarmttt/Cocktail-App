@@ -6,7 +6,7 @@ exports.up = async function (knex) {
   // --- importance_levels (Önem Seviyeleri) ---
   await knex.schema.createTable("importance_levels", (table) => {
     table.increments("level_id").primary(); // 1, 2, 3...
-    table.string("level_name").notNullable(); // 'Kesin Şart', 'Az Önemli', 'Süsleme'
+    table.string("level_name").notNullable(); // 'Gerekli', 'Süsleme'
     table.string("color_code");
   });
 
@@ -99,11 +99,26 @@ exports.up = async function (knex) {
   });
 
   // --- recipe_alternatives (Tarife Özel Alternatifler) [PRO] ---
+  // GÜNCELLEME: Burası 'akıllı' versiyonla değiştirildi (Sizin öneriniz).
   await knex.schema.createTable("recipe_alternatives", (table) => {
     table.increments("alternative_id").primary();
-    table.text("alternative_recipe_test").notNullable();
 
-    // Hangi kokteyl için bu alternatif?
+    // GÜNCELLEME: 'alternative_recipe_text' (düz metin) sütunu kaldırıldı.
+    // table.text("alternative_recipe_text").notNullable();
+
+    // GÜNCELLEME: Yerine 'alternative_ingredient_id' (malzeme ID'si) eklendi.
+    // Bu, "Barmen'in Asistanı" ('Elimde Votka var') özelliğimiz için GEREKLİDİR.
+    table
+      .integer("alternative_ingredient_id")
+      .unsigned()
+      .notNullable()
+      .references("ingredient_id")
+      .inTable("ingredients");
+
+    // GÜNCELLEME: Alternatifin miktarı eklendi.
+    table.string("alternative_amount").notNullable(); // örn: "60 ml"
+
+    // Hangi kokteyl için bu alternatif? (Bu satırlar aynı kaldı)
     table
       .integer("cocktail_id")
       .unsigned()
@@ -112,13 +127,12 @@ exports.up = async function (knex) {
       .inTable("cocktails")
       .onDelete("CASCADE");
 
-    // Hangi malzeme yerine bu alternatif? (örn: Esmer Şeker)
+    // Hangi malzeme yerine bu alternatif? (Bu satırlar aynı kaldı)
     table
       .integer("original_ingredient_id")
       .unsigned()
       .references("ingredient_id")
-      .inTable("ingredients")
-      .onDelete("SET NULL");
+      .inTable("ingredients");
   });
 
   // --- barmens_corner_posts (Barmen Köşesi Gönderileri) [PRO] ---
