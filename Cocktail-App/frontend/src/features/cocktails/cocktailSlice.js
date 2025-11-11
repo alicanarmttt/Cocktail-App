@@ -109,4 +109,19 @@ export const getDetailedCocktailStatus = (state) =>
   state.cocktails.detail.status;
 export const getDetailedCocktailError = (state) => state.cocktails.detail.error;
 
+// YENİ EKLENEN FONKSİYON (HomeScreen'in Gösterge Alanı için)
+/**
+ * @desc    Selects a single cocktail from the LIST state by its ID.
+ * @param   {object} state - The entire Redux state object
+ * @param   {number} cocktailId - The ID of the cocktail to find
+ * @returns {object | undefined} - The cocktail object, or undefined if not found.
+ */
+export const selectCocktailById = (state, cocktailId) => {
+  // DİKKAT: 'state.cocktails.list.data' (LİSTE) içinden arıyoruz,
+  // 'detail.data' içinden değil.
+  return state.cocktails.list.data.find(
+    (cocktail) => cocktail.cocktail_id === cocktailId
+  );
+};
+
 export default cocktailSlice.reducer;

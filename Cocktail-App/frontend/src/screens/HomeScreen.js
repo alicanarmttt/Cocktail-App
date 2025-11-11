@@ -1,112 +1,252 @@
-import React, { useEffect } from "react";
+// GÜNCELLEME: 'useState' (seçili kokteyli tutmak için) eklendi
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   StyleSheet,
   Text,
   View,
   ActivityIndicator,
-  Button,
-  FlatList,
+  Image, // GÜNCELLEME: Kokteyl resmini göstermek için eklendi
+  Pressable, // GÜNCELLEME: 'Button' yerine 'Pressable' (daha şık buton)
 } from "react-native";
+// GÜNCELLEME: 'SafeAreaView' (çentik/kenar boşlukları için)
+// DOĞRU kütüphaneden ('react-native-safe-area-context') import edildi.
+import { SafeAreaView } from "react-native-safe-area-context";
+
+// GÜNCELLEME: Yeni kurduğumuz 'Picker' (Rulet) kütüphanesini import ediyoruz
+import { Picker } from "@react-native-picker/picker";
 
 import {
   fetchCocktails,
   selectAllCocktails,
   getCocktailsListError,
   getCocktailsListStatus,
-} from "../features/cocktails/cocktailSlice";
+  // GÜNCELLEME: Redux Store'dan ID'ye göre kokteyl bulmak için
+  // 'selectCocktailById' selector'ünü (bulucu) slice'ımızdan import ediyoruz.
+  selectCocktailById,
+} from "../features/cocktails/cocktailSlice.js";
 
 /**
- * @desc Uygulamanın ana ekranı. Kokteyl listesini gösterir.
- * @param "{object}" React navigation tarafından sağlanan otomatik props
+ * @desc    Uygulamanın ana ekranı. Üstte bir gösterge, altta bir "Rulet" (Picker) gösterir.
+ * @param {object} navigation - React Navigation tarafından sağlanır.
  */
-
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
-  const cocktails = useSelector(selectAllCocktails);
+  // 1. ADIM: Tüm kokteylleri Redux'tan çek (4 kokteylimiz)
+  const allCocktails = useSelector(selectAllCocktails);
   const status = useSelector(getCocktailsListStatus);
   const error = useSelector(getCocktailsListError);
+
+  // 2. ADIM: Rulette 'o an' hangisinin seçili olduğunu tutmak için lokal 'state'
+  // GÜNCELLEME: Başlangıç değeri 'null' (Boş) olarak ayarlandı.
+  const [selectedCocktailId, setSelectedCocktailId] = useState(null);
+
+  // 3. ADIM: API'den veriyi çek (Bu kod aynı kaldı)
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchCocktails());
     }
   }, [status, dispatch]);
 
-  let content;
-  if (status === "loading") {
-    content = (
-      <ActivityIndicator size="large" color="#f4511e"></ActivityIndicator>
-    );
-  } else if (status === "succeeded") {
-    // Gelen 'cocktails' dizisini (array) 'FlatList' ile ekrana basıyoruz
-    // 'FlatList', 'map()' fonksiyonunun optimize edilmiş halidir.
-    content = (
-      <FlatList
-        data={cocktails}
-        keyExtractor={(item) => item.cocktail_id.toString()} // Her eleman için benzersiz ID
-        style={styles.list}
-        renderItem={({ item }) => (
-          <View style={styles.cocktailItem}>
-            <Text style={styles.cocktailName}>
-              {item.name} (ID: {item.cocktail_id})
-            </Text>
-            <Button
-              title="See Recipe"
-              onPress={() => {
-                navigation.navigate("CocktailDetail", {
-                  cocktailId: item.cocktail_id,
-                });
-              }}
-              color="#f4511e"
-            ></Button>
-          </View>
-        )}
-      ></FlatList>
-    );
-  } else if (status === "failed") {
-    content = (
+  // 4. ADIM: 'Gösterge' alanı için seçili kokteylin tüm verisini bul
+  // GÜNCELLEME: 'useSelector'u, 'selectedCocktailId' değiştiğinde
+  // Store'dan doğru kokteyli bulmak için kullanıyoruz.
+  const selectedCocktail = useSelector((state) =>
+    selectCocktailById(state, selectedCocktailId)
+  );
+
+  // 5. ADIM: Duruma göre içeriği çiz
+
+  // Yükleniyor durumu (Sadece ilk yüklemede)
+  if (status === "loading" && allCocktails.length === 0) {
+    return (
       <View style={styles.centeredContainer}>
-        <Text style={styles.errorText}>{error}</Text>;
+        <ActivityIndicator size="large" color="#f4511e" />
       </View>
     );
   }
 
-  return <View style={styles.container}>{content}</View>;
+  // Hata durumu
+  if (status === "failed") {
+    return (
+      <View style={styles.centeredContainer}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
+  // Başarılı (succeeded) durumu
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* GÖSTERGE ALANI (Ekranın Üstü)
+          GÜNCELLEME: Bu alanı büyütmek için flex: 3 verdik
+      */}
+      <View style={styles.displayArea}>
+        {/* "Afilli Cümle" Eklendi */}
+        <Text style={styles.headerQuote}>"Sanat, bir kadehte gizlidir..."</Text>
+
+        {/* "Altın Çerçeve" Eklendi (İç içe View kullanarak) */}
+        <View style={styles.frameOuter}>
+          <View style={styles.frameInner}>
+            {
+              // GÜNCELLEME: Başlangıçta (ID 'null' iken) resim yerine
+              // "Bir Kokteyl Seçin" yazısı gösterilir.
+              selectedCocktail ? (
+                <Image
+                  source={{ uri: selectedCocktail.image_url }}
+                  style={styles.image}
+                  resizeMode="cover"
+                />
+              ) : (
+                <View style={styles.placeholderContainer}>
+                  <Text style={styles.placeholderText}>Bir Kokteyl Seçin</Text>
+                </View>
+              )
+            }
+          </View>
+        </View>
+
+        {/* GÜNCELLEME: 'Button' yerine 'Pressable' (Şık Buton) eklendi
+            Başlangıçta (ID 'null' iken) buton 'disabled' (pasif) olur.
+        */}
+        <Pressable
+          style={[
+            styles.prepareButton,
+            !selectedCocktail && styles.prepareButtonDisabled, // Pasifken soluk görün
+          ]}
+          disabled={!selectedCocktail}
+          onPress={() => {
+            navigation.navigate("CocktailDetail", {
+              cocktailId: selectedCocktail.cocktail_id,
+            });
+          }}
+        >
+          <Text style={styles.prepareButtonText}>Hazırla</Text>
+        </Pressable>
+      </View>
+
+      {/* RULET ALANI (Ekranın Altı)
+          GÜNCELLEME: Bu alanı küçültmek için flex: 2 verdik
+      */}
+      <View style={styles.pickerArea}>
+        <Picker
+          selectedValue={selectedCocktailId}
+          onValueChange={(itemValue) => setSelectedCocktailId(itemValue)}
+          style={styles.pickerStyle}
+          itemStyle={styles.pickerItemStyle} // iOS'taki yazı stili
+        >
+          {/* GÜNCELLEME: Başlangıç değeri (Placeholder) eklendi */}
+          <Picker.Item label="Bir Kokteyl Seçin..." value={null} />
+
+          {/* Redux'tan gelen 'allCocktails' dizisini dönüyoruz */}
+          {allCocktails.map((cocktail) => (
+            <Picker.Item
+              key={cocktail.cocktail_id}
+              label={cocktail.name}
+              value={cocktail.cocktail_id}
+            />
+          ))}
+        </Picker>
+      </View>
+    </SafeAreaView>
+  );
 };
 
-// === Stil Dosyaları (DÜZELTİLDİ v2) ===
+// === Stil Dosyaları (Yeniden Yapılandırıldı) ===
 const styles = StyleSheet.create({
-  // Bu stil, SADECE 'loading' ve 'failed' durumları için kullanılır
-  // (Ortalamak için)
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   centeredContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    justifyContent: "center",
     alignItems: "center",
+  },
+  // ÜST ALAN: Resim, Başlık, Buton
+  displayArea: {
+    flex: 3, // GÜNCELLEME: Ekranın üst kısmı büyütüldü (flex: 3)
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    width: "100%",
+  },
+  headerQuote: {
+    fontSize: 16,
+    fontStyle: "italic",
+    color: "#666",
+    marginBottom: 20,
+  },
+  // "Altın Çerçeve" Stilleri
+  frameOuter: {
+    padding: 10,
+    borderRadius: 15,
+    backgroundColor: "#FFD700", // Altın Rengi
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8,
+  },
+  frameInner: {
+    padding: 3,
+    backgroundColor: "black", // İç ince çerçeve
+    borderRadius: 5, // Çerçeveye uyumlu
+  },
+  image: {
+    width: 250, // GÜNCELLEME: Resim boyutu büyütüldü
+    height: 250,
+    borderRadius: 5, // İç çerçeveye uyumlu
+  },
+  placeholderContainer: {
+    width: 250,
+    height: 250,
+    borderRadius: 5,
+    backgroundColor: "#eee",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  placeholderText: {
+    fontSize: 18,
+    color: "#999",
+    fontWeight: "500",
+  },
+  // "Hazırla" Butonu Stilleri
+  prepareButton: {
+    marginTop: 25,
+    backgroundColor: "#f4511e",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25, // Tam yuvarlak kenarlar
+    shadowColor: "#f4511e",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  prepareButtonDisabled: {
+    backgroundColor: "#ccc",
+    shadowColor: "transparent",
+  },
+  prepareButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  // ALT ALAN: Rulet
+  pickerArea: {
+    flex: 2, // GÜNCELLEME: Ekranın alt kısmı (flex: 2)
+    width: "100%",
     justifyContent: "center",
   },
-  // Bu stil, SADECE 'succeeded' (liste) durumu için kullanılır
-  // (Yayılmak için)
-  listContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
+  pickerStyle: {
+    width: "100%",
   },
-  list: {
-    width: "100%", // Listenin tüm genişliği kaplamasını sağla
-  },
-  cocktailItem: {
-    padding: 15,
-    marginVertical: 8,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-    width: "90%",
-    alignSelf: "center",
-  },
-  cocktailName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
+  pickerItemStyle: {
+    color: "#000",
+    fontSize: 22, // Rulet yazı boyutu
   },
   errorText: {
     fontSize: 16,

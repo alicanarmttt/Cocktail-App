@@ -76,7 +76,7 @@ const CocktailDetailScreen = ({ route }) => {
             <Text style={styles.sectionTitle}>Ingredients (Malzemeler)</Text>
             {/* Ana listeden renkleri ve parantezleri kaldırdık (istediğiniz gibi) */}
             {cocktail.ingredients.map((ing) => (
-              <View key={ing.name} style={styles.ingredientItem}>
+              <View key={ing.requirement_id} style={styles.ingredientItem}>
                 <Text style={styles.ingredientText}>
                   {ing.amount} {ing.name}
                 </Text>
@@ -84,14 +84,13 @@ const CocktailDetailScreen = ({ route }) => {
             ))}
           </View>
 
-          {/* "Eksik Malzemem Var" Butonu */}
-          <View style={styles.buttonContainer}>
-            <Button
-              title="Eksik malzemem var"
-              onPress={() => setIsModalVisible(true)} // Modal'ı açar
-              color="#f4511e"
-            />
-          </View>
+          {/* GÜNCELLEME: Standart <Button> yerine <Pressable> kullanıldı */}
+          <Pressable
+            style={styles.prepareButton} // HomeScreen'deki stilin aynısı
+            onPress={() => setIsModalVisible(true)} // Modal'ı açar
+          >
+            <Text style={styles.prepareButtonText}>Eksik malzemem var</Text>
+          </Pressable>
 
           {/* Bölüm: Hazırlanışı */}
           <View style={styles.section}>
@@ -182,7 +181,7 @@ const CocktailDetailScreen = ({ route }) => {
               <View style={styles.modalButtonsContainer}>
                 {cocktail?.ingredients.map((ing) => (
                   <Pressable
-                    key={ing.ingredient_id}
+                    key={ing.requirement_id}
                     // GÜNCELLEME: Stil artık 'has_alternative' bayrağına göre dinamik
                     style={[
                       styles.ingredientButton,
@@ -293,6 +292,30 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 20,
   },
+  // "Hazırla" Butonu Stilleri
+  prepareButton: {
+    marginTop: 15,
+    marginBottom: 15,
+    backgroundColor: "#f4511e",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25, // Tam yuvarlak kenarlar
+    shadowColor: "#f4511e",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 5,
+    alignSelf: "center",
+  },
+  prepareButtonDisabled: {
+    backgroundColor: "#ccc",
+    shadowColor: "transparent",
+  },
+  prepareButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 
   // --- YENİ MODAL (POPUP) STİLLERİ ---
   modalOverlay: {
@@ -317,9 +340,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalTitle: {
-    fontSize: 18,
+    color: "white",
+    fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 15,
   },
 
   // GÜNCELLEME: Bilgilendirme (Legend) Kutusu

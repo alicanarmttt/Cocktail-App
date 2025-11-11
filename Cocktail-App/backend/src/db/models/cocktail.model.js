@@ -37,6 +37,7 @@ const getCocktailById = async (id) => {
     // GÜNCELLEME: 'select' kısmını 'has_alternative' bayrağını (flag) içerecek şekilde güncelledik.
     // 'knex.raw' kullanarak bir SQL 'CASE' (Durum) ifadesi yazıyoruz.
     .select(
+      "req.requirement_id",
       "ing.ingredient_id", // (Pro özelliğinde tıklama için ID'yi de alalım)
       "ing.name",
       "req.amount",
