@@ -123,42 +123,88 @@ const CocktailDetailScreen = ({ route }) => {
             <Pressable style={styles.modalContent}>
               <Text style={styles.modalTitle}>Eksik Malzemeyi seçin</Text>
 
-              {/* Renkler için bilgilendirme (Legend) kutusu */}
+              {/* GÜNCELLEME: Renkler için bilgilendirme (Legend) kutusu */}
               <View style={styles.legendContainer}>
+                <Text style={styles.legendTitle}>Malzeme Göstergesi:</Text>
+
                 <View style={styles.legendItem}>
-                  {/* GÜNCELLEME: Renkler artık 'seed' dosyamızdaki (backend) veriye göre 
-                      (geçici olarak) hard-code edildi. */}
                   <View
-                    style={[styles.legendDot, { backgroundColor: "#FF4136" }]}
+                    style={[
+                      styles.legendBox,
+                      { borderColor: "#FF4136", backgroundColor: "#ffffff" },
+                    ]}
                   />
-                  <Text style={styles.legendText}>Zorunlu</Text>
+                  <Text style={styles.legendText}>
+                    Gerekli (Alternatifi Yok)
+                  </Text>
                 </View>
+
                 <View style={styles.legendItem}>
+                  {/* (Renkler 'seed' dosyamızdaki ('Gerekli') ve ('Gold') ile eşleşmeli) */}
                   <View
-                    style={[styles.legendDot, { backgroundColor: "#FF851B" }]}
+                    style={[
+                      styles.legendBox,
+                      { borderColor: "#FF4136", backgroundColor: "#f1e6a2d3" },
+                    ]}
                   />
-                  <Text style={styles.legendText}>Alternatifi Gör (Pro)</Text>
+                  <Text style={styles.legendText}>
+                    Gerekli (Alternatifi Var - PRO)
+                  </Text>
                 </View>
+
                 <View style={styles.legendItem}>
                   <View
-                    style={[styles.legendDot, { backgroundColor: "#2ECC40" }]}
+                    style={[
+                      styles.legendBox,
+                      { borderColor: "#2ECC40", backgroundColor: "#ffffff" },
+                    ]}
                   />
-                  <Text style={styles.legendText}>İsteğe Bağlı</Text>
+                  <Text style={styles.legendText}>
+                    Süsleme (Alternatifi Yok)
+                  </Text>
+                </View>
+
+                <View style={styles.legendItem}>
+                  <View
+                    style={[
+                      styles.legendBox,
+                      { borderColor: "#2ECC40", backgroundColor: "#f1e6a2d3" },
+                    ]}
+                  />
+                  <Text style={styles.legendText}>
+                    Süsleme (Alternatifi Var - PRO)
+                  </Text>
                 </View>
               </View>
 
               {/* Malzeme Butonları */}
+              {/* Malzeme Butonları */}
               <View style={styles.modalButtonsContainer}>
                 {cocktail?.ingredients.map((ing) => (
                   <Pressable
-                    key={ing.name}
+                    key={ing.ingredient_id}
+                    // GÜNCELLEME: Stil artık 'has_alternative' bayrağına göre dinamik
                     style={[
                       styles.ingredientButton,
-                      // GÜNCELLEME: 'borderColor' (çerçeve rengi) artık 'ezilmiyor',
-                      // doğrudan backend'den gelen 'ing.color_code'u kullanıyor.
+                      // 1. Çerçeve Rengi = Önem (DB'den gelen Kırmızı/Yeşil)
                       { borderColor: ing.color_code || "#ccc" },
+
+                      // 2. Arka Plan Rengi = Alternatif Var mı? (Gold/Beyaz)
+                      // (API'den gelen 'has_alternative' bayrağını (1 veya 0) kontrol ediyoruz)
+                      {
+                        backgroundColor: ing.has_alternative
+                          ? "#f1e6a2d3"
+                          : "#ffffff",
+                      }, // Gold or White
                     ]}
-                    onPress={() => alert("PRO Sürüm Gerekli!")}
+                    onPress={() => {
+                      // (Daha sonra burayı Pro yönlendirmesiyle güncelleyeceğiz)
+                      if (ing.has_alternative) {
+                        alert(`PRO: ${ing.name} için alternatifleri göster!`);
+                      } else {
+                        alert("Bu malzeme için alternatif bulunmuyor.");
+                      }
+                    }}
                   >
                     <Text style={styles.ingredientButtonText}>{ing.name}</Text>
                   </Pressable>
@@ -184,7 +230,7 @@ const CocktailDetailScreen = ({ route }) => {
   );
 };
 
-// === Stil Dosyaları ===
+// === Stil Dosyaları (GÜNCELLENDİ) ===
 const styles = StyleSheet.create({
   // 'loading' veya 'failed' durumları için ortalanmış stil
   centeredContainer: {
@@ -276,7 +322,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  // Bilgilendirme (Legend) Kutusu
+  // GÜNCELLEME: Bilgilendirme (Legend) Kutusu
   legendContainer: {
     width: "100%",
     backgroundColor: "#f7f7f7",
@@ -284,16 +330,24 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
   },
+  legendTitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#333",
+  },
   legendItem: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 2,
   },
-  legendDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+  legendBox: {
+    // (Nokta yerine kutu)
+    width: 12,
+    height: 12,
+    borderRadius: 3,
     marginRight: 8,
+    borderWidth: 2,
   },
   legendText: {
     fontSize: 12,
@@ -309,11 +363,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   ingredientButton: {
-    borderWidth: 2,
+    borderWidth: 2, // Çerçeve kalınlığı
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 12,
     margin: 4,
+    backgroundColor: "white", // Varsayılan arka plan
   },
   ingredientButtonText: {
     fontSize: 14,
@@ -321,4 +376,5 @@ const styles = StyleSheet.create({
     color: "#000",
   },
 });
+
 export default CocktailDetailScreen;

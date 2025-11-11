@@ -202,45 +202,6 @@ exports.seed = async function (knex) {
       alternative_amount: "1-2 Dilim",
     },
   ]);
-  // Yorum: 'recipe_alternatives' tablosunu dolduruyoruz.
-  // Bu, "akıllı" (ID'ye dayalı) şemamıza (migration) uygundur.
-  await knex("recipe_alternatives").insert([
-    // Rom -> Votka
-    {
-      cocktail_id: mojito.cocktail_id,
-      original_ingredient_id: rom.ingredient_id,
-      alternative_ingredient_id: votka.ingredient_id,
-      alternative_amount: "60 ml",
-    },
-    // Lime Suyu -> Limon Suyu
-    {
-      cocktail_id: mojito.cocktail_id,
-      original_ingredient_id: limeSuyu.ingredient_id,
-      alternative_ingredient_id: limonSuyu.ingredient_id,
-      alternative_amount: "30 ml",
-    },
-    // Esmer Şeker -> Toz Şeker
-    {
-      cocktail_id: mojito.cocktail_id,
-      original_ingredient_id: esmerSeker.ingredient_id,
-      alternative_ingredient_id: tozSeker.ingredient_id,
-      alternative_amount: "2 çay kaşığı",
-    },
-    // Soda -> Gazoz
-    {
-      cocktail_id: mojito.cocktail_id,
-      original_ingredient_id: soda.ingredient_id,
-      alternative_ingredient_id: gazoz.ingredient_id,
-      alternative_amount: "Üzerini tamamlayacak kadar",
-    },
-    // Lime Dilimi -> Limon Dilimi
-    {
-      cocktail_id: mojito.cocktail_id,
-      original_ingredient_id: limeDilimi.ingredient_id,
-      alternative_ingredient_id: limonDilimi.ingredient_id,
-      alternative_amount: "1-2 Dilim",
-    },
-  ]);
 
   // Yorum: Test kullanıcılarını ekle (Pro/Free)
   await knex("users").insert([
