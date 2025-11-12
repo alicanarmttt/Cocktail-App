@@ -1,22 +1,22 @@
-🍹 Cocktail-App (Full-Stack Mobil Proje)
+<h1>🍹 Cocktail-App (Full-Stack Mobil Proje)</h1>
 
 Bu proje, React Native (Expo) ve Node.js (Express, Knex, MSSQL) kullanarak geliştirilmiş, tam donanımlı (full-stack) bir mobil kokteyl tarifi uygulamasıdır.
 
-Bu depo, hem Frontend (mobil uygulama) hem de Backend (API sunucusu) kodunu içeren bir Monorepo (tek depo) yapısında organize edilmiştir.
-
-
-
+Bu depo, hem Frontend (mobil uygulama) hem de Backend (API sunucusu) kodunu içeren bir Monorepo (tek depo) yapısında organize edilmiştir. <br><br>
+<img src="/Cocktail-App/docs/HomeScreen.jpg" alt="Kokteyl Uygulaması Ekran Görüntüsü" width="200" />
+<img src="/Cocktail-App/docs/CocktailDetailScreen.jpg" alt="Kokteyl Detay Sayfası" width="200" />
+<img src="/Cocktail-App/docs/CocktailDetailModal.jpg" alt="Kokteyl Detay Sayfası Modal" width="200" />
+<br><br>
 🎯 Temel Amaç
 
 Bu uygulamanın amacı, kokteyl meraklılarına temiz bir arayüzle tarifler sunmak ve "Pro" özellikler (alternatif malzeme önerileri, eldeki malzemelerle filtreleme) için bir temel oluşturmaktır.
 
-
-
 Proje, modern mobil uygulama geliştirme pratiklerini (Monorepo mimarisi, Sorumlulukların Ayrılması, İlişkisel Veritabanı Tasarımı, Global State Yönetimi) göstermek amacıyla geliştirilmektedir.
 
+<br><br>
 
+<h2>🛠️ Kullanılan Teknolojiler (Tech Stack)</h2>
 
-🛠️ Kullanılan Teknolojiler (Tech Stack)
 
 Backend (API Sunucusu - /backend)
 
@@ -43,12 +43,14 @@ React Navigation (Stack ve Tab Navigasyon Mimarisi)
 @react-native-picker/picker (Native "Rulet" Seçici Bileşeni)
 
 Axios (HTTP İstemcisi)
+<br><br>
 
-🚀 Yerel (Local) Kurulum ve Çalıştırma
+<h2>🚀 Yerel (Local) Kurulum ve Çalıştırma</h2>
 
 Bu projeyi yerel makinenizde çalıştırmak için:
 
-1. Backend (Sunucu) Kurulumu
+
+<h3>1. Backend (Sunucu) Kurulumu</h3>
 
 Depoyu klonlayın ve backend klasörüne gidin:
 
@@ -59,7 +61,6 @@ cd Cocktail-App/backend
 Gerekli paketleri kurun:
 
 npm install
-
 
 .env dosyasını oluşturun:
 
@@ -75,7 +76,7 @@ Veritabanı Şemasını (Tabloları) Yükleyin:
 
 npx knex migrate:latest
 
-
+<br><br>
 Test Verilerini (4 Kokteyl) Yükleyin:
 
 npx knex seed:run
@@ -88,17 +89,17 @@ npm run dev
 
 (Sunucu http://localhost:5000 adresinde çalışıyor olmalı.)
 
-2. Frontend (Mobil Uygulama) Kurulumu
+<h3>2. Frontend (Mobil Uygulama) Kurulumu</h3>
 
 Yeni bir terminal açın ve frontend klasörüne gidin:
 
 cd ../frontend 
 
+<br><br>
 
-Gerekli paketleri kurun:
+<h3>Gerekli paketleri kurun:</h3>
 
 npm install
-
 
 .env dosyasını oluşturun:
 
