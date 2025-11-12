@@ -1,4 +1,4 @@
-🍹 Cocktail-App (Full-Stack Mobil Proje)
+<h1>🍹 Cocktail-App (Full-Stack Mobil Proje)</h1>
 
 Bu proje, React Native (Expo) ve Node.js (Express, Knex, MSSQL) kullanarak geliştirilmiş, tam donanımlı (full-stack) bir mobil kokteyl tarifi uygulamasıdır.
 
@@ -15,7 +15,8 @@ Proje, modern mobil uygulama geliştirme pratiklerini (Monorepo mimarisi, Soruml
 
 <br><br>
 
-🛠️ Kullanılan Teknolojiler (Tech Stack)
+<h2>🛠️ Kullanılan Teknolojiler (Tech Stack)</h2>
+
 
 Backend (API Sunucusu - /backend)
 
@@ -44,11 +45,12 @@ React Navigation (Stack ve Tab Navigasyon Mimarisi)
 Axios (HTTP İstemcisi)
 <br><br>
 
-🚀 Yerel (Local) Kurulum ve Çalıştırma
+<h2>🚀 Yerel (Local) Kurulum ve Çalıştırma</h2>
 
 Bu projeyi yerel makinenizde çalıştırmak için:
 
-1. Backend (Sunucu) Kurulumu
+
+<h3>1. Backend (Sunucu) Kurulumu</h3>
 
 Depoyu klonlayın ve backend klasörüne gidin:
 
@@ -87,14 +89,15 @@ npm run dev
 
 (Sunucu http://localhost:5000 adresinde çalışıyor olmalı.)
 
-2. Frontend (Mobil Uygulama) Kurulumu
+<h3>2. Frontend (Mobil Uygulama) Kurulumu</h3>
 
 Yeni bir terminal açın ve frontend klasörüne gidin:
 
 cd ../frontend 
 
 <br><br>
-Gerekli paketleri kurun:
+
+<h3>Gerekli paketleri kurun:</h3>
 
 npm install
 
