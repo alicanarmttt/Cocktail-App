@@ -18,11 +18,19 @@ app.use(express.json());
 // Kokteyl rotalarını (src/api/cocktails.js) içe aktar
 const cocktailRoutes = require("./src/api/cocktails");
 
+const ingredientRoutes = require("./src/api/ingredients");
+
 /**
  * @desc Ana Rota Yönlendiricisi (Main App Router)
  * '/api/cocktails' ile başlayan tüm istekleri 'cocktailRoutes' dosyasına yönlendirir.
  */
 app.use("/api/cocktails", cocktailRoutes);
+
+/**
+ * @desc Ana Rota Yönlendiricisi (Main App Router)
+ * '/api/ingredients' ile başlayan tüm istekleri 'ingredientRoutes' dosyasına yönlendirir.
+ */
+app.use("/api/ingredients", ingredientRoutes);
 
 // Sunucunun ayakta olup olmadığını test etmek için kök rota
 app.get("/", (req, res) => {
