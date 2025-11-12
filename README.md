@@ -3,18 +3,17 @@
 Bu proje, React Native (Expo) ve Node.js (Express, Knex, MSSQL) kullanarak geliştirilmiş, tam donanımlı (full-stack) bir mobil kokteyl tarifi uygulamasıdır.
 
 Bu depo, hem Frontend (mobil uygulama) hem de Backend (API sunucusu) kodunu içeren bir Monorepo (tek depo) yapısında organize edilmiştir.
-
-
+<img src="docs/HomeScreen.jpg" alt="Kokteyl Uygulaması Ekran Görüntüsü" width="300" />
 
 🎯 Temel Amaç
 
 Bu uygulamanın amacı, kokteyl meraklılarına temiz bir arayüzle tarifler sunmak ve "Pro" özellikler (alternatif malzeme önerileri, eldeki malzemelerle filtreleme) için bir temel oluşturmaktır.
 
-
-
 Proje, modern mobil uygulama geliştirme pratiklerini (Monorepo mimarisi, Sorumlulukların Ayrılması, İlişkisel Veritabanı Tasarımı, Global State Yönetimi) göstermek amacıyla geliştirilmektedir.
 
+<img src="docs/CocktailDetailScreen.jpg" alt="Kokteyl Detay Sayfası" width="300" />
 
+<img src="docs/CocktailDetailModal.jpg" alt="Kokteyl Detay Sayfası Modal" width="300" />
 
 🛠️ Kullanılan Teknolojiler (Tech Stack)
 
