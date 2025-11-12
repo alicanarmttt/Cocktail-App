@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_API_URL = process.env.EXPO_PUBLİC_API_URL;
+const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 /**
  * @desc    Fetches all ingredients (categorized) from the backend API.
@@ -32,7 +32,7 @@ export const ingredientSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.status = "succeeced";
+        state.status = "succeeded";
         state.data = action.payload;
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
