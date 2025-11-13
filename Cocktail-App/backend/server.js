@@ -20,6 +20,8 @@ const cocktailRoutes = require("./src/api/cocktails");
 
 const ingredientRoutes = require("./src/api/ingredients");
 
+const barmenRoutes = require("./src/api/barmen");
+
 /**
  * @desc Ana Rota Yönlendiricisi (Main App Router)
  * '/api/cocktails' ile başlayan tüm istekleri 'cocktailRoutes' dosyasına yönlendirir.
@@ -31,6 +33,12 @@ app.use("/api/cocktails", cocktailRoutes);
  * '/api/ingredients' ile başlayan tüm istekleri 'ingredientRoutes' dosyasına yönlendirir.
  */
 app.use("/api/ingredients", ingredientRoutes);
+
+/**
+ * @desc Ana Rota Yönlendiricisi (Main App Router)
+ * '/api/barmen' ile başlayan tüm istekleri 'barmenRoutes' dosyasına yönlendirir.
+ */
+app.use("/api/barmen", barmenRoutes);
 
 // Sunucunun ayakta olup olmadığını test etmek için kök rota
 app.get("/", (req, res) => {
