@@ -16,6 +16,7 @@ import {
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   fetchIngredients,
@@ -24,19 +25,30 @@ import {
   getIngredientsError,
 } from "../features/ingredientSlice.js";
 
+import {
+  findRecipes,
+  getSearchStatus,
+  clearSearchResults,
+} from "../features/barmenSlice.js";
+
 /**
  * @desc    Barmen'in Asistanı Ekranı. (Pazar/Tezgah Mantığı)
  * Kullanıcının malzemeleri arayıp "Tezgah"a eklemesini sağlar.
  */
 const AssistantScreen = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation(); // YENİ EKLENDİ: Ekranlar arası geçiş için
 
   const [searchText, setSearchText] = useState("");
-  const [tezgahItems, setTezgahItems] = useState([]);
+
+  const [tezgahItems, setTezgahItems] = useState([]); // YENİ EKLENDİ: (EKSİK 2) 'Sadece Yapabildiklerim' (strict) / 'Bunları İçerenler' (flexible) modu için
+  const [mode, setMode] = useState("strict");
 
   const allIngredients = useSelector(selectAllIngredients);
   const ingredientsStatus = useSelector(getIngredientsStatus);
   const ingredientsError = useSelector(getIngredientsError);
+  // YENİ EKLENDİ: 'findRecipes' API isteğinin durumunu (loading, failed vb.) takip et
+  const searchStatus = useSelector(getSearchStatus);
 
   // Ekran ilk yüklendiğinde "Ana Pazar Listesi"ni (tüm malzemeleri) API'den çek
   useEffect(() => {
@@ -44,6 +56,15 @@ const AssistantScreen = () => {
       dispatch(fetchIngredients());
     }
   }, [ingredientsStatus, dispatch]);
+
+  // YENİ EKLENDİ: Bu ekrana geri dönüldüğünde (focus) eski arama sonuçlarını temizle
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      dispatch(clearSearchResults());
+    });
+
+    return unsubscribe;
+  }, [navigation, dispatch]);
 
   // === 3. "PAZAR" (Market) FİLTRELEME MANTIĞI ===
   const pazarList = useMemo(() => {
@@ -60,6 +81,24 @@ const AssistantScreen = () => {
       item.name.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [searchText, allIngredients, tezgahItems]); // Bu 3'ü değişince filtreyi yeniden hesapla
+
+  // YENİ EKLENDİ: (EKSİK 2) "Kokteylleri Göster" butonuna basıldığında çalışacak fonksiyon
+  const handleFindRecipes = async () => {
+    // Yükleniyorsa veya tezgah boşsa bir şey yapma
+    if (searchStatus === "loading" || tezgahItems.length === 0) return; // 1. Tezgahtaki objeleri (state) al: [{ingredient_id: 1}, {ingredient_id: 7}] // 2. Bunu bir ID dizisine (API'nin beklediği) dönüştür: [1, 7]
+
+    const inventoryIds = tezgahItems.map((item) => item.ingredient_id); // 3. Backend'e 'inventoryIds' ve 'mode' (strict/flexible) bilgilerini gönder
+
+    try {
+      // 'unwrap()' isteğin tamamlanmasını (fulfilled veya rejected) bekler
+      await dispatch(findRecipes({ inventoryIds, mode })).unwrap(); // 4. İstek başarılı (fulfilled) oldu, Redux state'i (searchResults) doldu. //    Şimdi yeni Sonuç Ekranı'na git. //    (Bu ekranı bir sonraki adımda oluşturacağız)
+
+      navigation.navigate("AssistantResults");
+    } catch (error) {
+      // İstek başarısız (rejected) oldu
+      console.error("Tarifler bulunamadı:", error); // (Burada kullanıcıya bir hata mesajı (örn: Toast) gösterebiliriz)
+    }
+  };
 
   // === 4. ETKİLEŞİM (Interaction) FONKSİYONLARI ===
 
@@ -135,7 +174,6 @@ const AssistantScreen = () => {
             )}
           </ScrollView>
         </View>
-
         {/* --- BÖLÜM 2: ARAMA ÇUBUĞU --- */}
         <View style={styles.searchContainer}>
           <Ionicons
@@ -151,7 +189,6 @@ const AssistantScreen = () => {
             onChangeText={setSearchText} // Harf girildikçe 'searchText' state'ini günceller
           />
         </View>
-
         {/* --- BÖLÜM 3: PAZAR (Tüm Malzemeler) --- */}
         {/* 'ScrollView', kategorili gösterim için 'FlatList'ten daha esnek olabilir,
             ancak 150+ malzeme için 'FlatList' daha performanslıdır.
@@ -171,20 +208,61 @@ const AssistantScreen = () => {
             </Pressable>
           ))}
         </ScrollView>
+        {/* --- BÖLÜM 4: FİLTRE MODU (Toggle) --- */}
+        <View style={styles.toggleContainer}>
+          <Pressable
+            style={[
+              styles.toggleButton,
+              mode === "strict" && styles.toggleActive,
+            ]}
+            onPress={() => setMode("strict")}
+          >
+            <Text
+              style={[
+                styles.toggleText,
+                mode === "strict" && styles.toggleTextActive,
+              ]}
+            >
+              Sadece Yapabildiklerim
+            </Text>
+          </Pressable>
 
-        {/* --- BÖLÜM 4: TARİF BUL BUTONU --- */}
+          <Pressable
+            style={[
+              styles.toggleButton,
+              mode === "flexible" && styles.toggleActive,
+            ]}
+            onPress={() => setMode("flexible")}
+          >
+            <Text
+              style={[
+                styles.toggleText,
+                mode === "flexible" && styles.toggleTextActive,
+                // DÜZELTME: Hata (stray '_') buradan kaldırıldı
+              ]}
+            >
+              Bunları İçerenler
+            </Text>
+          </Pressable>
+        </View>
+        {/* --- BÖLÜM 5: TARİF BUL BUTONU --- */}
         <View style={styles.footer}>
           <Pressable
             style={[
-              styles.prepareButton,
-              tezgahItems.length === 0 && styles.prepareButtonDisabled, // Tezgah boşsa butonu pasif yap
+              styles.prepareButton, // Tezgah boşsa VEYA API isteği yükleniyorsa butonu pasif yap
+              (tezgahItems.length === 0 || searchStatus === "loading") &&
+                styles.prepareButtonDisabled,
             ]}
-            disabled={tezgahItems.length === 0}
-            // (İleride buraya 'onPress' ile sonuçları getirme mantığı eklenecek)
+            disabled={tezgahItems.length === 0 || searchStatus === "loading"} // YENİ: onPress fonksiyonunu bağla
+            onPress={handleFindRecipes}
           >
-            <Text style={styles.prepareButtonText}>
-              {tezgahItems.length} Malzeme ile Kokteylleri Göster
-            </Text>
+            {searchStatus === "loading" ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.prepareButtonText}>
+                {tezgahItems.length} Malzeme ile Kokteylleri Göster
+              </Text>
+            )}
           </Pressable>
         </View>
       </SafeAreaView>
@@ -280,6 +358,36 @@ const styles = StyleSheet.create({
     color: "gray",
     marginHorizontal: 10,
   },
+
+  // YENİ EKLENDİ: Toggle (Strict/Flexible) Buton Stilleri
+  toggleContainer: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    padding: 10,
+    justifyContent: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  toggleButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: "center",
+    borderRadius: 8,
+    backgroundColor: "#f0f0f0",
+    marginHorizontal: 5,
+  },
+  toggleActive: {
+    backgroundColor: "#007AFF", // Mavi (Aktif)
+  },
+  toggleText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#000",
+  },
+  toggleTextActive: {
+    color: "#fff",
+  },
+
   // --- Footer (Alt Buton) Stilleri ---
   footer: {
     backgroundColor: "#fff",

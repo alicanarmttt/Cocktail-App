@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import cocktailReducer from "../features/cocktails/cocktailSlice.js";
 import ingredientReducer from "../features/ingredientSlice.js";
+import barmenReducer from "../features/barmenSlice.js";
 /**
  * @desc    Configures and creates the main Redux store for the application.
  * Tüm 'reducer'ları (veri mantığı dilimlerini) burada birleştiririz.
@@ -15,5 +16,6 @@ export const store = configureStore({
     // (Gelecekteki dilimler buraya eklenecek)
     // user: userReducer,
     ingredients: ingredientReducer,
+    barmen: barmenReducer,
   },
 });
