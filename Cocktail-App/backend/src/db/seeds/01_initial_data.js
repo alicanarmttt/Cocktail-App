@@ -20,17 +20,18 @@ exports.seed = async function (knex) {
 
   // ADIM 1.5: MSSQL için IDENTITY (ID Sayacı) SIFIRLAMA
   // Yorum: Bu, bir sonraki ID'nin her zaman 1'den başlamasını sağlar.
-  // (Not: 'TRUNCATE' de kullanılabilir ama 'DELETE' + 'RESEED' daha güvenlidir)
+  // DÜZELTME: 'RESEED, 0' kullanmak, MSSQL'e "kullanılan son ID 0'dı,
+  // bir sonrakine 1'den başla" demenin en güvenli yoludur.
   // -----------------------------------------------------------------
-  await knex.raw("DBCC CHECKIDENT (barmens_corner_posts, RESEED, 1)");
-  await knex.raw("DBCC CHECKIDENT (recipe_alternatives, RESEED, 1)");
-  await knex.raw("DBCC CHECKIDENT (cocktail_requirements, RESEED, 1)");
-  await knex.raw("DBCC CHECKIDENT (user_profiles, RESEED, 1)");
-  await knex.raw("DBCC CHECKIDENT (ingredients, RESEED, 1)");
-  await knex.raw("DBCC CHECKIDENT (cocktails, RESEED, 1)");
-  await knex.raw("DBCC CHECKIDENT (users, RESEED, 1)");
-  await knex.raw("DBCC CHECKIDENT (ingredient_categories, RESEED, 1)");
-  await knex.raw("DBCC CHECKIDENT (importance_levels, RESEED, 1)");
+  await knex.raw("DBCC CHECKIDENT (barmens_corner_posts, RESEED, 0)");
+  await knex.raw("DBCC CHECKIDENT (recipe_alternatives, RESEED, 0)");
+  await knex.raw("DBCC CHECKIDENT (cocktail_requirements, RESEED, 0)");
+  await knex.raw("DBCC CHECKIDENT (user_profiles, RESEED, 0)");
+  await knex.raw("DBCC CHECKIDENT (ingredients, RESEED, 0)");
+  await knex.raw("DBCC CHECKIDENT (cocktails, RESEED, 0)");
+  await knex.raw("DBCC CHECKIDENT (users, RESEED, 0)");
+  await knex.raw("DBCC CHECKIDENT (ingredient_categories, RESEED, 0)");
+  await knex.raw("DBCC CHECKIDENT (importance_levels, RESEED, 0)");
 
   // ADIM 2: BAĞIMSIZ VERİLERİ EKLE (Düz Sırada)
   // -----------------------------------------------------------------

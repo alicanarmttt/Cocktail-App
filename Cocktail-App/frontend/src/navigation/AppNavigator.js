@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import CocktailDetailScreen from "../screens/CocktailDetailScreen";
 import AssistantScreen from "../screens/AssistantScreen";
+import AssistantResultScreen from "../screens/AssistantResultScreen";
 
 // "Stack" (Yığın) tipinde bir navigasyon oluşturucu başlatıyoruz
 const Stack = createNativeStackNavigator();
@@ -42,6 +43,33 @@ function HomeStackNavigator() {
 }
 
 /**
+ * @desc    YENİ EKLENDİ: "Asistan" sekmesinin (Assistant, Results) iç yığınını yönetir.
+ */
+function AssistantStackNavigator() {
+  return (
+    <Stack.Navigator
+      // Bu yığının da stilini diğeriyle aynı yapalım
+      screenOptions={{
+        headerStyle: { backgroundColor: "#f4511e" },
+        headerTintColor: "#fff",
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
+    >
+      <Stack.Screen
+        name="AssistantHome" // Yığının ana ekranı
+        component={AssistantScreen}
+        options={{ title: "Barmen'in Asistanı" }}
+      />
+      <Stack.Screen
+        name="AssistantResult" // AssistantScreen'in yönlendireceği ekran
+        component={AssistantResultScreen}
+        options={{ title: "Bulunan Tarifler" }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+/**
  * @desc    Uygulamamızın "ana haritası" artık burası.
  * Alt sekmeleri (Tabs) yönetir.
  */
@@ -65,8 +93,6 @@ function AppNavigator() {
           // Aktif ve pasif sekme renkleri
           tabBarActiveTintColor: "#f4511e",
           tabBarInactiveTintColor: "gray",
-          // Ana başlığı (header) sekmelerde göstermiyoruz
-          // (Çünkü HomeStackNavigator kendi başlığını yönetiyor)
           headerShown: false,
         })}
       >
@@ -76,16 +102,13 @@ function AppNavigator() {
           component={HomeStackNavigator}
           options={{ title: "Kokteyller" }}
         ></Tab.Screen>
+
         {/* SEKME 2: Barmen Asistanı */}
         <Tab.Screen
           name="Assistant"
-          component={AssistantScreen}
+          component={AssistantStackNavigator}
           options={{
-            title: "Barmen'in Asistanı",
-            // Bu ekranın kendi başlığı (header) olsun
-            headerShown: true,
-            headerStyle: { backgroundColor: "#f4511e" },
-            headerTintColor: "#fff",
+            title: "Asistan",
           }}
         ></Tab.Screen>
       </Tab.Navigator>

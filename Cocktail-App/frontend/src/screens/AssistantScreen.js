@@ -41,13 +41,15 @@ const AssistantScreen = () => {
 
   const [searchText, setSearchText] = useState("");
 
-  const [tezgahItems, setTezgahItems] = useState([]); // YENİ EKLENDİ: (EKSİK 2) 'Sadece Yapabildiklerim' (strict) / 'Bunları İçerenler' (flexible) modu için
+  const [tezgahItems, setTezgahItems] = useState([]);
+
+  //'Sadece Yapabildiklerim' (strict) / 'Bunları İçerenler' (flexible) modu için
   const [mode, setMode] = useState("strict");
 
   const allIngredients = useSelector(selectAllIngredients);
   const ingredientsStatus = useSelector(getIngredientsStatus);
   const ingredientsError = useSelector(getIngredientsError);
-  // YENİ EKLENDİ: 'findRecipes' API isteğinin durumunu (loading, failed vb.) takip et
+  //'findRecipes' API isteğinin durumunu (loading, failed vb.) takip et
   const searchStatus = useSelector(getSearchStatus);
 
   // Ekran ilk yüklendiğinde "Ana Pazar Listesi"ni (tüm malzemeleri) API'den çek
@@ -82,21 +84,21 @@ const AssistantScreen = () => {
     );
   }, [searchText, allIngredients, tezgahItems]); // Bu 3'ü değişince filtreyi yeniden hesapla
 
-  // YENİ EKLENDİ: (EKSİK 2) "Kokteylleri Göster" butonuna basıldığında çalışacak fonksiyon
+  //"Kokteylleri Göster" butonuna basıldığında çalışacak fonksiyon
   const handleFindRecipes = async () => {
     // Yükleniyorsa veya tezgah boşsa bir şey yapma
-    if (searchStatus === "loading" || tezgahItems.length === 0) return; // 1. Tezgahtaki objeleri (state) al: [{ingredient_id: 1}, {ingredient_id: 7}] // 2. Bunu bir ID dizisine (API'nin beklediği) dönüştür: [1, 7]
+    if (searchStatus === "loading" || tezgahItems.length === 0) return;
 
-    const inventoryIds = tezgahItems.map((item) => item.ingredient_id); // 3. Backend'e 'inventoryIds' ve 'mode' (strict/flexible) bilgilerini gönder
+    // 1. Tezgahtaki objeleri (state) al: [{ingredient_id: 1}, {ingredient_id: 7}]
+    // 2. Bunu bir ID dizisine (API'nin beklediği) dönüştür: [1, 7]
+    const inventoryIds = tezgahItems.map((item) => item.ingredient_id);
 
+    // 3. Backend'e 'inventoryIds' ve 'mode' (strict/flexible) bilgilerini gönder
     try {
-      // 'unwrap()' isteğin tamamlanmasını (fulfilled veya rejected) bekler
-      await dispatch(findRecipes({ inventoryIds, mode })).unwrap(); // 4. İstek başarılı (fulfilled) oldu, Redux state'i (searchResults) doldu. //    Şimdi yeni Sonuç Ekranı'na git. //    (Bu ekranı bir sonraki adımda oluşturacağız)
-
-      navigation.navigate("AssistantResults");
+      await dispatch(findRecipes({ inventoryIds, mode })).unwrap(); // 'unwrap()' isteğin tamamlanmasını (fulfilled veya rejected) bekler
+      navigation.navigate("AssistantResult");
     } catch (error) {
-      // İstek başarısız (rejected) oldu
-      console.error("Tarifler bulunamadı:", error); // (Burada kullanıcıya bir hata mesajı (örn: Toast) gösterebiliriz)
+      console.error("Tarifler bulunamadı:", error);
     }
   };
 
