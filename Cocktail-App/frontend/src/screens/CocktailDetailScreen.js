@@ -18,6 +18,8 @@ import {
   getDetailedCocktailError,
   clearDetail,
 } from "../features/cocktails/cocktailSlice";
+import { selectIsPro } from "../features/userSlice";
+import { Ionicons } from "@expo/vector-icons";
 
 /**
  * @desc    Tek bir kokteylin detaylarını gösterir.
@@ -28,10 +30,15 @@ const CocktailDetailScreen = ({ route }) => {
   const dispatch = useDispatch();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  // YENİ EKLENDİ (EKSİK 3): "İç İçe Modal" (Modal 2) için state
+  // (Tıklanan malzemenin 'ing' objesini (tüm detaylarıyla) tutar)
+  const [selectedAlternative, setSelectedAlternative] = useState(null);
 
   const cocktail = useSelector(selectDetailedCocktail);
   const status = useSelector(getDetailedCocktailStatus);
   const error = useSelector(getDetailedCocktailError);
+  // YENİ EKLENDİ: Pro üyelik durumunu Redux'tan (userSlice) oku
+  const isPro = useSelector(selectIsPro);
 
   // 3. Adım: Ekran yüklendiğinde (veya ID değiştiğinde) API isteğini tetikle
   useEffect(() => {
@@ -199,7 +206,7 @@ const CocktailDetailScreen = ({ route }) => {
                     onPress={() => {
                       // (Daha sonra burayı Pro yönlendirmesiyle güncelleyeceğiz)
                       if (ing.has_alternative) {
-                        alert(`PRO: ${ing.name} için alternatifleri göster!`);
+                        setSelectedAlternative(ing);
                       } else {
                         alert("Bu malzeme için alternatif bulunmuyor.");
                       }
@@ -209,6 +216,74 @@ const CocktailDetailScreen = ({ route }) => {
                   </Pressable>
                 ))}
               </View>
+              {/*
+             // === YENİ EKLENDİ (EKSİK 3): "İÇ İÇE MODAL" (Modal 2) ===
+             // (Alternatif detayını veya 'Pro Satın Al' uyarısını gösterir)
+            */}
+              <Modal
+                visible={!!selectedAlternative} // 'selectedAlternative' null değilse görünür
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setSelectedAlternative(null)} // Kapat
+              >
+                <Pressable
+                  style={styles.modalOverlay2} // Farklı stil (daha koyu olabilir)
+                  onPress={() => setSelectedAlternative(null)} // Dışarı tıklayınca kapat
+                >
+                  <Pressable style={styles.modalContent2}>
+                    {/* === Pro Kullanıcı Arayüzü === */}
+                    {isPro && selectedAlternative ? (
+                      <>
+                        <Ionicons
+                          name="star"
+                          size={32}
+                          color="#FFD700"
+                          style={styles.proIcon}
+                        />
+                        <Text style={styles.proTitle}>PRO Alternatif</Text>
+                        <Text style={styles.proText}>
+                          "{selectedAlternative.name}" yerine:
+                        </Text>
+                        <Text style={styles.proHighlight}>
+                          {selectedAlternative.alternative_amount}{" "}
+                          {selectedAlternative.alternative_name}
+                        </Text>
+                        <Text style={styles.proText}>kullanabilirsiniz.</Text>
+                      </>
+                    ) : (
+                      /* === Free Kullanıcı Arayüzü (Satın Al Uyarısı) === */
+                      <View style={styles.proLockContainer}>
+                        <Ionicons
+                          name="lock-closed"
+                          size={48}
+                          color="#f4511e"
+                          style={styles.proLockIcon}
+                        />
+                        <Text style={styles.proTitle}>PRO Özellik</Text>
+                        <Text style={styles.proText}>
+                          Bu kokteylin alternatif tariflerini görmek ve "Barmen
+                          Asistanı" özelliğini tam kapasite kullanmak için Pro
+                          üyeliğe geçin!
+                        </Text>
+                        {/* (İleride buradaki buton 'Satın Alma Ekranı'na yönlendirir) */}
+                        <Pressable
+                          style={styles.proButton}
+                          onPress={() => alert("Satın alma ekranı açılacak!")}
+                        >
+                          <Text style={styles.proButtonText}>PRO'ya Geç</Text>
+                        </Pressable>
+                      </View>
+                    )}
+
+                    <Button
+                      title="Kapat"
+                      onPress={() => setSelectedAlternative(null)}
+                      color="#f4511e"
+                    />
+                  </Pressable>
+                </Pressable>
+              </Modal>
+              {/* === "İÇ İÇE MODAL" SONU === */}
 
               <Button
                 title="Kapat"
@@ -340,9 +415,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalTitle: {
-    color: "white",
-    fontSize: 16,
+    // GÜNCELLEME: modalTitle stilini Bilgilendirme kutusuna taşıdık
+    // (veya burada bırakabiliriz, ama Bilgilendirme daha mantıklı)
+    // Şimdilik kalsın, ama Legend'e taşıyabiliriz.
+    // DÜZELTME: Bu başlık "Eksik Malzemeyi seçin" olmalı,
+    // Bilgilendirme (Legend) başlığı ayrı. Stili düzeltelim:
+    fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 15,
+    color: "#333",
   },
 
   // GÜNCELLEME: Bilgilendirme (Legend) Kutusu
@@ -398,6 +479,74 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#000",
   },
+
+  // === YENİ EKLENDİ (EKSİK 3): İç İçe Modal (Modal 2) Stilleri ===
+  modalOverlay2: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.75)", // Ana Modal'dan daha koyu
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent2: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 15,
+    padding: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  // Pro Kullanıcı Stilleri
+  proIcon: {
+    marginBottom: 10,
+  },
+  proTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  proText: {
+    fontSize: 16,
+    color: "#555",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  proHighlight: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#f4511e",
+    marginBottom: 10,
+  },
+  // Free Kullanıcı (Kilit) Stilleri
+  proLockContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  proLockIcon: {
+    marginBottom: 15,
+  },
+  proButton: {
+    backgroundColor: "#FFD700", // "Pro" rengi
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  proButtonText: {
+    color: "#333",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  // === STİL GÜNCELLEMESİ SONU ===
 });
 
 export default CocktailDetailScreen;

@@ -34,6 +34,17 @@ const getCocktailById = async (id) => {
         .on("req.cocktail_id", "=", "alt.cocktail_id")
         .andOn("req.ingredient_id", "=", "alt.original_ingredient_id");
     })
+    // === YENİ GÜNCELLEME (EKSİK 3 - "Pro" Tıklaması) ===
+    // 'recipe_alternatives' tablosu bize sadece alternatifin ID'sini (alternative_ingredient_id) verir.
+    // Bize o ID'nin 'adı' (örn: "Votka") lazım.
+    // Bu yüzden 'ingredients' tablosunu İKİNCİ KEZ, 'alt_ing' adıyla ('alias') JOIN ediyoruz.
+    //
+    .leftJoin(
+      "ingredients as alt_ing",
+      "alt.alternative_ingredient_id",
+      "alt_ing.ingredient_id"
+    )
+
     // GÜNCELLEME: 'select' kısmını 'has_alternative' bayrağını (flag) içerecek şekilde güncelledik.
     // 'knex.raw' kullanarak bir SQL 'CASE' (Durum) ifadesi yazıyoruz.
     .select(
@@ -43,6 +54,9 @@ const getCocktailById = async (id) => {
       "req.amount",
       "lvl.level_name",
       "lvl.color_code",
+      "alt.alternative_amount", // Alternatifin miktarı (örn: "60 ml")
+      "alt_ing.name as alternative_name", // Alternatifin adı (örn: "Votka")
+
       // YENİ BAYRAK: Eğer 'alt.alternative_id' NULL değilse (yani bir alternatif bulunduysa)
       // 'has_alternative' sütununu 'true' (1) yap, yoksa 'false' (0) yap.
       db.raw(
@@ -52,7 +66,7 @@ const getCocktailById = async (id) => {
     .where("req.cocktail_id", id); // Sadece bu kokteylin malzemelerini filtrele
   return {
     ...cocktail, // { name: 'Mojito', instructions: '...', ... }
-    ingredients: ingredients, // [ { name: 'Beyaz Rom', amount: '60 ml',  has_alternative: 1}, ... ]
+    ingredients: ingredients, // [ { name: 'Beyaz Rom', has_alternative: 1, alternative_name: 'Votka', alternative_amount: '60 ml' }, ... ]
   };
 };
 
