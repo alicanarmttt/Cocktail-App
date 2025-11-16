@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 // 1. userSlice'tan (sağdaki) gerekli selector ve action'ları import et
 import {
@@ -24,6 +25,7 @@ const ProfileScreen = () => {
   // 3. Redux'tan mevcut kullanıcıyı ve Pro durumunu oku
   const currentUser = useSelector(selectCurrentUser);
   const isPro = useSelector(selectIsPro);
+  const navigation = useNavigation();
 
   /**
    * @desc  Kullanıcıyı hem Firebase'den (Servis) hem de
@@ -101,7 +103,7 @@ const ProfileScreen = () => {
         {!isPro && (
           <Pressable
             style={[styles.button, styles.upgradeButton]}
-            onPress={() => alert("Satın alma ekranı açılacak!")}
+            onPress={() => navigation.navigate("UpgradeToPro")}
           >
             <Text style={[styles.buttonText, styles.upgradeButtonText]}>
               <Ionicons name="star-outline" size={16} /> PRO'ya Yükselt

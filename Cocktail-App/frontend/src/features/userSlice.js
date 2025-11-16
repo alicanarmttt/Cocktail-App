@@ -29,6 +29,30 @@ export const loginOrRegisterUser = createAsyncThunk(
   }
 );
 
+/**
+ * @desc    Backend'deki 'Pro'ya Yükselt' API'sine POST isteği gönderir.
+ * @name    user/upgradeToPro
+ * @param   {object} thunkAPI - 'getState' fonksiyonunu (Redux state'ini okumak için) içerir
+ */
+export const upgradeToPro = createAsyncThunk(
+  "/user/upgradeToPro",
+  async (_, { getState }) => {
+    const { currentUser } = getState().user;
+
+    if (!currentUser) {
+      throw new Error("Giriş ypamış kullanıcı bulunamadı.");
+    }
+
+    const response = await axios.post(
+      `${BASE_API_URL}/api/users/upgrade-to-pro`,
+      { firebase_uid: currentUser.firebase_uid } // 'uid'yi body'de gönder
+    );
+    // Backend'den dönen GÜNCELLENMİŞ (artık 'is_pro: true' olan)
+    // kullanıcı objesini (user object) döndürür
+    return response.data;
+  }
+);
+
 const initialState = {
   // GÜNCELLEME: 'mockProUser' yerine 'null'
   // Uygulama artık "Giriş Yapılmamış" (Logged Out) olarak başlıyor
@@ -37,6 +61,13 @@ const initialState = {
   // YENİ EKLENDİ: API isteğinin durumunu (state) yönet
   loginStatus: "idle", // 'idle', 'loading', 'succeeded', 'failed'
   loginError: null,
+
+  upgradeStatus: "idle", // 'idle', 'loading', 'succeeded', 'failed'
+  upgradeError: null,
+
+  // Uygulama ilk açıldığında Firebase/AsyncStorage'ı
+  // kontrol ederken 'true' olacak.
+  isAuthLoading: true,
 };
 
 export const userSlice = createSlice({
@@ -52,6 +83,8 @@ export const userSlice = createSlice({
       state.currentUser = null;
       state.loginStatus = "idle";
       state.loginError = null;
+      state.upgradeStatus = "idle";
+      state.upgradeError = null;
     },
   },
   // YENİ EKLENDİ: 'loginOrRegisterUser' (API isteği) thunk'ını dinle
@@ -60,17 +93,34 @@ export const userSlice = createSlice({
       .addCase(loginOrRegisterUser.pending, (state) => {
         state.loginStatus = "loading";
         state.loginError = null;
+        state.isAuthLoading = true;
       })
       .addCase(loginOrRegisterUser.fulfilled, (state, action) => {
         state.loginStatus = "succeeded";
         // API'den dönen (is_pro bayrağını içeren) GERÇEK kullanıcı verisini
         // 'currentUser' state'ine kaydet
         state.currentUser = action.payload;
+        state.isAuthLoading = false;
       })
       .addCase(loginOrRegisterUser.rejected, (state, action) => {
         state.loginStatus = "failed";
         state.loginError = action.error.message;
         state.currentUser = null; // Hata olursa kullanıcıyı 'null' yap
+        state.isAuthLoading = false;
+      })
+      .addCase(upgradeToPro.pending, (state) => {
+        state.upgradeStatus = "loading";
+        state.upgradeError = null;
+      })
+      .addCase(upgradeToPro.fulfilled, (state, action) => {
+        state.upgradeStatus = "succeeded";
+        // API'den dönen GÜNCELLENMİŞ (is_pro: true) kullanıcı verisiyle
+        // 'currentUser' state'ini GÜNCELLE
+        state.currentUser = action.payload;
+      })
+      .addCase(upgradeToPro.rejected, (state, action) => {
+        state.upgradeStatus = "failed";
+        state.upgradeError = action.error.message;
       });
   },
 });
@@ -88,8 +138,11 @@ export const selectCurrentUser = (state) => state.user.currentUser;
  * @desc  Mevcut kullanıcının 'Pro' olup olmadığını (true/false) seçer
  */
 export const selectIsPro = (state) => state.user.currentUser?.is_pro || false;
-
-// YENİ EKLENDİ: Login ekranı için
 export const getLoginStatus = (state) => state.user.loginStatus;
+export const getUpgradeStatus = (state) => state.user.upgradeStatus;
+export const getUpgradeError = (state) => state.user.upgradeError;
+
+// (EKSİK 9)
+export const getIsAuthLoading = (state) => state.user.isAuthLoading;
 
 export default userSlice.reducer;

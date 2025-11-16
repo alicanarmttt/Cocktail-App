@@ -36,6 +36,30 @@ const findOrCreateUser = async (firebase_uid, email) => {
   return createdUser;
 };
 
+// YENİ EKLENDİ (EKSİK 8)
+/**
+ * @desc    Updates a user's 'is_pro' status to true.
+ * @param   {string} firebase_uid - The UID of the user to upgrade
+ * @returns {Promise<Object>} The UPDATED user object (with is_pro: true)
+ */
+const upgradeUserToPro = async (firebase_uid) => {
+  // 1. Find the user and update their 'is_pro' status to true
+  // (Not: Knex 'update' varsayılan olarak etkilenen satır sayısını döndürür)
+  await db("users")
+    .where({ firebase_uid: firebase_uid })
+    .update({ is_pro: true });
+
+  // 2. 'update' komutu objeyi döndürmediği için,
+  //    (şimdi güncellenmiş olan) kullanıcıyı tekrar 'select' (getir)
+  //    ve frontend'e (Redux) göndermek için döndür.
+  const updatedUser = await db("users")
+    .where({ firebase_uid: firebase_uid })
+    .first();
+
+  return updatedUser;
+};
+
 module.exports = {
   findOrCreateUser,
+  upgradeUserToPro,
 };

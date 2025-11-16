@@ -20,6 +20,7 @@ import {
 } from "../features/cocktails/cocktailSlice";
 import { selectIsPro } from "../features/userSlice";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 /**
  * @desc    Tek bir kokteylin detaylarını gösterir.
@@ -28,6 +29,7 @@ import { Ionicons } from "@expo/vector-icons";
 const CocktailDetailScreen = ({ route }) => {
   const { cocktailId } = route.params;
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   // YENİ EKLENDİ (EKSİK 3): "İç İçe Modal" (Modal 2) için state
@@ -262,13 +264,13 @@ const CocktailDetailScreen = ({ route }) => {
                         <Text style={styles.proTitle}>PRO Özellik</Text>
                         <Text style={styles.proText}>
                           Bu kokteylin alternatif tariflerini görmek ve "Barmen
-                          Asistanı" özelliğini tam kapasite kullanmak için Pro
-                          üyeliğe geçin!
+                          Asistanı" özelliğini tam kapasite kullanmak için
+                          Profil'den Pro üyeliğe geçin!
                         </Text>
                         {/* (İleride buradaki buton 'Satın Alma Ekranı'na yönlendirir) */}
                         <Pressable
                           style={styles.proButton}
-                          onPress={() => alert("Satın alma ekranı açılacak!")}
+                          onPress={() => navigation.navigate("UpgradeToPro")}
                         >
                           <Text style={styles.proButtonText}>PRO'ya Geç</Text>
                         </Pressable>

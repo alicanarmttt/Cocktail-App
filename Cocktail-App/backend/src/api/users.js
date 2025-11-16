@@ -3,7 +3,10 @@ const router = express.Router();
 
 // Adım 4.A'da oluşturduğumuz "BEYİN" (Model/Veritabanı Mantığı) dosyasını içe aktar
 // (Sağdaki user.model.js dosyasından)
-const { findOrCreateUser } = require("../db/models/user.model");
+const {
+  findOrCreateUser,
+  upgradeUserToPro,
+} = require("../db/models/user.model");
 
 /**
  * @route   POST /api/users/loginOrRegister
@@ -36,6 +39,31 @@ router.post("/loginOrRegister", async (req, res) => {
       requestBody: req.body, // Hata ayıklama için gelen body'yi logla
     });
     res.status(500).json({ msg: "Sunucu Hatası", error: error.message });
+  }
+});
+
+/**
+ * @route   POST /api/users/upgrade-to-pro
+ * @desc    Kullanıcının 'is_pro' bayrağını 'true' olarak günceller.
+ * @access  (Şimdilik) Public / (Gelecekte) Güvenli
+ */
+router.post("/upgrade-to-pro", async (req, res) => {
+  try {
+    // 1. Frontend'den (Redux) gelen 'firebase_uid'yi al
+    const { firebase_uid } = req.body;
+
+    if (!firebase_uid) {
+      return res.status(400).json({ msg: "firebase_uid alanı zorunludur." });
+    }
+
+    const updatedUser = await upgradeUserToPro(firebase_uid);
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log("Hata (/api/user/upgrade-to-pro):", error.message, {
+      requestBody: req.body,
+    });
+    res.status(500).json({ msg: "Sunucu hatası", error: error.message });
   }
 });
 

@@ -10,7 +10,6 @@ import {
   Pressable, // GÜNCELLEME: 'Button' yerine 'Pressable' (daha şık buton)
 } from "react-native";
 // GÜNCELLEME: 'SafeAreaView' (çentik/kenar boşlukları için)
-// DOĞRU kütüphaneden ('react-native-safe-area-context') import edildi.
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // GÜNCELLEME: Yeni kurduğumuz 'Picker' (Rulet) kütüphanesini import ediyoruz
