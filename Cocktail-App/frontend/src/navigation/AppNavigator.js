@@ -9,6 +9,8 @@ import CocktailDetailScreen from "../screens/CocktailDetailScreen";
 import AssistantScreen from "../screens/AssistantScreen";
 import AssistantResultScreen from "../screens/AssistantResultScreen";
 import LoginScreen from "../screens/LoginScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+
 // YENİ EKLENDİ: 'userSlice'taki 'selector' (veri okuyucu)
 import { selectCurrentUser } from "../features/userSlice";
 import { useSelector } from "react-redux";
@@ -109,7 +111,7 @@ function AppNavigator() {
   );
 }
 /**
- * @desc    YENİ ADI: MainAppNavigator
+ * @desc MainAppNavigator
  * Giriş yapıldığında gösterilecek Ana Uygulamayı (Sekmeler) yönetir.
  */
 function MainAppNavigator() {
@@ -123,6 +125,8 @@ function MainAppNavigator() {
             iconName = focused ? "wine" : "wine-outline";
           } else if (route.name === "Assistant") {
             iconName = focused ? "build" : "build-outline";
+          } else if (route.name === "Profile") {
+            iconName = focused ? "person" : "person-outline";
           }
           return (
             <Ionicons name={iconName} size={size} color={color}></Ionicons>
@@ -145,6 +149,18 @@ function MainAppNavigator() {
         component={AssistantStackNavigator}
         options={{
           title: "Asistan",
+        }}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: "Profil",
+          // Bu ekranın kendi başlığı (header) olsun (AppNavigator'da)
+          headerShown: true,
+          headerStyle: { backgroundColor: "#f4511e" },
+          headerTintColor: "#fff",
+          headerTitleStyle: { fontWeight: "bold" },
         }}
       ></Tab.Screen>
     </Tab.Navigator>
