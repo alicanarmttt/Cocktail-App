@@ -162,34 +162,34 @@ const AssistantScreen = () => {
   }
 
   // === 5. ARAYÜZ (UI) RENDER ETME (Tamamen Yenilendi) ===
+
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      // GÜNCELLEME: 'keyboardVerticalOffset' Navigasyon Başlığı (Header)
-      // yüksekliğine ayarlandı (AppNavigator.js'ten dolayı)
-      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 60}
-    >
-      <SafeAreaView style={styles.container}>
-        {/*
-          GÜNCELLEME (EKSİK 9.C - Klavye Çözümü):
-          Artık tüm ekranı (Tezgah, Pazar, Arama, Toggle, Buton)
-          TEK BİR 'ScrollView' içine alıyoruz.
-          'keyboardShouldPersistTaps', 'LoginScreen' (sağdaki)
-          dosyasındaki "iki tıklama" sorununu burada da çözer.
-        */}
+    // 'SafeAreaView' (Çentik alanı) en dışta olmalı
+    <SafeAreaView style={styles.container} edges={["left", "right"]}>
+      {/*
+        GÜNCELLEME (EKSİK 9.D - Klavye Çözümü):
+        KAV (Klavye Yönetimi) artık ekranın 'sadece'
+        Pazar ve Arama'yı içeren 'esnek' (flex: 1) kısmını sarar.
+      */}
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingContainer} // 'flex: 1'
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        // (Başlık (Header) yüksekliğini 'AppNavigator.js'ten (sağdaki) biliyoruz)
+        keyboardVerticalOffset={Platform.OS === "ios" ? 120 : 90}
+      >
         <ScrollView
           style={styles.container}
-          contentContainerStyle={{ flexGrow: 1 }} // İçeriğin esnemesini sağlar
-          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.scrollContainer} // (paddingHorizontal içerir)
+          keyboardShouldPersistTaps="handled" // "İki tıklama" sorununu çözer
         >
-          {/* --- BÖLÜM 1: TEZGAH (Seçilenler) --- */}
-          {/* GÜNCELLEME: Artık kendi 'ScrollView'u yok, 'flex-wrap' (sarılan) bir 'View' */}
+          {/* BÖLÜM 1: TEZGAH (Klavye'den ETKİLENMEZ) */}
           <View style={styles.tezgahContainer}>
             <Text style={styles.sectionTitle}>
-              Tezgah ({tezgahItems.length} Malzeme)
+              Tezgah ({tezgahItems.length})
             </Text>
-            <View style={styles.chipScrollContainer}>
+            <View // (Tezgah'ın 'ScrollView'u kaldırıldı, 'flex-wrap' (sarılan) 'View' oldu)
+              style={styles.chipScrollContainer}
+            >
               {tezgahItems.length === 0 ? (
                 <Text style={styles.emptyText}>
                   {" "}
@@ -215,10 +215,10 @@ const AssistantScreen = () => {
             </View>
           </View>
 
-          {/* --- BÖLÜM 2: PAZAR (Tüm Malzemeler) --- */}
-          {/* GÜNCELLEME: 'flex: 1' kaldırıldı, artık Ana ScrollView'un bir parçası */}
+          {/* BÖLÜM 2: PAZAR (Artık KAV içinde) */}
           <View style={styles.pazarContainer}>
-            {/* Kategori Sekmeleri (Tabs) (Değişiklik Yok) */}
+            <Text style={styles.sectionTitle}>Malzemeler</Text>
+            {/* Kategori Sekmeleri (Tabs) */}
             <View>
               <ScrollView
                 horizontal
@@ -249,8 +249,10 @@ const AssistantScreen = () => {
             </View>
 
             {/* Pazar Izgarası (Grid) */}
-            {/* GÜNCELLEME: Artık kendi 'ScrollView'u yok, 'flex-wrap' (sarılan) bir 'View' */}
-            <View style={styles.chipScrollContainer}>
+            <ScrollView
+              contentContainerStyle={styles.chipScrollContainer}
+              keyboardShouldPersistTaps="handled" // "İki tıklama" sorununu çözer
+            >
               {pazarList.length === 0 && searchText ? (
                 <Text style={styles.emptyText}>
                   "{searchText}" bulunamadı...
@@ -272,56 +274,52 @@ const AssistantScreen = () => {
                   </Pressable>
                 ))
               )}
-            </View>
+            </ScrollView>
           </View>
 
-          {/* GÜNCELLEME: 'pazarContainer'dan 'Ana ScrollView'a taşındı */}
-          <View style={styles.bottomControlsContainer}>
-            {/* Arama Çubuğu */}
-            <View style={styles.searchContainer}>
-              <Ionicons
-                name="search"
-                size={20}
-                color="gray"
-                style={styles.searchIcon}
-              />
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Pazar'da ara..."
-                value={searchText}
-                onChangeText={setSearchText}
-              />
-            </View>
+          {/* BÖLÜM 3: ARAMA ÇUBUĞU (Artık KAV içinde) */}
+          <View style={styles.searchContainer}>
+            <Ionicons
+              name="search"
+              size={20}
+              color="gray"
+              style={styles.searchIcon}
+            />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Pazar'da ara..."
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+          </View>
 
-            {/* Filtre Modu (Kayan Toggle) */}
-            <CustomToggle mode={mode} onToggle={setMode} />
+          {/*BÖLÜM 4 ve 5 (Toggle ve Butonn) */}
+          {/* BÖLÜM 4: FİLTRE MODU (Toggle) (Artık KAV içinde) */}
+          <CustomToggle mode={mode} onToggle={setMode} />
 
-            {/* Tarif Bul Butonu (Footer) */}
-            <View style={styles.footer}>
-              <Pressable
-                style={[
-                  styles.prepareButton,
-                  (tezgahItems.length === 0 || searchStatus === "loading") &&
-                    styles.prepareButtonDisabled,
-                ]}
-                disabled={
-                  tezgahItems.length === 0 || searchStatus === "loading"
-                }
-                onPress={handleFindRecipes}
-              >
-                {searchStatus === "loading" ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <Text style={styles.prepareButtonText}>
-                    {tezgahItems.length} Malzeme ile Kokteylleri Göster
-                  </Text>
-                )}
-              </Pressable>
-            </View>
+          {/* BÖLÜM 5: BUTON (Footer) (Artık KAV içinde) */}
+          <View style={styles.footer}>
+            <Pressable
+              style={[
+                styles.prepareButton,
+                (tezgahItems.length === 0 || searchStatus === "loading") &&
+                  styles.prepareButtonDisabled,
+              ]}
+              disabled={tezgahItems.length === 0 || searchStatus === "loading"}
+              onPress={handleFindRecipes}
+            >
+              {searchStatus === "loading" ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.prepareButtonText}>
+                  {tezgahItems.length} Malzeme ile Kokteylleri Göster
+                </Text>
+              )}
+            </Pressable>
           </View>
         </ScrollView>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -355,7 +353,7 @@ const CustomToggle = ({ mode, onToggle }) => {
           mode === "strict" && styles.toggleTextActive,
         ]}
       >
-        Sadece Yapabildiklerim
+        Elimde sadece bunlar var
       </Text>
       <Pressable
         style={styles.toggleTrack}
@@ -372,17 +370,27 @@ const CustomToggle = ({ mode, onToggle }) => {
           mode === "flexible" && styles.toggleTextActive,
         ]}
       >
-        Bunları İçerenler
+        Bunları içeren kokteyller
       </Text>
     </View>
   );
 };
 
-// === Stil Dosyaları (Tamamen Yenilendi) ===
+// === Stil Dosyaları (EKSİK 10 - GÜNCELLENDİ) ===
+// (Senin vizyonuna (masa/kart) uygun olarak stiller güncellendi)
 const styles = StyleSheet.create({
+  // Ana konteyner (Gri Arka Plan)
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f0f2f5", // Daha yumuşak bir gri arka plan
+  },
+  // Container ile aynı
+  keyboardAvoidingContainer: {
+    flex: 1,
+  },
+  scrollContainer: {
+    paddingHorizontal: 10, // YAN BOŞLUKLAR (Senin istediğin)
+    flexGrow: 1, // GÜNCELLEME: İçerik kısaysa ekranı doldur, uzunsa kaydır
   },
   centeredContainer: {
     flex: 1,
@@ -395,42 +403,63 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 15,
     marginBottom: 10,
+    marginTop: 5, // Kartın üstünden biraz boşluk
+    alignSelf: "center",
   },
   emptyText: {
     fontSize: 14,
     color: "gray",
-    marginLeft: 15,
+    padding: 15, // Boş metin için dolgu
     alignSelf: "center",
-    marginTop: 10,
   },
   // --- Tezgah Stilleri (GÜNCELLENDİ) ---
   tezgahContainer: {
-    minHeight: 120, // 'minHeight' (minimum) yükseklik
+    maxHeight: 300,
+    minHeight: 150,
     paddingTop: 10,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    backgroundColor: "#fff", // Beyaz "Kart"
+    borderRadius: 12, // YUVARLATILMIŞ KÖŞE (Senin istediğin)
+    marginBottom: 10, // Kartlar arası boşluk
+    marginTop: 10,
+    // Gölge (iOS)
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    // Gölge (Android)
+    elevation: 3,
   },
-  bottomControlsContainer: {
-    // 'flex: 1' kaldırıldığı için, bu konteyner 'Ana ScrollView'un
-    // en altına (doğal olarak) yerleşir.
-    marginTop: "auto", // (Ana ScrollView'da 'flex: 1' yoksa bu gereksizdir, ancak flexGrow: 1 ile çalışır)
-    backgroundColor: "#f9f9f9",
-  },
+
   // --- Pazar Stilleri (GÜNCELLENDİ) ---
   pazarContainer: {
-    backgroundColor: "#fff",
-    maxHeight: 200,
+    backgroundColor: "#fff", // Beyaz "Kart"
+    borderRadius: 12, // YUVARLATILMIŞ KÖŞE
+    overflow: "hidden", // (Sekmelerin ve ScrollView'un köşelerini keser)
+    // Gölge (iOS)
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    // Gölge (Android)
+    elevation: 3,
+    maxHeight: 250,
+    minHeight: 150,
   },
-  // --- Arama Stilleri (GÜNCELLENDİ) ---
+  // --- Arama Stilleri---
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    backgroundColor: "#fff", // Beyaz "Kart"
+    borderRadius: 12, // YUVARLATILMIŞ KÖŞE
     paddingHorizontal: 15,
-    borderTopWidth: 1, // (Pazar'dan ayırmak için)
+    marginTop: 10, // (Pazar ile Arama arasına boşluk)
+    // Gölge (iOS)
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    // Gölge (Android)
+    elevation: 3,
   },
   searchIcon: {
     marginRight: 10,
@@ -440,10 +469,10 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 16,
   },
-  // --- Ortak 'Chip' (Etiket) Stilleri ---
+  // --- Ortak 'Chip' (Etiket) Stilleri (Değişiklik Yok) ---
   chipScrollContainer: {
-    flexDirection: "row", // YENİ: Yatay başla
-    flexWrap: "wrap", // YENİ: Sığmazsa alta sar
+    flexDirection: "row",
+    flexWrap: "wrap",
     paddingHorizontal: 10,
     paddingBottom: 10,
   },
@@ -453,23 +482,23 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 20,
-    margin: 4, // Etiketler arası boşluk
+    margin: 4,
   },
   tezgahChip: {
-    backgroundColor: "#007AFF", // Mavi (Seçili)
+    backgroundColor: "#007AFF",
   },
   chipText: {
     color: "white",
     fontWeight: "600",
   },
   pazarChip: {
-    backgroundColor: "#f0f0f0", // Gri (Seçilmemiş)
+    backgroundColor: "#f0f0f0",
   },
   chipTextPazar: {
-    color: "#333", // Koyu renk
+    color: "#333",
     fontWeight: "600",
   },
-  // --- Kategori Sekmesi (Tab) Stilleri (YENİ) ---
+  // --- Kategori Sekmesi (Tab) Stilleri (Değişiklik Yok) ---
   categoryScrollContainer: {
     paddingHorizontal: 10,
     paddingVertical: 10,
@@ -477,6 +506,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
+  // ... (Mevcut 'categoryChip' ve 'categoryChipActive' stilleri) ...
   categoryChip: {
     backgroundColor: "#e0e0e0",
     paddingVertical: 6,
@@ -496,29 +526,37 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  // --- Kayan Toggle Stilleri (YENİ) ---
+  // --- Kayan Toggle Stilleri  ---
   toggleContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff", // Beyaz "Kart"
     paddingVertical: 12,
     paddingHorizontal: 15,
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
+    borderRadius: 12, // YUVARLATILMIŞ KÖŞE
+    marginTop: 10, // (Arama ile Toggle arasına boşluk)
+    // Gölge (iOS)
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    // Gölge (Android)
+    elevation: 3,
   },
+  // ... (Mevcut 'toggleText' ve 'toggleTextActive' stilleri) ...
   toggleText: {
     fontSize: 14,
     fontWeight: "600",
     color: "gray",
-    flex: 1, // Yazıların alanı itmesini sağlar
+    flex: 1,
     textAlign: "center",
   },
   toggleTextActive: {
     color: "#f4511e", // Turuncu (Aktif)
   },
   toggleTrack: {
-    width: 140, // (100 + 4 + 4) * 2
+    width: 140,
     height: 36,
     backgroundColor: "#f0f0f0",
     borderRadius: 18,
@@ -526,23 +564,32 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   toggleKnob: {
-    width: 30, // Topun genişliği
+    width: 30,
     height: 30,
     backgroundColor: "#f4511e",
-    borderRadius: 15, // Tam daire
+    borderRadius: 15,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 4,
   },
-  // --- Footer (Alt Buton) Stilleri (Aynı Kaldı) ---
+  // --- Footer (Alt Buton) Stilleri ---
   footer: {
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
+    backgroundColor: "#fff", // Beyaz "Kart"
+    borderRadius: 12, // YUVARLATILMIŞ KÖŞE
     padding: 15,
+    marginTop: 10, // (Toggle ile Buton arasına boşluk)
+    marginBottom: 5, // (Ekranın en altından boşluk)
+    // Gölge (iOS)
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    // Gölge (Android)
+    elevation: 3,
   },
+  // ... (Mevcut 'prepareButton', 'prepareButtonDisabled', 'prepareButtonText', 'errorText' stilleri) ...
   prepareButton: {
     backgroundColor: "#f4511e",
     paddingVertical: 14,

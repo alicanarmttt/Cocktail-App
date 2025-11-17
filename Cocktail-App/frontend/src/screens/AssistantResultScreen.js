@@ -91,6 +91,10 @@ const AssistantResultScreen = () => {
           Tezgahınızdaki malzemelerle (veya seçtiğiniz filtreyle) eşleşen bir
           kokteyl bulunamadı.
         </Text>
+        <Text style={styles.emptySubtitle}>
+          Elinizdeki malzemeyi içeren kokteylleri görmek için geri dönüp
+          "Bunları içeren kokteyller" seçeneğiyle arayabilirsiniz.
+        </Text>
       </SafeAreaView>
     );
   }
@@ -171,6 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "gray",
     textAlign: "center",
+    paddingTop: 15,
   },
 });
 
