@@ -85,6 +85,7 @@ export const userSlice = createSlice({
       state.loginError = null;
       state.upgradeStatus = "idle";
       state.upgradeError = null;
+      state.isAuthLoading = false;
     },
   },
   // YENİ EKLENDİ: 'loginOrRegisterUser' (API isteği) thunk'ını dinle

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 
-// 1. Firebase Auth servisini (firebaseConfig.js'ten) içe aktar
+// 1. Firebase Auth servisi
 import { auth } from "../api/firebaseConfig";
 // 2. Firebase'in Email/Şifre fonksiyonlarını içe aktar
 import {
@@ -25,8 +25,14 @@ import {
 
 // 3. Redux Thunk (API isteği) ve Selector'leri (userSlice.js'ten) içe aktar
 import { loginOrRegisterUser, getLoginStatus } from "../features/userSlice";
+import * as WebBrowser from "expo-web-browser";
+import { useAuthRequest, makeRedirectUri } from "expo-auth-session";
+// 'GoogleAuthProvider' (Google'ın 'idToken'ını Firebase'e çevirmek için)
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 
-// YENİ EKLENDİ (Hata Çevirisi): Firebase hata kodlarını Türkçe'ye çevirir
+// (Giriş (Auth) akışı web tarayıcısını (web browser) tamamladığında çağrılır)
+WebBrowser.maybeCompleteAuthSession();
+
 const getFriendlyErrorMessage = (error) => {
   switch (error.code) {
     case "auth/email-already-in-use":
@@ -55,9 +61,84 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false); // Mod (Giriş / Kayıt)
 
-  // YENİ EKLENDİ (Tepkisizlik Çözümü):
   // Firebase (Adım 1) için lokal 'loading' state'i
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
+
+  // === YENİ EKLENDİ (EKSİK 11 - Google Girişi Mantığı) ===
+  const [googleLoading, setGoogleLoading] = useState(false); // (Google butonu için ayrı 'loading')
+
+  const redirectUri = makeRedirectUri({
+    useProxy: true,
+  });
+  // 1. 'useAuthRequest' kancasını (hook) .env anahtarlarıyla (keys) başlat
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      // iosClientId:
+      //   "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
+      // androidClientId:
+      //   "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
+      // (webClientId .env'de yok, ancak Expo Go için 'expoClientId'yi kullanabiliriz)
+      clientId:
+        "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
+      redirectUri,
+      esponseType: "id_token", // önemli: Google için id_token alıyoruz
+      scopes: ["openid", "profile", "email"],
+      // optional: prompt: "select_account" // ister isen ekle
+    },
+
+    {
+      authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
+      tokenEndpoint: "https://oauth2.googleapis.com/token",
+    }
+  );
+
+  // 2. Google "popup" (web) ekranından (response) bir yanıt geldiğinde 'useEffect'i tetikle
+  useEffect(() => {
+    if (response) {
+      if (response?.type === "success") {
+        const { id_token } = response.params;
+        // 3. Google'ın 'id_token'ı ile 'handleGoogleSignIn'ı (aşağıdaki) çağır
+        handleGoogleSignIn(id_token);
+      } else {
+        // (Kullanıcı popup'ı kapattı veya hata oluştu)
+        setGoogleLoading(false);
+      }
+    }
+  }, [response]);
+
+  /**
+   * @desc  Google'dan gelen 'idToken'ı alır, Firebase'e (Auth) gönderir,
+   * ardından bizim Backend'imizle (is_pro) senkronize eder.
+   */
+  const handleGoogleSignIn = async (id_token) => {
+    try {
+      // 1. ADIM: Google 'id_token'ını Firebase 'credential' (kimlik bilgisi) haline getir
+      const credential = GoogleAuthProvider.credential(id_token);
+
+      // 2. ADIM: Firebase (Frontend) - Bu 'credential' (kimlik bilgisi) ile Giriş Yap
+      const userCredential = await signInWithCredential(auth, credential);
+      const user = userCredential.user;
+
+      // 3. ADIM: Redux (Frontend) -> Backend (Senkronizasyon)
+      // (Email/Şifre ile aynı 'thunk'ı (sağdaki userSlice.js) çağırıyoruz)
+      await dispatch(
+        loginOrRegisterUser({
+          firebase_uid: user.uid,
+          email: user.email,
+        })
+      ).unwrap();
+      // (Başarılı. AppNavigator.js (sağdaki) bizi otomatik olarak Ana Ekrana yönlendirecek)
+    } catch (error) {
+      console.error("Google Giriş Hatası:", error);
+      Alert.alert(
+        "Google Giriş Hatası",
+        getFriendlyErrorMessage(error) // (Aynı hata çeviriciyi kullan)
+      );
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+  // ==================================================
 
   /**
    * @desc  Firebase'e YENİ KULLANICI kaydı yapar,
@@ -196,11 +277,15 @@ const LoginScreen = () => {
             style={[
               styles.button,
               // GÜNCELLEME: İki 'loading' durumunu da kontrol et
-              (loginStatus === "loading" || isFirebaseLoading) &&
+              (loginStatus === "loading" ||
+                isFirebaseLoading ||
+                googleLoading) &&
                 styles.buttonDisabled,
             ]}
             onPress={isRegistering ? handleRegister : handleLogin}
-            disabled={loginStatus === "loading"}
+            disabled={
+              loginStatus === "loading" || isFirebaseLoading || googleLoading
+            }
           >
             {loginStatus === "loading" || isFirebaseLoading ? (
               <ActivityIndicator color="#fff" />
@@ -221,6 +306,51 @@ const LoginScreen = () => {
                 ? "Zaten hesabınız var mı? Giriş Yapın"
                 : "Hesabınız yok mu? Kayıt Olun"}
             </Text>
+          </Pressable>
+          {/* --- YENİ EKLENDİ (EKSİK 11 - Google Giriş Butonu) --- */}
+          <View style={styles.dividerContainer}>
+            <View style={styles.divider} />
+            <Text style={styles.dividerText}>VEYA</Text>
+            <View style={styles.divider} />
+          </View>
+
+          <Pressable
+            style={[
+              styles.button,
+              styles.googleButton,
+              // GÜNCELLEME: *Herhangi* bir 'loading' durumunda pasif yap
+              (!request ||
+                loginStatus === "loading" ||
+                isFirebaseLoading ||
+                googleLoading) &&
+                styles.buttonDisabled,
+            ]}
+            disabled={
+              !request ||
+              loginStatus === "loading" ||
+              isFirebaseLoading ||
+              googleLoading
+            }
+            onPress={() => {
+              setGoogleLoading(true); // (Firebase 'popup'ı açılmadan hemen önce)
+              promptAsync(); // Google "popup" (web) ekranını açar
+            }}
+          >
+            {googleLoading ? (
+              <ActivityIndicator color="#000" /> // Siyah spinner
+            ) : (
+              <>
+                <Ionicons
+                  name="logo-google"
+                  size={20}
+                  color="#333"
+                  style={styles.googleIcon}
+                />
+                <Text style={styles.googleButtonText}>
+                  Google ile Giriş Yap
+                </Text>
+              </>
+            )}
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -295,6 +425,40 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#007AFF",
     fontWeight: "600",
+  },
+  dividerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#ddd",
+  },
+  dividerText: {
+    marginHorizontal: 10,
+    color: "#999",
+    fontWeight: "600",
+  },
+  googleButton: {
+    backgroundColor: "#fff", // Beyaz arka plan
+    borderColor: "#ddd", // Gri çerçeve
+    borderWidth: 1,
+    shadowColor: "#000", // Siyah gölge
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3, // (Daha hafif gölge)
+  },
+  googleIcon: {
+    marginRight: 10,
+  },
+  googleButtonText: {
+    color: "#333", // Koyu renk yazı
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

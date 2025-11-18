@@ -93,7 +93,7 @@ const AssistantResultScreen = () => {
         </Text>
         <Text style={styles.emptySubtitle}>
           Elinizdeki malzemeyi içeren kokteylleri görmek için geri dönüp
-          "Bunları içeren kokteyller" seçeneğiyle arayabilirsiniz.
+          "Bunları içeren kokteyller" seçeneğiyle arayabilirsiniz .
         </Text>
       </SafeAreaView>
     );

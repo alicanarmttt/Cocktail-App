@@ -42,7 +42,7 @@ const ProfileStack = createNativeStackNavigator();
 function AppNavigator() {
   // Redux store'dan (userSlice) mevcut kullanıcıyı ve Auth yüklenme durumunu seç
   const currentUser = useSelector(selectCurrentUser);
-  const isAuthLoading = useSelector(getIsAuthLoading); // (userSlice'tan - sağdaki)
+  const isAuthLoading = useSelector(getIsAuthLoading); // (userSlice'tan)
   const dispatch = useDispatch();
 
   // YENİ EKLENDİ (EKSİK 9): "Kalıcı Giriş" (Persistence) Köprüsü
