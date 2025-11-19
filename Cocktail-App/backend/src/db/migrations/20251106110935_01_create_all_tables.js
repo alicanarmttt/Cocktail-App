@@ -29,6 +29,14 @@ exports.up = async function (knex) {
   // --- cocktails (Kokteyller) ---
   await knex.schema.createTable("cocktails", (table) => {
     table.increments("cocktail_id").primary();
+
+    // YENİ EKLENENLER:
+    table.string("api_id").unique(); // TheCocktailDB ID'si (Tekrarı önlemek için unique)
+    table.string("glass_type"); // 'Highball glass'
+    table.text("tags"); // 'IBA,Vegan,Citrus' (Uzun olabilir diye text)
+    table.boolean("is_alcoholic").defaultTo(true); // true/false
+
+    // MEVCUT ALANLAR:
     table.string("name").notNullable().unique();
     table.text("instructions").notNullable();
     table.string("image_url");
