@@ -3,53 +3,69 @@
  * @returns { Promise<void> }
  */
 exports.up = async function (knex) {
-  // --- importance_levels (Önem Seviyeleri) ---
+  // 1. IMPORTANCE LEVELS (Önem Seviyeleri - Çevirili)
   await knex.schema.createTable("importance_levels", (table) => {
-    table.increments("level_id").primary(); // 1, 2, 3...
-    table.string("level_name").notNullable(); // 'Gerekli', 'Süsleme'
+    table.increments("level_id").primary();
+    table.string("level_name_tr").notNullable(); // 'Gerekli'
+    table.string("level_name_en").notNullable(); // 'Required'
     table.string("color_code");
   });
 
-  // --- ingredient_categories (Malzeme Kategorileri) ---
+  // 2. INGREDIENT CATEGORIES (Malzeme Kategorileri - Çevirili)
   await knex.schema.createTable("ingredient_categories", (table) => {
     table.increments("category_id").primary();
-    table.string("category_name").notNullable().unique(); // 'Alkol', 'Soft', 'Şurup'
-    table.string("parent_category_name"); // 'Soft' kategorisi için 'Asitli', 'Asitsiz' gibi alt gruplar
+    // Türkçe
+    table.string("category_name_tr").notNullable(); // 'Alkol'
+    table.string("parent_category_name_tr");
+    // İngilizce
+    table.string("category_name_en").notNullable(); // 'Alcohol'
+    table.string("parent_category_name_en");
   });
 
-  // --- users (Kullanıcılar) ---
+  // 3. USERS (Kullanıcılar - Değişmedi, email evrenseldir)
   await knex.schema.createTable("users", (table) => {
     table.increments("user_id").primary();
-    table.string("firebase_uid").notNullable().unique(); // Firebase'den gelen 'abc123xyz' gibi eşsiz ID
+    table.string("firebase_uid").notNullable().unique();
     table.string("email").notNullable().unique();
     table.boolean("is_pro").defaultTo(false);
-    table.timestamps(true, true); // created_at ve updated_at
+    table.timestamps(true, true);
   });
 
-  // --- cocktails (Kokteyller) ---
+  // 4. COCKTAILS (Kokteyller - Çevirili)
   await knex.schema.createTable("cocktails", (table) => {
     table.increments("cocktail_id").primary();
+    table.string("api_id").unique();
 
-    // YENİ EKLENENLER:
-    table.string("api_id").unique(); // TheCocktailDB ID'si (Tekrarı önlemek için unique)
-    table.string("glass_type"); // 'Highball glass'
-    table.text("tags"); // 'IBA,Vegan,Citrus' (Uzun olabilir diye text)
-    table.boolean("is_alcoholic").defaultTo(true); // true/false
+    // --- TÜRKÇE ALANLAR ---
+    table.string("name_tr").notNullable();
+    table.text("instructions_tr").notNullable();
+    table.string("glass_type_tr"); // 'Yüksek bardak'
+    table.text("tags_tr"); // 'Ekşi,Yaz,Parti'
+    table.text("history_notes_tr");
 
-    // MEVCUT ALANLAR:
-    table.string("name").notNullable().unique();
-    table.text("instructions").notNullable();
+    // --- İNGİLİZCE ALANLAR ---
+    table.string("name_en").notNullable();
+    table.text("instructions_en").notNullable();
+    table.string("glass_type_en"); // 'Highball glass'
+    table.text("tags_en"); // 'Sour,Summer,Party'
+    table.text("history_notes_en");
+
+    // --- ORTAK ALANLAR ---
+    table.boolean("is_alcoholic").defaultTo(true);
     table.string("image_url");
-    table.text("history_notes");
   });
 
-  //   // ADIM 2: "Bağımlı" Tabloları Oluştur (Foreign Key içerenler) 1-1
-
-  // --- ingredients (Malzemeler) ---
+  // 5. INGREDIENTS (Malzemeler - Çevirili)
   await knex.schema.createTable("ingredients", (table) => {
     table.increments("ingredient_id").primary();
-    table.string("name").notNullable().unique();
-    // 'ingredient_categories' tablosuna bağlanır:
+
+    table.string("name_tr").notNullable(); // 'Misket Limonu'
+    table.string("name_en").notNullable(); // 'Lime'
+
+    // Benzersizlik kontrolü: Artık tek başına name değil, tr ve en kombinasyonu veya ayrı ayrı unique olabilir.
+    // Genelde api'den gelen unique name_en olur ama biz ikisine de index atabiliriz.
+    // table.unique('name_en');
+
     table
       .integer("category_id")
       .unsigned()
@@ -58,10 +74,9 @@ exports.up = async function (knex) {
       .onDelete("SET NULL");
   });
 
-  // --- user_profiles (Kullanıcı Profilleri) ---
+  // 6. USER PROFILES (Değişmedi)
   await knex.schema.createTable("user_profiles", (table) => {
     table.increments("profile_id").primary();
-    // "users" table connection;
     table
       .integer("user_id")
       .unsigned()
@@ -73,15 +88,14 @@ exports.up = async function (knex) {
     table.string("profile_image_url");
   });
 
-  //   // ADIM 3: "İlişki" Tablolarını Oluştur (Çoka Çok İlişkiler)
-
-  // --- cocktail_requirements (Kokteyl Gereksinimleri) ---
-  // AÇIKLAMA: Projemizin kalbi. Hangi kokteyl, hangi malzemeden, ne kadar önemli?
+  // 7. COCKTAIL REQUIREMENTS (Gereksinimler - Miktar Çevirili)
   await knex.schema.createTable("cocktail_requirements", (table) => {
     table.increments("requirement_id").primary();
-    table.string("amount").notNullable();
 
-    // Coctails table connect
+    // Miktar metin olduğu için çevrilmeli (örn: "Juice of 1" vs "1 adet suyu")
+    table.string("amount_tr").notNullable();
+    table.string("amount_en").notNullable();
+
     table
       .integer("cocktail_id")
       .unsigned()
@@ -89,7 +103,6 @@ exports.up = async function (knex) {
       .references("cocktail_id")
       .inTable("cocktails")
       .onDelete("CASCADE");
-
     table
       .integer("ingredient_id")
       .unsigned()
@@ -97,7 +110,6 @@ exports.up = async function (knex) {
       .references("ingredient_id")
       .inTable("ingredients")
       .onDelete("CASCADE");
-
     table
       .integer("level_id")
       .unsigned()
@@ -106,16 +118,10 @@ exports.up = async function (knex) {
       .inTable("importance_levels");
   });
 
-  // --- recipe_alternatives (Tarife Özel Alternatifler) [PRO] ---
-  // GÜNCELLEME: Burası 'akıllı' versiyonla değiştirildi (Sizin öneriniz).
+  // 8. RECIPE ALTERNATIVES (Alternatifler - Miktar Çevirili)
   await knex.schema.createTable("recipe_alternatives", (table) => {
     table.increments("alternative_id").primary();
 
-    // GÜNCELLEME: 'alternative_recipe_text' (düz metin) sütunu kaldırıldı.
-    // table.text("alternative_recipe_text").notNullable();
-
-    // GÜNCELLEME: Yerine 'alternative_ingredient_id' (malzeme ID'si) eklendi.
-    // Bu, "Barmen'in Asistanı" ('Elimde Votka var') özelliğimiz için GEREKLİDİR.
     table
       .integer("alternative_ingredient_id")
       .unsigned()
@@ -123,10 +129,10 @@ exports.up = async function (knex) {
       .references("ingredient_id")
       .inTable("ingredients");
 
-    // GÜNCELLEME: Alternatifin miktarı eklendi.
-    table.string("alternative_amount").notNullable(); // örn: "60 ml"
+    // Alternatif miktarı da dilli olmalı
+    table.string("alternative_amount_tr").notNullable();
+    table.string("alternative_amount_en").notNullable();
 
-    // Hangi kokteyl için bu alternatif? (Bu satırlar aynı kaldı)
     table
       .integer("cocktail_id")
       .unsigned()
@@ -135,7 +141,6 @@ exports.up = async function (knex) {
       .inTable("cocktails")
       .onDelete("CASCADE");
 
-    // Hangi malzeme yerine bu alternatif? (Bu satırlar aynı kaldı)
     table
       .integer("original_ingredient_id")
       .unsigned()
@@ -143,23 +148,22 @@ exports.up = async function (knex) {
       .inTable("ingredients");
   });
 
-  // --- barmens_corner_posts (Barmen Köşesi Gönderileri) [PRO] ---
+  // 9. BARMENS CORNER (Kullanıcı İçeriği - Çevrilmez)
+  // Not: Kullanıcı gönderileri genelde orijinal dilinde kalır.
   await knex.schema.createTable("barmens_corner_posts", (table) => {
     table.increments("post_id").primary();
     table.string("image_url").notNullable();
-    table.text("caption"); // "Hafta sonu denemem!"
+    table.text("caption"); // Kullanıcının yazdığı dil neyse o kalır.
     table.timestamps(true, true);
 
-    // Kim paylaştı?
     table
       .integer("user_id")
       .unsigned()
       .notNullable()
       .references("user_id")
       .inTable("users")
-      .onDelete("CASCADE"); // Kullanıcı silinirse gönderileri de silinir.
+      .onDelete("CASCADE");
 
-    // Hangi kokteyli etiketledi? (Opsiyonel)
     table
       .integer("cocktail_id")
       .unsigned()
@@ -168,14 +172,12 @@ exports.up = async function (knex) {
       .onDelete("SET NULL");
   });
 };
+
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
 exports.down = async function (knex) {
-  // YUKARIDAKİ İŞLEMLERİN TAM TERSİ SIRASIYLA TÜM TABLOLARI SİL
-  // (Bağımlılık zincirini kırmamak için)
-
   await knex.schema.dropTableIfExists("barmens_corner_posts");
   await knex.schema.dropTableIfExists("recipe_alternatives");
   await knex.schema.dropTableIfExists("cocktail_requirements");

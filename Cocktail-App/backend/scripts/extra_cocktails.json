@@ -1,0 +1,162 @@
+[
+  {
+    "api_id": "extra_001",
+    "name": "Gin Basil Smash",
+    "category": "Cocktail",
+    "glass_type": "Old-fashioned glass",
+    "tags": "ModernClassic,Herbal,Refreshing,Summer",
+    "is_alcoholic": true,
+    "instructions": "Muddle basil leaves with sugar syrup in a shaker. Add gin and lemon juice. Fill with ice and shake vigorously. Double strain into an ice-filled glass. Garnish with basil.",
+    "image_url": "https://www.diffordsguide.com/cdn-cgi/image/w=1200,h=1200,c=fit,f=auto,q=85/thumbs/drunken-guide/recipes/2075/gin-basil-smash-new.jpg",
+    "ingredients": [
+      { "name": "Gin", "amount": "60 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Fresh Basil", "amount": "12 leaves", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Lemon Juice", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Sugar Syrup", "amount": "15 ml", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+  {
+    "api_id": "extra_002",
+    "name": "Paper Plane",
+    "category": "Cocktail",
+    "glass_type": "Coupe glass",
+    "tags": "IBA,ModernClassic,Bittersweet,Dinner",
+    "is_alcoholic": true,
+    "instructions": "Pour all ingredients into cocktail shaker filled with ice. Shake well. Strain into a chilled cocktail glass.",
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/94567t1617302337.jpg",
+    "ingredients": [
+      { "name": "Bourbon", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Aperol", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Amaro Nonino", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Lemon Juice", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+  {
+    "api_id": "extra_003",
+    "name": "Amaretto Sour",
+    "category": "Cocktail",
+    "glass_type": "Old-fashioned glass",
+    "tags": "IBA,Classic,Sour,Dinner",
+    "is_alcoholic": true,
+    "instructions": "Shake all ingredients with ice. Strain back into the shaker and dry shake (without ice) to emulsify the egg white. Pour over fresh ice.",
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/x55n281503568447.jpg",
+    "ingredients": [
+      { "name": "Amaretto", "amount": "60 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Lemon Juice", "amount": "30 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Egg White", "amount": "1 dash", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Angostura Bitters", "amount": "Dash", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+  {
+    "api_id": "extra_004",
+    "name": "Naked and Famous",
+    "category": "Cocktail",
+    "glass_type": "Coupe glass",
+    "tags": "ModernClassic,Smoky,Herbal",
+    "is_alcoholic": true,
+    "instructions": "Shake all ingredients with ice and strain into a chilled coupe glass.",
+    "image_url": "https://www.diffordsguide.com/cdn-cgi/image/w=1200,h=1200,c=fit,f=auto,q=85/thumbs/drunken-guide/recipes/2672/naked-and-famous-new.jpg",
+    "ingredients": [
+      { "name": "Mezcal", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Yellow Chartreuse", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Aperol", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Lime Juice", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+  {
+    "api_id": "extra_005",
+    "name": "Jungle Bird",
+    "category": "Cocktail",
+    "glass_type": "Old-fashioned glass",
+    "tags": "Tiki,Tropical,Bittersweet",
+    "is_alcoholic": true,
+    "instructions": "Shake all ingredients with ice and strain into a glass filled with crushed ice.",
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/2hms5h1504889042.jpg",
+    "ingredients": [
+      { "name": "Dark Rum", "amount": "45 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Campari", "amount": "20 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Pineapple Juice", "amount": "45 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Lime Juice", "amount": "15 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Sugar Syrup", "amount": "15 ml", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+  {
+    "api_id": "extra_006",
+    "name": "Bloody Mary",
+    "category": "Cocktail",
+    "glass_type": "Highball glass",
+    "tags": "IBA,Classic,Savory,Hangover,Brunch",
+    "is_alcoholic": true,
+    "instructions": "Stir gently, pour over ice cubes in a highball glass. Garnish with celery stalk and lemon wedge.",
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/t6caa21678570086.jpg",
+    "ingredients": [
+      { "name": "Vodka", "amount": "45 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Tomato Juice", "amount": "90 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Lemon Juice", "amount": "15 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Worcestershire Sauce", "amount": "2 dashes", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Tabasco Sauce", "amount": "2 dashes", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+  {
+    "api_id": "extra_007",
+    "name": "Boulevardier",
+    "category": "Cocktail",
+    "glass_type": "Old-fashioned glass",
+    "tags": "IBA,Classic,Bittersweet,Strong",
+    "is_alcoholic": true,
+    "instructions": "Stir with ice, strain, garnish with an orange twist.",
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/km84qi1513705868.jpg",
+    "ingredients": [
+      { "name": "Bourbon", "amount": "45 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Campari", "amount": "30 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Sweet Vermouth", "amount": "30 ml", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+  {
+    "api_id": "extra_008",
+    "name": "Aperol Spritz",
+    "category": "Cocktail",
+    "glass_type": "Wine Glass",
+    "tags": "IBA,Summer,Sparkling,Refreshing",
+    "is_alcoholic": true,
+    "instructions": "Build into glass over ice. Garnish with an orange slice.",
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/iloasq1587661955.jpg",
+    "ingredients": [
+      { "name": "Prosecco", "amount": "90 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Aperol", "amount": "60 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Soda Water", "amount": "Splash", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+   {
+    "api_id": "extra_009",
+    "name": "Vieux Carré",
+    "category": "Cocktail",
+    "glass_type": "Old-fashioned glass",
+    "tags": "IBA,Classic,Strong,NewOrleans",
+    "is_alcoholic": true,
+    "instructions": "Stir with ice. Strain into an ice-filled old-fashioned glass. Garnish with a lemon twist.",
+    "image_url": "https://www.diffordsguide.com/cdn-cgi/image/w=1200,h=1200,c=fit,f=auto,q=85/thumbs/drunken-guide/recipes/2091/vieux-carre-cocktail-new.jpg",
+    "ingredients": [
+      { "name": "Rye Whiskey", "amount": "30 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Cognac", "amount": "30 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Sweet Vermouth", "amount": "30 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Benedictine", "amount": "1 tsp", "category": null, "importance": null, "alternatives": [] }
+    ]
+  },
+  {
+    "api_id": "extra_010",
+    "name": "Sex on the Beach",
+    "category": "Cocktail",
+    "glass_type": "Highball glass",
+    "tags": "IBA,ContemporaryClassic,Sweet,Fruity,Summer",
+    "is_alcoholic": true,
+    "instructions": "Build all ingredients in a highball glass filled with ice. Garnish with orange slice.",
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/lijtw51551455287.jpg",
+    "ingredients": [
+      { "name": "Vodka", "amount": "45 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Peach Schnapps", "amount": "15 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Orange Juice", "amount": "45 ml", "category": null, "importance": null, "alternatives": [] },
+      { "name": "Cranberry Juice", "amount": "45 ml", "category": null, "importance": null, "alternatives": [] }
+    ]
+  }
+]

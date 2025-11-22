@@ -1,0 +1,316 @@
+[{
+    "name": "Amaretto Sour",
+    "history_notes_en": "Often dismissed as a 70s disco drink, it was revived by Jeffrey Morgenthaler, who added egg white and cask-strength bourbon to balance the sweetness.",
+    "history_notes_tr": "Genellikle 70'lerin disko içeceği olarak küçümsenirken, tatlılığı dengelemek için yumurta akı ve yüksek alkollü burbon ekleyen Jeffrey Morgenthaler tarafından yeniden canlandırılmıştır."
+  },
+  {
+    "name": "Americano",
+    "history_notes_en": "Created in the 1860s at Caffè Campari. Originally known as the 'Milano-Torino', it was renamed because of its popularity among American tourists escaping Prohibition.",
+    "history_notes_tr": "1860'larda Caffè Campari'de yaratıldı. Orijinal adı 'Milano-Torino' idi, ancak Yasak döneminden kaçan Amerikalı turistler arasında popüler olduğu için yeniden adlandırıldı."
+  },
+  {
+    "name": "Aperol Spritz",
+    "history_notes_en": "While the concept of a 'Spritz' dates back to Austrian soldiers in Venice diluting wine, the Aperol version became a global phenomenon in the 2000s as the ultimate Italian apéritif.",
+    "history_notes_tr": "'Spritz' kavramı Venedik'teki Avusturyalı askerlerin şarabı sulandırmasına dayansa da, Aperol versiyonu 2000'lerde nihai İtalyan aperitifi olarak küresel bir fenomen haline geldi."
+  },
+  {
+    "name": "Aviation",
+    "history_notes_en": "A pre-Prohibition classic created by Hugo Ensslin in 1916. It is famous for its sky-blue color, derived from the obscure Crème de Violette liqueur.",
+    "history_notes_tr": "1916'da Hugo Ensslin tarafından yaratılan Yasak öncesi bir klasik. Gökyüzü mavisi rengini, nadir bulunan Crème de Violette liköründen almasıyla ünlüdür."
+  },
+  {
+    "name": "Bellini",
+    "history_notes_en": "Invented by Giuseppe Cipriani at Harry's Bar in Venice around 1945. Named because its unique pink color reminded him of the toga of a saint in a painting by Giovanni Bellini.",
+    "history_notes_tr": "1945 civarında Venedik'teki Harry's Bar'da Giuseppe Cipriani tarafından icat edildi. Eşsiz pembe rengi ona Giovanni Bellini'nin bir tablosundaki azizin cübbesini hatırlattığı için bu adı aldı."
+  },
+  {
+    "name": "Bloody Mary",
+    "history_notes_en": "Often attributed to Fernand Petiot at Harry's New York Bar in Paris in the 1920s. It became the world's most famous hangover cure.",
+    "history_notes_tr": "Genellikle 1920'lerde Paris'teki Harry's New York Bar'da Fernand Petiot'a atfedilir. Dünyanın en ünlü akşamdan kalma ilacı haline gelmiştir."
+  },
+  {
+    "name": "Boulevardier",
+    "history_notes_en": "Created by Erskine Gwynne in Paris in 1927. Essentially a Negroni made with whiskey instead of gin, created for American expats in Paris.",
+    "history_notes_tr": "1927'de Paris'te Erskine Gwynne tarafından yaratıldı. Temelde cin yerine viski ile yapılan bir Negroni'dir ve Paris'teki Amerikalı gurbetçiler için tasarlanmıştır."
+  },
+  {
+    "name": "Bramble",
+    "history_notes_en": "Created by Dick Bradsell in London in the 1980s. Inspired by his childhood memories of picking blackberries on the Isle of Wight.",
+    "history_notes_tr": "1980'lerde Londra'da Dick Bradsell tarafından yaratıldı. Isle of Wight'ta böğürtlen topladığı çocukluk anılarından esinlenmiştir."
+  },
+  {
+    "name": "Caipirinha",
+    "history_notes_en": "Brazil's national cocktail. Originally consumed as a remedy for the Spanish Flu, containing garlic and honey, before evolving into today's refreshing mix.",
+    "history_notes_tr": "Brezilya'nın milli kokteyli. Bugünkü ferahlatıcı karışımına evrilmeden önce, aslında İspanyol Gribi için sarımsak ve bal içeren bir ilaç olarak tüketilirdi."
+  },
+  {
+    "name": "Casino",
+    "history_notes_en": "An IBA official classic that appeared in Hugo Ensslin's 1916 book. It is essentially an Aviation cocktail but uses orange bitters instead of Crème de Violette.",
+    "history_notes_tr": "Hugo Ensslin'in 1916 tarihli kitabında yer alan resmi bir IBA klasiği. Temelde bir Aviation kokteylidir ancak Menekşe likörü yerine portakal bitteri kullanılır."
+  },
+  {
+    "name": "Clover Club",
+    "history_notes_en": "A pre-Prohibition classic named after a men's club in Philadelphia. Known for its silky texture thanks to the egg white and raspberry syrup.",
+    "history_notes_tr": "Adını Philadelphia'daki bir erkek kulübünden alan Yasak öncesi klasik. Yumurta akı ve ahududu şurubu sayesinde sahip olduğu ipeksi dokusuyla bilinir."
+  },
+  {
+    "name": "Corpse Reviver",
+    "history_notes_en": "Specifically the 'No. 2', this drink comes from the Savoy Cocktail Book (1930). Intended as a 'hair of the dog' hangover cure to wake up the dead.",
+    "history_notes_tr": "Özellikle 'No. 2' versiyonu, Savoy Kokteyl Kitabı'ndan (1930) gelir. Ölüleri uyandırmak için tasarlanmış bir 'çivi çiviyi söker' (akşamdan kalma) ilacıdır."
+  },
+  {
+    "name": "Cosmopolitan",
+    "history_notes_en": "Though disputed, Toby Cecchini is often credited with the modern recipe in NYC. It became a global icon in the 90s thanks to the TV show 'Sex and the City'.",
+    "history_notes_tr": "Tartışmalı olsa da, modern tarif genellikle NYC'deki Toby Cecchini'ye atfedilir. 90'larda 'Sex and the City' dizisi sayesinde küresel bir ikon haline geldi."
+  },
+  {
+    "name": "Cuba Libre",
+    "history_notes_en": "Originated in Havana around 1900, following the Spanish-American War. The name means 'Free Cuba', celebrating the arrival of Coca-Cola and American soldiers.",
+    "history_notes_tr": "İspanyol-Amerikan Savaşı'nın ardından 1900 civarında Havana'da ortaya çıktı. Adı 'Özgür Küba' anlamına gelir ve Coca-Cola ile Amerikan askerlerinin gelişini kutlar."
+  },
+  {
+    "name": "Daiquiri",
+    "history_notes_en": "Invented by American mining engineer Jennings Cox in Cuba. Named after the beach and iron mine near Santiago de Cuba where he worked.",
+    "history_notes_tr": "Küba'daki Amerikalı maden mühendisi Jennings Cox tarafından icat edildi. Adını Santiago de Cuba yakınlarında çalıştığı plaj ve demir madeninden almıştır."
+  },
+  {
+    "name": "Dark and Stormy",
+    "history_notes_en": "The national drink of Bermuda. The name is said to have originated when a sailor observed that the drink's color looked like storm clouds.",
+    "history_notes_tr": "Bermuda'nın milli içeceği. Adının, bir denizcinin içeceğin renginin fırtına bulutlarına benzediğini söylemesiyle ortaya çıktığı söylenir."
+  },
+  {
+    "name": "Dry Martini",
+    "history_notes_en": "The King of Cocktails. Its origins are muddy, likely evolving from the sweeter 'Martinez'. It became drier over the decades, famously preferred by Churchill and Bond.",
+    "history_notes_tr": "Kokteyllerin Kralı. Kökenleri belirsizdir, muhtemelen daha tatlı olan 'Martinez'den evrilmiştir. On yıllar içinde daha sek hale geldi, Churchill ve Bond tarafından tercih edilmesiyle ünlendi."
+  },
+  {
+    "name": "Espresso Martini",
+    "history_notes_en": "Created by Dick Bradsell in London in 1983. Legend says a famous model asked for a drink that would 'wake me up and f**k me up'.",
+    "history_notes_tr": "1983 yılında Londra'da Dick Bradsell tarafından yaratıldı. Efsaneye göre ünlü bir model 'beni uyandıracak ve mahvedecek' bir içecek istemiştir."
+  },
+  {
+    "name": "French 75",
+    "history_notes_en": "Named after the rapid-firing 75mm field gun used by the French in WWI. It was said to have a kick comparable to being shelled.",
+    "history_notes_tr": "Adını Fransızların 1. Dünya Savaşı'nda kullandığı hızlı ateş eden 75 mm'lik sahra topundan almıştır. Bir top mermisi yemekle kıyaslanabilir bir vuruşu olduğu söylenirdi."
+  },
+  {
+    "name": "French Martini",
+    "history_notes_en": "Not truly French, but invented in NYC in the 80s. It sparked the fruity martini craze and is named for its use of Chambord, a French black raspberry liqueur.",
+    "history_notes_tr": "Aslında Fransız değildir, 80'lerde NYC'de icat edilmiştir. Meyveli martini çılgınlığını başlattı ve adını Fransız ahududu likörü Chambord kullanımından aldı."
+  },
+  {
+    "name": "Gimlet",
+    "history_notes_en": "Originally a medicine for British sailors to prevent scurvy. They mixed their daily ration of lime juice (preserved with sugar) with gin to make it palatable.",
+    "history_notes_tr": "Aslen İngiliz denizcileri iskorbütten korumak için bir ilaçtı. Günlük limon suyu (şekerle korunmuş) istihkaklarını içilebilir hale getirmek için cinle karıştırırlardı."
+  },
+  {
+    "name": "Gin Basil Smash",
+    "history_notes_en": "Created in 2008 by Jörg Meyer in Hamburg. Originally called the 'Gin Pesto', it quickly became a modern classic worldwide for its fresh herbal taste.",
+    "history_notes_tr": "2008 yılında Hamburg'da Jörg Meyer tarafından yaratıldı. Orijinal adı 'Gin Pesto' olan içecek, taze bitkisel tadıyla dünya çapında hızla modern bir klasik haline geldi."
+  },
+  {
+    "name": "Gin Tonic",
+    "history_notes_en": "Born in British colonial India. Soldiers mixed quinine (anti-malarial) with water, sugar, and lime to mask the bitter taste, adding gin to make a soothing drink.",
+    "history_notes_tr": "İngiliz sömürgesi Hindistan'da doğdu. Askerler kinini (sıtma ilacı) acı tadı maskelemek için su, şeker ve limonla karıştırır, rahatlatıcı bir içecek yapmak için cin eklerlerdi."
+  },
+  {
+    "name": "Godfather",
+    "history_notes_en": "Popular in the 1970s, it was named after the famous film starring Marlon Brando. It's a simple but bold mix of Scotch and Amaretto.",
+    "history_notes_tr": "1970'lerde popüler olan bu içecek, adını Marlon Brando'nun oynadığı ünlü filmden almıştır. Scotch ve Amaretto'nun basit ama cesur bir karışımıdır."
+  },
+  {
+    "name": "Hemingway Special",
+    "history_notes_en": "Also known as the 'Papa Doble'. Created for Ernest Hemingway at El Floridita in Havana. He was diabetic, so he requested double the rum and no sugar.",
+    "history_notes_tr": "'Papa Doble' olarak da bilinir. Havana'daki El Floridita'da Ernest Hemingway için yaratıldı. Şeker hastası olduğu için şekersiz ve iki kat romlu isterdi."
+  },
+  {
+    "name": "Irish Coffee",
+    "history_notes_en": "Invented by Joe Sheridan at Foynes Airport to warm up passengers. When asked if it was Brazilian coffee, he replied, 'No, that's Irish Coffee'.",
+    "history_notes_tr": "Foynes Havalimanı'nda Joe Sheridan tarafından yolcuları ısıtmak için icat edildi. Brezilya kahvesi olup olmadığı sorulduğunda, 'Hayır, bu İrlanda Kahvesi' yanıtını verdi."
+  },
+  {
+    "name": "Jungle Bird",
+    "history_notes_en": "Created in 1973 at the Kuala Lumpur Hilton's Aviary Bar. It is one of the few Tiki cocktails to use Campari, giving it a unique bittersweet profile.",
+    "history_notes_tr": "1973 yılında Kuala Lumpur Hilton'un Aviary Bar'ında yaratıldı. Campari kullanan ve ona eşsiz bir acı-tatlı profil kazandıran az sayıdaki Tiki kokteylinden biridir."
+  },
+  {
+    "name": "Kir Royale",
+    "history_notes_en": "A variation of the 'Kir', named after Canon Félix Kir, a hero of the French Resistance. He popularized the drink to promote local Burgundy products.",
+    "history_notes_tr": "Fransız Direnişi kahramanı Canon Félix Kir'in adını taşıyan 'Kir'in bir varyasyonudur. Yerel Burgonya ürünlerini tanıtmak için bu içeceği popülerleştirdi."
+  },
+  {
+    "name": "Long Island Iced Tea",
+    "history_notes_en": "Typically attributed to Robert 'Rosebud' Butt in the 1970s. Despite tasting like iced tea, it contains no tea, but four different spirits.",
+    "history_notes_tr": "Genellikle 1970'lerde Robert 'Rosebud' Butt'a atfedilir. Tadı buzlu çaya benzemesine rağmen içinde çay yoktur, ancak dört farklı alkol içerir."
+  },
+  {
+    "name": "Mai Tai",
+    "history_notes_en": "Invented by Trader Vic in 1944. Upon tasting it, a Tahitian friend exclaimed 'Maita'i roa ae!', meaning 'Out of this world!'.",
+    "history_notes_tr": "1944'te Trader Vic tarafından icat edildi. Tadına bakan Tahitili bir arkadaşı 'Maita'i roa ae!' diye haykırdı, bu 'Dünya dışı!' anlamına gelir."
+  },
+  {
+    "name": "Manhattan",
+    "history_notes_en": "One of the oldest cocktails, dating back to the 1870s. Legend links it to Lady Randolph Churchill at the Manhattan Club, though this is likely a myth.",
+    "history_notes_tr": "1870'lere dayanan en eski kokteyllerden biridir. Efsaneler onu Manhattan Club'daki Lady Randolph Churchill ile ilişkilendirir, ancak bu muhtemelen bir mittir."
+  },
+  {
+    "name": "Margarita",
+    "history_notes_en": "Its origin is murky, but it likely evolved from the 'Daisy' cocktail category (Margarita means Daisy in Spanish), substituting brandy with tequila.",
+    "history_notes_tr": "Kökeni belirsizdir, ancak muhtemelen brendinin tekila ile değiştirilmesiyle 'Daisy' (İspanyolca Margarita) kokteyl kategorisinden evrilmiştir."
+  },
+  {
+    "name": "Mimosa",
+    "history_notes_en": "Created by Frank Meier at the Ritz Hotel in Paris around 1925. Named after the yellow mimosa plant, it became the ultimate brunch cocktail.",
+    "history_notes_tr": "1925 civarında Paris'teki Ritz Otel'de Frank Meier tarafından yaratıldı. Adını sarı mimoza çiçeğinden alır ve nihai brunch kokteyli haline gelmiştir."
+  },
+  {
+    "name": "Mint Julep",
+    "history_notes_en": "A southern US classic associated with the Kentucky Derby since 1938. Traditionally served in a silver or pewter cup to keep it frostily cold.",
+    "history_notes_tr": "1938'den beri Kentucky Derbisi ile özdeşleşmiş bir ABD güney klasiği. Buz gibi soğuk kalması için geleneksel olarak gümüş veya kalaylı kupada servis edilir."
+  },
+  {
+    "name": "Mojito",
+    "history_notes_en": "Origins trace back to 16th-century Cuba and Sir Francis Drake. It became globally famous as one of Ernest Hemingway's favorite drinks.",
+    "history_notes_tr": "Kökenleri 16. yüzyıl Küba'sına ve Sir Francis Drake'e kadar uzanır. Ernest Hemingway'in favori içeceklerinden biri olarak dünyaca ünlenmiştir."
+  },
+  {
+    "name": "Moscow Mule",
+    "history_notes_en": "Created in 1941 as a marketing stunt to sell excess Smirnoff vodka and ginger beer. The copper mugs were used simply because they were available.",
+    "history_notes_tr": "1941'de fazla Smirnoff votkasını ve zencefil birasını satmak için bir pazarlama hilesi olarak yaratıldı. Bakır kupalar sadece elde mevcut oldukları için kullanıldı."
+  },
+  {
+    "name": "Naked and Famous",
+    "history_notes_en": "A modern classic by Joaquin Simo at Death & Co in 2011. It is a smoky, herbal riff on the Paper Plane and Last Word cocktails.",
+    "history_notes_tr": "2011'de Death & Co'da Joaquin Simo tarafından yaratılan modern bir klasik. Paper Plane ve Last Word kokteyllerinin dumanlı ve bitkisel bir uyarlamasıdır."
+  },
+  {
+    "name": "Negroni",
+    "history_notes_en": "Invented in Florence in 1919 when Count Camillo Negroni asked the bartender to strengthen his Americano by replacing soda water with gin.",
+    "history_notes_tr": "1919'da Floransa'da, Kont Camillo Negroni'nin barmenden Americano'sunu soda yerine cin koyarak güçlendirmesini istemesiyle icat edildi."
+  },
+  {
+    "name": "Old Cuban",
+    "history_notes_en": "Created by Audrey Saunders in 2001. It is essentially a sophisticated cross between a Mojito and a French 75, using aged rum and champagne.",
+    "history_notes_tr": "2001 yılında Audrey Saunders tarafından yaratıldı. Temelde yıllanmış rom ve şampanya kullanan, Mojito ve French 75'in sofistike bir karışımıdır."
+  },
+  {
+    "name": "Old Fashioned",
+    "history_notes_en": "The definition of the word 'cocktail' (spirits, sugar, water, bitters). It is the grandfather of all drinks, dating back to the early 19th century.",
+    "history_notes_tr": "'Kokteyl' kelimesinin tanımı (alkol, şeker, su, bitter). 19. yüzyılın başlarına kadar uzanan tüm içeceklerin büyük babasıdır."
+  },
+  {
+    "name": "Orgasm",
+    "history_notes_en": "A popular creamy shooter from the 1970s and 80s. It belongs to a category of drinks with provocative names that were popular in that era.",
+    "history_notes_tr": "1970'ler ve 80'lerin popüler kremalı shot'ı. O dönemde popüler olan kışkırtıcı isimli içecekler kategorisine aittir."
+  },
+  {
+    "name": "Paloma",
+    "history_notes_en": "Often considered Mexico's actual most beloved cocktail, surpassing the Margarita. Created by Don Javier Delgado Corona at La Capilla bar.",
+    "history_notes_tr": "Margarita'yı geride bırakarak Meksika'nın asıl en sevilen kokteyli kabul edilir. La Capilla barda Don Javier Delgado Corona tarafından yaratılmıştır."
+  },
+  {
+    "name": "Paper Plane",
+    "history_notes_en": "Created by Sam Ross in 2008. Named after the M.I.A. song 'Paper Planes', it is a perfectly balanced modern classic using equal parts.",
+    "history_notes_tr": "2008'de Sam Ross tarafından yaratıldı. Adını M.I.A.'nın 'Paper Planes' şarkısından alan bu içecek, eşit ölçüler kullanan mükemmel dengeli modern bir klasiktir."
+  },
+  {
+    "name": "Penicillin",
+    "history_notes_en": "Created by Sam Ross in 2005. It revolutionized scotch cocktails by combining blended scotch with fresh lemon, ginger, honey, and a smoky Islay float.",
+    "history_notes_tr": "2005'te Sam Ross tarafından yaratıldı. Harman viskiyi taze limon, zencefil, bal ve dumanlı Islay viskisiyle birleştirerek viski kokteyllerinde devrim yarattı."
+  },
+  {
+    "name": "Pina Colada",
+    "history_notes_en": "Born in Puerto Rico in 1954, credited to Ramon 'Monchito' Marrero. It became the official drink of Puerto Rico in 1978.",
+    "history_notes_tr": "1954'te Porto Riko'da doğdu, Ramon 'Monchito' Marrero'ya atfedilir. 1978'de Porto Riko'nun resmi içeceği oldu."
+  },
+  {
+    "name": "Pisco Sour",
+    "history_notes_en": "Invented by Victor Morris in Lima, Peru, in the 1920s. Both Peru and Chile claim it as their national drink, sparking a long-standing debate.",
+    "history_notes_tr": "1920'lerde Lima, Peru'da Victor Morris tarafından icat edildi. Hem Peru hem de Şili'nin milli içecekleri olduğunu iddia etmesi uzun süreli bir tartışmaya yol açtı."
+  },
+  {
+    "name": "Pornstar Martini",
+    "history_notes_en": "Created by Douglas Ankrah in London in 2002. Originally called the 'Maverick Martini', renamed for its provocative and indulgent nature.",
+    "history_notes_tr": "2002'de Londra'da Douglas Ankrah tarafından yaratıldı. Orijinal adı 'Maverick Martini' iken, kışkırtıcı ve keyif verici doğası nedeniyle yeniden adlandırıldı."
+  },
+  {
+    "name": "Ramos Gin Fizz",
+    "history_notes_en": "Invented by Henry C. Ramos in New Orleans in 1888. Famous for requiring 12 minutes of shaking; bars used to employ 'shaker boys' just for this drink.",
+    "history_notes_tr": "1888'de New Orleans'ta Henry C. Ramos tarafından icat edildi. 12 dakika çalkalanmasıyla ünlüdür; barlar sadece bu içecek için 'çalkalayıcı çocuklar' çalıştırırdı."
+  },
+  {
+    "name": "Rum Sour",
+    "history_notes_en": "A foundational Caribbean drink. Before the Daiquiri had a name, sailors and locals were already mixing rum, lime, and sugar in this 'sour' format.",
+    "history_notes_tr": "Temel bir Karayip içeceği. Daiquiri'nin bir adı olmadan önce bile, denizciler ve yerliler rom, limon ve şekeri bu 'sour' formatında karıştırıyorlardı."
+  },
+  {
+    "name": "San Francisco",
+    "history_notes_en": "A popular non-alcoholic mocktail classic. It mimics the complexity of a cocktail using juices and grenadine, evolving from the disco era.",
+    "history_notes_tr": "Popüler bir alkolsüz mocktail klasiği. Meyve suları ve nar şurubu kullanarak bir kokteylin karmaşıklığını taklit eder, disko döneminden evrilmiştir."
+  },
+  {
+    "name": "Sazerac",
+    "history_notes_en": "New Orleans' official cocktail. Originally made with Cognac, it switched to Rye Whiskey due to the phylloxera epidemic in France.",
+    "history_notes_tr": "New Orleans'ın resmi kokteyli. Başlangıçta Konyak ile yapılırken, Fransa'daki filoksera (bağ biti) salgını nedeniyle Çavdar Viskisine geçiş yapmıştır."
+  },
+  {
+    "name": "Sex on the Beach",
+    "history_notes_en": "Created by Ted Pizio in Florida in 1987. It was a marketing move to sell Peach Schnapps during spring break, named after tourists' two main goals.",
+    "history_notes_tr": "1987'de Florida'da Ted Pizio tarafından yaratıldı. Bahar tatilinde Şeftali Likörü satmak için yapılan bir pazarlama hamlesiydi, adını turistlerin iki ana hedefinden aldı."
+  },
+  {
+    "name": "Sidecar",
+    "history_notes_en": "Named after the motorcycle sidecar, popular in Paris and London after WWI. It is the definitive cognac sour cocktail.",
+    "history_notes_tr": "Adını motosiklet sepetinden alan bu içecek, 1. Dünya Savaşı'ndan sonra Paris ve Londra'da popüler oldu. Nihai konyak sour kokteylidir."
+  },
+  {
+    "name": "Spritz",
+    "history_notes_en": "A general category of Venetian aperitifs. 'Spritzen' is German for 'splash', referring to adding sparkling water to wine.",
+    "history_notes_tr": "Venedik aperitiflerinin genel kategorisi. 'Spritzen' Almanca 'sıçratmak' anlamına gelir ve şaraba soda eklemeyi ifade eder."
+  },
+  {
+    "name": "Tequila Sunrise",
+    "history_notes_en": "The modern version was created in Sausalito in the 70s. It became famous after The Rolling Stones dubbed their 1972 tour the 'Cocaine and Tequila Sunrise Tour'.",
+    "history_notes_tr": "Modern versiyonu 70'lerde Sausalito'da yaratıldı. The Rolling Stones'un 1972 turnesine 'Kokain ve Tequila Sunrise Turnesi' adını vermesiyle ünlendi."
+  },
+  {
+    "name": "The Last Word",
+    "history_notes_en": "A Prohibition-era classic from the Detroit Athletic Club (1915). Forgotten for decades, it was revived in Seattle in 2004, sparking a cocktail renaissance.",
+    "history_notes_tr": "Detroit Athletic Club'dan (1915) bir Yasak dönemi klasiği. On yıllarca unutulduktan sonra 2004'te Seattle'da yeniden canlandırıldı ve bir kokteyl rönesansı başlattı."
+  },
+  {
+    "name": "Tom Collins",
+    "history_notes_en": "Linked to the 'Great Tom Collins Hoax' of 1874. People would ask 'Have you seen Tom Collins?', sending victims on a wild goose chase to find a non-existent man.",
+    "history_notes_tr": "1874'teki 'Büyük Tom Collins Şakası' ile bağlantılıdır. İnsanlar 'Tom Collins'i gördün mü?' diye sorarak kurbanları olmayan bir adamı bulmaları için boş bir kovalamacaya gönderirlerdi."
+  },
+  {
+    "name": "Vesper",
+    "history_notes_en": "Invented by Ian Fleming for James Bond in 'Casino Royale' (1953). Named after Bond's love interest, Vesper Lynd.",
+    "history_notes_tr": "Ian Fleming tarafından 'Casino Royale' (1953) kitabında James Bond için icat edildi. Adını Bond'un aşkı Vesper Lynd'den alır."
+  },
+  {
+    "name": "Vieux Carré",
+    "history_notes_en": "Created by Walter Bergeron at Hotel Monteleone in 1938. It is named after the French term for the French Quarter in New Orleans.",
+    "history_notes_tr": "1938'de Hotel Monteleone'de Walter Bergeron tarafından yaratıldı. Adını New Orleans'taki Fransız Mahallesi'nin Fransızca teriminden alır."
+  },
+  {
+    "name": "Whiskey Sour",
+    "history_notes_en": "First written down in 1862 by Jerry Thomas. It was originally a way for sailors to combat scurvy and preserve their spirits during long voyages.",
+    "history_notes_tr": "İlk kez 1862'de Jerry Thomas tarafından yazıldı. Başlangıçta denizcilerin iskorbütle savaşmak ve uzun yolculuklarda içkilerini korumak için kullandıkları bir yöntemdi."
+  },
+  {
+    "name": "White Lady",
+    "history_notes_en": "Created by Harry MacElhone in 1919. It started with mint liqueur but evolved into the gin and Cointreau classic we know today at Harry's New York Bar.",
+    "history_notes_tr": "1919'da Harry MacElhone tarafından yaratıldı. Nane likörü ile başladı ancak Harry's New York Bar'da bugün bildiğimiz cin ve Cointreau klasiğine evrildi."
+  },
+  {
+    "name": "White Russian",
+    "history_notes_en": "A 1960s variation of the Black Russian. It achieved cult status in the late 90s as the signature drink of 'The Dude' in 'The Big Lebowski'.",
+    "history_notes_tr": "Black Russian'ın 1960'lardaki bir varyasyonu. 90'ların sonunda 'The Big Lebowski' filmindeki 'The Dude' karakterinin imza içeceği olarak kült statüsüne ulaştı."
+  },
+  {
+    "name": "Zombie",
+    "history_notes_en": "A Tiki legend by Donn Beach (1934). It was so strong (mostly rum) that customers were strictly limited to two per person because it turned them into zombies.",
+    "history_notes_tr": "Donn Beach (1934) tarafından yaratılan bir Tiki efsanesi. O kadar güçlüydü ki (çoğunlukla rom), insanları zombiye çevirdiği için müşteri başına kesinlikle iki adetle sınırlandırılmıştı."
+  }
+]
