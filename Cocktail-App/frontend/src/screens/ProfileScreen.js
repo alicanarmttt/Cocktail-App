@@ -3,7 +3,7 @@ import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
 // 1. userSlice'tan (sağdaki) gerekli selector ve action'ları import et
 import {
@@ -16,6 +16,15 @@ import {
 import { auth } from "../api/firebaseConfig";
 import { signOut } from "firebase/auth";
 
+// YENİ EKLENDİ (EKSİK 13): Dil yönetimi ve veri yenileme için importlar
+import { setLanguage, selectLanguage } from "../features/uiSlice";
+import { fetchIngredients } from "../features/ingredientSlice";
+import { clearSearchResults } from "../features/barmenSlice";
+import {
+  clearDetail,
+  fetchCocktails,
+} from "../features/cocktails/cocktailSlice";
+
 /**
  * @desc    Kullanıcı profilini gösterir, "Çıkış Yap" (Logout)
  * ve "Pro'ya Yükselt" işlemlerini yönetir.
@@ -26,6 +35,9 @@ const ProfileScreen = () => {
   const currentUser = useSelector(selectCurrentUser);
   const isPro = useSelector(selectIsPro);
   const navigation = useNavigation();
+
+  // YENİ EKLENDİ: Mevcut dili oku
+  const currentLanguage = useSelector(selectLanguage);
 
   /**
    * @desc  Kullanıcıyı hem Firebase'den (Servis) hem de
@@ -67,6 +79,50 @@ const ProfileScreen = () => {
     );
   };
 
+  // YENİ EKLENDİ (EKSİK 13): Dil Değiştirme Fonksiyonu
+  const toggleLanguage = () => {
+    const newLang = currentLanguage === "tr" ? "en" : "tr";
+
+    // 1. Dili değiştir
+    dispatch(setLanguage(newLang));
+
+    // 2. Verileri YENİLE (Reload)
+    // Dil değiştiğinde, eski dildeki verilerin yerine yenilerinin gelmesi gerekir.
+    // Özellikle 'Ingredients' (Malzemeler) Barmen Asistanı için kritiktir.
+    dispatch(fetchIngredients());
+    dispatch(clearSearchResults());
+    dispatch(clearDetail());
+    // (Eğer HomeScreen'de bir liste varsa onu da yenilemek gerekir)
+    dispatch(fetchCocktails());
+    // navigation.getParent(), bizi ProfileStack'ten çıkarıp Tab Navigator'a ulaştırır.
+    navigation.getParent()?.dispatch((state) => {
+      // Eğer state henüz hazır değilse işlem yapma
+      if (!state) return;
+
+      // Tab'daki rotaları (CocktailList, Assistant, Profile) tek tek geziyoruz
+      const freshRoutes = state.routes.map((route) => {
+        // Eğer sıra şu anki aktif tab'a (Profile) geldiyse:
+        // ONUN MEVCUT DURUMUNU KORU (Böylece profil sayfası yenilenmez/kapanmaz)
+        if (route.key === state.routes[state.index].key) {
+          return route;
+        }
+
+        // Diğer tablar (CocktailList ve Assistant) için:
+        // Sadece ismini döndürerek içindeki Stack geçmişini (history) SIFIRLIYORUZ.
+        // React Navigation, state vermediğimiz için bunları "ilk açılış" varsayar.
+        return { name: route.name };
+      });
+
+      // Yeni oluşturduğumuz temizlenmiş rota yapısını navigasyona zorluyoruz
+      return CommonActions.reset({
+        ...state,
+        routes: freshRoutes,
+        index: state.index, // Kullanıcının odağını (focus) değiştirmeden Profil'de tut
+      });
+    });
+    Alert.alert("Dil Değiştirildi", `Uygulama dili: ${newLang.toUpperCase()}`);
+  };
+
   // (Kenar durum: Eğer bir şekilde buraya 'null' kullanıcı gelirse)
   if (!currentUser) {
     return (
@@ -99,6 +155,17 @@ const ProfileScreen = () => {
 
       {/* Ana Eylem Butonları */}
       <View style={styles.buttonContainer}>
+        {/* YENİ EKLENDİ (EKSİK 13): Dil Değiştir Butonu */}
+        <Pressable
+          style={[styles.button, styles.languageButton]}
+          onPress={toggleLanguage}
+        >
+          <Text style={[styles.buttonText, styles.languageButtonText]}>
+            <Ionicons name="language-outline" size={16} /> Dil:{" "}
+            {currentLanguage === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
+          </Text>
+        </Pressable>
+
         {/* "Pro'ya Yükselt" butonu (Sadece 'Free' üye ise gösterilir) */}
         {!isPro && (
           <Pressable
@@ -186,6 +253,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+  // Dil Butonu Stili
+  languageButton: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#333",
+  },
+  languageButtonText: {
+    color: "#333",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
   // Pro Yükseltme Butonu
   upgradeButton: {
     backgroundColor: "#f4511e", // Ana renk (Turuncu)

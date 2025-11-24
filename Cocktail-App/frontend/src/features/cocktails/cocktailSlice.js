@@ -9,8 +9,11 @@ const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
  */
 export const fetchCocktails = createAsyncThunk(
   "cocktails/fetchCocktails",
-  async () => {
-    const response = await axios.get(`${BASE_API_URL}/api/cocktails`);
+  async (_, { getState }) => {
+    const lang = getState().ui?.language || "tr";
+    const response = await axios.get(
+      `${BASE_API_URL}/api/cocktails?lang=${lang}`
+    );
     return response.data;
   }
 );
@@ -22,10 +25,11 @@ export const fetchCocktails = createAsyncThunk(
  */
 export const fetchCocktailById = createAsyncThunk(
   "cocktails/fetchCocktailById",
-  async (cocktail_id) => {
+  async (cocktail_id, { getState }) => {
+    const lang = getState().ui?.language || "tr";
     // '/api/cocktails/:id' rotası backend'de getCocktailById (JOIN'lu) modelini çağırır
     const response = await axios.get(
-      `${BASE_API_URL}/api/cocktails/${cocktail_id}`
+      `${BASE_API_URL}/api/cocktails/${cocktail_id}?lang=${lang}`
     );
     return response.data;
   }

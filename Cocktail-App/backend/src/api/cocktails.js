@@ -14,6 +14,9 @@ const CocktailModel = require("../db/models/cocktail.model");
 
 router.get("/", async (req, res) => {
   try {
+    // 1. Query'den dili al (Varsayılan: 'tr')
+    const lang = req.query.lang || "tr";
+
     const cocktails = await CocktailModel.getAllCocktails();
     res.status(200).json(cocktails);
   } catch (error) {
@@ -34,8 +37,9 @@ router.get("/", async (req, res) => {
  */
 router.get("/:id", async (req, res) => {
   try {
+    const lang = req.query.lang || "tr";
     const { id } = req.params;
-    const cocktail = await CocktailModel.getCocktailById(id);
+    const cocktail = await CocktailModel.getCocktailById(id, lang);
     if (cocktail) {
       res.status(200).json(cocktail);
     } else {

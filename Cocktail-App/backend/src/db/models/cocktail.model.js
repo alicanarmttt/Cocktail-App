@@ -6,9 +6,21 @@ const db = require("knex")(knexConfig); //db object is tool to speak with databa
  * @desc    Fetches all cocktails from the database.
  * @returns {Promise<Array>} An array of cocktail objects
  */
-const getAllCocktails = () => {
+const getAllCocktails = (lang = "tr") => {
+  // Dil kontrolü (SQL Injection önlemek ve varsayılan atamak için)
+  const l = lang === "en" ? "en" : "tr";
+
   // SQL Karşılığı: SELECT * FROM cocktails
-  return db("cocktails").select("*");
+  return db("cocktails").select(
+    "cocktail_id",
+    "api_id",
+    `name_${l} as name`, // name_tr AS name
+    `instructions_${l} as instructions`,
+    `glass_type_${l} as glass_type`,
+    `tags_${l} as tags`,
+    "is_alcoholic",
+    "image_url"
+  );
 };
 
 //Tek bir kokteyli ID'sine göre getiren fonksiyon.
@@ -17,8 +29,22 @@ const getAllCocktails = () => {
  * @param   {number} id - The ID of the cocktail to search for
  * @returns {Promise<Object>} A single cocktail object
  */
-const getCocktailById = async (id) => {
-  const cocktail = await db("cocktails").where({ cocktail_id: id }).first();
+const getCocktailById = async (id, lang = "tr") => {
+  const l = lang === "en" ? "en" : "tr";
+
+  const cocktail = await db("cocktails")
+    .select(
+      "cocktail_id",
+      `name_${l} as name`,
+      `instructions_${l} as instructions`,
+      `history_notes_${l} as history_notes`,
+      `glass_type_${l} as glass_type`,
+      "image_url",
+      "is_alcoholic"
+    )
+    .where({ cocktail_id: id })
+    .first();
+
   if (!cocktail) return undefined;
 
   // Adım 2: Bu kokteylin malzemelerini (requirements) al
@@ -50,12 +76,14 @@ const getCocktailById = async (id) => {
     .select(
       "req.requirement_id",
       "ing.ingredient_id", // (Pro özelliğinde tıklama için ID'yi de alalım)
-      "ing.name",
-      "req.amount",
-      "lvl.level_name",
+      // DİLLİ ALANLAR:
+      `ing.name_${l} as name`, // Malzeme Adı
+      `req.amount_${l} as amount`, // Miktar
+      `lvl.level_name_${l} as level_name`, // Önem Seviyesi
       "lvl.color_code",
-      "alt.alternative_amount", // Alternatifin miktarı (örn: "60 ml")
-      "alt_ing.name as alternative_name", // Alternatifin adı (örn: "Votka")
+      // PRO ALANLAR (DİLLİ):
+      `alt.alternative_amount_${l} as alternative_amount`, // Alternatif Miktarı
+      `alt_ing.name_${l} as alternative_name`, // Alternatif Adı
 
       // YENİ BAYRAK: Eğer 'alt.alternative_id' NULL değilse (yani bir alternatif bulunduysa)
       // 'has_alternative' sütununu 'true' (1) yap, yoksa 'false' (0) yap.

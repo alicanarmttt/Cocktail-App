@@ -7,7 +7,12 @@ const db = require("knex")(knexConfig);
  * @param   {string} mode - Filtreleme modu: 'strict' (Sadece Yapabildiklerim) veya 'flexible' (Bunları İçerenler)
  * @returns {Promise<Array>} Eşleşen kokteyller listesi
  */
-const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
+const findRecipesByIngredients = async (
+  inventoryIds,
+  mode = "strict",
+  lang = "tr"
+) => {
+  const l = lang === "en" ? "en" : "tr";
   // 1. Eğer tezgah boşsa boş dizi dön (Hata almamak için)
   if (!inventoryIds || inventoryIds.length === 0) {
     return [];
@@ -17,6 +22,7 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
   // Mantık: Kokteylin 'Gerekli' (Level 1) malzemelerinin HEPSİ, kullanıcının listesinde (inventoryIds) var mı?
   // (Buna alternatifler de dahildir!)
 
+  // === MOD 1: STRICT (Sadece Yapabildiklerim) ===
   if (mode === "strict") {
     const exactMatches = await db("cocktails as c")
       .whereNotExists(function () {
@@ -35,7 +41,11 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
               .whereIn("alt.alternative_ingredient_id", inventoryIds)
           );
       })
-      .select("c.*");
+      .select(
+        "c.cocktail_id",
+        `c.name_${l} as name`, // name_tr -> name
+        "c.image_url"
+      );
 
     return exactMatches;
   }
@@ -60,10 +70,10 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
           inventoryIds
         );
       })
-      .groupBy("c.cocktail_id", "c.name", "c.image_url") // Kokteyle göre grupla
+      .groupBy("c.cocktail_id", `c.name_${l}`, "c.image_url") // Kokteyle göre grupla
       .select(
         "c.cocktail_id",
-        "c.name",
+        `c.name_${l} as name`,
         "c.image_url",
         // Eşleşen malzeme sayısını hesapla (Puanlama için)
         db.raw("COUNT(*) as match_count")

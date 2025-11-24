@@ -9,8 +9,13 @@ const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
  */
 export const fetchIngredients = createAsyncThunk(
   "ingredients/fetchIngredients",
-  async () => {
-    const response = await axios.get(`${BASE_API_URL}/api/ingredients`);
+  async (_, { getState }) => {
+    // 1. Redux Store'dan mevcut dili oku (uiSlice'tan)
+    // (Eğer uiSlice henüz yoksa varsayılan olarak 'tr' alırız)
+    const currentLang = getState().ui?.language || "tr";
+    const response = await axios.get(
+      `${BASE_API_URL}/api/ingredients?lang=${currentLang}`
+    );
     return response.data;
   }
 );

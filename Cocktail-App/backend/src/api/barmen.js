@@ -13,6 +13,8 @@ router.post("/find-recipes", async (req, res) => {
   try {
     // 1. Frontend'den (AssistantScreen) gelen veriyi 'req.body' içinden al
     const { inventoryIds, mode } = req.body;
+    // 1. Query'den dili al (Varsayılan: 'tr')
+    const lang = req.query.lang || "tr";
 
     // 2. Gelen veriyi doğrula (Temel Güvenlik)
     if (!inventoryIds || !Array.isArray(inventoryIds)) {
@@ -31,7 +33,7 @@ router.post("/find-recipes", async (req, res) => {
 
     // 3. Veri geçerliyse, "BEYNİ" (Model) çağır
     // Model dosyamızdaki o karmaşık Knex sorgusu burada çalışır
-    const cocktails = await findRecipesByIngredients(inventoryIds, mode);
+    const cocktails = await findRecipesByIngredients(inventoryIds, mode, lang);
 
     // 4. Sonucu (filtrelenmiş kokteyl listesini) frontend'e geri gönder
     res.status(200).json(cocktails);

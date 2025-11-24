@@ -4,6 +4,7 @@ import cocktailReducer from "../features/cocktails/cocktailSlice.js";
 import ingredientReducer from "../features/ingredientSlice.js";
 import barmenReducer from "../features/barmenSlice.js";
 import useReducer from "../features/userSlice.js";
+import uiReducer from "../features/uiSlice.js";
 /**
  * @desc    Configures and creates the main Redux store for the application.
  * Tüm 'reducer'ları (veri mantığı dilimlerini) burada birleştiririz.
@@ -19,5 +20,6 @@ export const store = configureStore({
     ingredients: ingredientReducer,
     barmen: barmenReducer,
     user: useReducer,
+    ui: uiReducer,
   },
 });

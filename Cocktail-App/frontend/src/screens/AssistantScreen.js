@@ -328,12 +328,12 @@ const CustomToggle = ({ mode, onToggle }) => {
   // 'mode' ("strict" veya "flexible") değiştiğinde 'animatedValue'yu (kayan top)
   // 0'dan 1'e (veya 1'den 0'a) hareket ettirir.
   const animatedValue = useRef(
-    new Animated.Value(mode === "strict" ? 0 : 1)
+    new Animated.Value(mode === "flexible" ? 0 : 1)
   ).current;
 
   useEffect(() => {
     Animated.spring(animatedValue, {
-      toValue: mode === "strict" ? 0 : 1,
+      toValue: mode === "flexible" ? 0 : 1,
       useNativeDriver: true, // Performans için
     }).start();
   }, [mode, animatedValue]);
@@ -350,14 +350,14 @@ const CustomToggle = ({ mode, onToggle }) => {
       <Text
         style={[
           styles.toggleText,
-          mode === "strict" && styles.toggleTextActive,
+          mode === "flexible" && styles.toggleTextActive,
         ]}
       >
-        Elimde sadece bunlar var
+        Bunları içeren kokteyller
       </Text>
       <Pressable
         style={styles.toggleTrack}
-        onPress={() => onToggle(mode === "strict" ? "flexible" : "strict")}
+        onPress={() => onToggle(mode === "flexible" ? "strict" : "flexible")}
       >
         {/* Kayan Top (Knob) */}
         <Animated.View
@@ -367,10 +367,10 @@ const CustomToggle = ({ mode, onToggle }) => {
       <Text
         style={[
           styles.toggleText,
-          mode === "flexible" && styles.toggleTextActive,
+          mode === "strict" && styles.toggleTextActive,
         ]}
       >
-        Bunları içeren kokteyller
+        Elimde sadece bunlar var
       </Text>
     </View>
   );
