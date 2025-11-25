@@ -70,6 +70,7 @@
     "pro_member": "PRO MEMBER",
     "free_member": "FREE MEMBER",
     "upgrade_btn": "Upgrade to PRO",
-    "language_changed": "Language Changed"
+    "language_changed": "Language Changed",
+     "language_select": "Change Language"
   }
 }

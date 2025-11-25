@@ -84,23 +84,23 @@ const ProfileScreen = () => {
   };
 
   // YENİ EKLENDİ (EKSİK 13): Dil Değiştirme Fonksiyonu
-  const toggleLanguage = () => {
+  const toggleLanguage = async () => {
     const newLang = currentLanguage === "tr" ? "en" : "tr";
 
     // 1. Dili değiştir
-    dispatch(setLanguage(newLang));
+    await i18n.changeLanguage(newLang);
+    // 2. Redux state'ini güncelle (UI tercihi olarak saklamak için)
+    await dispatch(setLanguage(newLang));
 
-    // 2. Verileri YENİLE (Reload)
-    // Dil değiştiğinde, eski dildeki verilerin yerine yenilerinin gelmesi gerekir.
-    // Özellikle 'Ingredients' (Malzemeler) Barmen Asistanı için kritiktir.
-    dispatch(fetchIngredients());
-    dispatch(clearSearchResults());
-    dispatch(clearDetail());
-    // (Eğer HomeScreen'de bir liste varsa onu da yenilemek gerekir)
-    dispatch(fetchCocktails());
+    // 3. Verileri Yenileme Zinciri
+    await dispatch(fetchIngredients());
+    await dispatch(clearSearchResults());
+    await dispatch(clearDetail());
+    await dispatch(fetchCocktails());
+
+    // 4. Navigasyon Resetleme Mantığı
     // navigation.getParent(), bizi ProfileStack'ten çıkarıp Tab Navigator'a ulaştırır.
     navigation.getParent()?.dispatch((state) => {
-      // Eğer state henüz hazır değilse işlem yapma
       if (!state) return;
 
       // Tab'daki rotaları (CocktailList, Assistant, Profile) tek tek geziyoruz
@@ -162,14 +162,14 @@ const ProfileScreen = () => {
 
       {/* Ana Eylem Butonları */}
       <View style={styles.buttonContainer}>
-        {/* YENİ EKLENDİ (EKSİK 13): Dil Değiştir Butonu */}
+        {/* Dil Değiştir Butonu */}
         <Pressable
           style={[styles.button, styles.languageButton]}
           onPress={toggleLanguage}
         >
           <Text style={[styles.buttonText, styles.languageButtonText]}>
             <Ionicons name="language-outline" size={16} />{" "}
-            {t("settings.language")}:{" "}
+            {t("profile.language_select")}:{" "}
             {currentLanguage === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
           </Text>
         </Pressable>

@@ -355,7 +355,7 @@ const AssistantScreen = () => {
 };
 
 // === YENİ EKLENDİ: 'Kayan Switch' (Sliding Toggle) Bileşeni ===
-const CustomToggle = ({ mode, onToggle }) => {
+const CustomToggle = ({ mode, onToggle, textLeft, textRight }) => {
   // 'mode' ("strict" veya "flexible") değiştiğinde 'animatedValue'yu (kayan top)
   // 0'dan 1'e (veya 1'den 0'a) hareket ettirir.
   const animatedValue = useRef(

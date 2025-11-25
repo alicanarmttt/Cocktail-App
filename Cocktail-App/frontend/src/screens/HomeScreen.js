@@ -36,8 +36,10 @@ const HomeScreen = ({ navigation }) => {
   // 1. Dil Kancasını (Hook) Başlat
   const { t, i18n } = useTranslation();
   // Dinamik İsim Seçici (Helper)
-  const getName = (item) =>
-    i18n.language === "tr" ? item.name_tr : item.name_en;
+  const getName = (item) => {
+    if (!item) return "";
+    return i18n.language === "tr" ? item.name_tr : item.name_en;
+  };
 
   // 1. ADIM: Tüm kokteylleri Redux'tan çek (4 kokteylimiz)
   const allCocktails = useSelector(selectAllCocktails);
@@ -116,9 +118,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* GÜNCELLEME: 'Button' yerine 'Pressable' (Şık Buton) eklendi
-            Başlangıçta (ID 'null' iken) buton 'disabled' (pasif) olur.
-        */}
+        {/* Hazırla Butonu */}
         <Pressable
           style={[
             styles.prepareButton,
@@ -131,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
             });
           }}
         >
-          <Text style={styles.prepareButtonText}>{t("prepare_btn")}</Text>
+          <Text style={styles.prepareButtonText}>{t("home.prepare_btn")}</Text>
         </Pressable>
       </View>
 

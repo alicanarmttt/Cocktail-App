@@ -320,7 +320,7 @@ const CocktailDetailScreen = ({ route }) => {
                         >
                           <Text style={styles.proButtonText}>
                             {t("detail.get_pro_btn")}
-                          </Text>{" "}
+                          </Text>
                         </Pressable>
                       </View>
                     )}
