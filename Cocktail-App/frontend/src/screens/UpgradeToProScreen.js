@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { useTranslation } from "react-i18next"; // 1. Çeviri kancasını ekle
 // 1. userSlice'tan (sağdaki) 'upgrade' (yükseltme) eylemini ve 'status'ü (durum) import et
 import {
   upgradeToPro,
@@ -25,7 +25,7 @@ import {
 const UpgradeToProScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
+  const { t } = useTranslation(); // 2. Çeviri fonksiyonunu al
   // 2. 'upgradeToPro' thunk'ının (API isteği) durumunu (state) Redux'tan oku
   const upgradeStatus = useSelector(getUpgradeStatus);
   const upgradeError = useSelector(getUpgradeError);
@@ -45,7 +45,10 @@ const UpgradeToProScreen = () => {
   useEffect(() => {
     // API isteği başarıyla tamamlandıysa ('fulfilled')
     if (upgradeStatus === "succeeded") {
-      Alert.alert("Tebrikler!", "Başarıyla Pro üyeliğe yükseltildiniz.");
+      Alert.alert(
+        t("upgrade.success_title") || "Tebrikler!",
+        t("upgrade.success_msg") || "Başarıyla Pro üyeliğe yükseltildiniz."
+      );
       // Kullanıcıyı (artık "PRO ÜYE" rozetini göreceği)
       // Profil ekranına geri gönder
       navigation.goBack();
@@ -53,18 +56,21 @@ const UpgradeToProScreen = () => {
     // API isteği başarısız olduysa ('rejected')
     if (upgradeStatus === "failed") {
       Alert.alert(
-        "Hata",
-        `Yükseltme sırasında bir hata oluştu: ${upgradeError}`
+        t("general.error") || "Hata",
+        `${t("upgrade.error_msg") || "Yükseltme sırasında bir hata oluştu"}: ${upgradeError}`
       );
     }
-  }, [upgradeStatus, navigation, upgradeError]); // Bu değerler değiştiğinde effect'i çalıştır
+  }, [upgradeStatus, navigation, upgradeError, t]); // Bu değerler değiştiğinde effect'i çalıştır
 
   return (
     <SafeAreaView style={styles.container}>
       <Ionicons name="sparkles" size={64} color="#FFD700" />
-      <Text style={styles.title}>PRO Üyeliğe Geçin</Text>
+      <Text style={styles.title}>
+        {t("upgrade.title") || "PRO Üyeliğe Geçin"}
+      </Text>
       <Text style={styles.subtitle}>
-        Kokteyl deneyiminizi bir üst seviyeye taşıyın.
+        {t("upgrade.subtitle") ||
+          "Kokteyl deneyiminizi bir üst seviyeye taşıyın."}
       </Text>
 
       {/* Özellik Listesi */}
@@ -72,24 +78,29 @@ const UpgradeToProScreen = () => {
         <View style={styles.featureItem}>
           <Ionicons name="star" size={24} color="#f4511e" />
           <Text style={styles.featureText}>
-            Akıllı Alternatifler (Votka yerine Cin? Lime yerine Limon?)
+            {t("upgrade.feature_1") ||
+              "Akıllı Alternatifler (Votka yerine Cin? Lime yerine Limon?)"}
           </Text>
         </View>
         <View style={styles.featureItem}>
           <Ionicons name="filter" size={24} color="#f4511e" />
           <Text style={styles.featureText}>
-            "Barmen Asistanı"nda gelişmiş filtreleme
+            {t("upgrade.feature_2") ||
+              '"Barmen Asistanı"nda gelişmiş filtreleme'}
           </Text>
         </View>
         <View style={styles.featureItem}>
           <Ionicons name="cloud-upload-outline" size={24} color="#f4511e" />
           <Text style={styles.featureText}>
-            Özel tariflerinizi kaydetme ve paylaşma (Çok Yakında)
+            {t("upgrade.feature_3") ||
+              "Özel tariflerinizi kaydetme ve paylaşma (Çok Yakında)"}
           </Text>
         </View>
         <View style={styles.featureItem}>
           <Ionicons name="remove-circle-outline" size={24} color="#f4511e" />
-          <Text style={styles.featureText}>Reklamsız Deneyim</Text>
+          <Text style={styles.featureText}>
+            {t("upgrade.feature_4") || "Reklamsız Deneyim"}
+          </Text>
         </View>
       </View>
 
@@ -105,7 +116,9 @@ const UpgradeToProScreen = () => {
         {upgradeStatus === "loading" ? (
           <ActivityIndicator color="#333" />
         ) : (
-          <Text style={styles.buttonText}>1 Yıllık PRO Satın Al (Test)</Text>
+          <Text style={styles.buttonText}>
+            {t("upgrade.buy_btn") || "1 Yıllık PRO Satın Al (Test)"}
+          </Text>
         )}
       </Pressable>
     </SafeAreaView>

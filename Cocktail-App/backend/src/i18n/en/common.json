@@ -1,0 +1,75 @@
+{
+  "general": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "or": "OR",
+    "cancel": "Cancel",
+    "ok": "OK"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Sign Up",
+    "logout": "Log Out",
+    "subtitle": "Please enter your details to continue.",
+    "email_placeholder": "Your Email Address",
+    "password_placeholder": "Your Password",
+    "google_login": "Sign in with Google",
+    "have_account": "Already have an account? Login",
+    "no_account": "Don't have an account? Sign Up",
+    "logout_confirm_title": "Log Out",
+    "logout_confirm_msg": "Are you sure you want to log out?",
+    "errors": {
+      "email_in_use": "Email address already in use.",
+      "invalid_cred": "Invalid email or password.",
+      "weak_pass": "Password is too weak (min 6 chars).",
+      "invalid_email": "Invalid email address.",
+      "empty_fields": "Email and password cannot be empty."
+    }
+  },
+  "home": {
+    "quote": "\"Art is hidden in a glass...\"",
+    "pick_cocktail": "Select a Cocktail",
+    "prepare_btn": "Prepare"
+  },
+  "detail": {
+    "ingredients_title": "Ingredients",
+    "missing_ingredients_btn": "I have missing ingredients",
+    "instructions_title": "Instructions",
+    "history_title": "History & Notes",
+    "modal_title": "Select Missing Ingredient",
+    "legend_title": "Ingredient Legend:",
+    "legend_required": "Required",
+    "legend_garnish": "Garnish",
+    "pro_alt_title": "PRO Alternative",
+    "pro_use_instead": "use instead of:",
+    "pro_can_use": "you can use.",
+    "pro_feature": "PRO Feature",
+    "pro_lock_msg": "Upgrade to Pro to see alternative recipes and use the 'Barman Assistant' to its full potential!",
+    "get_pro_btn": "Upgrade to PRO"
+  },
+  "assistant": {
+    "tab_all": "All",
+    "bench_title": "Workbench",
+    "bench_empty": "Select ingredients from Market...",
+    "market_title": "Market",
+    "search_placeholder": "Search Market...",
+    "toggle_strict": "I only have these",
+    "toggle_flexible": "Cocktails containing these",
+    "show_recipes_btn": "Show Cocktails with Ingredients",
+    "loading_market": "Setting up market...",
+    "not_found": "not found..."
+  },
+  "results": {
+    "title": "Found Recipes",
+    "loading": "Loading results...",
+    "empty_title": "No Results Found",
+    "empty_msg": "No cocktails found matching your workbench ingredients.",
+    "empty_hint": "Try changing the search mode to see cocktails containing your ingredients."
+  },
+  "profile": {
+    "pro_member": "PRO MEMBER",
+    "free_member": "FREE MEMBER",
+    "upgrade_btn": "Upgrade to PRO",
+    "language_changed": "Language Changed"
+  }
+}

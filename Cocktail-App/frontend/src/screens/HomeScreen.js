@@ -1,6 +1,7 @@
 // GÜNCELLEME: 'useState' (seçili kokteyli tutmak için) eklendi
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
   StyleSheet,
   Text,
@@ -32,6 +33,12 @@ import {
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
+  // 1. Dil Kancasını (Hook) Başlat
+  const { t, i18n } = useTranslation();
+  // Dinamik İsim Seçici (Helper)
+  const getName = (item) =>
+    i18n.language === "tr" ? item.name_tr : item.name_en;
+
   // 1. ADIM: Tüm kokteylleri Redux'tan çek (4 kokteylimiz)
   const allCocktails = useSelector(selectAllCocktails);
   const status = useSelector(getCocktailsListStatus);
@@ -62,6 +69,7 @@ const HomeScreen = ({ navigation }) => {
     return (
       <View style={styles.centeredContainer}>
         <ActivityIndicator size="large" color="#f4511e" />
+        <Text style={{ marginTop: 10 }}>{t("general.loading")}</Text>
       </View>
     );
   }
@@ -70,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
   if (status === "failed") {
     return (
       <View style={styles.centeredContainer}>
-        <Text style={styles.errorText}>{error}</Text>
+        <Text style={styles.errorText}>{error || t("general.error")}</Text>
       </View>
     );
   }
@@ -83,7 +91,7 @@ const HomeScreen = ({ navigation }) => {
       */}
       <View style={styles.displayArea}>
         {/* "Afilli Cümle" Eklendi */}
-        <Text style={styles.headerQuote}>"Sanat, bir kadehte gizlidir..."</Text>
+        <Text style={styles.headerQuote}>{t("home.quote")}</Text>
 
         {/* "Altın Çerçeve" Eklendi (İç içe View kullanarak) */}
         <View style={styles.frameOuter}>
@@ -99,7 +107,9 @@ const HomeScreen = ({ navigation }) => {
                 />
               ) : (
                 <View style={styles.placeholderContainer}>
-                  <Text style={styles.placeholderText}>Bir Kokteyl Seçin</Text>
+                  <Text style={styles.placeholderText}>
+                    {t("home.pick_cocktail")}
+                  </Text>
                 </View>
               )
             }
@@ -121,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
             });
           }}
         >
-          <Text style={styles.prepareButtonText}>Hazırla</Text>
+          <Text style={styles.prepareButtonText}>{t("prepare_btn")}</Text>
         </Pressable>
       </View>
 
@@ -136,13 +146,14 @@ const HomeScreen = ({ navigation }) => {
           itemStyle={styles.pickerItemStyle} // iOS'taki yazı stili
         >
           {/* GÜNCELLEME: Başlangıç değeri (Placeholder) eklendi */}
-          <Picker.Item label="Bir Kokteyl Seçin..." value={null} />
+          <Picker.Item label={t("home.pick_cocktail") + "..."} value={null} />
 
           {/* Redux'tan gelen 'allCocktails' dizisini dönüyoruz */}
           {allCocktails.map((cocktail) => (
             <Picker.Item
+              // Dinamik İsim Kullanımı (TR/EN)
               key={cocktail.cocktail_id}
-              label={cocktail.name}
+              label={getName(cocktail)}
               value={cocktail.cocktail_id}
             />
           ))}

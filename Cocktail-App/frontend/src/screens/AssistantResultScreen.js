@@ -1,4 +1,6 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+
 import {
   View,
   Text,
@@ -25,6 +27,12 @@ import {
  */
 const AssistantResultScreen = () => {
   const navigation = useNavigation();
+
+  // 1. Çeviri Hook'u
+  const { t, i18n } = useTranslation();
+  // Dinamik İsim Seçici (Helper)
+  const getName = (item) =>
+    i18n.language === "tr" ? item.name_tr : item.name_en;
 
   // 1. Redux store'dan (barmenSlice) verileri çek
   const results = useSelector(selectSearchResults);
@@ -53,7 +61,8 @@ const AssistantResultScreen = () => {
         }}
         style={styles.cardImage}
       />
-      <Text style={styles.cardText}>{item.name}</Text>
+      {/* Dinamik İsim Kullanımı */}
+      <Text style={styles.cardText}>{getName(item)}</Text>
       <Ionicons name="chevron-forward" size={24} color="#ccc" />
     </Pressable>
   );
@@ -65,7 +74,7 @@ const AssistantResultScreen = () => {
     return (
       <SafeAreaView style={styles.centeredContainer}>
         <ActivityIndicator size="large" color="#f4511e" />
-        <Text>Sonuçlar yükleniyor...</Text>
+        <Text>{t("results.loading")}</Text>
       </SafeAreaView>
     );
   }
@@ -74,9 +83,7 @@ const AssistantResultScreen = () => {
   if (status === "failed") {
     return (
       <SafeAreaView style={styles.centeredContainer}>
-        <Text style={styles.errorText}>
-          {error || "Tarifler alınırken bir hata oluştu."}
-        </Text>
+        <Text style={styles.errorText}>{error || t("general.error")}</Text>
       </SafeAreaView>
     );
   }
@@ -87,14 +94,8 @@ const AssistantResultScreen = () => {
       <SafeAreaView style={styles.centeredContainer}>
         <Ionicons name="sad-outline" size={64} color="gray" />
         <Text style={styles.emptyTitle}>Sonuç Bulunamadı</Text>
-        <Text style={styles.emptySubtitle}>
-          Tezgahınızdaki malzemelerle (veya seçtiğiniz filtreyle) eşleşen bir
-          kokteyl bulunamadı.
-        </Text>
-        <Text style={styles.emptySubtitle}>
-          Elinizdeki malzemeyi içeren kokteylleri görmek için geri dönüp
-          "Bunları içeren kokteyller" seçeneğiyle arayabilirsiniz .
-        </Text>
+        <Text style={styles.emptySubtitle}>{t("results.empty_msg")}</Text>
+        <Text style={styles.emptySubtitle}>{t("results.empty_hint")}</Text>
       </SafeAreaView>
     );
   }
@@ -102,7 +103,10 @@ const AssistantResultScreen = () => {
   // Başarılı ve sonuçlar varsa
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Bulunan Tarifler ({results.length} adet)</Text>
+      <Text style={styles.title}>
+        {" "}
+        {t("results.title")} ({results.length})
+      </Text>
       <FlatList
         data={results}
         renderItem={renderCocktailItem}

@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
   StyleSheet,
   Text,
@@ -27,6 +28,11 @@ import { useNavigation } from "@react-navigation/native";
  * @param   {object} route - React Navigation tarafından sağlanan ve 'params' (parametreler) içeren prop.
  */
 const CocktailDetailScreen = ({ route }) => {
+  // 1. Çeviri Hook'u
+  const { t, i18n } = useTranslation();
+  // 2. Helper: Dile Göre Metin Seçici
+  const getLocaleText = (tr, en) => (i18n.language === "tr" ? tr : en);
+
   const { cocktailId } = route.params;
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -68,7 +74,7 @@ const CocktailDetailScreen = ({ route }) => {
   } else if (status === "failed") {
     return (
       <View style={styles.centeredContainer}>
-        <Text style={styles.errorText}>{error}</Text>
+        <Text style={styles.errorText}>{error || t("general.error")}</Text>{" "}
       </View>
     );
   }
@@ -78,43 +84,62 @@ const CocktailDetailScreen = ({ route }) => {
       <View style={styles.listContainer}>
         <ScrollView contentContainerStyle={styles.scrollContentContainer}>
           <Image source={{ uri: cocktail.image_url }} style={styles.image} />
-          <Text style={styles.title}>{cocktail.name}</Text>
+          <Text style={styles.title}>
+            {getLocaleText(cocktail.name_tr, cocktail.name_en)}
+          </Text>
 
           {/* Bölüm: Malzemeler */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Ingredients (Malzemeler)</Text>
+            <Text style={styles.sectionTitle}>
+              {t("detail.ingredients_title")}
+            </Text>
             {/* Ana listeden renkleri ve parantezleri kaldırdık (istediğiniz gibi) */}
             {cocktail.ingredients.map((ing) => (
               <View key={ing.requirement_id} style={styles.ingredientItem}>
                 <Text style={styles.ingredientText}>
-                  {ing.amount} {ing.name}
+                  {getLocaleText(ing.amount_tr, ing.amount_en)}{" "}
+                  {getLocaleText(ing.name_tr, ing.name_en)}
                 </Text>
               </View>
             ))}
           </View>
 
-          {/* GÜNCELLEME: Standart <Button> yerine <Pressable> kullanıldı */}
+          {/* "Eksik Malzemem Var" Butonu */}
           <Pressable
             style={styles.prepareButton} // HomeScreen'deki stilin aynısı
             onPress={() => setIsModalVisible(true)} // Modal'ı açar
           >
-            <Text style={styles.prepareButtonText}>Eksik malzemem var</Text>
+            <Text style={styles.prepareButtonText}>
+              {t("detail.missing_ingredients_btn")}
+            </Text>
           </Pressable>
 
-          {/* Bölüm: Hazırlanışı */}
+          {/* Bölüm2: Hazırlanışı */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Instructions (Hazırlanışı)</Text>
-            <Text style={styles.text}>{cocktail.instructions}</Text>
+            <Text style={styles.sectionTitle}>
+              {t("detail.instructions_title")}
+            </Text>
+            <Text style={styles.text}>
+              {getLocaleText(
+                cocktail.instructions_tr,
+                cocktail.instructions_en
+              )}
+            </Text>
           </View>
 
-          {/* Bölüm: Tarihi */}
+          {/* Bölüm3: Tarihçe */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>History & Notes</Text>
-            <Text style={styles.text}>{cocktail.history_notes}</Text>
+            <Text style={styles.sectionTitle}>{t("detail.history_title")}</Text>
+            <Text style={styles.text}>
+              {getLocaleText(
+                cocktail.history_notes_tr,
+                cocktail.history_notes_en
+              )}
+            </Text>
           </View>
         </ScrollView>
 
-        {/* Modal (Popup) Bileşeni */}
+        {/* --- MODAL 1: EKSİK MALZEME SEÇİMİ --- */}
         <Modal
           visible={isModalVisible}
           transparent={true} // Bu, 'overlay' (üstte) görünümü için şarttır
@@ -129,11 +154,13 @@ const CocktailDetailScreen = ({ route }) => {
             {/* İçerik kutucuğu (Beyaz kutu) */}
             {/* 'onPress' ekleyerek bu kutuya tıklamanın Modal'ı kapatmasını engelliyoruz */}
             <Pressable style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Eksik Malzemeyi seçin</Text>
+              <Text style={styles.modalTitle}>{t("detail.modal_title")}</Text>
 
-              {/* GÜNCELLEME: Renkler için bilgilendirme (Legend) kutusu */}
+              {/* Renkler için bilgilendirme (Legend) kutusu */}
               <View style={styles.legendContainer}>
-                <Text style={styles.legendTitle}>Malzeme Göstergesi:</Text>
+                <Text style={styles.legendTitle}>
+                  {t("detail.legend_title")}
+                </Text>
 
                 <View style={styles.legendItem}>
                   <View
@@ -143,7 +170,7 @@ const CocktailDetailScreen = ({ route }) => {
                     ]}
                   />
                   <Text style={styles.legendText}>
-                    Gerekli (Alternatifi Yok)
+                    {t("detail.legend_required")} (No Alt)
                   </Text>
                 </View>
 
@@ -156,7 +183,7 @@ const CocktailDetailScreen = ({ route }) => {
                     ]}
                   />
                   <Text style={styles.legendText}>
-                    Gerekli (Alternatifi Var - PRO)
+                    {t("detail.legend_required")} (Pro)
                   </Text>
                 </View>
 
@@ -168,7 +195,7 @@ const CocktailDetailScreen = ({ route }) => {
                     ]}
                   />
                   <Text style={styles.legendText}>
-                    Süsleme (Alternatifi Yok)
+                    {t("detail.legend_garnish")}
                   </Text>
                 </View>
 
@@ -180,13 +207,13 @@ const CocktailDetailScreen = ({ route }) => {
                     ]}
                   />
                   <Text style={styles.legendText}>
-                    Süsleme (Alternatifi Var - PRO)
+                    {t("detail.legend_garnish")} (Pro)
                   </Text>
                 </View>
               </View>
 
               {/* Malzeme Butonları */}
-              {/* Malzeme Butonları */}
+
               <View style={styles.modalButtonsContainer}>
                 {cocktail?.ingredients.map((ing) => (
                   <Pressable
@@ -210,16 +237,19 @@ const CocktailDetailScreen = ({ route }) => {
                       if (ing.has_alternative) {
                         setSelectedAlternative(ing);
                       } else {
-                        alert("Bu malzeme için alternatif bulunmuyor.");
+                        alert(t("assistant.not_found"));
                       }
                     }}
                   >
-                    <Text style={styles.ingredientButtonText}>{ing.name}</Text>
+                    <Text style={styles.ingredientButtonText}>
+                      {getLocaleText(ing.name_tr, ing.name_en)}
+                    </Text>
                   </Pressable>
                 ))}
               </View>
+
               {/*
-             // === YENİ EKLENDİ (EKSİK 3): "İÇ İÇE MODAL" (Modal 2) ===
+             // --- MODAL 2: ALTERNATİF DETAYI (İÇ İÇE) ---
              // (Alternatif detayını veya 'Pro Satın Al' uyarısını gösterir)
             */}
               <Modal
@@ -242,15 +272,30 @@ const CocktailDetailScreen = ({ route }) => {
                           color="#FFD700"
                           style={styles.proIcon}
                         />
-                        <Text style={styles.proTitle}>PRO Alternatif</Text>
+                        <Text style={styles.proTitle}>
+                          {t("detail.pro_alt_title")}
+                        </Text>
                         <Text style={styles.proText}>
-                          "{selectedAlternative.name}" yerine:
+                          "
+                          {getLocaleText(
+                            selectedAlternative.name_tr,
+                            selectedAlternative.name_en
+                          )}
+                          " {t("detail.pro_use_instead")}
                         </Text>
                         <Text style={styles.proHighlight}>
-                          {selectedAlternative.alternative_amount}{" "}
-                          {selectedAlternative.alternative_name}
+                          {getLocaleText(
+                            selectedAlternative.alternative_amount_tr,
+                            selectedAlternative.alternative_amount_en
+                          )}{" "}
+                          {getLocaleText(
+                            selectedAlternative.alternative_name_tr,
+                            selectedAlternative.alternative_name_en
+                          )}
                         </Text>
-                        <Text style={styles.proText}>kullanabilirsiniz.</Text>
+                        <Text style={styles.proText}>
+                          {t("detail.pro_can_use")}
+                        </Text>
                       </>
                     ) : (
                       /* === Free Kullanıcı Arayüzü (Satın Al Uyarısı) === */
@@ -261,18 +306,21 @@ const CocktailDetailScreen = ({ route }) => {
                           color="#f4511e"
                           style={styles.proLockIcon}
                         />
-                        <Text style={styles.proTitle}>PRO Özellik</Text>
-                        <Text style={styles.proText}>
-                          Bu kokteylin alternatif tariflerini görmek ve "Barmen
-                          Asistanı" özelliğini tam kapasite kullanmak için
-                          Profil'den Pro üyeliğe geçin!
+                        <Text style={styles.proTitle}>
+                          {t("detail.pro_feature")}
                         </Text>
+                        <Text style={styles.proText}>
+                          {t("detail.pro_lock_msg")}
+                        </Text>
+
                         {/* (İleride buradaki buton 'Satın Alma Ekranı'na yönlendirir) */}
                         <Pressable
                           style={styles.proButton}
                           onPress={() => navigation.navigate("UpgradeToPro")}
                         >
-                          <Text style={styles.proButtonText}>PRO'ya Geç</Text>
+                          <Text style={styles.proButtonText}>
+                            {t("detail.get_pro_btn")}
+                          </Text>{" "}
                         </Pressable>
                       </View>
                     )}
@@ -301,7 +349,7 @@ const CocktailDetailScreen = ({ route }) => {
   // 'succeeded' ama 'cocktail' 'null' ise (kenar durum)
   return (
     <View style={styles.centeredContainer}>
-      <Text style={styles.errorText}>Cocktail not found!</Text>
+      <Text style={styles.errorText}>{t("results.not_found")}</Text>
     </View>
   );
 };

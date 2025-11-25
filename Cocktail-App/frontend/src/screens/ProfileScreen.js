@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, CommonActions } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 // 1. userSlice'tan (sağdaki) gerekli selector ve action'ları import et
 import {
@@ -31,6 +32,9 @@ import {
  */
 const ProfileScreen = () => {
   const dispatch = useDispatch();
+  // 1. Çeviri Hook'u
+  const { t, i18n } = useTranslation();
+
   // 3. Redux'tan mevcut kullanıcıyı ve Pro durumunu oku
   const currentUser = useSelector(selectCurrentUser);
   const isPro = useSelector(selectIsPro);
@@ -53,7 +57,7 @@ const ProfileScreen = () => {
       dispatch(clearUser());
     } catch (error) {
       console.error("Çıkış yaparken hata:", error);
-      Alert.alert("Hata", "Çıkış yapılırken bir sorun oluştu.");
+      Alert.alert("general.error", "Çıkış yapılırken bir sorun oluştu.");
     }
   };
 
@@ -62,16 +66,16 @@ const ProfileScreen = () => {
    */
   const confirmLogout = () => {
     Alert.alert(
-      "Çıkış Yap", // Başlık
-      "Çıkış yapmak istediğinizden emin misiniz?", // Mesaj
+      t("auth.logout_confirm_title"), // "Çıkış Yap"
+      t("auth.logout_confirm_msg"), // "Emin misiniz?"
       [
         // Butonlar
         {
-          text: "İptal",
+          text: t("general.cancel"),
           style: "cancel", // (iOS'ta sola yaslar)
         },
         {
-          text: "Çıkış Yap",
+          text: t("auth.logout"),
           style: "destructive", // (iOS'ta kırmızı yazar)
           onPress: handleLogout, // Sadece 'Çıkış Yap'a basılırsa çalıştır
         },
@@ -120,7 +124,10 @@ const ProfileScreen = () => {
         index: state.index, // Kullanıcının odağını (focus) değiştirmeden Profil'de tut
       });
     });
-    Alert.alert("Dil Değiştirildi", `Uygulama dili: ${newLang.toUpperCase()}`);
+    Alert.alert(
+      t("profile.language_changed"),
+      `Current Language: ${newLang.toUpperCase()}`
+    );
   };
 
   // (Kenar durum: Eğer bir şekilde buraya 'null' kullanıcı gelirse)
@@ -144,11 +151,11 @@ const ProfileScreen = () => {
         {isPro ? (
           <View style={styles.proBadge}>
             <Ionicons name="star" size={16} color="#333" />
-            <Text style={styles.proText}>PRO ÜYE</Text>
+            <Text style={styles.proText}>{t("profile.pro_member")}</Text>
           </View>
         ) : (
           <View style={styles.freeBadge}>
-            <Text style={styles.freeText}>FREE ÜYE</Text>
+            <Text style={styles.freeText}>{t("profile.free_member")}</Text>
           </View>
         )}
       </View>
@@ -161,7 +168,8 @@ const ProfileScreen = () => {
           onPress={toggleLanguage}
         >
           <Text style={[styles.buttonText, styles.languageButtonText]}>
-            <Ionicons name="language-outline" size={16} /> Dil:{" "}
+            <Ionicons name="language-outline" size={16} />{" "}
+            {t("settings.language")}:{" "}
             {currentLanguage === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
           </Text>
         </Pressable>
@@ -173,7 +181,8 @@ const ProfileScreen = () => {
             onPress={() => navigation.navigate("UpgradeToPro")}
           >
             <Text style={[styles.buttonText, styles.upgradeButtonText]}>
-              <Ionicons name="star-outline" size={16} /> PRO'ya Yükselt
+              <Ionicons name="star-outline" size={16} />{" "}
+              {t("profile.upgrade_btn")}
             </Text>
           </Pressable>
         )}
@@ -184,7 +193,8 @@ const ProfileScreen = () => {
           onPress={confirmLogout} // Onay sorusu sor
         >
           <Text style={[styles.buttonText, styles.logoutButtonText]}>
-            <Ionicons name="log-out-outline" size={16} /> Çıkış Yap
+            <Ionicons name="log-out-outline" size={16} />
+            {t("auth.logout")}
           </Text>
         </Pressable>
       </View>

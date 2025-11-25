@@ -29,25 +29,26 @@ import * as WebBrowser from "expo-web-browser";
 import { useAuthRequest, makeRedirectUri } from "expo-auth-session";
 // 'GoogleAuthProvider' (Google'ın 'idToken'ını Firebase'e çevirmek için)
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { useTranslation } from "react-i18next"; // 1. Çeviri kancasını ekle
 
 // (Giriş (Auth) akışı web tarayıcısını (web browser) tamamladığında çağrılır)
 WebBrowser.maybeCompleteAuthSession();
 
+// --- YARDIMCI FONKSİYON: Hata Mesajlarını Çevir ---
 const getFriendlyErrorMessage = (error) => {
   switch (error.code) {
     case "auth/email-already-in-use":
-      return "Bu email adresi zaten kullanılıyor. Lütfen giriş yapmayı deneyin.";
+      return t("auth.errors.email_in_use");
     case "auth/user-not-found":
     case "auth/wrong-password":
-    case "auth/invalid-credential": // (Yeni Firebase sürümleri 'invalid-credential' kullanır)
-      return "Email veya şifre hatalı. Lütfen bilgilerinizi kontrol edin.";
+    case "auth/invalid-credential":
+      return t("auth.errors.invalid_cred");
     case "auth/weak-password":
-      return "Şifre çok zayıf. Lütfen en az 6 karakterli bir şifre girin.";
+      return t("auth.errors.weak_pass");
     case "auth/invalid-email":
-      return "Geçersiz bir email adresi girdiniz.";
+      return t("auth.errors.invalid_email");
     default:
-      // (Beklenmedik bir hata olursa)
-      return "Bir hata oluştu. Lütfen daha sonra tekrar deneyin.";
+      return t("general.error");
   }
 };
 /**
@@ -60,6 +61,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false); // Mod (Giriş / Kayıt)
+  const { t } = useTranslation(); // 2. Çeviri fonksiyonunu al
 
   // Firebase (Adım 1) için lokal 'loading' state'i
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
@@ -146,7 +148,7 @@ const LoginScreen = () => {
    */
   const handleRegister = async () => {
     if (email === "" || password === "") {
-      Alert.alert("Hata", "Email ve şifre boş bırakılamaz.");
+      Alert.alert(t("general.error"), t("auth.errors.empty_fields"));
       return;
     }
     if (loginStatus === "loading" || isFirebaseLoading) return;
@@ -176,7 +178,7 @@ const LoginScreen = () => {
     } catch (error) {
       // (Hata yönetimi)
       console.error("Kayıt Hatası:", error);
-      Alert.alert("Kayıt Hatası", getFriendlyErrorMessage(error));
+      Alert.alert(t("general.error"), getFriendlyErrorMessage(error));
     } finally {
       // YENİ EKLENDİ (Tepkisizlik Çözümü): Yüklenmeyi (her durumda) bitir
       setIsFirebaseLoading(false);
@@ -189,7 +191,7 @@ const LoginScreen = () => {
    */
   const handleLogin = async () => {
     if (email === "" || password === "") {
-      Alert.alert("Hata", "Email ve şifre boş bırakılamaz.");
+      Alert.alert(t("general.error"), t("auth.errors.empty_fields"));
       return;
     }
     if (loginStatus === "loading" || isFirebaseLoading) return;
@@ -220,7 +222,7 @@ const LoginScreen = () => {
     } catch (error) {
       // (Hata yönetimi)
       console.error("Giriş Hatası:", error);
-      Alert.alert("Giriş Hatası", getFriendlyErrorMessage(error));
+      Alert.alert(t("general.error"), getFriendlyErrorMessage(error));
     } finally {
       // YENİ EKLENDİ (Tepkisizlik Çözümü): Yüklenmeyi (her durumda) bitir
       setIsFirebaseLoading(false);
@@ -245,16 +247,14 @@ const LoginScreen = () => {
             style={styles.logo}
           />
           <Text style={styles.title}>
-            {isRegistering ? "Kayıt Ol" : "Giriş Yap"}
+            {isRegistering ? t("auth.register") : t("auth.login")}
           </Text>
-          <Text style={styles.subtitle}>
-            Başlamak için lütfen bilgilerinizi girin.
-          </Text>
+          <Text style={styles.subtitle}>{t("auth.subtitle")}</Text>
 
           {/* Email Girişi */}
           <TextInput
             style={styles.input}
-            placeholder="Email Adresiniz"
+            placeholder={t("auth.email_placeholder")}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -265,7 +265,7 @@ const LoginScreen = () => {
           {/* Şifre Girişi */}
           <TextInput
             style={styles.input}
-            placeholder="Şifreniz"
+            placeholder={t("auth.password_placeholder")}
             value={password}
             onChangeText={setPassword}
             secureTextEntry // Şifreyi gizler
@@ -291,7 +291,7 @@ const LoginScreen = () => {
               <ActivityIndicator color="#fff" />
             ) : (
               <Text style={styles.buttonText}>
-                {isRegistering ? "Kayıt Ol" : "Giriş Yap"}
+                {isRegistering ? t("auth.register") : t("auth.login")}
               </Text>
             )}
           </Pressable>
@@ -302,15 +302,14 @@ const LoginScreen = () => {
             onPress={() => setIsRegistering(!isRegistering)}
           >
             <Text style={styles.toggleText}>
-              {isRegistering
-                ? "Zaten hesabınız var mı? Giriş Yapın"
-                : "Hesabınız yok mu? Kayıt Olun"}
+              {isRegistering ? t("auth.have_account") : t("auth.no_account")}
             </Text>
           </Pressable>
-          {/* --- YENİ EKLENDİ (EKSİK 11 - Google Giriş Butonu) --- */}
+
+          {/* --- Google Giriş Butonu) --- */}
           <View style={styles.dividerContainer}>
             <View style={styles.divider} />
-            <Text style={styles.dividerText}>VEYA</Text>
+            <Text style={styles.dividerText}>{t("general.or")}</Text>
             <View style={styles.divider} />
           </View>
 
@@ -347,7 +346,7 @@ const LoginScreen = () => {
                   style={styles.googleIcon}
                 />
                 <Text style={styles.googleButtonText}>
-                  Google ile Giriş Yap
+                  {t("auth.google_login")}
                 </Text>
               </>
             )}

@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from "react";
-
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -54,26 +54,41 @@ const AssistantScreen = () => {
   const [tezgahItems, setTezgahItems] = useState([]);
   const [mode, setMode] = useState("strict");
 
-  // YENİ EKLENDİ (Kategori Sekmeleri için)
-  const [activeCategory, setActiveCategory] = useState("Tümü");
+  // Kategori Sekmeleri için (Başlangıçta "Tümü"nün çevirisi değil, anahtarını kullanıyoruz)
+  const TAB_ALL_KEY = "ALL";
+  const [activeCategory, setActiveCategory] = useState(TAB_ALL_KEY);
 
   const allIngredients = useSelector(selectAllIngredients);
   const ingredientsStatus = useSelector(getIngredientsStatus);
   const ingredientsError = useSelector(getIngredientsError);
   const searchStatus = useSelector(getSearchStatus);
 
+  // 1. Çeviri Hook'u
+  const { t, i18n } = useTranslation();
+  // 2. Helper: Dile Göre Metin Seçici
+  // Veritabanından gelen nesnelerdeki _tr veya _en alanını seçer.
+  const getLocaleText = (item, fieldPrefix) => {
+    if (!item) return "";
+    const lang = i18n.language === "tr" ? "tr" : "en";
+    return item[`${fieldPrefix}_${lang}`] || item[`${fieldPrefix}_en`]; // Fallback to en
+  };
+
   // === 1. VERİ HAZIRLAMA (Kategoriler ve Pazar) ===
 
   // 'allIngredients' (Redux) değiştiğinde, 'Kategori Sekmeleri'ni (Tabs) hesapla
   const categories = useMemo(() => {
-    if (!allIngredients) return ["Tümü"];
+    if (!allIngredients) return [TAB_ALL_KEY];
+    // Hangi dilin kategori ismini kullanacağız?
+    const catNameField =
+      i18n.language === "tr" ? "category_name_tr" : "category_name_en";
+
     // Benzersiz (unique) kategori isimlerinden bir Set (küme) oluştur
     const uniqueCategories = new Set(
-      allIngredients.map((item) => item.category_name)
+      allIngredients.map((item) => item[catNameField])
     );
     // 'Tümü' sekmesini başa ekleyerek diziyi (array) döndür
-    return ["Tümü", ...uniqueCategories];
-  }, [allIngredients]);
+    return [TAB_ALL_KEY, ...uniqueCategories];
+  }, [allIngredients, i18n.language]); // Dil değişince yeniden hesapla
 
   // 'pazarList' (Pazar Listesi) artık 3 şeye bağlı:
   // 1. 'tezgahItems' (Tezgahta olanı Pazar'da gösterme)
@@ -81,6 +96,9 @@ const AssistantScreen = () => {
   // 3. 'searchText' (Arama filtresi)
   const pazarList = useMemo(() => {
     const tezgahIds = tezgahItems.map((item) => item.ingredient_id);
+    const catNameField =
+      i18n.language === "tr" ? "category_name_tr" : "category_name_en";
+    const nameField = i18n.language === "tr" ? "name_tr" : "name_en";
 
     return (
       allIngredients
@@ -88,18 +106,20 @@ const AssistantScreen = () => {
         .filter((item) => !tezgahIds.includes(item.ingredient_id))
         // 2. Aktif Kategoriye göre filtrele (Eğer 'Tümü' değilse)
         .filter((item) => {
-          if (activeCategory === "Tümü") return true;
-          return item.category_name === activeCategory;
+          if (activeCategory === TAB_ALL_KEY) return true;
+          return item[catNameField] === activeCategory;
         })
         // 3. Arama metnine göre filtrele (Eğer arama metni varsa)
         .filter((item) => {
           if (!searchText) return true;
-          return item.name.toLowerCase().includes(searchText.toLowerCase());
+          const itemName = item[nameField] || "";
+          return itemName.toLowerCase().includes(searchText.toLowerCase());
         })
     );
-  }, [searchText, allIngredients, tezgahItems, activeCategory]);
+  }, [searchText, allIngredients, tezgahItems, activeCategory, i18n.language]);
 
-  // === 2. API ve NAVİGASYON (Değişiklik Yok) ===
+  // === 2. API ve NAVİGASYON  ===
+
   useEffect(() => {
     if (ingredientsStatus === "idle") {
       dispatch(fetchIngredients());
@@ -126,9 +146,8 @@ const AssistantScreen = () => {
 
   // === 3. ETKİLEŞİM (Interaction) FONKSİYONLARI ===
 
-  // YENİ GÜNCELLEME (Taşıma Hissi):
   // 'LayoutAnimation' kullanarak state değişimlerini (Pazar/Tezgah)
-  // "yumuşak" (animate) hale getiriyoruz.
+
   const handleAddToTezgah = (ingredient) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setTezgahItems([...tezgahItems, ingredient]);
@@ -149,28 +168,25 @@ const AssistantScreen = () => {
     return (
       <SafeAreaView style={styles.centeredContainer}>
         <ActivityIndicator size="large" color="#f4511e" />
-        <Text>Pazar kuruluyor...</Text>
+        <Text>{t("assistant.loading_market")}</Text>
       </SafeAreaView>
     );
   }
   if (ingredientsStatus === "failed") {
     return (
       <SafeAreaView style={styles.centeredContainer}>
-        <Text style={styles.errorText}>{ingredientsError}</Text>
+        <Text style={styles.errorText}>
+          {ingredientsError || t("general.error")}
+        </Text>
       </SafeAreaView>
     );
   }
 
-  // === 5. ARAYÜZ (UI) RENDER ETME (Tamamen Yenilendi) ===
+  // === 5. ARAYÜZ (UI) RENDER ETME ===
 
   return (
     // 'SafeAreaView' (Çentik alanı) en dışta olmalı
     <SafeAreaView style={styles.container} edges={["left", "right"]}>
-      {/*
-        GÜNCELLEME (EKSİK 9.D - Klavye Çözümü):
-        KAV (Klavye Yönetimi) artık ekranın 'sadece'
-        Pazar ve Arama'yı içeren 'esnek' (flex: 1) kısmını sarar.
-      */}
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingContainer} // 'flex: 1'
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -185,15 +201,14 @@ const AssistantScreen = () => {
           {/* BÖLÜM 1: TEZGAH (Klavye'den ETKİLENMEZ) */}
           <View style={styles.tezgahContainer}>
             <Text style={styles.sectionTitle}>
-              Tezgah ({tezgahItems.length})
+              {t("assistant.bench_title")} ({tezgahItems.length})
             </Text>
             <View // (Tezgah'ın 'ScrollView'u kaldırıldı, 'flex-wrap' (sarılan) 'View' oldu)
               style={styles.chipScrollContainer}
             >
               {tezgahItems.length === 0 ? (
                 <Text style={styles.emptyText}>
-                  {" "}
-                  Pazar'dan malzeme seçin...
+                  {t("assistant.bench_empty")}
                 </Text>
               ) : (
                 tezgahItems.map((item) => (
@@ -202,7 +217,10 @@ const AssistantScreen = () => {
                     style={[styles.itemChip, styles.tezgahChip]}
                     onPress={() => handleRemoveFromTezgah(item)}
                   >
-                    <Text style={styles.chipText}>{item.name}</Text>
+                    {/* Dinamik İsim (TR/EN) */}
+                    <Text style={styles.chipText}>
+                      {getLocaleText(item, "name")}
+                    </Text>
                     <Ionicons
                       name="close-circle"
                       size={16}
@@ -217,7 +235,9 @@ const AssistantScreen = () => {
 
           {/* BÖLÜM 2: PAZAR (Artık KAV içinde) */}
           <View style={styles.pazarContainer}>
-            <Text style={styles.sectionTitle}>Malzemeler</Text>
+            <Text style={styles.sectionTitle}>
+              {t("assistant.market_title")}
+            </Text>
             {/* Kategori Sekmeleri (Tabs) */}
             <View>
               <ScrollView
@@ -241,7 +261,10 @@ const AssistantScreen = () => {
                           styles.categoryChipTextActive,
                       ]}
                     >
-                      {category}
+                      {/* Eğer kategori 'ALL' ise çevirisini göster, değilse kendisini */}
+                      {category === TAB_ALL_KEY
+                        ? t("assistant.tab_all")
+                        : category}
                     </Text>
                   </Pressable>
                 ))}
@@ -255,7 +278,7 @@ const AssistantScreen = () => {
             >
               {pazarList.length === 0 && searchText ? (
                 <Text style={styles.emptyText}>
-                  "{searchText}" bulunamadı...
+                  "{searchText}" {t("assistant.not_found")}
                 </Text>
               ) : (
                 pazarList.map((item) => (
@@ -264,7 +287,10 @@ const AssistantScreen = () => {
                     style={[styles.itemChip, styles.pazarChip]}
                     onPress={() => handleAddToTezgah(item)}
                   >
-                    <Text style={styles.chipTextPazar}>{item.name}</Text>
+                    {/* Dinamik İsim */}
+                    <Text style={styles.chipTextPazar}>
+                      {getLocaleText(item, "name")}
+                    </Text>
                     <Ionicons
                       name="add"
                       size={16}
@@ -287,7 +313,7 @@ const AssistantScreen = () => {
             />
             <TextInput
               style={styles.searchInput}
-              placeholder="Pazar'da ara..."
+              placeholder={t("assistant.search_placeholder")}
               value={searchText}
               onChangeText={setSearchText}
             />
@@ -295,7 +321,12 @@ const AssistantScreen = () => {
 
           {/*BÖLÜM 4 ve 5 (Toggle ve Butonn) */}
           {/* BÖLÜM 4: FİLTRE MODU (Toggle) (Artık KAV içinde) */}
-          <CustomToggle mode={mode} onToggle={setMode} />
+          <CustomToggle
+            mode={mode}
+            onToggle={setMode}
+            textLeft={t("assistant.toggle_flexible")}
+            textRight={t("assistant.toggle_strict")}
+          />
 
           {/* BÖLÜM 5: BUTON (Footer) (Artık KAV içinde) */}
           <View style={styles.footer}>
@@ -312,7 +343,7 @@ const AssistantScreen = () => {
                 <ActivityIndicator color="#fff" />
               ) : (
                 <Text style={styles.prepareButtonText}>
-                  {tezgahItems.length} Malzeme ile Kokteylleri Göster
+                  {tezgahItems.length} {t("assistant.show_recipes_btn")}
                 </Text>
               )}
             </Pressable>
@@ -353,7 +384,7 @@ const CustomToggle = ({ mode, onToggle }) => {
           mode === "flexible" && styles.toggleTextActive,
         ]}
       >
-        Bunları içeren kokteyller
+        {textLeft}
       </Text>
       <Pressable
         style={styles.toggleTrack}
@@ -370,7 +401,7 @@ const CustomToggle = ({ mode, onToggle }) => {
           mode === "strict" && styles.toggleTextActive,
         ]}
       >
-        Elimde sadece bunlar var
+        {textRight}
       </Text>
     </View>
   );

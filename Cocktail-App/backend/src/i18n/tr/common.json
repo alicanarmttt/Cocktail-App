@@ -1,0 +1,75 @@
+{
+  "general": {
+    "loading": "Yükleniyor...",
+    "error": "Bir hata oluştu",
+    "or": "VEYA",
+    "cancel": "İptal",
+    "ok": "Tamam"
+  },
+  "auth": {
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol",
+    "logout": "Çıkış Yap",
+    "subtitle": "Başlamak için lütfen bilgilerinizi girin.",
+    "email_placeholder": "Email Adresiniz",
+    "password_placeholder": "Şifreniz",
+    "google_login": "Google ile Giriş Yap",
+    "have_account": "Zaten hesabınız var mı? Giriş Yapın",
+    "no_account": "Hesabınız yok mu? Kayıt Olun",
+    "logout_confirm_title": "Çıkış Yap",
+    "logout_confirm_msg": "Çıkış yapmak istediğinizden emin misiniz?",
+    "errors": {
+      "email_in_use": "Bu email adresi zaten kullanılıyor.",
+      "invalid_cred": "Email veya şifre hatalı.",
+      "weak_pass": "Şifre çok zayıf (en az 6 karakter).",
+      "invalid_email": "Geçersiz email adresi.",
+      "empty_fields": "Email ve şifre boş bırakılamaz."
+    }
+  },
+  "home": {
+    "quote": "\"Sanat, bir kadehte gizlidir...\"",
+    "pick_cocktail": "Bir Kokteyl Seçin",
+    "prepare_btn": "Hazırla"
+  },
+  "detail": {
+    "ingredients_title": "Ingredients (Malzemeler)",
+    "missing_ingredients_btn": "Eksik malzemem var",
+    "instructions_title": "Instructions (Hazırlanışı)",
+    "history_title": "History & Notes",
+    "modal_title": "Eksik Malzemeyi Seçin",
+    "legend_title": "Malzeme Göstergesi:",
+    "legend_required": "Gerekli",
+    "legend_garnish": "Süsleme",
+    "pro_alt_title": "PRO Alternatif",
+    "pro_use_instead": "yerine:",
+    "pro_can_use": "kullanabilirsiniz.",
+    "pro_feature": "PRO Özellik",
+    "pro_lock_msg": "Bu kokteylin alternatif tariflerini görmek ve 'Barmen Asistanı' özelliğini tam kapasite kullanmak için Pro üyeliğe geçin!",
+    "get_pro_btn": "PRO'ya Geç"
+  },
+  "assistant": {
+    "tab_all": "Tümü",
+    "bench_title": "Tezgah",
+    "bench_empty": "Pazar'dan malzeme seçin...",
+    "market_title": "Malzemeler",
+    "search_placeholder": "Pazar'da ara...",
+    "toggle_strict": "Elimde sadece bunlar var",
+    "toggle_flexible": "Bunları içeren kokteyller",
+    "show_recipes_btn": "Malzeme ile Kokteylleri Göster",
+    "loading_market": "Pazar kuruluyor...",
+    "not_found": "bulunamadı..."
+  },
+  "results": {
+    "title": "Bulunan Tarifler",
+    "loading": "Sonuçlar yükleniyor...",
+    "empty_title": "Sonuç Bulunamadı",
+    "empty_msg": "Tezgahınızdaki malzemelerle eşleşen bir kokteyl bulunamadı.",
+    "empty_hint": "Elinizdeki malzemeyi içeren kokteylleri görmek için geri dönüp arama modunu değiştirebilirsiniz."
+  },
+  "profile": {
+    "pro_member": "PRO ÜYE",
+    "free_member": "FREE ÜYE",
+    "upgrade_btn": "PRO'ya Yükselt",
+    "language_changed": "Dil Değiştirildi"
+  }
+}
