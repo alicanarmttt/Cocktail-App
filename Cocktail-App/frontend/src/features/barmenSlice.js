@@ -10,13 +10,11 @@ const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
  */
 export const findRecipes = createAsyncThunk(
   "barmen/findRecipes",
-  async (payload, { getState }) => {
-    const lang = getState().ui?.language || "tr";
-
+  async (payload) => {
     // ÖNEMLİ: ingredientSlice'taki 'GET'ten farklı olarak,
     // biz 'POST' kullanıyoruz ve 'payload' (gövde) gönderiyoruz.
     const response = await axios.post(
-      `${BASE_API_URL}/api/barmen/find-recipes?lang=${lang}`,
+      `${BASE_API_URL}/api/barmen/find-recipes`,
       payload // { inventoryIds: [...], mode: '...' }
     );
     return response.data;

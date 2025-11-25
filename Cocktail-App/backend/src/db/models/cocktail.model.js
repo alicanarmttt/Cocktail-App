@@ -6,18 +6,23 @@ const db = require("knex")(knexConfig); //db object is tool to speak with databa
  * @desc    Fetches all cocktails from the database.
  * @returns {Promise<Array>} An array of cocktail objects
  */
-const getAllCocktails = (lang = "tr") => {
-  // Dil kontrolü (SQL Injection önlemek ve varsayılan atamak için)
-  const l = lang === "en" ? "en" : "tr";
-
+const getAllCocktails = () => {
   // SQL Karşılığı: SELECT * FROM cocktails
+
   return db("cocktails").select(
     "cocktail_id",
     "api_id",
-    `name_${l} as name`, // name_tr AS name
-    `instructions_${l} as instructions`,
-    `glass_type_${l} as glass_type`,
-    `tags_${l} as tags`,
+    // Türkçe Alanlar
+    "name_tr",
+    "instructions_tr",
+    "glass_type_tr",
+    "tags_tr",
+    // İngilizce Alanlar
+    "name_en",
+    "instructions_en",
+    "glass_type_en",
+    "tags_en",
+    // Ortak Alanlar
     "is_alcoholic",
     "image_url"
   );
@@ -29,16 +34,23 @@ const getAllCocktails = (lang = "tr") => {
  * @param   {number} id - The ID of the cocktail to search for
  * @returns {Promise<Object>} A single cocktail object
  */
-const getCocktailById = async (id, lang = "tr") => {
-  const l = lang === "en" ? "en" : "tr";
+const getCocktailById = async (id) => {
+  // GÜNCELLEME: 'lang' parametresi kaldırıldı.
 
   const cocktail = await db("cocktails")
     .select(
       "cocktail_id",
-      `name_${l} as name`,
-      `instructions_${l} as instructions`,
-      `history_notes_${l} as history_notes`,
-      `glass_type_${l} as glass_type`,
+      // Türkçe Alanlar
+      "name_tr",
+      "instructions_tr",
+      "history_notes_tr",
+      "glass_type_tr",
+      // İngilizce Alanlar
+      "name_en",
+      "instructions_en",
+      "history_notes_en",
+      "glass_type_en",
+      // Ortak Alanlar
       "image_url",
       "is_alcoholic"
     )
@@ -76,14 +88,24 @@ const getCocktailById = async (id, lang = "tr") => {
     .select(
       "req.requirement_id",
       "ing.ingredient_id", // (Pro özelliğinde tıklama için ID'yi de alalım)
-      // DİLLİ ALANLAR:
-      `ing.name_${l} as name`, // Malzeme Adı
-      `req.amount_${l} as amount`, // Miktar
-      `lvl.level_name_${l} as level_name`, // Önem Seviyesi
+
+      // DİLLİ ALANLAR (TÜMÜ):
+      "ing.name_tr", // Malzeme Adı TR
+      "ing.name_en", // Malzeme Adı EN
+
+      "req.amount_tr", // Miktar TR
+      "req.amount_en", // Miktar EN
+
+      "lvl.level_name_tr", // Önem Seviyesi TR
+      "lvl.level_name_en", // Önem Seviyesi EN
       "lvl.color_code",
-      // PRO ALANLAR (DİLLİ):
-      `alt.alternative_amount_${l} as alternative_amount`, // Alternatif Miktarı
-      `alt_ing.name_${l} as alternative_name`, // Alternatif Adı
+
+      // PRO ALANLAR (DİLLİ - TÜMÜ):
+      "alt.alternative_amount_tr", // Alternatif Miktarı TR
+      "alt.alternative_amount_en", // Alternatif Miktarı EN
+
+      "alt_ing.name_tr as alternative_name_tr", // Alternatif Adı TR
+      "alt_ing.name_en as alternative_name_en", // Alternatif Adı EN
 
       // YENİ BAYRAK: Eğer 'alt.alternative_id' NULL değilse (yani bir alternatif bulunduysa)
       // 'has_alternative' sütununu 'true' (1) yap, yoksa 'false' (0) yap.
@@ -92,9 +114,10 @@ const getCocktailById = async (id, lang = "tr") => {
       )
     )
     .where("req.cocktail_id", id); // Sadece bu kokteylin malzemelerini filtrele
+
   return {
-    ...cocktail, // { name: 'Mojito', instructions: '...', ... }
-    ingredients: ingredients, // [ { name: 'Beyaz Rom', has_alternative: 1, alternative_name: 'Votka', alternative_amount: '60 ml' }, ... ]
+    ...cocktail,
+    ingredients: ingredients,
   };
 };
 

@@ -12,8 +12,7 @@ const IngredientModel = require("../db/models/ingredient.model");
 
 router.get("/", async (req, res) => {
   try {
-    const lang = req.query.lang || "tr"; // Dil seçimi
-    const ingredients = await IngredientModel.getAllIngredients(lang);
+    const ingredients = await IngredientModel.getAllIngredients();
 
     // Veriyi (17 malzeme) JSON olarak frontend'e gönderiyoruz
     res.status(200).json(ingredients);
