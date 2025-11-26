@@ -1,26 +1,23 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
-  ScrollView,
   Pressable,
   ActivityIndicator,
-  KeyboardAvoidingView,
+  FlatList,
   Platform,
-  Animated,
-  LayoutAnimation,
-  UIManager,
+  KeyboardAvoidingView,
+  Keyboard,
 } from "react-native";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+// Redux Slice'ları
 import {
   fetchIngredients,
   selectAllIngredients,
@@ -34,98 +31,40 @@ import {
   clearSearchResults,
 } from "../features/barmenSlice.js";
 
-// (Android'de LayoutAnimation'ı etkinleştir)
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
-
 /**
- * @desc    Barmen'in Asistanı Ekranı. (Pazar/Tezgah Mantığı)
- * Kullanıcının malzemeleri arayıp "Tezgah"a eklemesini sağlar.
+ * @desc    Barmen'in Asistanı (YENİ SADE TASARIM)
+ * Karmaşık kutular yerine temiz bir liste ve seçim mantığı.
  */
 const AssistantScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { t, i18n } = useTranslation();
 
+  // --- STATE ---
   const [searchText, setSearchText] = useState("");
-  const [tezgahItems, setTezgahItems] = useState([]);
-  const [mode, setMode] = useState("strict");
+  const [selectedIds, setSelectedIds] = useState([]); // Sadece ID'leri tutmak yeterli ve performanslıdır
+  const [activeCategory, setActiveCategory] = useState("ALL");
 
-  // Kategori Sekmeleri için (Başlangıçta "Tümü"nün çevirisi değil, anahtarını kullanıyoruz)
-  const TAB_ALL_KEY = "ALL";
-  const [activeCategory, setActiveCategory] = useState(TAB_ALL_KEY);
-
+  // --- REDUX DATA ---
   const allIngredients = useSelector(selectAllIngredients);
   const ingredientsStatus = useSelector(getIngredientsStatus);
   const ingredientsError = useSelector(getIngredientsError);
   const searchStatus = useSelector(getSearchStatus);
 
-  // 1. Çeviri Hook'u
-  const { t, i18n } = useTranslation();
-  // 2. Helper: Dile Göre Metin Seçici
-  // Veritabanından gelen nesnelerdeki _tr veya _en alanını seçer.
-  const getLocaleText = (item, fieldPrefix) => {
-    if (!item) return "";
-    const lang = i18n.language === "tr" ? "tr" : "en";
-    return item[`${fieldPrefix}_${lang}`] || item[`${fieldPrefix}_en`]; // Fallback to en
-  };
+  // --- HELPER: Çeviri ---
+  const getName = (item) =>
+    i18n.language === "tr" ? item.name_tr : item.name_en;
+  const getCategoryName = (item) =>
+    i18n.language === "tr" ? item.category_name_tr : item.category_name_en;
 
-  // === 1. VERİ HAZIRLAMA (Kategoriler ve Pazar) ===
-
-  // 'allIngredients' (Redux) değiştiğinde, 'Kategori Sekmeleri'ni (Tabs) hesapla
-  const categories = useMemo(() => {
-    if (!allIngredients) return [TAB_ALL_KEY];
-    // Hangi dilin kategori ismini kullanacağız?
-    const catNameField =
-      i18n.language === "tr" ? "category_name_tr" : "category_name_en";
-
-    // Benzersiz (unique) kategori isimlerinden bir Set (küme) oluştur
-    const uniqueCategories = new Set(
-      allIngredients.map((item) => item[catNameField])
-    );
-    // 'Tümü' sekmesini başa ekleyerek diziyi (array) döndür
-    return [TAB_ALL_KEY, ...uniqueCategories];
-  }, [allIngredients, i18n.language]); // Dil değişince yeniden hesapla
-
-  // 'pazarList' (Pazar Listesi) artık 3 şeye bağlı:
-  // 1. 'tezgahItems' (Tezgahta olanı Pazar'da gösterme)
-  // 2. 'activeCategory' (Sekme filtresi)
-  // 3. 'searchText' (Arama filtresi)
-  const pazarList = useMemo(() => {
-    const tezgahIds = tezgahItems.map((item) => item.ingredient_id);
-    const catNameField =
-      i18n.language === "tr" ? "category_name_tr" : "category_name_en";
-    const nameField = i18n.language === "tr" ? "name_tr" : "name_en";
-
-    return (
-      allIngredients
-        // 1. Tezgahta olmayanları filtrele
-        .filter((item) => !tezgahIds.includes(item.ingredient_id))
-        // 2. Aktif Kategoriye göre filtrele (Eğer 'Tümü' değilse)
-        .filter((item) => {
-          if (activeCategory === TAB_ALL_KEY) return true;
-          return item[catNameField] === activeCategory;
-        })
-        // 3. Arama metnine göre filtrele (Eğer arama metni varsa)
-        .filter((item) => {
-          if (!searchText) return true;
-          const itemName = item[nameField] || "";
-          return itemName.toLowerCase().includes(searchText.toLowerCase());
-        })
-    );
-  }, [searchText, allIngredients, tezgahItems, activeCategory, i18n.language]);
-
-  // === 2. API ve NAVİGASYON  ===
-
+  // --- 1. VERİ YÜKLEME ---
   useEffect(() => {
     if (ingredientsStatus === "idle") {
       dispatch(fetchIngredients());
     }
   }, [ingredientsStatus, dispatch]);
 
+  // Sayfaya her gelindiğinde önceki sonuçları temizle ama SEÇİMLERİ KORU (Kullanıcı geri dönerse seçtikleri kalsın)
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       dispatch(clearSearchResults());
@@ -133,513 +72,384 @@ const AssistantScreen = () => {
     return unsubscribe;
   }, [navigation, dispatch]);
 
+  // --- 2. KATEGORİLERİ HESAPLA ---
+  const categories = useMemo(() => {
+    if (!allIngredients) return ["ALL"];
+    // Benzersiz kategorileri bul
+    const uniqueCats = new Set(allIngredients.map(getCategoryName));
+    return ["ALL", ...Array.from(uniqueCats)];
+  }, [allIngredients, i18n.language]);
+
+  // --- 3. LİSTEYİ FİLTRELE ---
+  const filteredList = useMemo(() => {
+    if (!allIngredients) return [];
+
+    return allIngredients.filter((item) => {
+      // 1. Kategori Filtresi
+      const itemCat = getCategoryName(item);
+      const catMatch = activeCategory === "ALL" || itemCat === activeCategory;
+
+      // 2. Arama Filtresi
+      const itemName = getName(item).toLowerCase();
+      const searchMatch =
+        !searchText || itemName.includes(searchText.toLowerCase());
+
+      return catMatch && searchMatch;
+    });
+  }, [allIngredients, activeCategory, searchText, i18n.language]);
+
+  // --- 4. SEÇİM MANTIĞI (Toggle) ---
+  const toggleSelection = (id) => {
+    setSelectedIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((itemId) => itemId !== id); // Varsa çıkar
+      } else {
+        return [...prev, id]; // Yoksa ekle
+      }
+    });
+  };
+
+  // --- 5. TARİF BULMA (Action) ---
   const handleFindRecipes = async () => {
-    if (searchStatus === "loading" || tezgahItems.length === 0) return;
-    const inventoryIds = tezgahItems.map((item) => item.ingredient_id);
+    if (searchStatus === "loading" || selectedIds.length === 0) return;
+
+    // Klavye açıksa kapat
+    Keyboard.dismiss();
+
     try {
-      await dispatch(findRecipes({ inventoryIds, mode })).unwrap();
+      // Mod: Artık kullanıcıya sormuyoruz, her zaman 'flexible' gönderiyoruz.
+      // Sonuç ekranında biz gruplayacağız.
+      await dispatch(
+        findRecipes({ inventoryIds: selectedIds, mode: "flexible" })
+      ).unwrap();
+
       navigation.navigate("AssistantResult");
     } catch (error) {
-      console.error("Tarifler bulunamadı:", error);
+      console.error("Tarif arama hatası:", error);
     }
   };
 
-  // === 3. ETKİLEŞİM (Interaction) FONKSİYONLARI ===
-
-  // 'LayoutAnimation' kullanarak state değişimlerini (Pazar/Tezgah)
-
-  const handleAddToTezgah = (ingredient) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setTezgahItems([...tezgahItems, ingredient]);
-    setSearchText("");
-  };
-
-  const handleRemoveFromTezgah = (ingredient) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setTezgahItems(
-      tezgahItems.filter(
-        (item) => item.ingredient_id !== ingredient.ingredient_id
-      )
-    );
-  };
-
-  // === 4. YÜKLENME (Loading) ve HATA (Error) EKRANLARI (Değişiklik Yok) ===
+  // --- RENDER: Yükleniyor / Hata ---
   if (ingredientsStatus === "loading") {
     return (
       <SafeAreaView style={styles.centeredContainer}>
         <ActivityIndicator size="large" color="#f4511e" />
-        <Text>{t("assistant.loading_market")}</Text>
-      </SafeAreaView>
-    );
-  }
-  if (ingredientsStatus === "failed") {
-    return (
-      <SafeAreaView style={styles.centeredContainer}>
-        <Text style={styles.errorText}>
-          {ingredientsError || t("general.error")}
+        <Text style={{ marginTop: 10, color: "gray" }}>
+          {t("assistant.loading_market", "Malzemeler yükleniyor...")}
         </Text>
       </SafeAreaView>
     );
   }
 
-  // === 5. ARAYÜZ (UI) RENDER ETME ===
+  if (ingredientsStatus === "failed") {
+    return (
+      <SafeAreaView style={styles.centeredContainer}>
+        <Text style={{ color: "red" }}>{ingredientsError}</Text>
+      </SafeAreaView>
+    );
+  }
 
+  // --- RENDER: ANA EKRAN ---
   return (
-    // 'SafeAreaView' (Çentik alanı) en dışta olmalı
-    <SafeAreaView style={styles.container} edges={["left", "right"]}>
+    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
       <KeyboardAvoidingView
-        style={styles.keyboardAvoidingContainer} // 'flex: 1'
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        // (Başlık (Header) yüksekliğini 'AppNavigator.js'ten (sağdaki) biliyoruz)
-        keyboardVerticalOffset={Platform.OS === "ios" ? 120 : 90}
+        style={{ flex: 1 }}
       >
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.scrollContainer} // (paddingHorizontal içerir)
-          keyboardShouldPersistTaps="handled" // "İki tıklama" sorununu çözer
-        >
-          {/* BÖLÜM 1: TEZGAH (Klavye'den ETKİLENMEZ) */}
-          <View style={styles.tezgahContainer}>
-            <Text style={styles.sectionTitle}>
-              {t("assistant.bench_title")} ({tezgahItems.length})
-            </Text>
-            <View // (Tezgah'ın 'ScrollView'u kaldırıldı, 'flex-wrap' (sarılan) 'View' oldu)
-              style={styles.chipScrollContainer}
-            >
-              {tezgahItems.length === 0 ? (
-                <Text style={styles.emptyText}>
-                  {t("assistant.bench_empty")}
-                </Text>
-              ) : (
-                tezgahItems.map((item) => (
-                  <Pressable
-                    key={item.ingredient_id}
-                    style={[styles.itemChip, styles.tezgahChip]}
-                    onPress={() => handleRemoveFromTezgah(item)}
-                  >
-                    {/* Dinamik İsim (TR/EN) */}
-                    <Text style={styles.chipText}>
-                      {getLocaleText(item, "name")}
-                    </Text>
-                    <Ionicons
-                      name="close-circle"
-                      size={16}
-                      color="#fff"
-                      style={{ marginLeft: 5 }}
-                    />
-                  </Pressable>
-                ))
-              )}
-            </View>
-          </View>
+        {/* HEADER KISMI (Sabit) */}
+        <View style={styles.header}>
+          <Text style={styles.title}>
+            {t("assistant.title", "Barmen'in Asistanı")}
+          </Text>
+          <Text style={styles.subtitle}>
+            {t(
+              "assistant.subtitle",
+              "Elinde ne varsa seç, gerisini bana bırak."
+            )}
+          </Text>
 
-          {/* BÖLÜM 2: PAZAR (Artık KAV içinde) */}
-          <View style={styles.pazarContainer}>
-            <Text style={styles.sectionTitle}>
-              {t("assistant.market_title")}
-            </Text>
-            {/* Kategori Sekmeleri (Tabs) */}
-            <View>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.categoryScrollContainer}
-              >
-                {categories.map((category) => (
-                  <Pressable
-                    key={category}
-                    style={[
-                      styles.categoryChip,
-                      activeCategory === category && styles.categoryChipActive,
-                    ]}
-                    onPress={() => setActiveCategory(category)}
-                  >
-                    <Text
-                      style={[
-                        styles.categoryChipText,
-                        activeCategory === category &&
-                          styles.categoryChipTextActive,
-                      ]}
-                    >
-                      {/* Eğer kategori 'ALL' ise çevirisini göster, değilse kendisini */}
-                      {category === TAB_ALL_KEY
-                        ? t("assistant.tab_all")
-                        : category}
-                    </Text>
-                  </Pressable>
-                ))}
-              </ScrollView>
-            </View>
-
-            {/* Pazar Izgarası (Grid) */}
-            <ScrollView
-              contentContainerStyle={styles.chipScrollContainer}
-              keyboardShouldPersistTaps="handled" // "İki tıklama" sorununu çözer
-            >
-              {pazarList.length === 0 && searchText ? (
-                <Text style={styles.emptyText}>
-                  "{searchText}" {t("assistant.not_found")}
-                </Text>
-              ) : (
-                pazarList.map((item) => (
-                  <Pressable
-                    key={item.ingredient_id}
-                    style={[styles.itemChip, styles.pazarChip]}
-                    onPress={() => handleAddToTezgah(item)}
-                  >
-                    {/* Dinamik İsim */}
-                    <Text style={styles.chipTextPazar}>
-                      {getLocaleText(item, "name")}
-                    </Text>
-                    <Ionicons
-                      name="add"
-                      size={16}
-                      color="#f4511e"
-                      style={{ marginLeft: 5 }}
-                    />
-                  </Pressable>
-                ))
-              )}
-            </ScrollView>
-          </View>
-
-          {/* BÖLÜM 3: ARAMA ÇUBUĞU (Artık KAV içinde) */}
+          {/* Arama Çubuğu */}
           <View style={styles.searchContainer}>
-            <Ionicons
-              name="search"
-              size={20}
-              color="gray"
-              style={styles.searchIcon}
-            />
+            <Ionicons name="search" size={20} color="#999" />
             <TextInput
               style={styles.searchInput}
-              placeholder={t("assistant.search_placeholder")}
+              placeholder={t(
+                "assistant.search_placeholder",
+                "Malzeme ara (örn: Cin, Limon)"
+              )}
               value={searchText}
               onChangeText={setSearchText}
+              placeholderTextColor="#aaa"
             />
+            {searchText.length > 0 && (
+              <Pressable onPress={() => setSearchText("")}>
+                <Ionicons name="close-circle" size={18} color="#999" />
+              </Pressable>
+            )}
           </View>
 
-          {/*BÖLÜM 4 ve 5 (Toggle ve Butonn) */}
-          {/* BÖLÜM 4: FİLTRE MODU (Toggle) (Artık KAV içinde) */}
-          <CustomToggle
-            mode={mode}
-            onToggle={setMode}
-            textLeft={t("assistant.toggle_flexible")}
-            textRight={t("assistant.toggle_strict")}
-          />
+          {/* Kategoriler */}
+          <View style={{ height: 50 }}>
+            <FlatList
+              data={categories}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item}
+              contentContainerStyle={{
+                paddingHorizontal: 16,
+                alignItems: "center",
+              }}
+              renderItem={({ item }) => {
+                const isActive = activeCategory === item;
+                const label =
+                  item === "ALL" ? t("assistant.tab_all", "Tümü") : item;
+                return (
+                  <Pressable
+                    style={[styles.catTab, isActive && styles.catTabActive]}
+                    onPress={() => setActiveCategory(item)}
+                  >
+                    <Text
+                      style={[styles.catText, isActive && styles.catTextActive]}
+                    >
+                      {label}
+                    </Text>
+                  </Pressable>
+                );
+              }}
+            />
+          </View>
+        </View>
 
-          {/* BÖLÜM 5: BUTON (Footer) (Artık KAV içinde) */}
-          <View style={styles.footer}>
+        {/* LİSTE KISMI (Body) */}
+        <FlatList
+          data={filteredList}
+          keyExtractor={(item) => item.ingredient_id.toString()}
+          contentContainerStyle={{ paddingBottom: 100, paddingTop: 10 }} // Footer için boşluk
+          initialNumToRender={15} // Performans için
+          removeClippedSubviews={true} // Performans için
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>
+                {t("assistant.not_found", "Malzeme bulunamadı.")}
+              </Text>
+            </View>
+          }
+          renderItem={({ item }) => {
+            const isSelected = selectedIds.includes(item.ingredient_id);
+            return (
+              <Pressable
+                style={[styles.row, isSelected && styles.rowSelected]}
+                onPress={() => toggleSelection(item.ingredient_id)}
+              >
+                <View style={styles.rowContent}>
+                  {/* İsim */}
+                  <Text
+                    style={[
+                      styles.rowText,
+                      isSelected && styles.rowTextSelected,
+                    ]}
+                  >
+                    {getName(item)}
+                  </Text>
+
+                  {/* Kategori (Küçük gri yazı) */}
+                  <Text style={styles.rowSubText}>{getCategoryName(item)}</Text>
+                </View>
+
+                {/* Seçim İkonu */}
+                <Ionicons
+                  name={isSelected ? "checkbox" : "square-outline"}
+                  size={24}
+                  color={isSelected ? "#f4511e" : "#ccc"}
+                />
+              </Pressable>
+            );
+          }}
+        />
+
+        {/* FOOTER (Yüzen Buton) - Sadece seçim varsa görünür */}
+        {selectedIds.length > 0 && (
+          <View style={styles.footerContainer}>
             <Pressable
-              style={[
-                styles.prepareButton,
-                (tezgahItems.length === 0 || searchStatus === "loading") &&
-                  styles.prepareButtonDisabled,
-              ]}
-              disabled={tezgahItems.length === 0 || searchStatus === "loading"}
+              style={styles.actionButton}
               onPress={handleFindRecipes}
+              disabled={searchStatus === "loading"}
             >
               {searchStatus === "loading" ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.prepareButtonText}>
-                  {tezgahItems.length} {t("assistant.show_recipes_btn")}
-                </Text>
+                <>
+                  <View style={styles.badge}>
+                    <Text style={styles.badgeText}>{selectedIds.length}</Text>
+                  </View>
+                  <Text style={styles.actionButtonText}>
+                    {t("assistant.show_recipes_btn", "Kokteylleri Bul")}
+                  </Text>
+                  <Ionicons
+                    name="arrow-forward"
+                    size={20}
+                    color="#fff"
+                    style={{ marginLeft: 5 }}
+                  />
+                </>
               )}
             </Pressable>
           </View>
-        </ScrollView>
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
 
-// === YENİ EKLENDİ: 'Kayan Switch' (Sliding Toggle) Bileşeni ===
-const CustomToggle = ({ mode, onToggle, textLeft, textRight }) => {
-  // 'mode' ("strict" veya "flexible") değiştiğinde 'animatedValue'yu (kayan top)
-  // 0'dan 1'e (veya 1'den 0'a) hareket ettirir.
-  const animatedValue = useRef(
-    new Animated.Value(mode === "flexible" ? 0 : 1)
-  ).current;
-
-  useEffect(() => {
-    Animated.spring(animatedValue, {
-      toValue: mode === "flexible" ? 0 : 1,
-      useNativeDriver: true, // Performans için
-    }).start();
-  }, [mode, animatedValue]);
-
-  // 'animatedValue' (0-1 arası) değiştikçe, 'translateX' (yatay konum)
-  // 0'dan 100'e (veya tam tersi) değişir. (104 = Genişlik - margin)
-  const translateX = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [4, 104], // 4 (sol boşluk) -> 104 (sağ boşluk)
-  });
-
-  return (
-    <View style={styles.toggleContainer}>
-      <Text
-        style={[
-          styles.toggleText,
-          mode === "flexible" && styles.toggleTextActive,
-        ]}
-      >
-        {textLeft}
-      </Text>
-      <Pressable
-        style={styles.toggleTrack}
-        onPress={() => onToggle(mode === "flexible" ? "strict" : "flexible")}
-      >
-        {/* Kayan Top (Knob) */}
-        <Animated.View
-          style={[styles.toggleKnob, { transform: [{ translateX }] }]}
-        />
-      </Pressable>
-      <Text
-        style={[
-          styles.toggleText,
-          mode === "strict" && styles.toggleTextActive,
-        ]}
-      >
-        {textRight}
-      </Text>
-    </View>
-  );
-};
-
-// === Stil Dosyaları (EKSİK 10 - GÜNCELLENDİ) ===
-// (Senin vizyonuna (masa/kart) uygun olarak stiller güncellendi)
 const styles = StyleSheet.create({
-  // Ana konteyner (Gri Arka Plan)
   container: {
     flex: 1,
-    backgroundColor: "#f0f2f5", // Daha yumuşak bir gri arka plan
-  },
-  // Container ile aynı
-  keyboardAvoidingContainer: {
-    flex: 1,
-  },
-  scrollContainer: {
-    paddingHorizontal: 10, // YAN BOŞLUKLAR (Senin istediğin)
-    flexGrow: 1, // GÜNCELLEME: İçerik kısaysa ekranı doldur, uzunsa kaydır
+    backgroundColor: "#fff",
   },
   centeredContainer: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f9f9f9",
+    alignItems: "center",
   },
-  sectionTitle: {
-    fontSize: 20,
+  // --- HEADER ---
+  header: {
+    backgroundColor: "#fff",
+    paddingTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 3,
+    elevation: 2,
+    zIndex: 1, // Listenin üstünde kalsın
+  },
+  title: {
+    fontSize: 28,
     fontWeight: "bold",
-    marginLeft: 15,
-    marginBottom: 10,
-    marginTop: 5, // Kartın üstünden biraz boşluk
-    alignSelf: "center",
+    color: "#333",
+    paddingHorizontal: 20,
   },
-  emptyText: {
+  subtitle: {
     fontSize: 14,
     color: "gray",
-    padding: 15, // Boş metin için dolgu
-    alignSelf: "center",
+    paddingHorizontal: 20,
+    marginBottom: 15,
   },
-  // --- Tezgah Stilleri (GÜNCELLENDİ) ---
-  tezgahContainer: {
-    maxHeight: 300,
-    minHeight: 150,
-    paddingTop: 10,
-    backgroundColor: "#fff", // Beyaz "Kart"
-    borderRadius: 12, // YUVARLATILMIŞ KÖŞE (Senin istediğin)
-    marginBottom: 10, // Kartlar arası boşluk
-    marginTop: 10,
-    // Gölge (iOS)
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    // Gölge (Android)
-    elevation: 3,
-  },
-
-  // --- Pazar Stilleri (GÜNCELLENDİ) ---
-  pazarContainer: {
-    backgroundColor: "#fff", // Beyaz "Kart"
-    borderRadius: 12, // YUVARLATILMIŞ KÖŞE
-    overflow: "hidden", // (Sekmelerin ve ScrollView'un köşelerini keser)
-    // Gölge (iOS)
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    // Gölge (Android)
-    elevation: 3,
-    maxHeight: 250,
-    minHeight: 150,
-  },
-  // --- Arama Stilleri---
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff", // Beyaz "Kart"
-    borderRadius: 12, // YUVARLATILMIŞ KÖŞE
+    backgroundColor: "#f5f5f5",
+    marginHorizontal: 20,
+    marginBottom: 15,
     paddingHorizontal: 15,
-    marginTop: 10, // (Pazar ile Arama arasına boşluk)
-    // Gölge (iOS)
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    // Gölge (Android)
-    elevation: 3,
-  },
-  searchIcon: {
-    marginRight: 10,
+    height: 46,
+    borderRadius: 12,
   },
   searchInput: {
     flex: 1,
-    height: 50,
+    marginLeft: 10,
     fontSize: 16,
-  },
-  // --- Ortak 'Chip' (Etiket) Stilleri (Değişiklik Yok) ---
-  chipScrollContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    paddingHorizontal: 10,
-    paddingBottom: 10,
-  },
-  itemChip: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    margin: 4,
-  },
-  tezgahChip: {
-    backgroundColor: "#007AFF",
-  },
-  chipText: {
-    color: "white",
-    fontWeight: "600",
-  },
-  pazarChip: {
-    backgroundColor: "#f0f0f0",
-  },
-  chipTextPazar: {
     color: "#333",
-    fontWeight: "600",
+    height: "100%",
   },
-  // --- Kategori Sekmesi (Tab) Stilleri (Değişiklik Yok) ---
-  categoryScrollContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    backgroundColor: "#f9f9f9",
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-  },
-  // ... (Mevcut 'categoryChip' ve 'categoryChipActive' stilleri) ...
-  categoryChip: {
-    backgroundColor: "#e0e0e0",
+  // --- KATEGORİ TABLARI ---
+  catTab: {
     paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 18,
-    marginHorizontal: 4,
+    paddingHorizontal: 16,
+    marginRight: 8,
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#eee",
+    justifyContent: "center",
   },
-  categoryChipActive: {
-    backgroundColor: "#f4511e", // Turuncu (Aktif)
+  catTabActive: {
+    backgroundColor: "#333", // Aktifken siyah (veya turuncu)
+    borderColor: "#333",
   },
-  categoryChipText: {
-    color: "#333",
+  catText: {
+    fontSize: 14,
+    color: "#666",
     fontWeight: "500",
   },
-  categoryChipTextActive: {
+  catTextActive: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "600",
   },
-
-  // --- Kayan Toggle Stilleri  ---
-  toggleContainer: {
+  // --- LİSTE SATIRI ---
+  row: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
-    backgroundColor: "#fff", // Beyaz "Kart"
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderRadius: 12, // YUVARLATILMIŞ KÖŞE
-    marginTop: 10, // (Arama ile Toggle arasına boşluk)
-    // Gölge (iOS)
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    // Gölge (Android)
-    elevation: 3,
+    justifyContent: "space-between",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f9f9f9",
   },
-  // ... (Mevcut 'toggleText' ve 'toggleTextActive' stilleri) ...
-  toggleText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "gray",
+  rowSelected: {
+    backgroundColor: "#fffaf5", // Seçilince çok hafif turuncu
+  },
+  rowContent: {
     flex: 1,
-    textAlign: "center",
   },
-  toggleTextActive: {
-    color: "#f4511e", // Turuncu (Aktif)
+  rowText: {
+    fontSize: 17,
+    color: "#333",
   },
-  toggleTrack: {
-    width: 140,
-    height: 36,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 18,
-    justifyContent: "center",
-    marginHorizontal: 10,
+  rowTextSelected: {
+    fontWeight: "600",
+    color: "#f4511e",
   },
-  toggleKnob: {
-    width: 30,
-    height: 30,
-    backgroundColor: "#f4511e",
-    borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 4,
+  rowSubText: {
+    fontSize: 12,
+    color: "#999",
+    marginTop: 2,
   },
-  // --- Footer (Alt Buton) Stilleri ---
-  footer: {
-    backgroundColor: "#fff", // Beyaz "Kart"
-    borderRadius: 12, // YUVARLATILMIŞ KÖŞE
-    padding: 15,
-    marginTop: 10, // (Toggle ile Buton arasına boşluk)
-    marginBottom: 5, // (Ekranın en altından boşluk)
-    // Gölge (iOS)
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    // Gölge (Android)
-    elevation: 3,
-  },
-  // ... (Mevcut 'prepareButton', 'prepareButtonDisabled', 'prepareButtonText', 'errorText' stilleri) ...
-  prepareButton: {
-    backgroundColor: "#f4511e",
-    paddingVertical: 14,
-    borderRadius: 10,
+  emptyContainer: {
     alignItems: "center",
+    marginTop: 50,
   },
-  prepareButtonDisabled: {
-    backgroundColor: "#ccc",
-  },
-  prepareButtonText: {
-    color: "white",
+  emptyText: {
+    color: "gray",
     fontSize: 16,
+  },
+  // --- FOOTER BUTON ---
+  footerContainer: {
+    position: "absolute",
+    bottom: 20, // SafeAreaView içinde olduğu için bottom inset'e gerek kalmayabilir ama garanti olsun
+    left: 20,
+    right: 20,
+  },
+  actionButton: {
+    backgroundColor: "#f4511e",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 16,
+    borderRadius: 16,
+    shadowColor: "#f4511e",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+    elevation: 6,
+  },
+  actionButtonText: {
+    color: "#fff",
+    fontSize: 18,
     fontWeight: "bold",
+    marginLeft: 10,
   },
-  errorText: {
-    fontSize: 16,
-    color: "red",
-    padding: 20,
-    textAlign: "center",
+  badge: {
+    backgroundColor: "rgba(255,255,255,0.25)",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  badgeText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });
 

@@ -219,6 +219,11 @@ function AssistantStackNavigator() {
         component={AssistantResultScreen}
         options={{ title: "Bulunan Tarifler" }}
       />
+      <Stack.Screen
+        name="CocktailDetail"
+        component={CocktailDetailScreen}
+        options={{ title: "Tarif Detayı" }}
+      />
     </Stack.Navigator>
   );
 }

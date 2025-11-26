@@ -76,5 +76,17 @@
     "upgrade_btn": "Upgrade to PRO",
     "language_changed": "Language Changed",
      "language_select": "Change Language"
+  },
+  "upgrade": {
+    "title": "Upgrade to PRO",
+    "subtitle": "Take your cocktail experience to the next level.",
+    "feature_1": "Smart Alternatives (Gin instead of Vodka? Lemon instead of Lime?)",
+    "feature_2": "Advanced filtering in \"Barman's Assistant\"",
+    "feature_3": "Save and share your custom recipes (Coming Soon)",
+    "feature_4": "Ad-free Experience",
+    "buy_btn": "Buy 1 Year PRO (Test)",
+    "success_title": "Congratulations!",
+    "success_msg": "Successfully upgraded to Pro membership.",
+    "error_msg": "An error occurred during upgrade"
   }
 }

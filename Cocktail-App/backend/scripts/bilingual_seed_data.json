@@ -40,8 +40,8 @@
         ]
       },
       {
-        "name_en": "maraschino liqueur",
-        "name_tr": "Maraschino likörü",
+        "name_en": "Maraschino Liqueur",
+        "name_tr": "Maraschino Likörü",
         "amount_en": "1.5 cl",
         "amount_tr": "1,5 cl",
         "category": "Liqueurs",
@@ -49,7 +49,7 @@
         "alternatives": []
       }
     ],
-    "history_notes_en": "A pre-Prohibition classic created by Hugo Ensslin in 1916. It is famous for its sky-blue color, derived from the obscure Crème de Violette liqueur."
+    "history_notes_en": "A pre-Prohibition classic created by Hugo Ensslin in 1916. It is famous for its sky-blue color, derived from the obscure Crème de Violette Liqueur."
   },
   {
     "api_id": "15941",
@@ -197,7 +197,7 @@
       },
       {
         "name_en": "Sugar syrup",
-        "name_tr": "Şeker şurubu",
+        "name_tr": "Şeker Şurubu",
         "amount_en": "1 cl",
         "amount_tr": "1 cl",
         "category": "Syrups",
@@ -240,8 +240,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Maraschino liqueur",
-        "name_tr": "Maraschino likörü",
+        "name_en": "Maraschino Liqueur",
+        "name_tr": "Maraschino Likörü",
         "amount_en": "1/4 tsp",
         "amount_tr": "1/4 çay kaşığı",
         "category": "Liqueurs",
@@ -449,7 +449,7 @@
       },
       {
         "name_en": "Egg white",
-        "name_tr": "Yumurta beyazı",
+        "name_tr": "Yumurta Beyazı",
         "amount_en": "1",
         "amount_tr": "1",
         "category": "Pantry",
@@ -525,8 +525,8 @@
         ]
       },
       {
-        "name_en": "Cranberry juice",
-        "name_tr": "Kızılcık suyu",
+        "name_en": "Cranberry Juice",
+        "name_tr": "Kızılcık Suyu",
         "amount_en": "1/4 cup",
         "amount_tr": "1/4 bardak",
         "category": "Juices",
@@ -734,7 +734,7 @@
     "ingredients": [
       {
         "name_en": "Dark Rum",
-        "name_tr": "Dark rom",
+        "name_tr": "Dark Rom",
         "amount_en": "5 cl",
         "amount_tr": "5 cl",
         "category": "Spirits",
@@ -795,7 +795,7 @@
       },
       {
         "name_en": "Sugar syrup",
-        "name_tr": "Şeker şurubu",
+        "name_tr": "Şeker Şurubu",
         "amount_en": "1 dash",
         "amount_tr": "1 çizgi",
         "category": "Syrups",
@@ -838,8 +838,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Lemon juice",
-        "name_tr": "Limon suyu",
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
         "amount_en": "1 1/2 oz",
         "amount_tr": "4.5 cl",
         "category": "Juices",
@@ -881,8 +881,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Maraschino cherry",
-        "name_tr": "Marachino kirazı",
+        "name_en": "Maraschino Cherry",
+        "name_tr": "Marachino Kirazı",
         "amount_en": "1",
         "amount_tr": "1",
         "category": "Fruits",
@@ -925,8 +925,8 @@
         "alternatives": []
       },
       {
-        "name_en": "pineapple juice",
-        "name_tr": "ananas suyu",
+        "name_en": "Pineapple Juice",
+        "name_tr": "Ananas Suyu",
         "amount_en": "1.5 cl",
         "amount_tr": "1,5 cl",
         "category": "Juices",
@@ -969,7 +969,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1/2 oz",
             "amount_tr": "1,5 cl",
             "category": "Juices"
@@ -1141,7 +1141,7 @@
       },
       {
         "name_en": "Grapefruit Juice",
-        "name_tr": "Greyfurt suyu",
+        "name_tr": "Greyfurt Suyu",
         "amount_en": "1 1/3 oz",
         "amount_tr": "4 cl",
         "category": "Juices",
@@ -1167,7 +1167,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1/2 oz",
             "amount_tr": "1.5 cl",
             "category": "Juices"
@@ -1193,7 +1193,7 @@
     "ingredients": [
       {
         "name_en": "Irish whiskey",
-        "name_tr": "İrlanda viskisi",
+        "name_tr": "Irish viskisi",
         "amount_en": "1 1/2 oz",
         "amount_tr": "4.5 cl",
         "category": "Spirits",
@@ -1220,7 +1220,7 @@
       },
       {
         "name_en": "Whipped cream",
-        "name_tr": "Krem şanti",
+        "name_tr": "Krem Şanti",
         "amount_en": "1 tblsp",
         "amount_tr": "1 yemek kaşığı",
         "category": "Pantry",
@@ -1454,8 +1454,8 @@
         ]
       },
       {
-        "name_en": "Orange juice",
-        "name_tr": "Portakal suyu",
+        "name_en": "Orange Juice",
+        "name_tr": "Portakal Suyu",
         "amount_en": "2 oz",
         "amount_tr": "6 cl",
         "category": "Juices",
@@ -1490,7 +1490,7 @@
       },
       {
         "name_en": "Orgeat syrup",
-        "name_tr": "Orgeat şurubu",
+        "name_tr": "Orgeat Şurubu",
         "amount_en": "1/2 oz",
         "amount_tr": "1.5 cl",
         "category": "Syrups",
@@ -1515,8 +1515,8 @@
         ]
       },
       {
-        "name_en": "Sweet and sour",
-        "name_tr": "Tatlı ve ekşi sos",
+        "name_en": "Sweet and Sour",
+        "name_tr": "Tatlı ve Ekşi Sos",
         "amount_en": "1 1/2 oz",
         "amount_tr": "4.5 cl",
         "category": "Syrups",
@@ -1655,8 +1655,8 @@
         ]
       },
       {
-        "name_en": "Lime juice",
-        "name_tr": "Misket Limonu suyu",
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
         "amount_en": "1 oz",
         "amount_tr": "3 cl",
         "category": "Juices",
@@ -1664,7 +1664,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1 oz",
             "amount_tr": "3 cl",
             "category": "Juices"
@@ -1724,8 +1724,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Powdered sugar",
-        "name_tr": "Pudra şekeri",
+        "name_en": "Powdered Sugar",
+        "name_tr": "Pudra Şekeri",
         "amount_en": "1 tsp",
         "amount_tr": "1 çay kaşığı",
         "category": "Pantry",
@@ -1768,8 +1768,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Lime juice",
-        "name_tr": "Misket Limonu suyu",
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
         "amount_en": "2 oz",
         "amount_tr": "6 cl",
         "category": "Juices",
@@ -1777,7 +1777,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "2 oz",
             "amount_tr": "6 cl",
             "category": "Juices"
@@ -1983,7 +1983,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1 oz",
             "amount_tr": "3 cl",
             "category": "Juices"
@@ -2157,7 +2157,7 @@
       },
       {
         "name_en": "Honey syrup",
-        "name_tr": "Bal şurubu",
+        "name_tr": "Bal Şurubu",
         "amount_en": "2 tsp",
         "amount_tr": "2 çay kaşığı",
         "category": "Syrups",
@@ -2340,8 +2340,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Passion fruit juice",
-        "name_tr": "Tutku meyvesi suyu",
+        "name_en": "Passion fruit Juice",
+        "name_tr": "Tutku meyvesi Suyu",
         "amount_en": "1 cl",
         "amount_tr": "1 cl",
         "category": "Juices",
@@ -2350,7 +2350,7 @@
       },
       {
         "name_en": "Lime Juice",
-        "name_tr": "Misket Limonu suyu",
+        "name_tr": "Misket Limonu Suyu",
         "amount_en": "1 cl",
         "amount_tr": "1 cl",
         "category": "Juices",
@@ -2358,7 +2358,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1 oz",
             "amount_tr": "3 cl",
             "category": "Juices"
@@ -2556,7 +2556,7 @@
       },
       {
         "name_en": "Soda Water",
-        "name_tr": "soda",
+        "name_tr": "Soda",
         "amount_en": "2/3 oz",
         "amount_tr": "2 cl",
         "category": "Mixers",
@@ -2616,7 +2616,7 @@
       },
       {
         "name_en": "Soda Water",
-        "name_tr": "soda",
+        "name_tr": "Soda",
         "amount_en": "splash",
         "amount_tr": "Az miktar",
         "category": "Mixers",
@@ -2660,7 +2660,7 @@
       },
       {
         "name_en": "Peychaud bitters",
-        "name_tr": "Peychaud bitterleri",
+        "name_tr": "Peychaud bitters",
         "amount_en": "2 dashes",
         "amount_tr": "2 damla",
         "category": "Liqueurs",
@@ -2669,7 +2669,7 @@
       },
       {
         "name_en": "Water",
-        "name_tr": "su",
+        "name_tr": "Su",
         "amount_en": "1 tsp",
         "amount_tr": "1 çay kaşığı",
         "category": "Mixers",
@@ -2700,7 +2700,7 @@
   {
     "api_id": "12196",
     "name_en": "Sidecar",
-    "name_tr": "Sepet",
+    "name_tr": "Sidecar",
     "instructions_en": "Pour all ingredients into cocktail shaker filled with ice. Shake well and strain into cocktail glass.",
     "instructions_tr": "Tüm malzemeleri buzla dolu shaker'a dökün. İyice çalkalayın ve kokteyl bardağına süzün.",
     "glass_type_en": "Cocktail glass",
@@ -2814,8 +2814,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Orange juice",
-        "name_tr": "Portakal suyu",
+        "name_en": "Orange Juice",
+        "name_tr": "Portakal Suyu",
         "amount_en": "Splash",
         "amount_tr": "Kararınca",
         "category": "Juices",
@@ -2875,8 +2875,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Club soda",
-        "name_tr": "Kulüp sodası",
+        "name_en": "Club Soda",
+        "name_tr": "Kulüp Sodası",
         "amount_en": "3 oz",
         "amount_tr": "9 cl",
         "category": "Mixers",
@@ -2884,8 +2884,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Maraschino cherry",
-        "name_tr": "Maraschino kirazı",
+        "name_en": "Maraschino Cherry",
+        "name_tr": "Maraschino Kirazı",
         "amount_en": "1",
         "amount_tr": "1",
         "category": "Fruits",
@@ -2946,7 +2946,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1 oz",
             "amount_tr": "3 cl",
             "category": "Juices"
@@ -2989,8 +2989,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Orange juice",
-        "name_tr": "Portakal suyu",
+        "name_en": "Orange Juice",
+        "name_tr": "Portakal Suyu",
         "amount_en": "Splash",
         "amount_tr": "Kararınca",
         "category": "Juices",
@@ -3137,7 +3137,7 @@
     "ingredients": [
       {
         "name_en": "Blended whiskey",
-        "name_tr": "Harmanlanmış viski",
+        "name_tr": "Blended viski",
         "amount_en": "2 oz",
         "amount_tr": "6 cl",
         "category": "Spirits",
@@ -3223,8 +3223,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Coffee liqueur",
-        "name_tr": "Kahve likörü",
+        "name_en": "Coffee Liqueur",
+        "name_tr": "Kahve Likörü",
         "amount_en": "1 oz",
         "amount_tr": "3 cl",
         "category": "Liqueurs",
@@ -3267,8 +3267,8 @@
         "alternatives": []
       },
       {
-        "name_en": "Gold rum",
-        "name_tr": "Gold rum",
+        "name_en": "Gold Rum",
+        "name_tr": "Gold Rom",
         "amount_en": "1 1/2 oz",
         "amount_tr": "4.5 cl",
         "category": "Spirits",
@@ -3312,7 +3312,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1 oz",
             "amount_tr": "3 cl",
             "category": "Juices"
@@ -3604,7 +3604,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1 oz",
             "amount_tr": "3 cl",
             "category": "Juices"
@@ -3630,7 +3630,7 @@
     "ingredients": [
       {
         "name_en": "Dark Rum",
-        "name_tr": "Koyu rom",
+        "name_tr": "Dark Rom",
         "amount_en": "1 1/2 oz",
         "amount_tr": "4.5 cl",
         "category": "Spirits",
@@ -3673,7 +3673,7 @@
         "alternatives": [
           {
             "name_en": "Lemon Juice",
-            "name_tr": "Limon suyu",
+            "name_tr": "Limon Suyu",
             "amount_en": "1 oz",
             "amount_tr": "3 cl",
             "category": "Juices"
@@ -3732,7 +3732,7 @@
       },
       {
         "name_en": "Tomato Juice",
-        "name_tr": "Domates suyu",
+        "name_tr": "Domates Suyu",
         "amount_en": "3 oz",
         "amount_tr": "9 cl",
         "category": "Juices",
@@ -3897,7 +3897,7 @@
     "ingredients": [
       {
         "name_en": "Rye Whiskey",
-        "name_tr": "Çavdar Viski",
+        "name_tr": "Çavdar Viskisi",
         "amount_en": "1 oz",
         "amount_tr": "3 cl",
         "category": "Spirits",
@@ -3932,7 +3932,7 @@
       },
       {
         "name_en": "Benedictine",
-        "name_tr": "Benediktin",
+        "name_tr": "Benedictine",
         "amount_en": "1 tsp",
         "amount_tr": "1 çay kaşığı",
         "category": "Liqueurs",
@@ -3976,7 +3976,7 @@
       },
       {
         "name_en": "Orange Juice",
-        "name_tr": "Portakal suyu",
+        "name_tr": "Portakal Suyu",
         "amount_en": "1 1/2 oz",
         "amount_tr": "4.5 cl",
         "category": "Juices",

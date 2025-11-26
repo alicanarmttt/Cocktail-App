@@ -28,29 +28,24 @@ const getAllCocktails = () => {
   );
 };
 
-//Tek bir kokteyli ID'sine göre getiren fonksiyon.
 /**
  * @desc    Fetches a single cocktail by its ID.
  * @param   {number} id - The ID of the cocktail to search for
  * @returns {Promise<Object>} A single cocktail object
  */
 const getCocktailById = async (id) => {
-  // GÜNCELLEME: 'lang' parametresi kaldırıldı.
-
+  // 1. KOKTEYL DETAYINI ÇEK
   const cocktail = await db("cocktails")
     .select(
       "cocktail_id",
-      // Türkçe Alanlar
       "name_tr",
       "instructions_tr",
       "history_notes_tr",
       "glass_type_tr",
-      // İngilizce Alanlar
       "name_en",
       "instructions_en",
       "history_notes_en",
       "glass_type_en",
-      // Ortak Alanlar
       "image_url",
       "is_alcoholic"
     )
@@ -59,65 +54,88 @@ const getCocktailById = async (id) => {
 
   if (!cocktail) return undefined;
 
-  // Adım 2: Bu kokteylin malzemelerini (requirements) al
-  // Yorum: Bu, 3 tabloyu birleştiren (JOIN) bir sorgudur.
-  const ingredients = await db("cocktail_requirements as req")
+  // 2. MALZEMELERİ VE ALTERNATİFLERİNİ ÇEK (JOIN ile)
+  // Bu sorgu, çoklu alternatiflerde aynı malzemeyi tekrar eden satırlar döndürür.
+  const rawIngredients = await db("cocktail_requirements as req")
     .join("ingredients as ing", "req.ingredient_id", "ing.ingredient_id")
     .join("importance_levels as lvl", "req.level_id", "lvl.level_id")
-    // GÜNCELLEME: "Gold Arka Plan" fikri için 'recipe_alternatives' tablosuna LEFT JOIN
-    // 'LEFT JOIN' kullanıyoruz çünkü bir malzemenin alternatifi OLMAYABİLİR,
-    // ama biz o malzemeyi yine de listelemek isteriz.
     .leftJoin("recipe_alternatives as alt", (join) => {
       join
         .on("req.cocktail_id", "=", "alt.cocktail_id")
         .andOn("req.ingredient_id", "=", "alt.original_ingredient_id");
     })
-    // === YENİ GÜNCELLEME (EKSİK 3 - "Pro" Tıklaması) ===
-    // 'recipe_alternatives' tablosu bize sadece alternatifin ID'sini (alternative_ingredient_id) verir.
-    // Bize o ID'nin 'adı' (örn: "Votka") lazım.
-    // Bu yüzden 'ingredients' tablosunu İKİNCİ KEZ, 'alt_ing' adıyla ('alias') JOIN ediyoruz.
-    //
     .leftJoin(
       "ingredients as alt_ing",
       "alt.alternative_ingredient_id",
       "alt_ing.ingredient_id"
     )
-
-    // GÜNCELLEME: 'select' kısmını 'has_alternative' bayrağını (flag) içerecek şekilde güncelledik.
-    // 'knex.raw' kullanarak bir SQL 'CASE' (Durum) ifadesi yazıyoruz.
     .select(
       "req.requirement_id",
-      "ing.ingredient_id", // (Pro özelliğinde tıklama için ID'yi de alalım)
-
-      // DİLLİ ALANLAR (TÜMÜ):
-      "ing.name_tr", // Malzeme Adı TR
-      "ing.name_en", // Malzeme Adı EN
-
-      "req.amount_tr", // Miktar TR
-      "req.amount_en", // Miktar EN
-
-      "lvl.level_name_tr", // Önem Seviyesi TR
-      "lvl.level_name_en", // Önem Seviyesi EN
+      "ing.ingredient_id",
+      // Malzeme Bilgileri
+      "ing.name_tr",
+      "ing.name_en",
+      "req.amount_tr",
+      "req.amount_en",
+      "lvl.level_name_tr",
+      "lvl.level_name_en",
       "lvl.color_code",
-
-      // PRO ALANLAR (DİLLİ - TÜMÜ):
-      "alt.alternative_amount_tr", // Alternatif Miktarı TR
-      "alt.alternative_amount_en", // Alternatif Miktarı EN
-
-      "alt_ing.name_tr as alternative_name_tr", // Alternatif Adı TR
-      "alt_ing.name_en as alternative_name_en", // Alternatif Adı EN
-
-      // YENİ BAYRAK: Eğer 'alt.alternative_id' NULL değilse (yani bir alternatif bulunduysa)
-      // 'has_alternative' sütununu 'true' (1) yap, yoksa 'false' (0) yap.
-      db.raw(
-        "CASE WHEN alt.alternative_id IS NOT NULL THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END as has_alternative"
-      )
+      // Alternatif Bilgileri (Varsa)
+      "alt.alternative_amount_tr",
+      "alt.alternative_amount_en",
+      "alt_ing.ingredient_id as alt_id", // Alternatifin ID'si
+      "alt_ing.name_tr as alternative_name_tr",
+      "alt_ing.name_en as alternative_name_en"
     )
-    .where("req.cocktail_id", id); // Sadece bu kokteylin malzemelerini filtrele
+    .where("req.cocktail_id", id);
+
+  // 3. GRUPLAMA (JAVASCRIPT LOGIC)
+  // Gelen ham veriyi işleyerek duplicate (tekrar eden) malzemeleri birleştiriyoruz.
+
+  const ingredientsMap = new Map();
+
+  rawIngredients.forEach((row) => {
+    // Eğer bu malzeme daha önce listeye eklenmediyse, ana iskeletini oluştur
+    if (!ingredientsMap.has(row.ingredient_id)) {
+      ingredientsMap.set(row.ingredient_id, {
+        requirement_id: row.requirement_id,
+        ingredient_id: row.ingredient_id,
+        name_tr: row.name_tr,
+        name_en: row.name_en,
+        amount_tr: row.amount_tr,
+        amount_en: row.amount_en,
+        level_name_tr: row.level_name_tr,
+        level_name_en: row.level_name_en,
+        color_code: row.color_code,
+        has_alternative: false, // Başlangıçta false
+        alternatives: [], // Alternatifleri buraya dolduracağız
+      });
+    }
+
+    // Eğer bu satırda bir alternatif varsa (alt_id null değilse)
+    if (row.alt_id) {
+      const ingredient = ingredientsMap.get(row.ingredient_id);
+
+      // Bayrağı true yap
+      ingredient.has_alternative = true;
+
+      // Alternatifi listeye ekle
+      ingredient.alternatives.push({
+        ingredient_id: row.alt_id,
+        name_tr: row.alternative_name_tr,
+        name_en: row.alternative_name_en,
+        amount_tr: row.alternative_amount_tr,
+        amount_en: row.alternative_amount_en,
+      });
+    }
+  });
+
+  // Map yapısını tekrar diziye (Array) çevir
+  const groupedIngredients = Array.from(ingredientsMap.values());
 
   return {
     ...cocktail,
-    ingredients: ingredients,
+    ingredients: groupedIngredients,
   };
 };
 

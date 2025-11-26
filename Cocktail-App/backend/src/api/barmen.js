@@ -22,16 +22,14 @@ router.post("/find-recipes", async (req, res) => {
         .json({ msg: "inventoryIds alanı zorunludur ve bir dizi olmalıdır." });
     }
 
-    if (!mode || (mode !== "strict" && mode !== "flexible")) {
-      // 'mode' alanı da zorunludur
-      return res
-        .status(400)
-        .json({ msg: "mode alanı zorunludur ('strict' veya 'flexible')." });
-    }
+    // 3. Mod Belirleme (Akıllı Varsayılan)
+    // Eğer frontend 'mode' göndermediyse, otomatik olarak 'flexible' (Akıllı Sıralama) yap.
+    // Bu sayede eski frontend kodu da, yeni frontend kodu da çalışır.
+    const searchMode = mode || "flexible";
 
     // 3. Veri geçerliyse, "BEYNİ" (Model) çağır
     // Model dosyamızdaki o karmaşık Knex sorgusu burada çalışır
-    const cocktails = await findRecipesByIngredients(inventoryIds, mode);
+    const cocktails = await findRecipesByIngredients(inventoryIds, searchMode);
 
     // 4. Sonucu (filtrelenmiş kokteyl listesini) frontend'e geri gönder
     res.status(200).json(cocktails);

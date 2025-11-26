@@ -77,4 +77,16 @@
     "language_changed": "Dil Değiştirildi",
     "language_select": "Dili Değiştir"
   }
+  ,"upgrade": {
+    "title": "PRO Üyeliğe Geçin",
+    "subtitle": "Kokteyl deneyiminizi bir üst seviyeye taşıyın.",
+    "feature_1": "Akıllı Alternatifler (Votka yerine Cin? Lime yerine Limon?)",
+    "feature_2": "\"Barmen Asistanı\"nda gelişmiş filtreleme",
+    "feature_3": "Özel tariflerinizi kaydetme ve paylaşma (Çok Yakında)",
+    "feature_4": "Reklamsız Deneyim",
+    "buy_btn": "1 Yıllık PRO Satın Al (Test)",
+    "success_title": "Tebrikler!",
+    "success_msg": "Başarıyla Pro üyeliğe yükseltildiniz.",
+    "error_msg": "Yükseltme sırasında bir hata oluştu"
+  }
 }
