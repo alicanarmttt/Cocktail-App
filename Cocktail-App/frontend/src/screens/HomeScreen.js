@@ -1,5 +1,5 @@
 // GÜNCELLEME: 'useState' (seçili kokteyli tutmak için) eklendi
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,12 +7,16 @@ import {
   Text,
   View,
   ActivityIndicator,
-  Image, // GÜNCELLEME: Kokteyl resmini göstermek için eklendi
-  Pressable, // GÜNCELLEME: 'Button' yerine 'Pressable' (daha şık buton)
+  Image,
+  Pressable,
+  Modal,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 // GÜNCELLEME: 'SafeAreaView' (çentik/kenar boşlukları için)
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { Ionicons } from "@expo/vector-icons";
 // GÜNCELLEME: Yeni kurduğumuz 'Picker' (Rulet) kütüphanesini import ediyoruz
 import { Picker } from "@react-native-picker/picker";
 
@@ -31,6 +35,29 @@ import {
  * @param {object} navigation - React Navigation tarafından sağlanır.
  */
 const HomeScreen = ({ navigation }) => {
+  const POPULAR_COCKTAILS = [
+    "Margarita",
+    "Mojito",
+    "Old Fashioned",
+    "Negroni",
+    "Gin Tonic",
+    "Espresso Martini",
+    "Daiquiri",
+    "Dry Martini",
+    "Whiskey Sour",
+    "Aperol Spritz",
+    "Long Island Iced Tea",
+    "Pina Colada",
+    "Cosmopolitan",
+    "Moscow Mule",
+    "Bloody Mary",
+    "Cuba Libre",
+    "Tequila Sunrise",
+    "Sex on the Beach",
+    "White Russian",
+    "Manhattan",
+  ];
+
   const dispatch = useDispatch();
 
   // 1. Dil Kancasını (Hook) Başlat
@@ -50,6 +77,10 @@ const HomeScreen = ({ navigation }) => {
   // GÜNCELLEME: Başlangıç değeri 'null' (Boş) olarak ayarlandı.
   const [selectedCocktailId, setSelectedCocktailId] = useState(null);
 
+  //Arama modalı için stateler
+  const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
   // 3. ADIM: API'den veriyi çek (Bu kod aynı kaldı)
   useEffect(() => {
     if (status === "idle") {
@@ -63,6 +94,59 @@ const HomeScreen = ({ navigation }) => {
   const selectedCocktail = useSelector((state) =>
     selectCocktailById(state, selectedCocktailId)
   );
+
+  // --- AKILLI SIRALAMA (POPÜLERLER EN BAŞA) ---
+  const sortedCocktails = useMemo(() => {
+    if (!allCocktails || allCocktails.length === 0) return [];
+
+    const populars = [];
+    const others = [];
+
+    allCocktails.forEach((cocktail) => {
+      // İngilizce ismine göre popüler mi diye bakıyoruz (Data tutarlılığı için)
+      if (POPULAR_COCKTAILS.includes(cocktail.name_en)) {
+        populars.push(cocktail);
+      } else {
+        others.push(cocktail);
+      }
+    });
+
+    // Popülerleri kendi içinde sırala (Opsiyonel, dizi sırasına göre de kalabilir)
+    // populars.sort((a, b) => getName(a).localeCompare(getName(b)));
+
+    // Diğerlerini alfabetik sırala
+    others.sort((a, b) => getName(a).localeCompare(getName(b)));
+
+    return [...populars, ...others];
+  }, [allCocktails, i18n.language]);
+
+  // --- ARAMA FİLTRELEME FONKSİYONU ---
+  const filteredCocktails = useMemo(() => {
+    return sortedCocktails.filter((cocktail) => {
+      const name = getName(cocktail);
+      return name.toLowerCase().includes(searchText.toLowerCase());
+    });
+  }, [sortedCocktails, searchText, i18n.language]);
+
+  //Otomatik açılış ekranında cosmopolitanı getir.
+  useEffect(() => {
+    if (sortedCocktails.length > 0 && selectedCocktailId === null) {
+      const targetCocktail = sortedCocktails.find(
+        (c) => c.name_en === "Cosmopolitan"
+      );
+
+      if (targetCocktail) {
+        setSelectedCocktailId(targetCocktail.cocktail_id);
+      }
+    }
+  }, [sortedCocktails, selectedCocktailId]);
+
+  // --- YENİ: ARAMADAN SEÇİM YAPMA ---
+  const handleSelectFromSearch = (id) => {
+    setSelectedCocktailId(id); // Ruleti güncelle
+    setIsSearchModalVisible(false); // Modalı kapat
+    setSearchText(""); // Arama metnini temizle
+  };
 
   // 5. ADIM: Duruma göre içeriği çiz
 
@@ -139,6 +223,15 @@ const HomeScreen = ({ navigation }) => {
           GÜNCELLEME: Bu alanı küçültmek için flex: 2 verdik
       */}
       <View style={styles.pickerArea}>
+        {/* YENİ: ARAMA BUTONU (Ruletin hemen üstünde) */}
+        <Pressable
+          style={styles.searchButton}
+          onPress={() => setIsSearchModalVisible(true)}
+        >
+          <Ionicons name="search" size={20} color="#f4511e" />
+          <Text style={styles.searchButtonText}>{t("home.search_btn")}</Text>
+        </Pressable>
+
         <Picker
           selectedValue={selectedCocktailId}
           onValueChange={(itemValue) => setSelectedCocktailId(itemValue)}
@@ -148,22 +241,90 @@ const HomeScreen = ({ navigation }) => {
           {/* GÜNCELLEME: Başlangıç değeri (Placeholder) eklendi */}
           <Picker.Item label={t("home.pick_cocktail") + "..."} value={null} />
 
-          {/* Redux'tan gelen 'allCocktails' dizisini dönüyoruz */}
-          {allCocktails.map((cocktail) => (
-            <Picker.Item
-              // Dinamik İsim Kullanımı (TR/EN)
-              key={cocktail.cocktail_id}
-              label={getName(cocktail)}
-              value={cocktail.cocktail_id}
-            />
-          ))}
+          {/* SIRALANMIŞ LİSTEYİ KULLAN */}
+          {sortedCocktails.map((cocktail, index) => {
+            // Ayraç Mantığı: Popülerler bittiğinde bir çizgi çekmek için
+            // (Picker içinde stil vermek zordur, o yüzden renk değişimi veya özel karakter kullanabiliriz)
+            const isPopular = POPULAR_COCKTAILS.includes(cocktail.name_en);
+            const labelPrefix = isPopular ? "⭐ " : ""; // Popülerlere yıldız ekle
+
+            return (
+              <Picker.Item
+                key={cocktail.cocktail_id}
+                label={labelPrefix + getName(cocktail)}
+                value={cocktail.cocktail_id}
+              />
+            );
+          })}
         </Picker>
       </View>
+      {/* --- YENİ: ARAMA MODALI --- */}
+      <Modal
+        visible={isSearchModalVisible}
+        animationType="slide" // Aşağıdan yukarı kayarak gelir
+        presentationStyle="pageSheet" // iOS'ta sayfa gibi görünür
+        onRequestClose={() => setIsSearchModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          {/* Modal Başlığı ve Kapat Butonu */}
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>
+              {t("home.search_modal_title")}
+            </Text>
+            <Pressable onPress={() => setIsSearchModalVisible(false)}>
+              <Ionicons name="close-circle" size={30} color="#ccc" />
+            </Pressable>
+          </View>
+
+          {/* Arama Input */}
+          <View style={styles.modalInputContainer}>
+            <Ionicons
+              name="search"
+              size={20}
+              color="#666"
+              style={{ marginRight: 10 }}
+            />
+            <TextInput
+              style={styles.modalInput}
+              placeholder={t("home.search_modal_placeholder")}
+              value={searchText}
+              onChangeText={setSearchText}
+              autoFocus={true} // Açılınca klavye gelsin
+            />
+          </View>
+
+          {/* Sonuç Listesi */}
+          <FlatList
+            data={filteredCocktails}
+            keyExtractor={(item) => item.cocktail_id.toString()}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.searchItem}
+                onPress={() => handleSelectFromSearch(item.cocktail_id)}
+              >
+                <Image
+                  source={{ uri: item.image_url }}
+                  style={styles.searchItemImage}
+                />
+                <Text style={styles.searchItemText}>{getName(item)}</Text>
+                <Ionicons name="chevron-forward" size={20} color="#ccc" />
+              </TouchableOpacity>
+            )}
+            ListEmptyComponent={
+              <Text style={styles.noResultText}>
+                {t("assistant.not_found")}
+              </Text>
+            }
+          />
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
 
 // === Stil Dosyaları (Yeniden Yapılandırıldı) ===
+// === Stiller ===
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -174,25 +335,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  // ÜST ALAN: Resim, Başlık, Buton
+  // --- ÜST KISIM ---
   displayArea: {
-    flex: 3, // GÜNCELLEME: Ekranın üst kısmı büyütüldü (flex: 3)
+    flex: 3,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
     width: "100%",
+    paddingBottom: 60,
   },
   headerQuote: {
     fontSize: 16,
     fontStyle: "italic",
-    color: "#666",
-    marginBottom: 20,
+    color: "#050404ff",
+    marginBottom: 15,
+    textAlign: "center",
   },
-  // "Altın Çerçeve" Stilleri
   frameOuter: {
-    padding: 10,
+    padding: 8,
     borderRadius: 15,
-    backgroundColor: "#FFD700", // Altın Rengi
+    backgroundColor: "#FFD700",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -200,35 +362,41 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   frameInner: {
-    padding: 3,
-    backgroundColor: "black", // İç ince çerçeve
-    borderRadius: 5, // Çerçeveye uyumlu
+    padding: 2,
+    backgroundColor: "black",
+    borderRadius: 5,
   },
   image: {
-    width: 250, // GÜNCELLEME: Resim boyutu büyütüldü
+    width: 250, // Biraz küçülttük ki arama butonuna yer kalsın
     height: 250,
-    borderRadius: 5, // İç çerçeveye uyumlu
+    borderRadius: 5,
   },
   placeholderContainer: {
-    width: 250,
-    height: 250,
+    width: 220,
+    height: 220,
     borderRadius: 5,
     backgroundColor: "#eee",
     justifyContent: "center",
     alignItems: "center",
   },
   placeholderText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#999",
     fontWeight: "500",
   },
-  // "Hazırla" Butonu Stilleri
+  cocktailName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginTop: 10,
+    color: "#333",
+    textAlign: "center",
+  },
   prepareButton: {
-    marginTop: 25,
+    marginTop: 15,
     backgroundColor: "#f4511e",
     paddingVertical: 12,
     paddingHorizontal: 30,
-    borderRadius: 25, // Tam yuvarlak kenarlar
+    borderRadius: 25,
     shadowColor: "#f4511e",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
@@ -245,18 +413,108 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  // ALT ALAN: Rulet
+  // --- ALT KISIM (PICKER & SEARCH) ---
   pickerArea: {
-    flex: 2, // GÜNCELLEME: Ekranın alt kısmı (flex: 2)
+    flex: 2,
     width: "100%",
+    justifyContent: "flex-start", // Üstten başlasın
+    backgroundColor: "#f9f9f9",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 10,
+  },
+  // Yeni Arama Butonu
+  searchButton: {
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#fff",
+    marginHorizontal: 40,
+    paddingVertical: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#f4511e",
+    marginBottom: 5,
+  },
+  searchButtonText: {
+    color: "#f4511e",
+    fontWeight: "600",
+    marginLeft: 8,
+    fontSize: 16,
   },
   pickerStyle: {
     width: "100%",
   },
   pickerItemStyle: {
     color: "#000",
-    fontSize: 22, // Rulet yazı boyutu
+    fontSize: 20,
+  },
+
+  // --- MODAL STİLLERİ ---
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingTop: 20, // iOS Statusbar için
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  modalInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    margin: 15,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    height: 50,
+  },
+  modalInput: {
+    flex: 1,
+    height: 50,
+    fontSize: 16,
+  },
+  // Liste Elemanları
+  searchItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  searchItemImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 15,
+    backgroundColor: "#eee",
+  },
+  searchItemText: {
+    fontSize: 16,
+    color: "#333",
+    flex: 1,
+  },
+  noResultText: {
+    textAlign: "center",
+    marginTop: 30,
+    color: "gray",
+    fontSize: 16,
   },
   errorText: {
     fontSize: 16,

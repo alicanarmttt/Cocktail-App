@@ -29,7 +29,11 @@
   "home": {
     "quote": "\"Sanat, bir kadehte gizlidir...\"",
     "pick_cocktail": "Bir Kokteyl Seçin",
-    "prepare_btn": "Hazırla"
+    "prepare_btn": "Hazırla",
+    "search_btn": "Kokteyl Ara...",
+    "search_modal_title": "Hangi kokteyli arıyorsunuz?",
+    "search_modal_placeholder": "Kokteyl adı yazın...",
+    "close": "Kapat"
   },
   "detail": {
     "ingredients_title": "Ingredients (Malzemeler)",

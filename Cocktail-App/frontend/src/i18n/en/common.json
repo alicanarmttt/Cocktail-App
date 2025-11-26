@@ -29,7 +29,11 @@
   "home": {
     "quote": "\"Art is hidden in a glass...\"",
     "pick_cocktail": "Select a Cocktail",
-    "prepare_btn": "Prepare"
+    "prepare_btn": "Prepare",
+    "search_btn": "Search Cocktail...",
+    "search_modal_title": "Which cocktail are you looking for?",
+    "search_modal_placeholder": "Type cocktail name...",
+    "close": "Close"
   },
   "detail": {
     "ingredients_title": "Ingredients",
