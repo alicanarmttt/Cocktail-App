@@ -196,7 +196,7 @@
         ]
       },
       {
-        "name_en": "Sugar syrup",
+        "name_en": "Sugar Syrup",
         "name_tr": "Şeker Şurubu",
         "amount_en": "1 cl",
         "amount_tr": "1 cl",
@@ -428,7 +428,21 @@
         "amount_tr": "2 çay kaşığı",
         "category": "Syrups",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          },{
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          }
+        ]
       },
       {
         "name_en": "Lemon Juice",
@@ -531,7 +545,22 @@
         "amount_tr": "1/4 bardak",
         "category": "Juices",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+           {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1/4 cup",
+            "amount_tr": "1/4 bardak",
+            "category": "Juices"
+          },
+           {
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1/4 cup",
+            "amount_tr": "1/4 bardak",
+            "category": "Juices"
+          }
+        ]
       }
     ],
     "history_notes_en": "Though disputed, Toby Cecchini is often credited with the modern recipe in NYC. It became a global icon in the 90s thanks to the TV show 'Sex and the City'."
@@ -794,7 +823,7 @@
         "alternatives": []
       },
       {
-        "name_en": "Sugar syrup",
+        "name_en": "Sugar Syrup",
         "name_tr": "Şeker Şurubu",
         "amount_en": "1 dash",
         "amount_tr": "1 çizgi",
@@ -1258,6 +1287,13 @@
             "amount_en": "1 cl",
             "amount_tr": "1 cl",
             "category": "Syrups"
+          },
+          {
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
           }
         ]
       },
@@ -1373,7 +1409,15 @@
         "amount_tr": "6-8 cl",
         "category": "Spirits",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Rum",
+            "name_tr": "Rom",
+            "amount_en": "2-3 oz",
+            "amount_tr": "6-8 cl",
+            "category": "Spirits"
+          }
+        ]
       },
       {
         "name_en": "Lime Juice",
@@ -1399,7 +1443,15 @@
         "amount_tr": "2 çay kaşığı",
         "category": "Pantry",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Brown Sugar",
+            "name_tr": "Esmer Şeker",
+            "amount_en": "2 tsp",
+            "amount_tr": "2 çay kaşığı",
+            "category": "Pantry"
+          }
+        ]
       },
       {
         "name_en": "Mint",
@@ -1417,7 +1469,15 @@
         "amount_tr": "Üstünü doldur",
         "category": "Mixers",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Sprite",
+            "name_tr": "Gazoz",
+            "amount_en": "Top up",
+            "amount_tr": "Üstünü doldur",
+            "category": "Mixers"
+          }
+        ]
       }
     ],
     "history_notes_en": "Origins trace back to 16th-century Cuba and Sir Francis Drake. It became globally famous as one of Ernest Hemingway's favorite drinks."
@@ -1481,15 +1541,23 @@
     "ingredients": [
       {
         "name_en": "Light rum",
-        "name_tr": "Light rum",
+        "name_tr": "Beyaz Rom",
         "amount_en": "1 oz",
         "amount_tr": "3 cl",
         "category": "Spirits",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Rum",
+            "name_tr": "Rom",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Spirits"
+          }
+        ]
       },
       {
-        "name_en": "Orgeat syrup",
+        "name_en": "Orgeat Syrup",
         "name_tr": "Orgeat Şurubu",
         "amount_en": "1/2 oz",
         "amount_tr": "1.5 cl",
@@ -2156,7 +2224,7 @@
         ]
       },
       {
-        "name_en": "Honey syrup",
+        "name_en": "Honey Syrup",
         "name_tr": "Bal Şurubu",
         "amount_en": "2 tsp",
         "amount_tr": "2 çay kaşığı",
@@ -2811,7 +2879,22 @@
         "amount_tr": "Kararınca",
         "category": "Liqueurs",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          },
+          {
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
       },
       {
         "name_en": "Orange Juice",
@@ -3004,7 +3087,21 @@
         "amount_tr": "Kararınca",
         "category": "Liqueurs",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          },{
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
       }
     ],
     "history_notes_en": "The modern version was created in Sausalito in the 70s. It became famous after The Rolling Stones dubbed their 1972 tour the 'Cocaine and Tequila Sunrise Tour'."
@@ -3300,7 +3397,21 @@
         "amount_tr": "1 çay kaşığı",
         "category": "Liqueurs",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          },{
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
       },
       {
         "name_en": "Lime Juice",
@@ -3990,7 +4101,22 @@
         "amount_tr": "4.5 cl",
         "category": "Juices",
         "importance": "Required",
-        "alternatives": []
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          },
+           {
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
       }
     ],
     "history_notes_en": "Created by Ted Pizio in Florida in 1987. It was a marketing move to sell Peach Schnapps during spring break, named after tourists' two main goals."
