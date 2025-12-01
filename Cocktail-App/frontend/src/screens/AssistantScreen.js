@@ -109,6 +109,11 @@ const AssistantScreen = () => {
     });
   };
 
+  // --- SEÇİMLERİ SIFIRLA ---
+  const handleClearSelection = () => {
+    setSelectedIds([]); // Diziyi boşaltır, tikleri kaldırır.
+  };
+
   // --- 5. TARİF BULMA (Action) ---
   const handleFindRecipes = async () => {
     if (searchStatus === "loading" || selectedIds.length === 0) return;
@@ -270,6 +275,14 @@ const AssistantScreen = () => {
         {/* FOOTER (Yüzen Buton) - Sadece seçim varsa görünür */}
         {selectedIds.length > 0 && (
           <View style={styles.footerContainer}>
+            {/* YENİ: SIFIRLAMA BUTONU (Küçük Kutu) */}
+            <Pressable
+              style={styles.resetButton}
+              onPress={handleClearSelection}
+            >
+              <Ionicons name="trash-outline" size={24} color="#FF3B30" />
+            </Pressable>
+            {/* MEVCUT: AKSİYON BUTONU (Geniş) */}
             <Pressable
               style={styles.actionButton}
               onPress={handleFindRecipes}
@@ -420,11 +433,34 @@ const styles = StyleSheet.create({
     bottom: 20, // SafeAreaView içinde olduğu için bottom inset'e gerek kalmayabilir ama garanti olsun
     left: 20,
     right: 20,
+
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+  //Sıfırlama Butonu Stili
+  resetButton: {
+    backgroundColor: "#fff",
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: "#ffe5e5",
   },
   actionButton: {
+    flex: 1, // Kalan tüm alanı kaplasın
     backgroundColor: "#f4511e",
     flexDirection: "row",
     alignItems: "center",
+    height: 56,
     justifyContent: "center",
     paddingVertical: 16,
     borderRadius: 16,
