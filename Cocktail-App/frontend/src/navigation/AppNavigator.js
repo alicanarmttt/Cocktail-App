@@ -11,6 +11,7 @@ import AssistantResultScreen from "../screens/AssistantResultScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import UpgradeToProScreen from "../screens/UpgradeToProScreen";
+import RouletteScreen from "../screens/RouletteScreen";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 
 // YENİ EKLENDİ: 'userSlice'taki 'selector' (veri okuyucu)
@@ -33,7 +34,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
 const ProfileStack = createNativeStackNavigator();
-
+const RouletteStack = createNativeStackNavigator();
 /**
  * @desc    GÜNCELLENDİ: Ana Navigasyon Yönlendiricisi
  * Artık 'userSlice' (Redux) durumuna bakar ve
@@ -132,6 +133,8 @@ function MainAppNavigator() {
             iconName = focused ? "build" : "build-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
+          } else if (route.name === "RouletteTab") {
+            iconName = focused ? "dice" : "dice-outline";
           }
           return (
             <Ionicons name={iconName} size={size} color={color}></Ionicons>
@@ -148,6 +151,11 @@ function MainAppNavigator() {
         component={HomeStackNavigator}
         options={{ title: "Kokteyller" }}
       ></Tab.Screen>
+      <Tab.Screen
+        name="RouletteTab"
+        component={RouletteStackNavigator}
+        options={{ title: "Rulet" }}
+      />
       {/* SEKME 2: Barmen Asistanı */}
       <Tab.Screen
         name="Assistant"
@@ -186,6 +194,37 @@ function HomeStackNavigator() {
         name="Home"
         component={HomeScreen}
         options={{ title: "Kokteyller" }}
+      />
+      <Stack.Screen
+        name="CocktailDetail"
+        component={CocktailDetailScreen}
+        options={{ title: "Tarif Detayı" }}
+      />
+      <Stack.Screen
+        name="Roulette"
+        component={RouletteScreen}
+        options={{ title: "Kokteyl Çarkı 🎲" }}
+      />
+    </Stack.Navigator>
+  );
+}
+/**
+ * @desc   Rulet sekmesi için navigasyon yığını.
+ * İçinde Rulet ve Detay sayfası olur.
+ */
+function RouletteStackNavigator() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "#f4511e" },
+        headerTintColor: "#fff",
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
+    >
+      <Stack.Screen
+        name="RouletteHome"
+        component={RouletteScreen}
+        options={{ title: "Kokteyl Çarkı 🎲" }}
       />
       <Stack.Screen
         name="CocktailDetail"

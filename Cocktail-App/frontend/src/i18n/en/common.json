@@ -88,5 +88,33 @@
     "success_title": "Congratulations!",
     "success_msg": "Successfully upgraded to Pro membership.",
     "error_msg": "An error occurred during upgrade"
+  },
+  "roulette": {
+    "menu_title": "Choose Roulette Mode",
+    "menu_subtitle": "Pick a mode to start the party.",
+    "mode_driver": "Driver Mode 🚗",
+    "mode_popular": "Hall of Fame ⭐",
+    "mode_taste": "Pick Your Vibe 🍋",
+    "mode_spirit": "Pick Your Poison 🥃",
+    "mode_random": "Bartender's Choice 🎲",
+    "pick_spirit": "Which Spirit?",
+    "pick_taste": "Which Vibe?",
+    "spirit_gin": "Gin",
+    "spirit_vodka": "Vodka",
+    "spirit_rum": "Rum",
+    "spirit_whiskey": "Whiskey",
+    "spirit_tequila": "Tequila",
+    "taste_sweet": "Sweet",
+    "taste_sour": "Sour",
+    "taste_bitter": "Bitter / Strong",
+    "taste_fruity": "Fruity",
+    "loading_pool": "Preparing Cocktails...",
+    "options_found": "Options Ready!",
+    "spin_btn": "SPIN!",
+    "winner_title": "Here's Your Pick!",
+    "go_recipe": "Go to Recipe",
+    "spin_again": "Spin Again",
+    "back_menu": "Back to Menu",
+    "no_cocktail_found": "No cocktails found for these criteria."
   }
 }

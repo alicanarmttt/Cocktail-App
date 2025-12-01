@@ -88,5 +88,33 @@
     "success_title": "Tebrikler!",
     "success_msg": "Başarıyla Pro üyeliğe yükseltildiniz.",
     "error_msg": "Yükseltme sırasında bir hata oluştu"
+  },
+  "roulette": {
+    "menu_title": "Rulet Modunu Seç",
+    "menu_subtitle": "Partiyi başlatmak için bir mod seç.",
+    "mode_driver": "Sürücü Modu 🚗",
+    "mode_popular": "Şöhretler Karması ⭐",
+    "mode_taste": "Damak Tadı 🍋",
+    "mode_spirit": "Zehrini Seç 🥃",
+    "mode_random": "Şansına Küses 🎲",
+    "pick_spirit": "Hangi İçki?",
+    "pick_taste": "Hangi Tat?",
+    "spirit_gin": "Cin",
+    "spirit_vodka": "Votka",
+    "spirit_rum": "Rom",
+    "spirit_whiskey": "Viski",
+    "spirit_tequila": "Tekila",
+    "taste_sweet": "Tatlı",
+    "taste_sour": "Ekşi",
+    "taste_bitter": "Acı / Sert",
+    "taste_fruity": "Meyveli",
+    "loading_pool": "Kokteyller Hazırlanıyor...",
+    "options_found": "Seçenek Hazır!",
+    "spin_btn": "ÇEVİR!",
+    "winner_title": "İşte Seçimin!",
+    "go_recipe": "Tarife Git",
+    "spin_again": "Tekrar Çevir",
+    "back_menu": "Menüye Dön",
+    "no_cocktail_found": "Bu kriterlere uygun kokteyl bulunamadı."
   }
 }
