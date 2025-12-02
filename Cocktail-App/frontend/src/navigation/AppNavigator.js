@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useColorScheme } from "react-native";
 import HomeScreen from "../screens/HomeScreen";
 import CocktailDetailScreen from "../screens/CocktailDetailScreen";
 import AssistantScreen from "../screens/AssistantScreen";
@@ -29,6 +29,10 @@ import {
   clearUser, // Auth 'null' ise Redux'u temizle
 } from "../features/userSlice";
 
+// 2. YENİ TEMA DOSYAMIZI IMPORT ET
+import { lightTheme, darkTheme } from "../constants/theme";
+import { selectThemeMode } from "../features/uiSlice";
+
 // "Stack" (Yığın) tipinde bir navigasyon oluşturucu başlatıyoruz
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,7 +50,21 @@ function AppNavigator() {
   const isAuthLoading = useSelector(getIsAuthLoading); // (userSlice'tan)
   const dispatch = useDispatch();
 
-  // YENİ EKLENDİ (EKSİK 9): "Kalıcı Giriş" (Persistence) Köprüsü
+  // 3. Tema Mantığı
+  const themeMode = useSelector(selectThemeMode); // Redux'tan gelen tercih ('system', 'light', 'dark')
+  const systemScheme = useColorScheme(); // Telefonun ayarı ('light' veya 'dark')
+
+  // Hangi tema aktif olacak?
+  const currentTheme =
+    themeMode === "system"
+      ? systemScheme === "dark"
+        ? darkTheme
+        : lightTheme
+      : themeMode === "dark"
+        ? darkTheme
+        : lightTheme;
+
+  //  (EKSİK 9): "Kalıcı Giriş" (Persistence) Köprüsü
   // Uygulama başlar başlamaz (bir kereliğine) çalışır
   useEffect(() => {
     // Firebase'e (AsyncStorage kullanarak) "Giriş yapmış birini hatırlıyor musun?"
@@ -90,7 +108,7 @@ function AppNavigator() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={currentTheme}>
       {/* Eğer 'currentUser' null değilse (Giriş yapmışsa) Ana Uygulamayı (Sekmeleri) göster.
         Eğer 'currentUser' null ise (Giriş yapmamışsa) Giriş (Auth) yığınını göster.
       */}

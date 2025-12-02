@@ -343,6 +343,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   modeCard: {
     width: "48%",
