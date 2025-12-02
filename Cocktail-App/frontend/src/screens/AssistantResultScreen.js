@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -27,6 +27,7 @@ import {
  * Çok eksiği olanlarda negatif bir dil yerine "İlham" odaklı dil kullanır.
  */
 const AssistantResultScreen = () => {
+  const { colors } = useTheme();
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
 
@@ -92,7 +93,14 @@ const AssistantResultScreen = () => {
 
     return (
       <Pressable
-        style={styles.card}
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+            shadowColor: colors.shadow,
+          },
+        ]}
         onPress={() => handlePressCocktail(item.cocktail_id)}
       >
         {/* Sol: Resim */}
@@ -101,18 +109,20 @@ const AssistantResultScreen = () => {
             uri:
               item.image_url || "https://placehold.co/100x100/eee/999?text=Bar",
           }}
-          style={styles.cardImage}
+          style={[styles.cardImage, { backgroundColor: colors.subCard }]}
         />
 
         {/* Orta: İçerik */}
         <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>{getName(item)}</Text>
+          <Text style={[styles.cardTitle, { color: colors.text }]}>
+            {getName(item)}
+          </Text>
 
           {/* Alt Metin: Hangi gruptaysa ona göre mesaj ver */}
 
           {/* 1. GRUP: HAZIR */}
           {sectionType === "ready" && (
-            <Text style={styles.subtitleReady}>
+            <Text style={[styles.subtitleReady, { color: colors.success }]}>
               <Ionicons name="checkmark-circle" size={14} />{" "}
               {t("results.ready_msg", "Malzemeler Tam!")}
             </Text>
@@ -120,14 +130,16 @@ const AssistantResultScreen = () => {
 
           {/* 2. GRUP: AZ EKSİK */}
           {sectionType === "almost" && (
-            <Text style={styles.subtitleMissing}>
+            <Text style={[styles.subtitleMissing, { color: colors.primary }]}>
               {missingCount} {t("results.missing_msg", "malzeme daha gerekli")}
             </Text>
           )}
 
           {/* 3. GRUP: İLHAM (Negatiflik Yok!) */}
           {sectionType === "explore" && (
-            <Text style={styles.subtitleGeneric}>
+            <Text
+              style={[styles.subtitleGeneric, { color: colors.textSecondary }]}
+            >
               {t("results.explore_msg", "Tarife göz at")}
             </Text>
           )}
@@ -137,10 +149,10 @@ const AssistantResultScreen = () => {
         <View style={styles.cardAction}>
           {sectionType === "ready" ? (
             // Hazırsa Yeşil Play Tuşu (Harekete Geçirici)
-            <Ionicons name="play-circle" size={32} color="#4CAF50" />
+            <Ionicons name="play-circle" size={32} color={colors.success} />
           ) : (
             // Değilse Gri Ok
-            <Ionicons name="chevron-forward" size={24} color="#ccc" />
+            <Ionicons name="chevron-forward" size={24} color={colors.border} />
           )}
         </View>
       </Pressable>
@@ -150,27 +162,29 @@ const AssistantResultScreen = () => {
   // --- 4. BÖLÜM BAŞLIKLARI ---
   const renderSectionHeader = ({ section: { title } }) => {
     let titleText = "";
-    let titleColor = "#333";
+    let titleColor = colors.text;
 
     switch (title) {
       case "ready":
         titleText = "🥂 " + t("results.header_ready", "Hemen Yapabilirsin!");
-        titleColor = "#2E7D32"; // Yeşil
+        titleColor = colors.success; // Yeşil
         break;
       case "almost":
         titleText = "🛒 " + t("results.header_almost", "Çok Yaklaşmışsın");
-        titleColor = "#F57C00"; // Turuncu
+        titleColor = colors.primary; // Premium Gold (Turuncu yerine)
         break;
       case "explore":
         titleText = "💡 " + t("results.header_explore", "İlham Al");
-        titleColor = "#757575"; // Gri
+        titleColor = colors.textSecondary; // Gri
         break;
       default:
         titleText = t("results.header_generic", "Sonuçlar");
     }
 
     return (
-      <View style={styles.sectionHeader}>
+      <View
+        style={[styles.sectionHeader, { backgroundColor: colors.background }]}
+      >
         <Text style={[styles.sectionHeaderText, { color: titleColor }]}>
           {titleText}
         </Text>
@@ -182,9 +196,14 @@ const AssistantResultScreen = () => {
 
   if (status === "loading") {
     return (
-      <SafeAreaView style={styles.centeredContainer}>
-        <ActivityIndicator size="large" color="#f4511e" />
-        <Text style={styles.loadingText}>
+      <SafeAreaView
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
           {t("results.loading", "En uygun tarifler aranıyor...")}
         </Text>
       </SafeAreaView>
@@ -193,21 +212,37 @@ const AssistantResultScreen = () => {
 
   if (status === "failed") {
     return (
-      <SafeAreaView style={styles.centeredContainer}>
-        <Ionicons name="alert-circle-outline" size={48} color="red" />
-        <Text style={styles.errorText}>{error || t("general.error")}</Text>
+      <SafeAreaView
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <Ionicons
+          name="alert-circle-outline"
+          size={48}
+          color={colors.notification}
+        />
+        <Text style={[styles.errorText, { color: colors.notification }]}>
+          {error || t("general.error")}
+        </Text>
       </SafeAreaView>
     );
   }
 
   if (status === "succeeded" && rawResults.length === 0) {
     return (
-      <SafeAreaView style={styles.centeredContainer}>
-        <Ionicons name="wine-outline" size={64} color="#ccc" />
-        <Text style={styles.emptyTitle}>
+      <SafeAreaView
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <Ionicons name="wine-outline" size={64} color={colors.textSecondary} />
+        <Text style={[styles.emptyTitle, { color: colors.text }]}>
           {t("results.no_result_title", "Sonuç Bulunamadı")}
         </Text>
-        <Text style={styles.emptySubtitle}>
+        <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
           {t(
             "results.no_result_msg",
             "Seçtiğin malzemelerle eşleşen bir tarif bulamadık."
@@ -219,16 +254,27 @@ const AssistantResultScreen = () => {
 
   // --- ANA RENDER ---
   return (
-    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={["top", "left", "right"]}
+    >
       {/* Header */}
-      <View style={styles.header}>
+      <View
+        style={[
+          styles.header,
+          {
+            backgroundColor: colors.background,
+            borderBottomColor: colors.border,
+          },
+        ]}
+      >
         <Pressable
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </Pressable>
-        <Text style={styles.headerTitle}>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>
           {t("results.title", "Bulunan Tarifler")} ({rawResults.length})
         </Text>
       </View>
@@ -250,14 +296,12 @@ const AssistantResultScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff", // Temiz beyaz
   },
   centeredContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#fff",
   },
   // Header
   header: {
@@ -266,8 +310,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
-    backgroundColor: "#fff",
   },
   backButton: {
     padding: 8,
@@ -276,11 +318,9 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
   },
   // Section Header
   sectionHeader: {
-    backgroundColor: "#fff", // Arka planın şeffaf değil beyaz olması önemli
     paddingTop: 24,
     paddingBottom: 12,
     paddingHorizontal: 20,
@@ -294,25 +334,21 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
     marginHorizontal: 20,
     marginBottom: 12,
     padding: 12,
     borderRadius: 16,
     // Soft Gölge
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 6,
     elevation: 3,
     borderWidth: 1,
-    borderColor: "#f9f9f9",
   },
   cardImage: {
     width: 64,
     height: 64,
     borderRadius: 12,
-    backgroundColor: "#f0f0f0",
     marginRight: 16,
   },
   cardContent: {
@@ -322,23 +358,19 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 17,
     fontWeight: "700",
-    color: "#333",
     marginBottom: 4,
   },
   // Alt Metin Stilleri
   subtitleReady: {
     fontSize: 14,
-    color: "#2E7D32", // Koyu Yeşil
     fontWeight: "600",
   },
   subtitleMissing: {
     fontSize: 14,
-    color: "#EF6C00", // Turuncu
     fontWeight: "500",
   },
   subtitleGeneric: {
     fontSize: 13,
-    color: "#999", // Gri
     fontStyle: "italic",
   },
   cardAction: {
@@ -347,24 +379,20 @@ const styles = StyleSheet.create({
   // Loading & Error
   loadingText: {
     marginTop: 10,
-    color: "gray",
     fontSize: 16,
   },
   errorText: {
     marginTop: 10,
-    color: "red",
     fontSize: 16,
     textAlign: "center",
   },
   emptyTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
     marginTop: 20,
   },
   emptySubtitle: {
     fontSize: 16,
-    color: "gray",
     textAlign: "center",
     marginTop: 10,
     paddingHorizontal: 20,

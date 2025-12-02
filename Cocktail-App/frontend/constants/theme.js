@@ -30,10 +30,33 @@ const palette = {
 };
 
 // ==========================================
+// 🔤 YAZI TİPİ AYARLARI (Standart)
+// ==========================================
+const fonts = {
+  regular: {
+    fontFamily: "System",
+    fontWeight: "400",
+  },
+  medium: {
+    fontFamily: "System",
+    fontWeight: "500",
+  },
+  light: {
+    fontFamily: "System",
+    fontWeight: "300",
+  },
+  thin: {
+    fontFamily: "System",
+    fontWeight: "100",
+  },
+};
+
+// ==========================================
 // ☀️ AYDINLIK TEMA (Light Theme) - "Champagne Brunch"
 // ==========================================
 export const lightTheme = {
   dark: false,
+  fonts, // <--- BURASI EKSİKTİ: fonts objesini buraya ekledik
   colors: {
     // React Navigation Standartları
     primary: palette.goldPrime, // Aktif tablar, ana başlıklar
@@ -76,6 +99,7 @@ export const lightTheme = {
 // ==========================================
 export const darkTheme = {
   dark: true,
+  fonts, // <--- BURASI EKSİKTİ: fonts objesini buraya ekledik
   colors: {
     // React Navigation Standartları
     primary: palette.goldMuted, // Dark modda altın biraz daha matlaşır (Göz yormaz)

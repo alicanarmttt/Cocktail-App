@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next"; // 1. Çeviri kancasını ekle
 // 1. userSlice'tan (sağdaki) 'upgrade' (yükseltme) eylemini ve 'status'ü (durum) import et
@@ -23,6 +23,7 @@ import {
  * @desc    "Pro'ya Yükselt" (Sahte Satın Alma) ekranı.
  */
 const UpgradeToProScreen = () => {
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation(); // 2. Çeviri fonksiyonunu al
@@ -63,12 +64,14 @@ const UpgradeToProScreen = () => {
   }, [upgradeStatus, navigation, upgradeError, t]); // Bu değerler değiştiğinde effect'i çalıştır
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Ionicons name="sparkles" size={64} color="#FFD700" />
-      <Text style={styles.title}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <Ionicons name="sparkles" size={64} color={colors.gold} />
+      <Text style={[styles.title, { color: colors.text }]}>
         {t("upgrade.title") || "PRO Üyeliğe Geçin"}
       </Text>
-      <Text style={styles.subtitle}>
+      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
         {t("upgrade.subtitle") ||
           "Kokteyl deneyiminizi bir üst seviyeye taşıyın."}
       </Text>
@@ -76,29 +79,37 @@ const UpgradeToProScreen = () => {
       {/* Özellik Listesi */}
       <View style={styles.featuresList}>
         <View style={styles.featureItem}>
-          <Ionicons name="star" size={24} color="#f4511e" />
-          <Text style={styles.featureText}>
+          <Ionicons name="star" size={24} color={colors.primary} />
+          <Text style={[styles.featureText, { color: colors.text }]}>
             {t("upgrade.feature_1") ||
               "Akıllı Alternatifler (Votka yerine Cin? Lime yerine Limon?)"}
           </Text>
         </View>
         <View style={styles.featureItem}>
-          <Ionicons name="filter" size={24} color="#f4511e" />
-          <Text style={styles.featureText}>
+          <Ionicons name="filter" size={24} color={colors.primary} />
+          <Text style={[styles.featureText, { color: colors.text }]}>
             {t("upgrade.feature_2") ||
               '"Barmen Asistanı"nda gelişmiş filtreleme'}
           </Text>
         </View>
         <View style={styles.featureItem}>
-          <Ionicons name="cloud-upload-outline" size={24} color="#f4511e" />
-          <Text style={styles.featureText}>
+          <Ionicons
+            name="cloud-upload-outline"
+            size={24}
+            color={colors.primary}
+          />
+          <Text style={[styles.featureText, { color: colors.text }]}>
             {t("upgrade.feature_3") ||
               "Özel tariflerinizi kaydetme ve paylaşma (Çok Yakında)"}
           </Text>
         </View>
         <View style={styles.featureItem}>
-          <Ionicons name="remove-circle-outline" size={24} color="#f4511e" />
-          <Text style={styles.featureText}>
+          <Ionicons
+            name="remove-circle-outline"
+            size={24}
+            color={colors.primary}
+          />
+          <Text style={[styles.featureText, { color: colors.text }]}>
             {t("upgrade.feature_4") || "Reklamsız Deneyim"}
           </Text>
         </View>
@@ -108,15 +119,16 @@ const UpgradeToProScreen = () => {
       <Pressable
         style={[
           styles.button,
+          { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
           upgradeStatus === "loading" && styles.buttonDisabled,
         ]}
         onPress={handleUpgrade} // 'upgradeToPro' thunk'ını (API isteği) tetikler
         disabled={upgradeStatus === "loading"}
       >
         {upgradeStatus === "loading" ? (
-          <ActivityIndicator color="#333" />
+          <ActivityIndicator color={colors.buttonText} />
         ) : (
-          <Text style={styles.buttonText}>
+          <Text style={[styles.buttonText, { color: colors.buttonText }]}>
             {t("upgrade.buy_btn") || "1 Yıllık PRO Satın Al (Test)"}
           </Text>
         )}
@@ -128,7 +140,6 @@ const UpgradeToProScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     padding: 20,
     paddingTop: 40,
@@ -136,12 +147,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#333",
     marginTop: 15,
   },
   subtitle: {
     fontSize: 16,
-    color: "#777",
     marginTop: 10,
     marginBottom: 30,
     textAlign: "center",
@@ -157,29 +166,25 @@ const styles = StyleSheet.create({
   },
   featureText: {
     fontSize: 15,
-    color: "#333",
     marginLeft: 15,
     flex: 1, // Metnin (ikonun yanına) düzgünce sığmasını sağlar
   },
   button: {
     width: "90%",
-    backgroundColor: "#FFD700", // Altın (Gold) "Pro" rengi
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 5,
   },
   buttonDisabled: {
-    backgroundColor: "#ccc",
+    opacity: 0.6,
     shadowColor: "transparent",
     elevation: 0,
   },
   buttonText: {
-    color: "#333",
     fontSize: 16,
     fontWeight: "bold",
   },

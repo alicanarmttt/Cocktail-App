@@ -21,13 +21,14 @@ import {
 } from "../features/cocktails/cocktailSlice";
 import { selectIsPro } from "../features/userSlice";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
 /**
  * @desc    Tek bir kokteylin detaylarını gösterir.
  * @param   {object} route - React Navigation tarafından sağlanan prop.
  */
 const CocktailDetailScreen = ({ route }) => {
+  const { colors } = useTheme();
   // 1. Çeviri Hook'u
   const { t, i18n } = useTranslation();
   // 2. Helper: Dile Göre Metin Seçici
@@ -64,35 +65,57 @@ const CocktailDetailScreen = ({ route }) => {
   // 5. Adım: Duruma göre içeriği render et
   if (status === "loading" || status === "idle") {
     return (
-      <View style={styles.centeredContainer}>
-        <ActivityIndicator size="large" color="#f4511e" />
+      <View
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   } else if (status === "failed") {
     return (
-      <View style={styles.centeredContainer}>
-        <Text style={styles.errorText}>{error || t("general.error")}</Text>
+      <View
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <Text style={[styles.errorText, { color: colors.notification }]}>
+          {error || t("general.error")}
+        </Text>
       </View>
     );
   }
   // 'succeeded' durumu
   else if (status === "succeeded" && cocktail) {
     return (
-      <View style={styles.listContainer}>
+      <View
+        style={[styles.listContainer, { backgroundColor: colors.background }]}
+      >
         <ScrollView contentContainerStyle={styles.scrollContentContainer}>
           <Image source={{ uri: cocktail.image_url }} style={styles.image} />
-          <Text style={styles.title}>
+          <Text style={[styles.title, { color: colors.primary }]}>
             {getLocaleText(cocktail.name_tr, cocktail.name_en)}
           </Text>
 
           {/* Bölüm: Malzemeler */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                {
+                  color: colors.textSecondary,
+                  borderBottomColor: colors.border,
+                },
+              ]}
+            >
               {t("detail.ingredients_title")}
             </Text>
             {cocktail.ingredients.map((ing) => (
               <View key={ing.requirement_id} style={styles.ingredientItem}>
-                <Text style={styles.ingredientText}>
+                <Text style={[styles.ingredientText, { color: colors.text }]}>
                   {getLocaleText(ing.amount_tr, ing.amount_en)}{" "}
                   {getLocaleText(ing.name_tr, ing.name_en)}
                 </Text>
@@ -102,20 +125,33 @@ const CocktailDetailScreen = ({ route }) => {
 
           {/* "Eksik Malzemem Var" Butonu */}
           <Pressable
-            style={styles.prepareButton}
+            style={[
+              styles.prepareButton,
+              { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
+            ]}
             onPress={() => setIsModalVisible(true)}
           >
-            <Text style={styles.prepareButtonText}>
+            <Text
+              style={[styles.prepareButtonText, { color: colors.buttonText }]}
+            >
               {t("detail.missing_ingredients_btn")}
             </Text>
           </Pressable>
 
           {/* Bölüm2: Hazırlanışı */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                {
+                  color: colors.textSecondary,
+                  borderBottomColor: colors.border,
+                },
+              ]}
+            >
               {t("detail.instructions_title")}
             </Text>
-            <Text style={styles.text}>
+            <Text style={[styles.text, { color: colors.text }]}>
               {getLocaleText(
                 cocktail.instructions_tr,
                 cocktail.instructions_en
@@ -125,8 +161,18 @@ const CocktailDetailScreen = ({ route }) => {
 
           {/* Bölüm3: Tarihçe */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{t("detail.history_title")}</Text>
-            <Text style={styles.text}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                {
+                  color: colors.textSecondary,
+                  borderBottomColor: colors.border,
+                },
+              ]}
+            >
+              {t("detail.history_title")}
+            </Text>
+            <Text style={[styles.text, { color: colors.text }]}>
               {getLocaleText(
                 cocktail.history_notes_tr,
                 cocktail.history_notes_en
@@ -146,12 +192,23 @@ const CocktailDetailScreen = ({ route }) => {
             style={styles.modalOverlay}
             onPress={() => setIsModalVisible(false)}
           >
-            <Pressable style={styles.modalContent}>
-              <Text style={styles.modalTitle}>{t("detail.modal_title")}</Text>
+            <Pressable
+              style={[styles.modalContent, { backgroundColor: colors.card }]}
+            >
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                {t("detail.modal_title")}
+              </Text>
 
               {/* Bilgilendirme (Legend) kutusu */}
-              <View style={styles.legendContainer}>
-                <Text style={styles.legendTitle}>
+              <View
+                style={[
+                  styles.legendContainer,
+                  { backgroundColor: colors.subCard },
+                ]}
+              >
+                <Text
+                  style={[styles.legendTitle, { color: colors.textSecondary }]}
+                >
                   {t("detail.legend_title")}
                 </Text>
 
@@ -159,10 +216,13 @@ const CocktailDetailScreen = ({ route }) => {
                   <View
                     style={[
                       styles.legendBox,
-                      { borderColor: "#FF4136", backgroundColor: "#ffffff" },
+                      {
+                        borderColor: colors.notification,
+                        backgroundColor: colors.card,
+                      },
                     ]}
                   />
-                  <Text style={styles.legendText}>
+                  <Text style={[styles.legendText, { color: colors.text }]}>
                     {t("detail.legend_required")} (No Alt)
                   </Text>
                 </View>
@@ -171,10 +231,13 @@ const CocktailDetailScreen = ({ route }) => {
                   <View
                     style={[
                       styles.legendBox,
-                      { borderColor: "#FF4136", backgroundColor: "#f1e6a2d3" },
+                      {
+                        borderColor: colors.notification,
+                        backgroundColor: colors.proCardBg,
+                      },
                     ]}
                   />
-                  <Text style={styles.legendText}>
+                  <Text style={[styles.legendText, { color: colors.text }]}>
                     {t("detail.legend_required")} (Pro)
                   </Text>
                 </View>
@@ -183,10 +246,13 @@ const CocktailDetailScreen = ({ route }) => {
                   <View
                     style={[
                       styles.legendBox,
-                      { borderColor: "#2ECC40", backgroundColor: "#ffffff" },
+                      {
+                        borderColor: colors.success,
+                        backgroundColor: colors.card,
+                      },
                     ]}
                   />
-                  <Text style={styles.legendText}>
+                  <Text style={[styles.legendText, { color: colors.text }]}>
                     {t("detail.legend_garnish")}
                   </Text>
                 </View>
@@ -195,10 +261,13 @@ const CocktailDetailScreen = ({ route }) => {
                   <View
                     style={[
                       styles.legendBox,
-                      { borderColor: "#2ECC40", backgroundColor: "#f1e6a2d3" },
+                      {
+                        borderColor: colors.success,
+                        backgroundColor: colors.proCardBg,
+                      },
                     ]}
                   />
-                  <Text style={styles.legendText}>
+                  <Text style={[styles.legendText, { color: colors.text }]}>
                     {t("detail.legend_garnish")} (Pro)
                   </Text>
                 </View>
@@ -213,12 +282,12 @@ const CocktailDetailScreen = ({ route }) => {
                     style={[
                       styles.ingredientButton,
                       // 1. Çerçeve Rengi
-                      { borderColor: ing.color_code || "#ccc" },
+                      { borderColor: ing.color_code || colors.border },
                       // 2. Arka Plan Rengi
                       {
                         backgroundColor: ing.has_alternative
-                          ? "#f1e6a2d3"
-                          : "#ffffff",
+                          ? colors.proCardBg
+                          : colors.card,
                       },
                     ]}
                     onPress={() => {
@@ -231,7 +300,12 @@ const CocktailDetailScreen = ({ route }) => {
                       }
                     }}
                   >
-                    <Text style={styles.ingredientButtonText}>
+                    <Text
+                      style={[
+                        styles.ingredientButtonText,
+                        { color: colors.text },
+                      ]}
+                    >
                       {getLocaleText(ing.name_tr, ing.name_en)}
                     </Text>
                   </Pressable>
@@ -251,22 +325,32 @@ const CocktailDetailScreen = ({ route }) => {
                   style={styles.modalOverlay2}
                   onPress={() => setSelectedAlternative(null)}
                 >
-                  <Pressable style={styles.modalContent2}>
+                  <Pressable
+                    style={[
+                      styles.modalContent2,
+                      { backgroundColor: colors.background },
+                    ]}
+                  >
                     {/* === Pro Kullanıcı Arayüzü === */}
                     {isPro && selectedAlternative ? (
                       <>
                         <Ionicons
                           name="star"
                           size={32}
-                          color="#FFD700"
+                          color={colors.gold}
                           style={styles.proIcon}
                         />
-                        <Text style={styles.proTitle}>
+                        <Text style={[styles.proTitle, { color: colors.text }]}>
                           {t("detail.pro_alt_title")}
                         </Text>
 
                         {/* Dinamik Başlık: X Malzemesi Yerine... */}
-                        <Text style={styles.proText}>
+                        <Text
+                          style={[
+                            styles.proText,
+                            { color: colors.textSecondary },
+                          ]}
+                        >
                           "
                           {getLocaleText(
                             selectedAlternative.name_tr,
@@ -275,7 +359,12 @@ const CocktailDetailScreen = ({ route }) => {
                           " {t("detail.pro_use_instead")}
                         </Text>
 
-                        <Text style={[styles.proText, { marginBottom: 15 }]}>
+                        <Text
+                          style={[
+                            styles.proText,
+                            { marginBottom: 15, color: colors.textSecondary },
+                          ]}
+                        >
                           {t(
                             "detail.pro_can_use_list",
                             "Aşağıdakilerden birini kullanabilirsiniz:"
@@ -283,24 +372,35 @@ const CocktailDetailScreen = ({ route }) => {
                         </Text>
 
                         {/* GÜNCELLEME: ALTERNATİFLER LİSTESİ 
-                           Dizi (Array) üzerinden map yaparak hepsini listeliyoruz.
+                            Dizi (Array) üzerinden map yaparak hepsini listeliyoruz.
                         */}
                         <ScrollView style={{ maxHeight: 150, width: "100%" }}>
                           {selectedAlternative.alternatives &&
                             selectedAlternative.alternatives.map(
                               (alt, index) => (
-                                <View key={index} style={styles.altListItem}>
+                                <View
+                                  key={index}
+                                  style={[
+                                    styles.altListItem,
+                                    { borderBottomColor: colors.border },
+                                  ]}
+                                >
                                   <Ionicons
                                     name="arrow-forward"
                                     size={16}
-                                    color="#f4511e"
+                                    color={colors.primary}
                                   />
-                                  <Text style={styles.altListItemText}>
+                                  <Text
+                                    style={[
+                                      styles.altListItemText,
+                                      { color: colors.text },
+                                    ]}
+                                  >
                                     {/* Miktar */}
                                     <Text
                                       style={{
                                         fontWeight: "bold",
-                                        color: "#f4511e",
+                                        color: colors.primary,
                                       }}
                                     >
                                       {getLocaleText(
@@ -322,25 +422,38 @@ const CocktailDetailScreen = ({ route }) => {
                         <Ionicons
                           name="lock-closed"
                           size={48}
-                          color="#f4511e"
+                          color={colors.primary}
                           style={styles.proLockIcon}
                         />
-                        <Text style={styles.proTitle}>
+                        <Text style={[styles.proTitle, { color: colors.text }]}>
                           {t("detail.pro_feature")}
                         </Text>
-                        <Text style={styles.proText}>
+                        <Text
+                          style={[
+                            styles.proText,
+                            { color: colors.textSecondary },
+                          ]}
+                        >
                           {t("detail.pro_lock_msg")}
                         </Text>
 
                         <Pressable
-                          style={styles.proButton}
+                          style={[
+                            styles.proButton,
+                            { backgroundColor: colors.gold },
+                          ]}
                           onPress={() => {
                             setSelectedAlternative(null); // Modalı kapat
                             setIsModalVisible(false); // Ana modalı kapat
                             navigation.navigate("UpgradeToPro"); // Yönlendir
                           }}
                         >
-                          <Text style={styles.proButtonText}>
+                          <Text
+                            style={[
+                              styles.proButtonText,
+                              { color: colors.buttonText },
+                            ]}
+                          >
                             {t("detail.get_pro_btn")}
                           </Text>
                         </Pressable>
@@ -350,7 +463,7 @@ const CocktailDetailScreen = ({ route }) => {
                     <Button
                       title={t("general.close", "Kapat")}
                       onPress={() => setSelectedAlternative(null)}
-                      color="#f4511e"
+                      color={colors.primary}
                     />
                   </Pressable>
                 </Pressable>
@@ -360,7 +473,7 @@ const CocktailDetailScreen = ({ route }) => {
               <Button
                 title={t("general.close", "Kapat")}
                 onPress={() => setIsModalVisible(false)}
-                color="#f4511e"
+                color={colors.primary}
               />
             </Pressable>
           </Pressable>
@@ -370,8 +483,12 @@ const CocktailDetailScreen = ({ route }) => {
   }
   // 'succeeded' ama 'cocktail' 'null' ise
   return (
-    <View style={styles.centeredContainer}>
-      <Text style={styles.errorText}>{t("results.not_found")}</Text>
+    <View
+      style={[styles.centeredContainer, { backgroundColor: colors.background }]}
+    >
+      <Text style={[styles.errorText, { color: colors.text }]}>
+        {t("results.not_found")}
+      </Text>
     </View>
   );
 };
@@ -380,13 +497,11 @@ const CocktailDetailScreen = ({ route }) => {
 const styles = StyleSheet.create({
   centeredContainer: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
   listContainer: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   scrollContentContainer: {
     paddingBottom: 30,
@@ -412,7 +527,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
     paddingBottom: 5,
   },
   ingredientItem: {
@@ -430,16 +544,13 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: "red",
   },
   prepareButton: {
     marginTop: 15,
     marginBottom: 15,
-    backgroundColor: "#f4511e",
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 25,
-    shadowColor: "#f4511e",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
@@ -447,7 +558,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   prepareButtonText: {
-    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -460,11 +570,9 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "90%",
-    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -474,11 +582,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 15,
-    color: "#333",
   },
   legendContainer: {
     width: "100%",
-    backgroundColor: "#f7f7f7",
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
@@ -487,7 +593,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "#333",
   },
   legendItem: {
     flexDirection: "row",
@@ -503,7 +608,6 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 12,
-    color: "#333",
   },
   modalButtonsContainer: {
     width: "100%",
@@ -518,12 +622,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     margin: 4,
-    backgroundColor: "white",
   },
   ingredientButtonText: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#000",
   },
   // İç İçe Modal (Modal 2) Stilleri
   modalOverlay2: {
@@ -534,11 +636,9 @@ const styles = StyleSheet.create({
   },
   modalContent2: {
     width: "80%",
-    backgroundColor: "white",
     borderRadius: 15,
     padding: 25,
     alignItems: "center",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -550,13 +650,11 @@ const styles = StyleSheet.create({
   proTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#333",
     marginBottom: 10,
     textAlign: "center",
   },
   proText: {
     fontSize: 16,
-    color: "#555",
     textAlign: "center",
     marginBottom: 5,
   },
@@ -566,13 +664,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
     width: "100%",
   },
   altListItemText: {
     fontSize: 16,
     marginLeft: 10,
-    color: "#333",
   },
   proLockContainer: {
     alignItems: "center",
@@ -582,7 +678,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   proButton: {
-    backgroundColor: "#FFD700",
     borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 30,
@@ -593,7 +688,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   proButtonText: {
-    color: "#333",
     fontSize: 16,
     fontWeight: "bold",
   },

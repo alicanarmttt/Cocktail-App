@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next"; // Çeviri kancası
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
 import {
   fetchRoulettePool,
@@ -82,6 +82,7 @@ const TASTES = [
 ];
 
 const RouletteScreen = () => {
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t, i18n } = useTranslation(); // Çeviri fonksiyonu
@@ -173,20 +174,33 @@ const RouletteScreen = () => {
   // 1. MENÜ
   const renderMenu = () => (
     <View style={styles.menuContainer}>
-      <Text style={styles.headerTitle}>{t("roulette.menu_title")}</Text>
-      <Text style={styles.headerSubtitle}>{t("roulette.menu_subtitle")}</Text>
+      <Text style={[styles.headerTitle, { color: colors.text }]}>
+        {t("roulette.menu_title")}
+      </Text>
+      <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
+        {t("roulette.menu_subtitle")}
+      </Text>
 
       <View style={styles.grid}>
         {MODES.map((item) => (
           <Pressable
             key={item.id}
-            style={[styles.modeCard, { borderColor: item.color }]}
+            style={[
+              styles.modeCard,
+              {
+                borderColor: item.color,
+                backgroundColor: colors.card,
+                shadowColor: colors.shadow,
+              },
+            ]}
             onPress={() => handleModeSelect(item.id)}
           >
             <View style={[styles.iconCircle, { backgroundColor: item.color }]}>
               <Ionicons name={item.icon} size={32} color="#fff" />
             </View>
-            <Text style={styles.modeText}>{t(item.labelKey)}</Text>
+            <Text style={[styles.modeText, { color: colors.text }]}>
+              {t(item.labelKey)}
+            </Text>
           </Pressable>
         ))}
       </View>
@@ -202,25 +216,33 @@ const RouletteScreen = () => {
     return (
       <View style={styles.filterContainer}>
         <Pressable style={styles.backButton} onPress={() => setStep("menu")}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </Pressable>
 
-        <Text style={styles.headerTitle}>{t(titleKey)}</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>
+          {t(titleKey)}
+        </Text>
 
         <View style={styles.listWrapper}>
           {list.map((item) => (
             <Pressable
               key={item.id}
-              style={styles.filterItem}
+              style={[styles.filterItem, { borderBottomColor: colors.border }]}
               onPress={() => handleFilterSelect(item.id)}
             >
               <Ionicons
                 name={item.icon || "radio-button-on"}
                 size={24}
-                color="#f4511e"
+                color={colors.primary}
               />
-              <Text style={styles.filterText}>{t(item.labelKey)}</Text>
-              <Ionicons name="chevron-forward" size={24} color="#ccc" />
+              <Text style={[styles.filterText, { color: colors.text }]}>
+                {t(item.labelKey)}
+              </Text>
+              <Ionicons
+                name="chevron-forward"
+                size={24}
+                color={colors.textSecondary}
+              />
             </Pressable>
           ))}
         </View>
@@ -233,8 +255,8 @@ const RouletteScreen = () => {
     if (status === "loading") {
       return (
         <View style={styles.centerAll}>
-          <ActivityIndicator size="large" color="#f4511e" />
-          <Text style={{ marginTop: 20, fontSize: 18 }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={{ marginTop: 20, fontSize: 18, color: colors.text }}>
             {t("roulette.loading_pool")}
           </Text>
         </View>
@@ -243,13 +265,13 @@ const RouletteScreen = () => {
 
     return (
       <View style={styles.wheelContainer}>
-        <Text style={styles.wheelTitle}>
+        <Text style={[styles.wheelTitle, { color: colors.text }]}>
           {pool.length} {t("roulette.options_found")}
         </Text>
 
         <View style={styles.wheelWrapper}>
           <View style={styles.indicatorContainer}>
-            <Ionicons name="caret-down" size={50} color="#333" />
+            <Ionicons name="caret-down" size={50} color={colors.text} />
           </View>
           <Animated.Image
             source={require("../../assets/roulette_wheel.png")}
@@ -258,8 +280,16 @@ const RouletteScreen = () => {
           />
         </View>
 
-        <Pressable style={styles.spinButton} onPress={spinWheel}>
-          <Text style={styles.spinButtonText}>{t("roulette.spin_btn")}</Text>
+        <Pressable
+          style={[
+            styles.spinButton,
+            { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
+          ]}
+          onPress={spinWheel}
+        >
+          <Text style={[styles.spinButtonText, { color: colors.buttonText }]}>
+            {t("roulette.spin_btn")}
+          </Text>
         </Pressable>
       </View>
     );
@@ -270,42 +300,65 @@ const RouletteScreen = () => {
     if (!winner) return null;
 
     return (
-      <View style={styles.resultContainer}>
-        <Text style={styles.winnerHeader}>
+      <View
+        style={[styles.resultContainer, { backgroundColor: colors.background }]}
+      >
+        <Text style={[styles.winnerHeader, { color: colors.text }]}>
           🎉 {t("roulette.winner_title")} 🎉
         </Text>
 
-        <View style={styles.winnerCard}>
+        <View
+          style={[
+            styles.winnerCard,
+            { backgroundColor: colors.card, shadowColor: colors.shadow },
+          ]}
+        >
           <Image
-            source={{ uri: winner.image_url || "https://placehold.co/300x300" }}
+            source={{
+              uri: winner.image_url || "https://placehold.co/300x300",
+            }}
             style={styles.winnerImage}
           />
-          <Text style={styles.winnerName}>{getCocktailName(winner)}</Text>
+          <Text style={[styles.winnerName, { color: colors.primary }]}>
+            {getCocktailName(winner)}
+          </Text>
         </View>
 
         <View style={styles.resultButtons}>
           <Pressable
-            style={[styles.resultBtn, styles.recipeBtn]}
+            style={[
+              styles.resultBtn,
+              styles.recipeBtn,
+              { backgroundColor: colors.buttonBg },
+            ]}
             onPress={() =>
               navigation.navigate("CocktailDetail", {
                 cocktailId: winner.cocktail_id,
               })
             }
           >
-            <Text style={styles.btnTextWhite}>{t("roulette.go_recipe")}</Text>
+            <Text style={[styles.btnTextWhite, { color: colors.buttonText }]}>
+              {t("roulette.go_recipe")}
+            </Text>
           </Pressable>
 
           <Pressable
-            style={[styles.resultBtn, styles.againBtn]}
+            style={[
+              styles.resultBtn,
+              styles.againBtn,
+              { backgroundColor: colors.card, borderColor: colors.primary },
+            ]}
             onPress={() => setStep("wheel")}
           >
-            <Text style={styles.btnTextOutline}>
+            <Text style={[styles.btnTextOutline, { color: colors.primary }]}>
               {t("roulette.spin_again")}
             </Text>
           </Pressable>
 
           <Pressable style={styles.backLink} onPress={() => setStep("menu")}>
-            <Text style={{ color: "#999" }}>{t("roulette.back_menu")}</Text>
+            <Text style={{ color: colors.textSecondary }}>
+              {t("roulette.back_menu")}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -313,7 +366,9 @@ const RouletteScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       {step === "menu" && renderMenu()}
       {step === "filter" && renderFilter()}
       {step === "wheel" && renderWheel()}
@@ -323,7 +378,7 @@ const RouletteScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1 },
   centerAll: { flex: 1, justifyContent: "center", alignItems: "center" },
   menuContainer: { flex: 1, padding: 20, justifyContent: "center" },
   headerTitle: {
@@ -331,12 +386,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 5,
-    color: "#333",
   },
   headerSubtitle: {
     fontSize: 16,
     textAlign: "center",
-    color: "#777",
     marginBottom: 30,
   },
   grid: {
@@ -347,13 +400,11 @@ const styles = StyleSheet.create({
   },
   modeCard: {
     width: "48%",
-    backgroundColor: "#fff",
     borderRadius: 15,
     padding: 20,
     marginBottom: 15,
     alignItems: "center",
     borderWidth: 2,
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -367,7 +418,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  modeText: { fontWeight: "bold", color: "#333", textAlign: "center" },
+  modeText: { fontWeight: "bold", textAlign: "center" },
   filterContainer: { flex: 1, padding: 20 },
   backButton: { marginBottom: 20 },
   listWrapper: { marginTop: 20 },
@@ -376,16 +427,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
   },
-  filterText: { fontSize: 18, marginLeft: 15, flex: 1, color: "#333" },
+  filterText: { fontSize: 18, marginLeft: 15, flex: 1 },
   wheelContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "space-around",
     paddingVertical: 40,
   },
-  wheelTitle: { fontSize: 22, fontWeight: "bold", color: "#333" },
+  wheelTitle: { fontSize: 22, fontWeight: "bold" },
   wheelWrapper: {
     width: SCREEN_WIDTH * 0.8,
     height: SCREEN_WIDTH * 0.8,
@@ -396,18 +446,15 @@ const styles = StyleSheet.create({
   wheelImage: { width: "100%", height: "100%" },
   indicatorContainer: { position: "absolute", top: -30, zIndex: 10 },
   spinButton: {
-    backgroundColor: "#f4511e",
     paddingVertical: 15,
     paddingHorizontal: 60,
     borderRadius: 30,
-    shadowColor: "#f4511e",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 8,
   },
   spinButtonText: {
-    color: "#fff",
     fontSize: 24,
     fontWeight: "bold",
     letterSpacing: 2,
@@ -417,21 +464,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#fcfcfc",
   },
   winnerHeader: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "#333",
   },
   winnerCard: {
     width: "90%",
-    backgroundColor: "#fff",
     borderRadius: 20,
     padding: 20,
     alignItems: "center",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 10,
@@ -442,7 +485,6 @@ const styles = StyleSheet.create({
   winnerName: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#f4511e",
     textAlign: "center",
   },
   resultButtons: { width: "100%", alignItems: "center", gap: 15 },
@@ -452,10 +494,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
   },
-  recipeBtn: { backgroundColor: "#f4511e" },
-  againBtn: { backgroundColor: "#fff", borderWidth: 2, borderColor: "#f4511e" },
-  btnTextWhite: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  btnTextOutline: { color: "#f4511e", fontSize: 16, fontWeight: "bold" },
+  recipeBtn: {},
+  againBtn: { borderWidth: 2 },
+  btnTextWhite: { fontSize: 16, fontWeight: "bold" },
+  btnTextOutline: { fontSize: 16, fontWeight: "bold" },
   backLink: { marginTop: 10 },
 });
 

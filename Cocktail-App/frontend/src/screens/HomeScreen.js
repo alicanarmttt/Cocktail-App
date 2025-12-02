@@ -19,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 // GÜNCELLEME: Yeni kurduğumuz 'Picker' (Rulet) kütüphanesini import ediyoruz
 import { Picker } from "@react-native-picker/picker";
+import { useTheme } from "@react-navigation/native";
 
 import {
   fetchCocktails,
@@ -35,6 +36,8 @@ import {
  * @param {object} navigation - React Navigation tarafından sağlanır.
  */
 const HomeScreen = ({ navigation }) => {
+  const { colors } = useTheme();
+
   const POPULAR_COCKTAILS = [
     "Margarita",
     "Mojito",
@@ -153,9 +156,16 @@ const HomeScreen = ({ navigation }) => {
   // Yükleniyor durumu (Sadece ilk yüklemede)
   if (status === "loading" && allCocktails.length === 0) {
     return (
-      <View style={styles.centeredContainer}>
-        <ActivityIndicator size="large" color="#f4511e" />
-        <Text style={{ marginTop: 10 }}>{t("general.loading")}</Text>
+      <View
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={{ marginTop: 10, color: colors.text }}>
+          {t("general.loading")}
+        </Text>
       </View>
     );
   }
@@ -163,25 +173,41 @@ const HomeScreen = ({ navigation }) => {
   // Hata durumu
   if (status === "failed") {
     return (
-      <View style={styles.centeredContainer}>
-        <Text style={styles.errorText}>{error || t("general.error")}</Text>
+      <View
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <Text style={[styles.errorText, { color: colors.notification }]}>
+          {error || t("general.error")}
+        </Text>
       </View>
     );
   }
 
   // Başarılı (succeeded) durumu
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       {/* GÖSTERGE ALANI (Ekranın Üstü)
           GÜNCELLEME: Bu alanı büyütmek için flex: 3 verdik
       */}
       <View style={styles.displayArea}>
         {/* "Afilli Cümle" Eklendi */}
-        <Text style={styles.headerQuote}>{t("home.quote")}</Text>
+        <Text style={[styles.headerQuote, { color: colors.textSecondary }]}>
+          {t("home.quote")}
+        </Text>
 
         {/* "Altın Çerçeve" Eklendi (İç içe View kullanarak) */}
-        <View style={styles.frameOuter}>
-          <View style={styles.frameInner}>
+        <View
+          style={[
+            styles.frameOuter,
+            { backgroundColor: colors.gold, shadowColor: colors.shadow },
+          ]}
+        >
+          <View style={[styles.frameInner, { backgroundColor: colors.card }]}>
             {
               // GÜNCELLEME: Başlangıçta (ID 'null' iken) resim yerine
               // "Bir Kokteyl Seçin" yazısı gösterilir.
@@ -192,8 +218,18 @@ const HomeScreen = ({ navigation }) => {
                   resizeMode="cover"
                 />
               ) : (
-                <View style={styles.placeholderContainer}>
-                  <Text style={styles.placeholderText}>
+                <View
+                  style={[
+                    styles.placeholderContainer,
+                    { backgroundColor: colors.subCard },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.placeholderText,
+                      { color: colors.textSecondary },
+                    ]}
+                  >
                     {t("home.pick_cocktail")}
                   </Text>
                 </View>
@@ -206,6 +242,7 @@ const HomeScreen = ({ navigation }) => {
         <Pressable
           style={[
             styles.prepareButton,
+            { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
             !selectedCocktail && styles.prepareButtonDisabled, // Pasifken soluk görün
           ]}
           disabled={!selectedCocktail}
@@ -215,31 +252,51 @@ const HomeScreen = ({ navigation }) => {
             });
           }}
         >
-          <Text style={styles.prepareButtonText}>{t("home.prepare_btn")}</Text>
+          <Text
+            style={[styles.prepareButtonText, { color: colors.buttonText }]}
+          >
+            {t("home.prepare_btn")}
+          </Text>
         </Pressable>
       </View>
 
       {/* RULET ALANI (Ekranın Altı)
           GÜNCELLEME: Bu alanı küçültmek için flex: 2 verdik
       */}
-      <View style={styles.pickerArea}>
+      <View
+        style={[
+          styles.pickerArea,
+          { backgroundColor: colors.subCard, shadowColor: colors.shadow },
+        ]}
+      >
         {/* YENİ: ARAMA BUTONU (Ruletin hemen üstünde) */}
         <Pressable
-          style={styles.searchButton}
+          style={[
+            styles.searchButton,
+            { backgroundColor: colors.card, borderColor: colors.primary },
+          ]}
           onPress={() => setIsSearchModalVisible(true)}
         >
-          <Ionicons name="search" size={20} color="#f4511e" />
-          <Text style={styles.searchButtonText}>{t("home.search_btn")}</Text>
+          <Ionicons name="search" size={20} color={colors.primary} />
+          <Text style={[styles.searchButtonText, { color: colors.primary }]}>
+            {t("home.search_btn")}
+          </Text>
         </Pressable>
 
         <Picker
           selectedValue={selectedCocktailId}
           onValueChange={(itemValue) => setSelectedCocktailId(itemValue)}
           style={styles.pickerStyle}
-          itemStyle={styles.pickerItemStyle} // iOS'taki yazı stili
+          dropdownIconColor={colors.text}
+          itemStyle={[styles.pickerItemStyle, { color: colors.text }]} // iOS'taki yazı stili
+          mode="dialog"
         >
           {/* GÜNCELLEME: Başlangıç değeri (Placeholder) eklendi */}
-          <Picker.Item label={t("home.pick_cocktail") + "..."} value={null} />
+          <Picker.Item
+            label={t("home.pick_cocktail") + "..."}
+            value={null}
+            color={colors.text}
+          />
 
           {/* SIRALANMIŞ LİSTEYİ KULLAN */}
           {sortedCocktails.map((cocktail, index) => {
@@ -253,6 +310,7 @@ const HomeScreen = ({ navigation }) => {
                 key={cocktail.cocktail_id}
                 label={labelPrefix + getName(cocktail)}
                 value={cocktail.cocktail_id}
+                color={colors.text}
               />
             );
           })}
@@ -265,28 +323,45 @@ const HomeScreen = ({ navigation }) => {
         presentationStyle="pageSheet" // iOS'ta sayfa gibi görünür
         onRequestClose={() => setIsSearchModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
+        <View
+          style={[
+            styles.modalContainer,
+            { backgroundColor: colors.background },
+          ]}
+        >
           {/* Modal Başlığı ve Kapat Butonu */}
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>
+          <View
+            style={[styles.modalHeader, { borderBottomColor: colors.border }]}
+          >
+            <Text style={[styles.modalTitle, { color: colors.text }]}>
               {t("home.search_modal_title")}
             </Text>
             <Pressable onPress={() => setIsSearchModalVisible(false)}>
-              <Ionicons name="close-circle" size={30} color="#ccc" />
+              <Ionicons
+                name="close-circle"
+                size={30}
+                color={colors.textSecondary}
+              />
             </Pressable>
           </View>
 
           {/* Arama Input */}
-          <View style={styles.modalInputContainer}>
+          <View
+            style={[
+              styles.modalInputContainer,
+              { backgroundColor: colors.subCard },
+            ]}
+          >
             <Ionicons
               name="search"
               size={20}
-              color="#666"
+              color={colors.textSecondary}
               style={{ marginRight: 10 }}
             />
             <TextInput
-              style={styles.modalInput}
+              style={[styles.modalInput, { color: colors.text }]}
               placeholder={t("home.search_modal_placeholder")}
+              placeholderTextColor={colors.textSecondary}
               value={searchText}
               onChangeText={setSearchText}
               autoFocus={true} // Açılınca klavye gelsin
@@ -300,19 +375,33 @@ const HomeScreen = ({ navigation }) => {
             contentContainerStyle={{ paddingBottom: 20 }}
             renderItem={({ item }) => (
               <TouchableOpacity
-                style={styles.searchItem}
+                style={[
+                  styles.searchItem,
+                  { borderBottomColor: colors.border },
+                ]}
                 onPress={() => handleSelectFromSearch(item.cocktail_id)}
               >
                 <Image
                   source={{ uri: item.image_url }}
-                  style={styles.searchItemImage}
+                  style={[
+                    styles.searchItemImage,
+                    { backgroundColor: colors.subCard },
+                  ]}
                 />
-                <Text style={styles.searchItemText}>{getName(item)}</Text>
-                <Ionicons name="chevron-forward" size={20} color="#ccc" />
+                <Text style={[styles.searchItemText, { color: colors.text }]}>
+                  {getName(item)}
+                </Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={20}
+                  color={colors.border}
+                />
               </TouchableOpacity>
             )}
             ListEmptyComponent={
-              <Text style={styles.noResultText}>
+              <Text
+                style={[styles.noResultText, { color: colors.textSecondary }]}
+              >
                 {t("assistant.not_found")}
               </Text>
             }
@@ -328,7 +417,6 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   centeredContainer: {
     flex: 1,
@@ -347,15 +435,12 @@ const styles = StyleSheet.create({
   headerQuote: {
     fontSize: 16,
     fontStyle: "italic",
-    color: "#050404ff",
     marginBottom: 15,
     textAlign: "center",
   },
   frameOuter: {
     padding: 8,
     borderRadius: 15,
-    backgroundColor: "#FFD700",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
@@ -363,7 +448,6 @@ const styles = StyleSheet.create({
   },
   frameInner: {
     padding: 2,
-    backgroundColor: "black",
     borderRadius: 5,
   },
   image: {
@@ -375,40 +459,34 @@ const styles = StyleSheet.create({
     width: 220,
     height: 220,
     borderRadius: 5,
-    backgroundColor: "#eee",
     justifyContent: "center",
     alignItems: "center",
   },
   placeholderText: {
     fontSize: 16,
-    color: "#999",
     fontWeight: "500",
   },
   cocktailName: {
     fontSize: 24,
     fontWeight: "bold",
     marginTop: 10,
-    color: "#333",
     textAlign: "center",
   },
   prepareButton: {
     marginTop: 15,
-    backgroundColor: "#f4511e",
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 25,
-    shadowColor: "#f4511e",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5,
   },
   prepareButtonDisabled: {
-    backgroundColor: "#ccc",
+    opacity: 0.6,
     shadowColor: "transparent",
   },
   prepareButtonText: {
-    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -418,11 +496,9 @@ const styles = StyleSheet.create({
     flex: 2,
     width: "100%",
     justifyContent: "flex-start", // Üstten başlasın
-    backgroundColor: "#f9f9f9",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingTop: 10,
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -433,16 +509,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
     marginHorizontal: 40,
     paddingVertical: 10,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#f4511e",
     marginBottom: 5,
   },
   searchButtonText: {
-    color: "#f4511e",
     fontWeight: "600",
     marginLeft: 8,
     fontSize: 16,
@@ -451,14 +524,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   pickerItemStyle: {
-    color: "#000",
     fontSize: 20,
   },
 
   // --- MODAL STİLLERİ ---
   modalContainer: {
     flex: 1,
-    backgroundColor: "#fff",
     paddingTop: 20, // iOS Statusbar için
   },
   modalHeader: {
@@ -468,17 +539,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#333",
   },
   modalInputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
     margin: 15,
     paddingHorizontal: 15,
     borderRadius: 10,
@@ -496,29 +564,24 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
   },
   searchItemImage: {
     width: 40,
     height: 40,
     borderRadius: 20,
     marginRight: 15,
-    backgroundColor: "#eee",
   },
   searchItemText: {
     fontSize: 16,
-    color: "#333",
     flex: 1,
   },
   noResultText: {
     textAlign: "center",
     marginTop: 30,
-    color: "gray",
     fontSize: 16,
   },
   errorText: {
     fontSize: 16,
-    color: "red",
   },
 });
 

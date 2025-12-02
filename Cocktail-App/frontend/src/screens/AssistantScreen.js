@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
 // Redux Slice'ları
 import {
@@ -36,6 +36,7 @@ import {
  * Karmaşık kutular yerine temiz bir liste ve seçim mantığı.
  */
 const AssistantScreen = () => {
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
@@ -137,9 +138,14 @@ const AssistantScreen = () => {
   // --- RENDER: Yükleniyor / Hata ---
   if (ingredientsStatus === "loading") {
     return (
-      <SafeAreaView style={styles.centeredContainer}>
-        <ActivityIndicator size="large" color="#f4511e" />
-        <Text style={{ marginTop: 10, color: "gray" }}>
+      <SafeAreaView
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={{ marginTop: 10, color: colors.textSecondary }}>
           {t("assistant.loading_market", "Malzemeler yükleniyor...")}
         </Text>
       </SafeAreaView>
@@ -148,25 +154,42 @@ const AssistantScreen = () => {
 
   if (ingredientsStatus === "failed") {
     return (
-      <SafeAreaView style={styles.centeredContainer}>
-        <Text style={{ color: "red" }}>{ingredientsError}</Text>
+      <SafeAreaView
+        style={[
+          styles.centeredContainer,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <Text style={{ color: colors.notification }}>{ingredientsError}</Text>
       </SafeAreaView>
     );
   }
 
   // --- RENDER: ANA EKRAN ---
   return (
-    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={["top", "left", "right"]}
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
         {/* HEADER KISMI (Sabit) */}
-        <View style={styles.header}>
-          <Text style={styles.title}>
+        <View
+          style={[
+            styles.header,
+            {
+              backgroundColor: colors.background,
+              borderBottomColor: colors.border,
+              shadowColor: colors.shadow,
+            },
+          ]}
+        >
+          <Text style={[styles.title, { color: colors.primary }]}>
             {t("assistant.title", "Barmen'in Asistanı")}
           </Text>
-          <Text style={styles.subtitle}>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             {t(
               "assistant.subtitle",
               "Elinde ne varsa seç, gerisini bana bırak."
@@ -174,21 +197,30 @@ const AssistantScreen = () => {
           </Text>
 
           {/* Arama Çubuğu */}
-          <View style={styles.searchContainer}>
-            <Ionicons name="search" size={20} color="#999" />
+          <View
+            style={[
+              styles.searchContainer,
+              { backgroundColor: colors.inputBg },
+            ]}
+          >
+            <Ionicons name="search" size={20} color={colors.textSecondary} />
             <TextInput
-              style={styles.searchInput}
+              style={[styles.searchInput, { color: colors.text }]}
               placeholder={t(
                 "assistant.search_placeholder",
                 "Malzeme ara (örn: Cin, Limon)"
               )}
               value={searchText}
               onChangeText={setSearchText}
-              placeholderTextColor="#aaa"
+              placeholderTextColor={colors.textSecondary}
             />
             {searchText.length > 0 && (
               <Pressable onPress={() => setSearchText("")}>
-                <Ionicons name="close-circle" size={18} color="#999" />
+                <Ionicons
+                  name="close-circle"
+                  size={18}
+                  color={colors.textSecondary}
+                />
               </Pressable>
             )}
           </View>
@@ -210,11 +242,25 @@ const AssistantScreen = () => {
                   item === "ALL" ? t("assistant.tab_all", "Tümü") : item;
                 return (
                   <Pressable
-                    style={[styles.catTab, isActive && styles.catTabActive]}
+                    style={[
+                      styles.catTab,
+                      {
+                        backgroundColor: colors.card,
+                        borderColor: colors.border,
+                      },
+                      isActive && {
+                        backgroundColor: colors.primary,
+                        borderColor: colors.primary,
+                      },
+                    ]}
                     onPress={() => setActiveCategory(item)}
                   >
                     <Text
-                      style={[styles.catText, isActive && styles.catTextActive]}
+                      style={[
+                        styles.catText,
+                        { color: colors.textSecondary },
+                        isActive && { color: colors.buttonText },
+                      ]}
                     >
                       {label}
                     </Text>
@@ -234,7 +280,7 @@ const AssistantScreen = () => {
           removeClippedSubviews={true} // Performans için
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
                 {t("assistant.not_found", "Malzeme bulunamadı.")}
               </Text>
             </View>
@@ -243,7 +289,11 @@ const AssistantScreen = () => {
             const isSelected = selectedIds.includes(item.ingredient_id);
             return (
               <Pressable
-                style={[styles.row, isSelected && styles.rowSelected]}
+                style={[
+                  styles.row,
+                  { borderBottomColor: colors.border },
+                  isSelected && { backgroundColor: colors.subCard },
+                ]}
                 onPress={() => toggleSelection(item.ingredient_id)}
               >
                 <View style={styles.rowContent}>
@@ -251,21 +301,29 @@ const AssistantScreen = () => {
                   <Text
                     style={[
                       styles.rowText,
-                      isSelected && styles.rowTextSelected,
+                      { color: colors.text },
+                      isSelected && {
+                        color: colors.primary,
+                        fontWeight: "600",
+                      },
                     ]}
                   >
                     {getName(item)}
                   </Text>
 
                   {/* Kategori (Küçük gri yazı) */}
-                  <Text style={styles.rowSubText}>{getCategoryName(item)}</Text>
+                  <Text
+                    style={[styles.rowSubText, { color: colors.textSecondary }]}
+                  >
+                    {getCategoryName(item)}
+                  </Text>
                 </View>
 
                 {/* Seçim İkonu */}
                 <Ionicons
                   name={isSelected ? "checkbox" : "square-outline"}
                   size={24}
-                  color={isSelected ? "#f4511e" : "#ccc"}
+                  color={isSelected ? colors.primary : colors.border}
                 />
               </Pressable>
             );
@@ -277,31 +335,57 @@ const AssistantScreen = () => {
           <View style={styles.footerContainer}>
             {/* YENİ: SIFIRLAMA BUTONU (Küçük Kutu) */}
             <Pressable
-              style={styles.resetButton}
+              style={[
+                styles.resetButton,
+                {
+                  backgroundColor: colors.card,
+                  shadowColor: colors.shadow,
+                  borderColor: colors.border,
+                },
+              ]}
               onPress={handleClearSelection}
             >
-              <Ionicons name="trash-outline" size={24} color="#FF3B30" />
+              <Ionicons
+                name="trash-outline"
+                size={24}
+                color={colors.notification}
+              />
             </Pressable>
             {/* MEVCUT: AKSİYON BUTONU (Geniş) */}
             <Pressable
-              style={styles.actionButton}
+              style={[
+                styles.actionButton,
+                {
+                  backgroundColor: colors.buttonBg,
+                  shadowColor: colors.shadow,
+                },
+              ]}
               onPress={handleFindRecipes}
               disabled={searchStatus === "loading"}
             >
               {searchStatus === "loading" ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={colors.buttonText} />
               ) : (
                 <>
                   <View style={styles.badge}>
-                    <Text style={styles.badgeText}>{selectedIds.length}</Text>
+                    <Text
+                      style={[styles.badgeText, { color: colors.buttonText }]}
+                    >
+                      {selectedIds.length}
+                    </Text>
                   </View>
-                  <Text style={styles.actionButtonText}>
+                  <Text
+                    style={[
+                      styles.actionButtonText,
+                      { color: colors.buttonText },
+                    ]}
+                  >
                     {t("assistant.show_recipes_btn", "Kokteylleri Bul")}
                   </Text>
                   <Ionicons
                     name="arrow-forward"
                     size={20}
-                    color="#fff"
+                    color={colors.buttonText}
                     style={{ marginLeft: 5 }}
                   />
                 </>
@@ -317,7 +401,6 @@ const AssistantScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   centeredContainer: {
     flex: 1,
@@ -326,11 +409,8 @@ const styles = StyleSheet.create({
   },
   // --- HEADER ---
   header: {
-    backgroundColor: "#fff",
     paddingTop: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.03,
     shadowRadius: 3,
@@ -340,19 +420,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#333",
     paddingHorizontal: 20,
   },
   subtitle: {
     fontSize: 14,
-    color: "gray",
     paddingHorizontal: 20,
     marginBottom: 15,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
     marginHorizontal: 20,
     marginBottom: 15,
     paddingHorizontal: 15,
@@ -363,7 +440,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     fontSize: 16,
-    color: "#333",
     height: "100%",
   },
   // --- KATEGORİ TABLARI ---
@@ -372,23 +448,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginRight: 8,
     borderRadius: 20,
-    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: "#eee",
     justifyContent: "center",
-  },
-  catTabActive: {
-    backgroundColor: "#333", // Aktifken siyah (veya turuncu)
-    borderColor: "#333",
   },
   catText: {
     fontSize: 14,
-    color: "#666",
     fontWeight: "500",
-  },
-  catTextActive: {
-    color: "#fff",
-    fontWeight: "600",
   },
   // --- LİSTE SATIRI ---
   row: {
@@ -398,25 +463,15 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#f9f9f9",
-  },
-  rowSelected: {
-    backgroundColor: "#fffaf5", // Seçilince çok hafif turuncu
   },
   rowContent: {
     flex: 1,
   },
   rowText: {
     fontSize: 17,
-    color: "#333",
-  },
-  rowTextSelected: {
-    fontWeight: "600",
-    color: "#f4511e",
   },
   rowSubText: {
     fontSize: 12,
-    color: "#999",
     marginTop: 2,
   },
   emptyContainer: {
@@ -424,7 +479,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   emptyText: {
-    color: "gray",
     fontSize: 16,
   },
   // --- FOOTER BUTON ---
@@ -441,37 +495,31 @@ const styles = StyleSheet.create({
   },
   //Sıfırlama Butonu Stili
   resetButton: {
-    backgroundColor: "#fff",
     width: 56,
     height: 56,
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 5,
     borderWidth: 1,
-    borderColor: "#ffe5e5",
   },
   actionButton: {
     flex: 1, // Kalan tüm alanı kaplasın
-    backgroundColor: "#f4511e",
     flexDirection: "row",
     alignItems: "center",
     height: 56,
     justifyContent: "center",
     paddingVertical: 16,
     borderRadius: 16,
-    shadowColor: "#f4511e",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
     elevation: 6,
   },
   actionButtonText: {
-    color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
@@ -483,7 +531,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   badgeText: {
-    color: "#fff",
     fontSize: 14,
     fontWeight: "bold",
   },

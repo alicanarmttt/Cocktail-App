@@ -1,9 +1,18 @@
 import { React, useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useTheme, // YENİ: Tema renklerini alt bileşenlerde kullanmak için
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { useColorScheme } from "react-native";
+import {
+  useColorScheme,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
+
 import HomeScreen from "../screens/HomeScreen";
 import CocktailDetailScreen from "../screens/CocktailDetailScreen";
 import AssistantScreen from "../screens/AssistantScreen";
@@ -12,15 +21,14 @@ import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import UpgradeToProScreen from "../screens/UpgradeToProScreen";
 import RouletteScreen from "../screens/RouletteScreen";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
 
 // YENİ EKLENDİ: 'userSlice'taki 'selector' (veri okuyucu)
-
 import { useSelector, useDispatch } from "react-redux";
 
 // YENİ EKLENDİ (EKSİK 9): Firebase Auth Servisi ve "Auth Durum Dinleyicisi"
 import { auth } from "../api/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+
 // YENİ EKLENDİ (EKSİK 9): 'userSlice' (sağdaki) dosyasından GEREKLİ eylem ve selector'ler
 import {
   selectCurrentUser,
@@ -30,7 +38,7 @@ import {
 } from "../features/userSlice";
 
 // 2. YENİ TEMA DOSYAMIZI IMPORT ET
-import { lightTheme, darkTheme } from "../constants/theme";
+import { lightTheme, darkTheme } from "../../constants/theme";
 import { selectThemeMode } from "../features/uiSlice";
 
 // "Stack" (Yığın) tipinde bir navigasyon oluşturucu başlatıyoruz
@@ -39,6 +47,7 @@ const Tab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
 const ProfileStack = createNativeStackNavigator();
 const RouletteStack = createNativeStackNavigator();
+
 /**
  * @desc    GÜNCELLENDİ: Ana Navigasyon Yönlendiricisi
  * Artık 'userSlice' (Redux) durumuna bakar ve
@@ -101,8 +110,14 @@ function AppNavigator() {
   // (ekranın "göz kırpmasını" engellemek için) bir "Yükleniyor" (Loading) ekranı gösteririz.
   if (isAuthLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#f4511e" />
+      // GÜNCELLEME: Yüklenme ekranı arka planı ve spinner rengi dinamikleştirildi
+      <View
+        style={[
+          styles.loadingContainer,
+          { backgroundColor: currentTheme.colors.background },
+        ]}
+      >
+        <ActivityIndicator size="large" color={currentTheme.colors.primary} />
       </View>
     );
   }
@@ -139,6 +154,9 @@ function AuthNavigator() {
  * Giriş yapıldığında gösterilecek Ana Uygulamayı (Sekmeler) yönetir.
  */
 function MainAppNavigator() {
+  // YENİ: Renkleri hook ile alıyoruz
+  const { colors } = useTheme();
+
   return (
     <Tab.Navigator
       initialRouteName="CocktailList"
@@ -158,8 +176,13 @@ function MainAppNavigator() {
             <Ionicons name={iconName} size={size} color={color}></Ionicons>
           );
         },
-        tabBarActiveTintColor: "#f4511e",
-        tabBarInactiveTintColor: "gray",
+        // GÜNCELLEME: Renkler tema dosyasından geliyor
+        tabBarActiveTintColor: colors.primary, // Aktif ikon rengi
+        tabBarInactiveTintColor: colors.textSecondary || "gray", // Pasif ikon rengi
+        tabBarStyle: {
+          backgroundColor: colors.card, // Tab bar arka planı
+          borderTopColor: colors.border, // Üst çizgi rengi
+        },
         headerShown: false,
       })}
     >
@@ -199,12 +222,16 @@ function MainAppNavigator() {
  * <NavigationContainer> is the root component for navigation.
  */
 function HomeStackNavigator() {
+  // YENİ: Renkleri hook ile alıyoruz
+  const { colors } = useTheme();
+
   return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
-        headerStyle: { backgroundColor: "#f4511e" },
-        headerTintColor: "#fff",
+        // GÜNCELLEME: Header renkleri dinamik
+        headerStyle: { backgroundColor: colors.primary },
+        headerTintColor: colors.buttonText || "#fff", // Primary üstündeki yazı rengi
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -226,16 +253,21 @@ function HomeStackNavigator() {
     </Stack.Navigator>
   );
 }
+
 /**
  * @desc   Rulet sekmesi için navigasyon yığını.
  * İçinde Rulet ve Detay sayfası olur.
  */
 function RouletteStackNavigator() {
+  // YENİ: Renkleri hook ile alıyoruz
+  const { colors } = useTheme();
+
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "#f4511e" },
-        headerTintColor: "#fff",
+        // GÜNCELLEME: Header renkleri dinamik
+        headerStyle: { backgroundColor: colors.primary },
+        headerTintColor: colors.buttonText || "#fff",
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -257,12 +289,16 @@ function RouletteStackNavigator() {
  * @desc    YENİ EKLENDİ: "Asistan" sekmesinin (Assistant, Results) iç yığınını yönetir.
  */
 function AssistantStackNavigator() {
+  // YENİ: Renkleri hook ile alıyoruz
+  const { colors } = useTheme();
+
   return (
     <Stack.Navigator
       // Bu yığının da stilini diğeriyle aynı yapalım
       screenOptions={{
-        headerStyle: { backgroundColor: "#f4511e" },
-        headerTintColor: "#fff",
+        // GÜNCELLEME: Header renkleri dinamik
+        headerStyle: { backgroundColor: colors.primary },
+        headerTintColor: colors.buttonText || "#fff",
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -289,12 +325,16 @@ function AssistantStackNavigator() {
  * @desc    "Profil" sekmesinin (Profile, UpgradeToPro) iç yığınını yönetir.
  */
 function ProfileStackNavigator() {
+  // YENİ: Renkleri hook ile alıyoruz
+  const { colors } = useTheme();
+
   return (
     // ÖNEMLİ: Bu yığının (Stack) kendi başlığı (header) VARDIR
     <ProfileStack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "#f4511e" },
-        headerTintColor: "#fff",
+        // GÜNCELLEME: Header renkleri dinamik
+        headerStyle: { backgroundColor: colors.primary },
+        headerTintColor: colors.buttonText || "#fff",
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -318,7 +358,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff", // Başlangıç ekranı arka planı
+    // backgroundColor: "#fff", // SİLİNDİ: Inline style ile dinamik veriliyor
   },
 });
 

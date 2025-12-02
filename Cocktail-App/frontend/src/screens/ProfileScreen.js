@@ -3,7 +3,11 @@ import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, CommonActions } from "@react-navigation/native";
+import {
+  useNavigation,
+  CommonActions,
+  useTheme,
+} from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 
 // 1. userSlice'tan (sağdaki) gerekli selector ve action'ları import et
@@ -18,7 +22,12 @@ import { auth } from "../api/firebaseConfig";
 import { signOut } from "firebase/auth";
 
 // YENİ EKLENDİ (EKSİK 13): Dil yönetimi ve veri yenileme için importlar
-import { setLanguage, selectLanguage } from "../features/uiSlice";
+import {
+  setLanguage,
+  selectLanguage,
+  setThemeMode,
+  selectThemeMode,
+} from "../features/uiSlice";
 import { fetchIngredients } from "../features/ingredientSlice";
 import { clearSearchResults } from "../features/barmenSlice";
 import {
@@ -31,6 +40,7 @@ import {
  * ve "Pro'ya Yükselt" işlemlerini yönetir.
  */
 const ProfileScreen = () => {
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   // 1. Çeviri Hook'u
   const { t, i18n } = useTranslation();
@@ -42,6 +52,8 @@ const ProfileScreen = () => {
 
   // YENİ EKLENDİ: Mevcut dili oku
   const currentLanguage = useSelector(selectLanguage);
+  // YENİ: Mevcut tema modunu Redux'tan oku ('system' | 'light' | 'dark')
+  const currentThemeMode = useSelector(selectThemeMode);
 
   /**
    * @desc  Kullanıcıyı hem Firebase'den (Servis) hem de
@@ -130,32 +142,80 @@ const ProfileScreen = () => {
     );
   };
 
+  // --- YENİ: TEMA DEĞİŞTİRME MANTIĞI ---
+
+  const cycleTheme = () => {
+    // Döngü: system -> light -> dark -> system
+    let newMode;
+    if (currentThemeMode === "system") newMode = "light";
+    else if (currentThemeMode === "light") newMode = "dark";
+    else newMode = "system";
+
+    dispatch(setThemeMode(newMode));
+  };
+
+  // Helper: Tema ikonunu ve metnini belirle
+  const getThemeIcon = () => {
+    switch (currentThemeMode) {
+      case "light":
+        return "sunny";
+      case "dark":
+        return "moon";
+      default:
+        return "phone-portrait"; // System için telefon ikonu
+    }
+  };
+
+  const getThemeLabel = () => {
+    // Bu metinleri de dil dosyasına eklemelisin! (Şimdilik hardcoded örnek)
+    switch (currentThemeMode) {
+      case "light":
+        return t("profile.theme_light");
+      case "dark":
+        return t("profile.theme_dark");
+      default:
+        return t("profile.theme_system");
+    }
+  };
+
   // (Kenar durum: Eğer bir şekilde buraya 'null' kullanıcı gelirse)
   if (!currentUser) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>Kullanıcı bulunamadı.</Text>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
+        <Text style={[styles.errorText, { color: colors.notification }]}>
+          Kullanıcı bulunamadı.
+        </Text>
       </SafeAreaView>
     );
   }
 
   // 4. Arayüzü (UI) Render Et
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       {/* Profil Başlığı */}
       <View style={styles.header}>
-        <Ionicons name="person-circle-outline" size={80} color="#333" />
-        <Text style={styles.emailText}>{currentUser.email}</Text>
+        <Ionicons name="person-circle-outline" size={80} color={colors.text} />
+        <Text style={[styles.emailText, { color: colors.text }]}>
+          {currentUser.email}
+        </Text>
 
         {/* Pro / Free Rozeti (Badge) */}
         {isPro ? (
-          <View style={styles.proBadge}>
-            <Ionicons name="star" size={16} color="#333" />
-            <Text style={styles.proText}>{t("profile.pro_member")}</Text>
+          <View style={[styles.proBadge, { backgroundColor: colors.gold }]}>
+            <Ionicons name="star" size={16} color={colors.buttonText} />
+            <Text style={[styles.proText, { color: colors.buttonText }]}>
+              {t("profile.pro_member")}
+            </Text>
           </View>
         ) : (
-          <View style={styles.freeBadge}>
-            <Text style={styles.freeText}>{t("profile.free_member")}</Text>
+          <View style={[styles.freeBadge, { backgroundColor: colors.subCard }]}>
+            <Text style={[styles.freeText, { color: colors.textSecondary }]}>
+              {t("profile.free_member")}
+            </Text>
           </View>
         )}
       </View>
@@ -164,10 +224,20 @@ const ProfileScreen = () => {
       <View style={styles.buttonContainer}>
         {/* Dil Değiştir Butonu */}
         <Pressable
-          style={[styles.button, styles.languageButton]}
+          style={[
+            styles.button,
+            styles.languageButton,
+            { backgroundColor: colors.card, borderColor: colors.text },
+          ]}
           onPress={toggleLanguage}
         >
-          <Text style={[styles.buttonText, styles.languageButtonText]}>
+          <Text
+            style={[
+              styles.buttonText,
+              styles.languageButtonText,
+              { color: colors.text },
+            ]}
+          >
             <Ionicons name="language-outline" size={16} />{" "}
             {t("profile.language_select")}:{" "}
             {currentLanguage === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
@@ -177,22 +247,56 @@ const ProfileScreen = () => {
         {/* "Pro'ya Yükselt" butonu (Sadece 'Free' üye ise gösterilir) */}
         {!isPro && (
           <Pressable
-            style={[styles.button, styles.upgradeButton]}
+            style={[
+              styles.button,
+              styles.upgradeButton,
+              { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
+            ]}
             onPress={() => navigation.navigate("UpgradeToPro")}
           >
-            <Text style={[styles.buttonText, styles.upgradeButtonText]}>
+            <Text
+              style={[
+                styles.buttonText,
+                styles.upgradeButtonText,
+                { color: colors.buttonText },
+              ]}
+            >
               <Ionicons name="star-outline" size={16} />{" "}
               {t("profile.upgrade_btn")}
             </Text>
           </Pressable>
         )}
+        {/* 2. YENİ: TEMA BUTONU */}
+        <Pressable
+          style={[
+            styles.button,
+            styles.outlineButton,
+            { borderColor: colors.border, backgroundColor: colors.card },
+          ]}
+          onPress={cycleTheme}
+        >
+          <Text style={[styles.buttonText, { color: colors.text }]}>
+            <Ionicons name={getThemeIcon()} size={18} />{" "}
+            {t("profile.theme_title") || "Tema"}: {getThemeLabel()}
+          </Text>
+        </Pressable>
 
         {/* "Çıkış Yap" Butonu */}
         <Pressable
-          style={[styles.button, styles.logoutButton]}
+          style={[
+            styles.button,
+            styles.logoutButton,
+            { backgroundColor: colors.card, borderColor: colors.notification },
+          ]}
           onPress={confirmLogout} // Onay sorusu sor
         >
-          <Text style={[styles.buttonText, styles.logoutButtonText]}>
+          <Text
+            style={[
+              styles.buttonText,
+              styles.logoutButtonText,
+              { color: colors.notification },
+            ]}
+          >
             <Ionicons name="log-out-outline" size={16} />
             {t("auth.logout")}
           </Text>
@@ -205,107 +309,69 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
     alignItems: "center",
     padding: 20,
   },
   header: {
     alignItems: "center",
-    marginTop: 30, // (iOS için)
+    marginTop: 30,
     marginBottom: 40,
   },
   emailText: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#333",
     marginTop: 15,
   },
-  // Pro Rozeti
   proBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFD700", // Altın (Gold)
     borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
+    paddingVertical: 6,
+    paddingHorizontal: 16,
     marginTop: 15,
+    borderWidth: 1,
   },
   proText: {
-    color: "#333",
     fontWeight: "bold",
     marginLeft: 5,
+    fontSize: 14,
   },
-  // Free Rozeti
   freeBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#e0e0e0", // Gri
     borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
+    paddingVertical: 6,
+    paddingHorizontal: 16,
     marginTop: 15,
   },
   freeText: {
-    color: "#555",
-    fontWeight: "bold",
+    fontWeight: "600",
+    fontSize: 14,
   },
-  // Butonlar
   buttonContainer: {
     width: "100%",
     alignItems: "center",
+    gap: 15,
   },
   button: {
-    width: "90%",
-    paddingVertical: 14,
-    borderRadius: 10,
+    width: "100%",
+    paddingVertical: 16,
+    borderRadius: 12,
     alignItems: "center",
-    marginTop: 20,
     flexDirection: "row",
     justifyContent: "center",
-  },
-  // Dil Butonu Stili
-  languageButton: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#333",
-  },
-  languageButtonText: {
-    color: "#333",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-
-  // Pro Yükseltme Butonu
-  upgradeButton: {
-    backgroundColor: "#f4511e", // Ana renk (Turuncu)
-    shadowColor: "#f4511e",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.05,
     shadowRadius: 3,
-    elevation: 5,
+    elevation: 2,
   },
-  upgradeButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  // Çıkış Yap Butonu
-  logoutButton: {
-    backgroundColor: "#fff",
+  outlineButton: {
     borderWidth: 1,
-    borderColor: "#f4511e", // Ana renk (Turuncu)
-  },
-  logoutButtonText: {
-    color: "#f4511e",
-    fontSize: 16,
-    fontWeight: "bold",
   },
   buttonText: {
-    marginHorizontal: 5, // İkon ile yazı arasına boşluk
-  },
-  errorText: {
     fontSize: 16,
-    color: "red",
+    fontWeight: "500",
   },
 });
 

@@ -75,7 +75,11 @@
     "free_member": "FREE MEMBER",
     "upgrade_btn": "Upgrade to PRO",
     "language_changed": "Language Changed",
-     "language_select": "Change Language"
+    "language_select": "Change Language",
+    "theme_title": "Appearance",
+    "theme_light":"Light Mode",
+    "theme_dark":"Dark Mode",
+    "theme_system":"System Mode"
   },
   "upgrade": {
     "title": "Upgrade to PRO",

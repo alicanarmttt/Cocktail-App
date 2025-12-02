@@ -14,6 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
+import { useTheme } from "@react-navigation/native";
 
 // 1. Firebase Auth servisi
 import { auth } from "../api/firebaseConfig";
@@ -25,6 +26,8 @@ import {
 
 // 3. Redux Thunk (API isteği) ve Selector'leri (userSlice.js'ten) içe aktar
 import { loginOrRegisterUser, getLoginStatus } from "../features/userSlice";
+
+// Eğer konsolda "undefined" yazıyorsa, Metro Cache'i temizlemen şarttır.
 import * as WebBrowser from "expo-web-browser";
 import { useAuthRequest, makeRedirectUri } from "expo-auth-session";
 // 'GoogleAuthProvider' (Google'ın 'idToken'ını Firebase'e çevirmek için)
@@ -38,23 +41,25 @@ WebBrowser.maybeCompleteAuthSession();
 const getFriendlyErrorMessage = (error) => {
   switch (error.code) {
     case "auth/email-already-in-use":
-      return t("auth.errors.email_in_use");
+      return "E-posta zaten kullanımda.";
     case "auth/user-not-found":
     case "auth/wrong-password":
     case "auth/invalid-credential":
-      return t("auth.errors.invalid_cred");
+      return "Hatalı e-posta veya şifre.";
     case "auth/weak-password":
-      return t("auth.errors.weak_pass");
+      return "Şifre çok zayıf.";
     case "auth/invalid-email":
-      return t("auth.errors.invalid_email");
+      return "Geçersiz e-posta formatı.";
     default:
-      return t("general.error");
+      return "Bir hata oluştu.";
   }
 };
+
 /**
  * @desc    Kullanıcıların giriş yapmasını (Login) veya kayıt olmasını (Register) sağlar.
  */
 const LoginScreen = () => {
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   const loginStatus = useSelector(getLoginStatus);
 
@@ -83,7 +88,7 @@ const LoginScreen = () => {
       clientId:
         "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
       redirectUri,
-      esponseType: "id_token", // önemli: Google için id_token alıyoruz
+      responseType: "id_token", // önemli: Google için id_token alıyoruz
       scopes: ["openid", "profile", "email"],
       // optional: prompt: "select_account" // ister isen ekle
     },
@@ -230,7 +235,9 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -243,39 +250,56 @@ const LoginScreen = () => {
           <Ionicons
             name="wine-outline"
             size={80}
-            color="#f4511e"
+            color={colors.primary}
             style={styles.logo}
           />
-          <Text style={styles.title}>
+          <Text style={[styles.title, { color: colors.primary }]}>
             {isRegistering ? t("auth.register") : t("auth.login")}
           </Text>
-          <Text style={styles.subtitle}>{t("auth.subtitle")}</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            {t("auth.subtitle")}
+          </Text>
 
           {/* Email Girişi */}
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                backgroundColor: colors.inputBg,
+                borderColor: colors.inputBorder || colors.border,
+                color: colors.text,
+              },
+            ]}
             placeholder={t("auth.email_placeholder")}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-            placeholderTextColor="#999"
+            placeholderTextColor={colors.textSecondary}
           />
 
           {/* Şifre Girişi */}
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                backgroundColor: colors.inputBg,
+                borderColor: colors.inputBorder || colors.border,
+                color: colors.text,
+              },
+            ]}
             placeholder={t("auth.password_placeholder")}
             value={password}
             onChangeText={setPassword}
             secureTextEntry // Şifreyi gizler
-            placeholderTextColor="#999"
+            placeholderTextColor={colors.textSecondary}
           />
 
           {/* Ana Buton (Giriş veya Kayıt) */}
           <Pressable
             style={[
               styles.button,
+              { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
               // GÜNCELLEME: İki 'loading' durumunu da kontrol et
               (loginStatus === "loading" ||
                 isFirebaseLoading ||
@@ -288,9 +312,9 @@ const LoginScreen = () => {
             }
           >
             {loginStatus === "loading" || isFirebaseLoading ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={colors.buttonText} />
             ) : (
-              <Text style={styles.buttonText}>
+              <Text style={[styles.buttonText, { color: colors.buttonText }]}>
                 {isRegistering ? t("auth.register") : t("auth.login")}
               </Text>
             )}
@@ -301,22 +325,33 @@ const LoginScreen = () => {
             style={styles.toggleButton}
             onPress={() => setIsRegistering(!isRegistering)}
           >
-            <Text style={styles.toggleText}>
+            <Text style={[styles.toggleText, { color: colors.primary }]}>
               {isRegistering ? t("auth.have_account") : t("auth.no_account")}
             </Text>
           </Pressable>
 
           {/* --- Google Giriş Butonu) --- */}
           <View style={styles.dividerContainer}>
-            <View style={styles.divider} />
-            <Text style={styles.dividerText}>{t("general.or")}</Text>
-            <View style={styles.divider} />
+            <View
+              style={[styles.divider, { backgroundColor: colors.border }]}
+            />
+            <Text style={[styles.dividerText, { color: colors.textSecondary }]}>
+              {t("general.or")}
+            </Text>
+            <View
+              style={[styles.divider, { backgroundColor: colors.border }]}
+            />
           </View>
 
           <Pressable
             style={[
               styles.button,
               styles.googleButton,
+              {
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+                shadowColor: colors.shadow,
+              },
               // GÜNCELLEME: *Herhangi* bir 'loading' durumunda pasif yap
               (!request ||
                 loginStatus === "loading" ||
@@ -336,16 +371,16 @@ const LoginScreen = () => {
             }}
           >
             {googleLoading ? (
-              <ActivityIndicator color="#000" /> // Siyah spinner
+              <ActivityIndicator color={colors.text} /> // Spinner text renginde
             ) : (
               <>
                 <Ionicons
                   name="logo-google"
                   size={20}
-                  color="#333"
+                  color={colors.text}
                   style={styles.googleIcon}
                 />
-                <Text style={styles.googleButtonText}>
+                <Text style={[styles.googleButtonText, { color: colors.text }]}>
                   {t("auth.google_login")}
                 </Text>
               </>
@@ -360,7 +395,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
   },
   scrollContainer: {
     flexGrow: 1,
@@ -375,45 +410,38 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#333",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: "#777",
     marginBottom: 30,
     textAlign: "center",
   },
   input: {
     width: "100%",
     height: 50,
-    backgroundColor: "#f0f0f0",
     borderRadius: 10,
     paddingHorizontal: 15,
     fontSize: 16,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: "#ddd",
   },
   button: {
     width: "100%",
-    backgroundColor: "#f4511e",
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
-    shadowColor: "#f4511e",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 5,
   },
   buttonDisabled: {
-    backgroundColor: "#ccc",
+    opacity: 0.6,
     shadowColor: "transparent",
     elevation: 0,
   },
   buttonText: {
-    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -422,7 +450,6 @@ const styles = StyleSheet.create({
   },
   toggleText: {
     fontSize: 14,
-    color: "#007AFF",
     fontWeight: "600",
   },
   dividerContainer: {
@@ -435,27 +462,23 @@ const styles = StyleSheet.create({
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: "#ddd",
   },
   dividerText: {
     marginHorizontal: 10,
-    color: "#999",
     fontWeight: "600",
   },
   googleButton: {
-    backgroundColor: "#fff", // Beyaz arka plan
-    borderColor: "#ddd", // Gri çerçeve
     borderWidth: 1,
-    shadowColor: "#000", // Siyah gölge
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 3, // (Daha hafif gölge)
+    elevation: 3,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   googleIcon: {
     marginRight: 10,
   },
   googleButtonText: {
-    color: "#333", // Koyu renk yazı
     fontSize: 16,
     fontWeight: "bold",
   },
