@@ -189,10 +189,11 @@ const HomeScreen = ({ navigation }) => {
   // Başarılı (succeeded) durumu
   return (
     <SafeAreaView
+      edges={["top", "left", "right"]}
       style={[styles.container, { backgroundColor: colors.background }]}
     >
       {/* GÖSTERGE ALANI (Ekranın Üstü)
-          GÜNCELLEME: Bu alanı büyütmek için flex: 3 verdik
+          
       */}
       <View style={styles.displayArea}>
         {/* "Afilli Cümle" Eklendi */}
@@ -238,7 +239,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* YENİ PREMİUM BUTON */}
+        {/*BUTON */}
         <PremiumButton
           variant="gold"
           title={t("home.prepare_btn")} // İçindeki yazı
@@ -252,61 +253,77 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
 
-      {/* RULET ALANI (Ekranın Altı)
-          GÜNCELLEME: Bu alanı küçültmek için flex: 2 verdik
-      */}
+      {/* RULET ALANI (Ekranın Altı)*/}
       <View
         style={[
           styles.pickerArea,
           { backgroundColor: colors.subCard, shadowColor: colors.shadow },
         ]}
       >
-        {/* YENİ: ARAMA BUTONU (Ruletin hemen üstünde) */}
-        <Pressable
-          style={[
-            styles.searchButton,
-            { backgroundColor: colors.card, borderColor: colors.primary },
-          ]}
+        {/* YENİ: PREMIUM ARAMA BAR (Silver Button Kullanımı) */}
+        <PremiumButton
+          variant="silver"
           onPress={() => setIsSearchModalVisible(true)}
+          style={styles.compactSearchBtn} // Yeni stil (İnce ve zarif)
+          gradientStyle={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            paddingHorizontal: 15, // İç boşluğu kıstık
+            paddingVertical: 0, // Dikey boşluğu sıfırladık (height ile yöneteceğiz)
+            height: "100%",
+          }}
         >
-          <Ionicons name="search" size={20} color={colors.primary} />
-          <Text style={[styles.searchButtonText, { color: colors.primary }]}>
-            {t("home.search_btn")}
-          </Text>
-        </Pressable>
-
-        <Picker
-          selectedValue={selectedCocktailId}
-          onValueChange={(itemValue) => setSelectedCocktailId(itemValue)}
-          style={styles.pickerStyle}
-          dropdownIconColor={colors.text}
-          itemStyle={[styles.pickerItemStyle, { color: colors.text }]} // iOS'taki yazı stili
-          mode="dialog"
-        >
-          {/* GÜNCELLEME: Başlangıç değeri (Placeholder) eklendi */}
-          <Picker.Item
-            label={t("home.pick_cocktail") + "..."}
-            value={null}
-            color={colors.text}
+          <Ionicons
+            name="search"
+            size={18}
+            color={colors.textSecondary}
+            style={{ marginRight: 8, opacity: 0.6 }}
           />
+          <Text
+            style={{
+              color: colors.textSecondary,
+              fontSize: 14,
+              fontWeight: "500",
+              opacity: 0.7,
+            }}
+          >
+            {t("home.search_btn", "Kokteyl ara...")}
+          </Text>
+        </PremiumButton>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={selectedCocktailId}
+            onValueChange={(itemValue) => setSelectedCocktailId(itemValue)}
+            style={styles.pickerStyle}
+            dropdownIconColor={colors.text}
+            itemStyle={[styles.pickerItemStyle, { color: colors.text }]} // iOS'taki yazı stili
+            mode="dialog"
+          >
+            {/* GÜNCELLEME: Başlangıç değeri (Placeholder) eklendi */}
+            <Picker.Item
+              label={t("home.pick_cocktail") + "..."}
+              value={null}
+              color={colors.text}
+            />
 
-          {/* SIRALANMIŞ LİSTEYİ KULLAN */}
-          {sortedCocktails.map((cocktail, index) => {
-            // Ayraç Mantığı: Popülerler bittiğinde bir çizgi çekmek için
-            // (Picker içinde stil vermek zordur, o yüzden renk değişimi veya özel karakter kullanabiliriz)
-            const isPopular = POPULAR_COCKTAILS.includes(cocktail.name_en);
-            const labelPrefix = isPopular ? "⭐ " : ""; // Popülerlere yıldız ekle
+            {/* SIRALANMIŞ LİSTEYİ KULLAN */}
+            {sortedCocktails.map((cocktail, index) => {
+              // Ayraç Mantığı: Popülerler bittiğinde bir çizgi çekmek için
+              // (Picker içinde stil vermek zordur, o yüzden renk değişimi veya özel karakter kullanabiliriz)
+              const isPopular = POPULAR_COCKTAILS.includes(cocktail.name_en);
+              const labelPrefix = isPopular ? "⭐ " : ""; // Popülerlere yıldız ekle
 
-            return (
-              <Picker.Item
-                key={cocktail.cocktail_id}
-                label={labelPrefix + getName(cocktail)}
-                value={cocktail.cocktail_id}
-                color={colors.text}
-              />
-            );
-          })}
-        </Picker>
+              return (
+                <Picker.Item
+                  key={cocktail.cocktail_id}
+                  label={labelPrefix + getName(cocktail)}
+                  value={cocktail.cocktail_id}
+                  color={colors.text}
+                />
+              );
+            })}
+          </Picker>
+        </View>
       </View>
       {/* --- YENİ: ARAMA MODALI --- */}
       <Modal
@@ -417,12 +434,11 @@ const styles = StyleSheet.create({
   },
   // --- ÜST KISIM ---
   displayArea: {
-    flex: 3,
+    flex: 1.5,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    paddingBottom: 20,
     width: "100%",
-    paddingBottom: 60,
   },
   headerQuote: {
     fontSize: 16,
@@ -431,7 +447,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   frameOuter: {
-    padding: 8,
+    padding: 6,
     borderRadius: 15,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -466,13 +482,6 @@ const styles = StyleSheet.create({
   },
   prepareButton: {
     marginTop: 15,
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 5,
   },
   prepareButtonDisabled: {
     opacity: 0.6,
@@ -485,38 +494,43 @@ const styles = StyleSheet.create({
 
   // --- ALT KISIM (PICKER & SEARCH) ---
   pickerArea: {
-    flex: 2,
+    flex: 1,
     width: "100%",
     justifyContent: "flex-start", // Üstten başlasın
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingTop: 10,
+    borderRadius: 30,
+    marginTop: 20,
+    paddingTop: 20,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 10,
   },
   // Yeni Arama Butonu
-  searchButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 40,
-    paddingVertical: 10,
+  compactSearchBtn: {
+    width: "85%", // Kenarlardan boşluk kalsın
+    height: 40, // DÜZELTME: 50 -> 40px (Daha ince, kibar)
+    marginBottom: 0,
+    alignSelf: "center", // Ortala
     borderRadius: 10,
-    borderWidth: 1,
-    marginBottom: 5,
   },
   searchButtonText: {
     fontWeight: "600",
     marginLeft: 8,
     fontSize: 16,
   },
+  pickerContainer: {
+    flex: 1, // Kalan tüm alanı kapla
+    width: "100%",
+    justifyContent: "center",
+    overflow: "hidden", // Taşanları kes
+  },
   pickerStyle: {
     width: "100%",
+    height: "100%",
   },
   pickerItemStyle: {
-    fontSize: 20,
+    fontSize: 21,
+    fontWeight: "500",
   },
 
   // --- MODAL STİLLERİ ---

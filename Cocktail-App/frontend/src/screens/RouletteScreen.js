@@ -17,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { useNavigation, useTheme } from "@react-navigation/native";
+import PremiumButton from "../ui/PremiumButton";
 
 import {
   fetchRoulettePool,
@@ -279,18 +280,13 @@ const RouletteScreen = () => {
             resizeMode="contain"
           />
         </View>
-
-        <Pressable
-          style={[
-            styles.spinButton,
-            { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
-          ]}
+        {/* ÇARKI ÇEVİR BUTONU */}
+        <PremiumButton
+          variant="arcade"
           onPress={spinWheel}
-        >
-          <Text style={[styles.spinButtonText, { color: colors.buttonText }]}>
-            {t("roulette.spin_btn")}
-          </Text>
-        </Pressable>
+          title={t("roulette.spin_btn")}
+          style={styles.spinButton}
+        ></PremiumButton>
       </View>
     );
   };
@@ -325,35 +321,36 @@ const RouletteScreen = () => {
         </View>
 
         <View style={styles.resultButtons}>
-          <Pressable
-            style={[
-              styles.resultBtn,
-              styles.recipeBtn,
-              { backgroundColor: colors.buttonBg },
-            ]}
+          {/* 1. TARİFE GİT (Gold - Ana Aksiyon) */}
+          <PremiumButton
+            variant="gold"
+            title={t("roulette.go_recipe")}
             onPress={() =>
               navigation.navigate("CocktailDetail", {
                 cocktailId: winner.cocktail_id,
               })
             }
-          >
-            <Text style={[styles.btnTextWhite, { color: colors.buttonText }]}>
-              {t("roulette.go_recipe")}
-            </Text>
-          </Pressable>
+            style={styles.resultBtn} // Sadece genişlik ayarı kalacak
+          />
 
-          <Pressable
-            style={[
-              styles.resultBtn,
-              styles.againBtn,
-              { backgroundColor: colors.card, borderColor: colors.primary },
-            ]}
+          {/* 2. TEKRAR ÇEVİR (Silver - İkincil Aksiyon) */}
+          <PremiumButton
+            variant="arcade"
             onPress={() => setStep("wheel")}
+            style={styles.resultBtn} // Aynı genişlik
           >
-            <Text style={[styles.btnTextOutline, { color: colors.primary }]}>
+            {/* İkon + Yazı (PremiumButton bunları yan yana dizer) */}
+            <Ionicons
+              name="refresh"
+              size={20}
+              style={{ marginRight: 8, color: "#FFFFFF" }}
+            />
+            <Text
+              style={{ fontSize: 16, fontWeight: "bold", color: "#FFFFFF" }}
+            >
               {t("roulette.spin_again")}
             </Text>
-          </Pressable>
+          </PremiumButton>
 
           <Pressable style={styles.backLink} onPress={() => setStep("menu")}>
             <Text style={{ color: colors.textSecondary }}>
@@ -446,19 +443,12 @@ const styles = StyleSheet.create({
   wheelImage: { width: "100%", height: "100%" },
   indicatorContainer: { position: "absolute", top: -30, zIndex: 10 },
   spinButton: {
-    paddingVertical: 15,
-    paddingHorizontal: 60,
-    borderRadius: 30,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 8,
+    width: "80%",
+    marginTop: 10,
+    alignSelf: "center",
+    marginBottom: 20,
   },
-  spinButtonText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    letterSpacing: 2,
-  },
+
   resultContainer: {
     flex: 1,
     alignItems: "center",
@@ -490,14 +480,8 @@ const styles = StyleSheet.create({
   resultButtons: { width: "100%", alignItems: "center", gap: 15 },
   resultBtn: {
     width: "80%",
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
   },
-  recipeBtn: {},
-  againBtn: { borderWidth: 2 },
-  btnTextWhite: { fontSize: 16, fontWeight: "bold" },
-  btnTextOutline: { fontSize: 16, fontWeight: "bold" },
+
   backLink: { marginTop: 10 },
 });
 

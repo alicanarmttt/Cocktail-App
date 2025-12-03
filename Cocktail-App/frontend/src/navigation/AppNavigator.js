@@ -40,7 +40,9 @@ import {
 // 2. YENİ TEMA DOSYAMIZI IMPORT ET
 import { lightTheme, darkTheme } from "../../constants/theme";
 import { selectThemeMode } from "../features/uiSlice";
+import { LinearGradient } from "expo-linear-gradient";
 
+import MerlotHeader from "../ui/MerlotHeader";
 // "Stack" (Yığın) tipinde bir navigasyon oluşturucu başlatıyoruz
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -230,9 +232,10 @@ function HomeStackNavigator() {
       initialRouteName="Home"
       screenOptions={{
         // GÜNCELLEME: Header renkleri dinamik
-        headerStyle: { backgroundColor: colors.primary },
-        headerTintColor: colors.headerTint || "#fff", // Primary üstündeki yazı rengi
+        headerStyle: { backgroundColor: "transparent" },
+        headerTintColor: "#fff", // Primary üstündeki yazı rengi
         headerTitleStyle: { fontWeight: "bold" },
+        headerBackground: () => <MerlotHeader />,
       }}
     >
       <Stack.Screen
@@ -274,7 +277,26 @@ function RouletteStackNavigator() {
       <Stack.Screen
         name="RouletteHome"
         component={RouletteScreen}
-        options={{ title: "Kokteyl Çarkı 🎲" }}
+        options={{
+          title: "Kokteyl Çarkı 🎲",
+
+          // Yazı rengini Beyaz yapıyoruz (Renkli arka planda okunsun diye)
+          headerTintColor: "#FFFFFF",
+
+          // Header'ın altındaki ince gölge çizgisini kaldırıyoruz (Daha temiz durur)
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: "transparent" },
+          //Arka planı Gradyan yapıyoruz
+          headerBackground: () => (
+            <LinearGradient
+              // Parti Renkleri: Mor -> Fuşya -> Turuncu
+              colors={colors.partyGradient}
+              style={{ flex: 1 }}
+              start={{ x: 0, y: 0 }} // Sol Üstten
+              end={{ x: 1, y: 1 }} // Sağ Alta
+            />
+          ),
+        }}
       />
       <Stack.Screen
         name="CocktailDetail"
@@ -297,9 +319,10 @@ function AssistantStackNavigator() {
       // Bu yığının da stilini diğeriyle aynı yapalım
       screenOptions={{
         // GÜNCELLEME: Header renkleri dinamik
-        headerStyle: { backgroundColor: colors.primary },
-        headerTintColor: colors.buttonText || "#fff",
+        headerStyle: { backgroundColor: "transparent" },
+        headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
+        headerBackground: () => <MerlotHeader />,
       }}
     >
       <Stack.Screen
@@ -333,9 +356,10 @@ function ProfileStackNavigator() {
     <ProfileStack.Navigator
       screenOptions={{
         // GÜNCELLEME: Header renkleri dinamik
-        headerStyle: { backgroundColor: colors.primary },
-        headerTintColor: colors.buttonText || "#fff",
+        headerStyle: { backgroundColor: "transparent" },
+        headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
+        headerBackground: () => <MerlotHeader />,
       }}
     >
       <ProfileStack.Screen

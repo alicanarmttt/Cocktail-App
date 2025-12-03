@@ -33,6 +33,7 @@ import { useAuthRequest, makeRedirectUri } from "expo-auth-session";
 // 'GoogleAuthProvider' (Google'ın 'idToken'ını Firebase'e çevirmek için)
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { useTranslation } from "react-i18next"; // 1. Çeviri kancasını ekle
+import PremiumButton from "../ui/PremiumButton";
 
 // (Giriş (Auth) akışı web tarayıcısını (web browser) tamamladığında çağrılır)
 WebBrowser.maybeCompleteAuthSession();
@@ -296,29 +297,23 @@ const LoginScreen = () => {
           />
 
           {/* Ana Buton (Giriş veya Kayıt) */}
-          <Pressable
-            style={[
-              styles.button,
-              { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
-              // GÜNCELLEME: İki 'loading' durumunu da kontrol et
-              (loginStatus === "loading" ||
-                isFirebaseLoading ||
-                googleLoading) &&
-                styles.buttonDisabled,
-            ]}
+          <PremiumButton
+            title={isRegistering ? t("auth.register") : t("auth.login")}
             onPress={isRegistering ? handleRegister : handleLogin}
+            variant="gold"
+            // 4. Karmaşık Loading Mantığı (Tek satıra indi!)
+            // Herhangi biri yükleniyorsa buton döner
+            isLoading={
+              loginStatus === "loading" || isFirebaseLoading || googleLoading
+            }
+            // 5. Disabled Mantığı
+            // Yükleme varsa tıklamayı engelle
             disabled={
               loginStatus === "loading" || isFirebaseLoading || googleLoading
             }
-          >
-            {loginStatus === "loading" || isFirebaseLoading ? (
-              <ActivityIndicator color={colors.buttonText} />
-            ) : (
-              <Text style={[styles.buttonText, { color: colors.buttonText }]}>
-                {isRegistering ? t("auth.register") : t("auth.login")}
-              </Text>
-            )}
-          </Pressable>
+            // 6. Stil (Sadece yerleşim ayarları kalacak)
+            style={styles.button}
+          ></PremiumButton>
 
           {/* Mod Değiştirme Butonu */}
           <Pressable
@@ -342,7 +337,6 @@ const LoginScreen = () => {
               style={[styles.divider, { backgroundColor: colors.border }]}
             />
           </View>
-
           <Pressable
             style={[
               styles.button,
@@ -428,23 +422,10 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "100%",
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 5,
+    marginTop: 20, // Üstten boşluk
+    marginBottom: 10,
   },
-  buttonDisabled: {
-    opacity: 0.6,
-    shadowColor: "transparent",
-    elevation: 0,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+
   toggleButton: {
     marginTop: 20,
   },

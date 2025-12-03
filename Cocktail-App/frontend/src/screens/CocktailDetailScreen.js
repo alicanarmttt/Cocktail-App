@@ -22,6 +22,7 @@ import {
 import { selectIsPro } from "../features/userSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useTheme } from "@react-navigation/native";
+import PremiumButton from "../ui/PremiumButton";
 
 /**
  * @desc    Tek bir kokteylin detaylarını gösterir.
@@ -124,19 +125,12 @@ const CocktailDetailScreen = ({ route }) => {
           </View>
 
           {/* "Eksik Malzemem Var" Butonu */}
-          <Pressable
-            style={[
-              styles.prepareButton,
-              { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
-            ]}
+          <PremiumButton
+            style={styles.prepareButton}
             onPress={() => setIsModalVisible(true)}
-          >
-            <Text
-              style={[styles.prepareButtonText, { color: colors.buttonText }]}
-            >
-              {t("detail.missing_ingredients_btn")}
-            </Text>
-          </Pressable>
+            variant="gold"
+            title={t("detail.missing_ingredients_btn")}
+          ></PremiumButton>
 
           {/* Bölüm2: Hazırlanışı */}
           <View style={styles.section}>
@@ -546,21 +540,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   prepareButton: {
-    marginTop: 15,
     marginBottom: 15,
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 5,
     alignSelf: "center",
   },
-  prepareButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
+
   // Modal Stilleri
   modalOverlay: {
     flex: 1,
