@@ -9,7 +9,7 @@ const palette = {
   goldMuted: "#C5A059", // Mat Altın (Göz yormayan ikonlar için)
   silver: "#C0C0C0", // Gümüş (İkincil metinler ve borderlar)
   platinum: "#E5E4E2", // Platin (Açık gri yüzeyler)
-
+  royalMerlot: "#4A0E15",
   // --- IŞIK (Light Mode Temelleri) ---
   cream: "#FCFAF2", // Fildişi/Krem (Çiğ beyaz yerine asil arka plan)
   white: "#FFFFFF", // Saf Beyaz (Kartlar için)
@@ -27,6 +27,22 @@ const palette = {
   // --- DURUMLAR ---
   success: "#4A7c59", // Zümrüt Yeşili (Cırtlak yeşil yerine)
   danger: "#A63434", // Yakut Kırmızısı (Cırtlak kırmızı yerine)
+
+  // GOLD GRADIENT (Sihirli Dizi)
+  // Bu dizi sırasıyla: [Açık Işıltı, Ana Altın, Koyu Bronz]
+  goldGradientColors: ["#F1E5AC", "#D4AF37", "#996515"],
+
+  // SİLVER DİZİSİ (Yeni: Platin -> Gümüş -> Koyu Gri)
+  silverGradientColors: ["#F5F5F5", "#C0C0C0", "#707070"],
+
+  // TEXT SHADOW (Yazı parlaması için stil objesi verisi)
+  goldShadow: {
+    shadowColor: "#D4AF37",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 5, // Android için
+  },
 };
 
 // ==========================================
@@ -59,7 +75,8 @@ export const lightTheme = {
   fonts, // <--- BURASI EKSİKTİ: fonts objesini buraya ekledik
   colors: {
     // React Navigation Standartları
-    primary: palette.goldPrime, // Aktif tablar, ana başlıklar
+    primary: palette.royalMerlot, // Aktif tablar, ana başlıklar
+    headerTint: palette.white,
     background: palette.cream, // Arka plan (Hafif krem)
     card: palette.white, // Kartlar (Beyaz)
     text: palette.inkBlack, // Yazılar (Koyu Antrasit)
@@ -81,6 +98,12 @@ export const lightTheme = {
     // Butonlar
     buttonBg: palette.goldPrime, // Buton Arka Planı (Altın)
     buttonText: palette.white, // Buton Yazısı (Beyaz)
+    //GOLD BUTTON GÖRÜNÜMÜ İÇİN
+    goldGradient: palette.goldGradientColors, // Temadan erişilebilir hale getir
+    goldShadow: palette.goldShadow,
+
+    //SİLVER İÇİN
+    silverGradient: palette.silverGradientColors,
 
     // Durumlar
     success: palette.success,
@@ -102,7 +125,7 @@ export const darkTheme = {
   fonts, // <--- BURASI EKSİKTİ: fonts objesini buraya ekledik
   colors: {
     // React Navigation Standartları
-    primary: palette.goldMuted, // Dark modda altın biraz daha matlaşır (Göz yormaz)
+    primary: palette.royalMerlot, // Dark modda altın biraz daha matlaşır (Göz yormaz)
     background: palette.pianoBlack, // Arka plan (Derin Siyah)
     card: palette.charcoal, // Kartlar (Koyu Antrasit)
     text: palette.cloudWhite, // Yazılar (Kırık Beyaz)
@@ -124,6 +147,12 @@ export const darkTheme = {
     // Butonlar
     buttonBg: palette.goldPrime, // Buton yine Altın
     buttonText: palette.inkBlack, // Dark modda buton yazısı SİYAH olur (Kontrast için)
+    //GOLD BUTTON GÖRÜNÜMÜ İÇİN
+    goldGradient: palette.goldGradientColors, // Temadan erişilebilir hale getir
+    goldShadow: palette.goldShadow,
+
+    //SİLVER İÇİN
+    silverGradient: palette.silverGradientColors,
 
     // Durumlar
     success: palette.success,

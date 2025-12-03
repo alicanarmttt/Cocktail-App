@@ -16,6 +16,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useTheme } from "@react-navigation/native";
+import PremiumButton from "../ui/PremiumButton.js";
 
 // Redux Slice'ları
 import {
@@ -333,64 +334,55 @@ const AssistantScreen = () => {
         {/* FOOTER (Yüzen Buton) - Sadece seçim varsa görünür */}
         {selectedIds.length > 0 && (
           <View style={styles.footerContainer}>
-            {/* YENİ: SIFIRLAMA BUTONU (Küçük Kutu) */}
-            <Pressable
-              style={[
-                styles.resetButton,
-                {
-                  backgroundColor: colors.card,
-                  shadowColor: colors.shadow,
-                  borderColor: colors.border,
-                },
-              ]}
+            {/* YENİ SİLVER SIFIRLAMA BUTTON */}
+            <PremiumButton
               onPress={handleClearSelection}
+              variant="silver"
+              style={styles.resetButton}
+              gradientStyle={{
+                paddingHorizontal: 0,
+                paddingVertical: 0,
+                width: "100%", // Gradyan kutuyu tam doldursun
+                height: "100%", // Gradyan kutuyu tam doldursun
+                justifyContent: "center", // İkonu tam ortala
+                alignItems: "center",
+              }}
             >
               <Ionicons
                 name="trash-outline"
                 size={24}
                 color={colors.notification}
               />
-            </Pressable>
-            {/* MEVCUT: AKSİYON BUTONU (Geniş) */}
-            <Pressable
-              style={[
-                styles.actionButton,
-                {
-                  backgroundColor: colors.buttonBg,
-                  shadowColor: colors.shadow,
-                },
-              ]}
+            </PremiumButton>
+
+            {/* YENİ GÜÇLÜ GOLD BUTTON */}
+            <PremiumButton
+              variant="gold"
               onPress={handleFindRecipes}
               disabled={searchStatus === "loading"}
+              isLoading={searchStatus === "loading"}
+              style={styles.actionButton}
             >
-              {searchStatus === "loading" ? (
-                <ActivityIndicator color={colors.buttonText} />
-              ) : (
-                <>
-                  <View style={styles.badge}>
-                    <Text
-                      style={[styles.badgeText, { color: colors.buttonText }]}
-                    >
-                      {selectedIds.length}
-                    </Text>
-                  </View>
-                  <Text
-                    style={[
-                      styles.actionButtonText,
-                      { color: colors.buttonText },
-                    ]}
-                  >
-                    {t("assistant.show_recipes_btn", "Kokteylleri Bul")}
-                  </Text>
-                  <Ionicons
-                    name="arrow-forward"
-                    size={20}
-                    color={colors.buttonText}
-                    style={{ marginLeft: 5 }}
-                  />
-                </>
-              )}
-            </Pressable>
+              {/* 1. Badge (Sayı) */}
+              <View style={styles.badge}>
+                <Text style={[styles.badgeText, { color: colors.buttonText }]}>
+                  {selectedIds.length}
+                </Text>
+              </View>
+              {/* 2. Ana Metin */}
+              <Text
+                style={[styles.actionButtonText, { color: colors.buttonText }]}
+              >
+                {t("assistant.show_recipes_btn", "Kokteylleri Bul")}
+              </Text>
+              {/* 3. İkon */}
+              <Ionicons
+                name="arrow-forward"
+                size={20}
+                color={colors.buttonText}
+                style={{ marginLeft: 5 }}
+              />
+            </PremiumButton>
           </View>
         )}
       </KeyboardAvoidingView>
@@ -497,27 +489,12 @@ const styles = StyleSheet.create({
   resetButton: {
     width: 56,
     height: 56,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 5,
-    borderWidth: 1,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
   },
   actionButton: {
     flex: 1, // Kalan tüm alanı kaplasın
-    flexDirection: "row",
-    alignItems: "center",
     height: 56,
-    justifyContent: "center",
-    paddingVertical: 16,
-    borderRadius: 16,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 5,
-    elevation: 6,
   },
   actionButtonText: {
     fontSize: 18,
@@ -525,13 +502,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   badge: {
-    backgroundColor: "rgba(255,255,255,0.25)",
+    backgroundColor: "rgba(7, 0, 0, 0.25)",
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 8,
   },
   badgeText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "bold",
   },
 });

@@ -231,7 +231,7 @@ function HomeStackNavigator() {
       screenOptions={{
         // GÜNCELLEME: Header renkleri dinamik
         headerStyle: { backgroundColor: colors.primary },
-        headerTintColor: colors.buttonText || "#fff", // Primary üstündeki yazı rengi
+        headerTintColor: colors.headerTint || "#fff", // Primary üstündeki yazı rengi
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >

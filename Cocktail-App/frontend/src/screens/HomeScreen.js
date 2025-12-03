@@ -20,7 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 // GÜNCELLEME: Yeni kurduğumuz 'Picker' (Rulet) kütüphanesini import ediyoruz
 import { Picker } from "@react-native-picker/picker";
 import { useTheme } from "@react-navigation/native";
-
+import PremiumButton from "../ui/PremiumButton.js";
 import {
   fetchCocktails,
   selectAllCocktails,
@@ -238,26 +238,18 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Hazırla Butonu */}
-        <Pressable
-          style={[
-            styles.prepareButton,
-            { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
-            !selectedCocktail && styles.prepareButtonDisabled, // Pasifken soluk görün
-          ]}
-          disabled={!selectedCocktail}
+        {/* YENİ PREMİUM BUTON */}
+        <PremiumButton
+          variant="gold"
+          title={t("home.prepare_btn")} // İçindeki yazı
+          disabled={!selectedCocktail} // Seçim yoksa pasif olsun
+          style={styles.prepareButton} // Konumlandırma stillerin (margin vb.) korunsun
           onPress={() => {
             navigation.navigate("CocktailDetail", {
               cocktailId: selectedCocktail.cocktail_id,
             });
           }}
-        >
-          <Text
-            style={[styles.prepareButtonText, { color: colors.buttonText }]}
-          >
-            {t("home.prepare_btn")}
-          </Text>
-        </Pressable>
+        />
       </View>
 
       {/* RULET ALANI (Ekranın Altı)
