@@ -1,47 +1,85 @@
+import { Platform } from "react-native";
 // @react-navigation/native importunu kaldırdık, çünkü tüm değerleri manuel veriyoruz.
 // Böylece "undefined" hatası riski sıfıra iniyor.
 
 // ==========================================
 // 🔤 YAZI TİPİ AYARLARI (ÖNCE BUNU TANIMLAMALIYIZ)
 // ==========================================
+const fontPixel = (size) => size; // İleride responsive scale için placeholder
 
-const fontPixel = (size) => size; // İleride responsive scale fonksiyonu eklenebilir
+// AİLELER: "Beautiful" (Serif) ve "Readable" (Sans) ayrımı
+const families = {
+  // Okunabilirlik için (Malzemeler, Tarifler, Tarihçe)
+  // iOS: San Francisco, Android: Roboto
+  sans: Platform.select({ ios: "System", android: "sans-serif" }),
+
+  // Şıklık ve Karakter için (Başlıklar)
+  // iOS: Georgia veya Times New Roman (Sistemde var)
+  // Android: serif (Sistemde var)
+  serif: Platform.select({ ios: "Georgia", android: "serif" }),
+};
 
 const typography = {
-  // 1. Temel Tanımlar (Tokens)
-  families: {
-    regular: "System",
-    bold: "System",
-  },
+  // 1. Temel Tanımlar
+  families,
   sizes: {
     h1: fontPixel(32),
     h2: fontPixel(24),
     h3: fontPixel(20),
     body: fontPixel(16),
-    caption: fontPixel(12),
+    caption: fontPixel(13), // 12 çok küçük kalabiliyor, 13 ideal
   },
 
   // 2. Hazır Stiller (Variants)
   styles: {
+    // --- BAŞLIKLAR (ŞIK & TIRNAKLI) ---
     h1: {
+      fontFamily: families.serif,
       fontSize: 32,
       fontWeight: "700",
-      lineHeight: 40,
+      lineHeight: 40, // Başlıklar sıkışık olmamalı
+      letterSpacing: 0.5,
     },
     h2: {
+      fontFamily: families.serif,
       fontSize: 24,
       fontWeight: "600",
       lineHeight: 32,
     },
+    h3: {
+      fontFamily: families.serif, // Alt başlıklar da şık olsun
+      fontSize: 20,
+      fontWeight: "600",
+      lineHeight: 28,
+    },
+
+    // --- İÇERİK (SADE & OKUNAKLI) ---
     body: {
+      fontFamily: families.sans,
       fontSize: 16,
       fontWeight: "400",
-      lineHeight: 24,
+      lineHeight: 26, // Satır arası boşluk (leading) okunabilirlik için %150-160 olmalı
+    },
+    // Malzeme listelerinde miktar vurgusu için (Örn: **60ml** Cin)
+    bodyBold: {
+      fontFamily: families.sans,
+      fontSize: 16,
+      fontWeight: "700",
+      lineHeight: 26,
     },
     caption: {
-      fontSize: 12,
+      fontFamily: families.sans,
+      fontSize: 13,
       fontWeight: "400",
+      lineHeight: 18,
       color: "#888",
+    },
+    button: {
+      fontFamily: families.sans,
+      fontSize: 16,
+      fontWeight: "600",
+      textTransform: "uppercase",
+      letterSpacing: 1, // Butonlarda harf aralığı modern durur
     },
   },
 };

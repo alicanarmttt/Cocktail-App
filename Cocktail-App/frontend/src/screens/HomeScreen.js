@@ -276,15 +276,12 @@ const HomeScreen = ({ navigation }) => {
           <Ionicons
             name="search"
             size={18}
-            color={colors.textSecondary}
             style={{ marginRight: 8, opacity: 0.6 }}
           />
           <Text
             style={{
-              color: colors.textSecondary,
               fontSize: 14,
               fontWeight: "500",
-              opacity: 0.7,
             }}
           >
             {t("home.search_btn", "Kokteyl ara...")}
@@ -513,11 +510,7 @@ const styles = StyleSheet.create({
     alignSelf: "center", // Ortala
     borderRadius: 10,
   },
-  searchButtonText: {
-    fontWeight: "600",
-    marginLeft: 8,
-    fontSize: 16,
-  },
+
   pickerContainer: {
     flex: 1, // Kalan tüm alanı kapla
     width: "100%",
