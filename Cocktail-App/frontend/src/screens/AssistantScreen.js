@@ -37,7 +37,7 @@ import {
  * Karmaşık kutular yerine temiz bir liste ve seçim mantığı.
  */
 const AssistantScreen = () => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();

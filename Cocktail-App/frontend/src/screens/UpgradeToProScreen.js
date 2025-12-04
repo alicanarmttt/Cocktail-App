@@ -23,7 +23,7 @@ import {
  * @desc    "Pro'ya Yükselt" (Sahte Satın Alma) ekranı.
  */
 const UpgradeToProScreen = () => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t } = useTranslation(); // 2. Çeviri fonksiyonunu al

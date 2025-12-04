@@ -60,7 +60,7 @@ const getFriendlyErrorMessage = (error) => {
  * @desc    Kullanıcıların giriş yapmasını (Login) veya kayıt olmasını (Register) sağlar.
  */
 const LoginScreen = () => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   const loginStatus = useSelector(getLoginStatus);
 

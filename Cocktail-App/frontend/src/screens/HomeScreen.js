@@ -36,7 +36,7 @@ import {
  * @param {object} navigation - React Navigation tarafından sağlanır.
  */
 const HomeScreen = ({ navigation }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   const POPULAR_COCKTAILS = [
     "Margarita",

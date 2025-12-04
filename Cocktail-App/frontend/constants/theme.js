@@ -1,3 +1,51 @@
+// @react-navigation/native importunu kaldırdık, çünkü tüm değerleri manuel veriyoruz.
+// Böylece "undefined" hatası riski sıfıra iniyor.
+
+// ==========================================
+// 🔤 YAZI TİPİ AYARLARI (ÖNCE BUNU TANIMLAMALIYIZ)
+// ==========================================
+
+const fontPixel = (size) => size; // İleride responsive scale fonksiyonu eklenebilir
+
+const typography = {
+  // 1. Temel Tanımlar (Tokens)
+  families: {
+    regular: "System",
+    bold: "System",
+  },
+  sizes: {
+    h1: fontPixel(32),
+    h2: fontPixel(24),
+    h3: fontPixel(20),
+    body: fontPixel(16),
+    caption: fontPixel(12),
+  },
+
+  // 2. Hazır Stiller (Variants)
+  styles: {
+    h1: {
+      fontSize: 32,
+      fontWeight: "700",
+      lineHeight: 40,
+    },
+    h2: {
+      fontSize: 24,
+      fontWeight: "600",
+      lineHeight: 32,
+    },
+    body: {
+      fontSize: 16,
+      fontWeight: "400",
+      lineHeight: 24,
+    },
+    caption: {
+      fontSize: 12,
+      fontWeight: "400",
+      color: "#888",
+    },
+  },
+};
+
 // ==========================================
 // 🎨 LÜKS & RAFİNE RENK PALETİ (Premium Palette)
 // ==========================================
@@ -10,16 +58,16 @@ const palette = {
   silver: "#C0C0C0",
   platinum: "#E5E4E2",
   royalMerlot: "#4A0E15",
-  // --- YENİ: DARK MOD RENK ---
-  // Bordo'nun "Karanlıkta Parlayan" versiyonu (Yakut Kırmızısı)
-  neonRuby: "#E63946", // Veya biraz daha koyusu: "#D63447"
+
+  // --- DARK MOD RENK ---
+  neonRuby: "#E63946",
 
   // --- ARKA PLAN & YÜZEYLER ---
   cream: "#FCFAF2",
   white: "#FFFFFF",
-  pianoBlack: "#141415", // Hafif metalik, mavimsi olmayan nötr/sıcak siyah
-  charcoal: "#1F1F22", // Kartlar için yüzey rengi
-  richGrey: "#2D2D30", // Modallar ve inputlar için
+  pianoBlack: "#141415",
+  charcoal: "#1F1F22",
+  richGrey: "#2D2D30",
 
   // --- METİNLER ---
   inkBlack: "#121212",
@@ -31,34 +79,27 @@ const palette = {
   danger: "#A63434",
 
   // ==========================================
-  // 🌈 GRADYAN DİZİLERİ (Raw Data)
+  // 🌈 GRADYAN DİZİLERİ
   // ==========================================
   goldGradient: ["#F1E5AC", "#D4AF37", "#996515"],
   silverGradient: ["#F5F5F5", "#C0C0C0", "#707070"],
-  arcadeGradient: ["#FF7A00", "#D91E5B", "#450456"], // Sıcak Parti
-  cyberGradient: ["#00C6FF", "#0072FF"], // Soğuk Neon
-  partyGradient: ["#450456", "#D91E5B", "#FF7A00"], // Header Geçişi
+  arcadeGradient: ["#FF7A00", "#D91E5B", "#450456"],
+  cyberGradient: ["#00C6FF", "#0072FF"],
+  partyGradient: ["#450456", "#D91E5B", "#FF7A00"],
   merlotGradient: ["#6B1B27", "#4A0E15", "#2A050A"],
+
   // ==========================================
-  // ✨ 3D BUTON EFEKTLERİ (Highlight & Shadow)
+  // ✨ 3D BUTON EFEKTLERİ
   // ==========================================
-  // Gold
   goldHighlight: "rgba(255, 255, 255, 0.6)",
   goldShadow: "rgba(100, 70, 0, 0.4)",
-
-  // Silver
   silverHighlight: "rgba(255, 255, 255, 0.9)",
   silverShadow: "rgba(0, 0, 0, 0.3)",
-
-  // Arcade (Sıcak Neon)
   arcadeHighlight: "rgba(255, 200, 100, 0.6)",
   arcadeShadow: "rgba(69, 4, 86, 0.8)",
-
-  // Cyber (Soğuk Neon)
   cyberHighlight: "rgba(200, 255, 255, 0.6)",
   cyberShadow: "rgba(0, 50, 150, 0.8)",
 
-  // Diğer Efektler
   goldShadowStyle: {
     shadowColor: "#D4AF37",
     shadowOffset: { width: 0, height: 0 },
@@ -69,28 +110,26 @@ const palette = {
 };
 
 // ==========================================
-// 🛠️ BUTON VARYANT OLUŞTURUCU (Helper)
+// 🛠️ BUTON VARYANT OLUŞTURUCU
 // ==========================================
-// Bu fonksiyon, PremiumButton'ın ihtiyaç duyduğu tüm veriyi paketler.
 const getButtonVariants = (isDark) => ({
   gold: {
     gradient: palette.goldGradient,
     topHighlight: palette.goldHighlight,
     bottomShadow: palette.goldShadow,
-    // Gold üstüne Dark modda siyah yazı, Light modda beyaz yazı daha iyi okunur
     textColor: isDark ? palette.pianoBlack : palette.white,
   },
   silver: {
     gradient: palette.silverGradient,
     topHighlight: palette.silverHighlight,
     bottomShadow: palette.silverShadow,
-    textColor: palette.charcoal, // Gümüş üstüne hep koyu yazı
+    textColor: palette.charcoal,
   },
   arcade: {
     gradient: palette.arcadeGradient,
     topHighlight: palette.arcadeHighlight,
     bottomShadow: palette.arcadeShadow,
-    textColor: palette.white, // Neon üstüne beyaz yazı
+    textColor: palette.white,
   },
   cyber: {
     gradient: palette.cyberGradient,
@@ -101,25 +140,15 @@ const getButtonVariants = (isDark) => ({
 });
 
 // ==========================================
-// 🔤 YAZI TİPİ AYARLARI
+// ☀️ AYDINLIK TEMA (CustomLightTheme)
 // ==========================================
-const fonts = {
-  regular: { fontFamily: "System", fontWeight: "400" },
-  medium: { fontFamily: "System", fontWeight: "500" },
-  light: { fontFamily: "System", fontWeight: "300" },
-  thin: { fontFamily: "System", fontWeight: "100" },
-};
-
-// ==========================================
-// ☀️ AYDINLIK TEMA (Light Theme)
-// ==========================================
-export const lightTheme = {
-  dark: false,
-  fonts,
+export const CustomLightTheme = {
+  dark: false, // DefaultTheme yerine manuel set ediyoruz
   colors: {
-    // Navigation & Temel
+    // ...DefaultTheme.colors SİLİNDİ (Hata kaynağı buydu)
+
+    // Navigation Zorunlu Renkler
     primary: palette.royalMerlot,
-    headerTint: palette.white,
     background: palette.cream,
     card: palette.white,
     text: palette.inkBlack,
@@ -127,6 +156,7 @@ export const lightTheme = {
     notification: palette.danger,
 
     // Özel Bileşenler
+    headerTint: palette.white,
     textSecondary: palette.slateGrey,
     subCard: palette.platinum,
     icon: palette.inkBlack,
@@ -134,35 +164,38 @@ export const lightTheme = {
     gold: palette.goldPrime,
     proCardBg: palette.goldLight,
 
-    // Standart Buton (Fallback)
+    // Standart Buton
     buttonBg: palette.goldPrime,
     buttonText: palette.white,
 
-    // --- YENİ: MERKEZİ BUTON VARYANTLARI ---
-    // PremiumButton artık burayı okuyacak
+    // Buton Varyantları
     buttonVariants: getButtonVariants(false),
 
-    // Manuel Erişim İçin (Header vb.)
+    // Manuel Erişim
     partyGradient: palette.partyGradient,
     goldShadow: palette.goldShadowStyle,
     merlotGradient: palette.merlotGradient,
-    // Form & Durumlar
     success: palette.success,
     error: palette.danger,
     inputBg: palette.white,
     inputBorder: "#E0E0E0",
     shadow: "#000000",
+
+    // Geriye dönük uyumluluk
+    silver: palette.silver,
   },
+  fonts: typography,
 };
 
 // ==========================================
-// 🌙 KARANLIK TEMA (Dark Theme)
+// 🌙 KARANLIK TEMA (CustomDarkTheme)
 // ==========================================
-export const darkTheme = {
-  dark: true,
-  fonts,
+export const CustomDarkTheme = {
+  dark: true, // DarkTheme yerine manuel set ediyoruz
   colors: {
-    // Navigation & Temel
+    // ...DarkTheme.colors SİLİNDİ (Hata kaynağı buydu)
+
+    // Navigation Zorunlu Renkler
     primary: palette.neonRuby,
     background: palette.pianoBlack,
     card: palette.charcoal,
@@ -171,6 +204,7 @@ export const darkTheme = {
     notification: palette.neonRuby,
 
     // Özel Bileşenler
+    headerTint: palette.white, // Dark modda da header yazısı beyaz kalsın
     textSecondary: palette.silver,
     subCard: palette.richGrey,
     icon: palette.cloudWhite,
@@ -178,22 +212,25 @@ export const darkTheme = {
     gold: palette.goldPrime,
     proCardBg: "#2A2510",
 
-    // Standart Buton (Fallback)
+    // Standart Buton
     buttonBg: palette.goldPrime,
     buttonText: palette.inkBlack,
 
-    // --- YENİ: MERKEZİ BUTON VARYANTLARI ---
+    // Buton Varyantları
     buttonVariants: getButtonVariants(true),
 
-    // Manuel Erişim İçin
+    // Manuel Erişim
     partyGradient: palette.partyGradient,
     goldShadow: palette.goldShadowStyle,
     merlotGradient: palette.merlotGradient,
-    // Form & Durumlar
     success: palette.success,
     error: palette.danger,
     inputBg: palette.charcoal,
     inputBorder: palette.richGrey,
     shadow: "#000000",
+
+    // Geriye dönük uyumluluk
+    silver: palette.silver,
   },
+  fonts: typography,
 };

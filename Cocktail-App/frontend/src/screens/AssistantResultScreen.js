@@ -27,7 +27,7 @@ import {
  * Çok eksiği olanlarda negatif bir dil yerine "İlham" odaklı dil kullanır.
  */
 const AssistantResultScreen = () => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
 

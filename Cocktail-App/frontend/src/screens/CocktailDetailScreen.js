@@ -29,7 +29,7 @@ import PremiumButton from "../ui/PremiumButton";
  * @param   {object} route - React Navigation tarafından sağlanan prop.
  */
 const CocktailDetailScreen = ({ route }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   // 1. Çeviri Hook'u
   const { t, i18n } = useTranslation();
   // 2. Helper: Dile Göre Metin Seçici

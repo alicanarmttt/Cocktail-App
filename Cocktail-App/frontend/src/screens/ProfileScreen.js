@@ -40,7 +40,7 @@ import PremiumButton from "../ui/PremiumButton";
  * ve "Pro'ya Yükselt" işlemlerini yönetir.
  */
 const ProfileScreen = () => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   // 1. Çeviri Hook'u
   const { t, i18n } = useTranslation();

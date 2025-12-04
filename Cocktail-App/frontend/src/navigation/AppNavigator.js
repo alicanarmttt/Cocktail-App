@@ -1,7 +1,8 @@
 import { React, useEffect } from "react";
 import {
   NavigationContainer,
-  useTheme, // YENİ: Tema renklerini alt bileşenlerde kullanmak için
+  useTheme,
+  dark, // YENİ: Tema renklerini alt bileşenlerde kullanmak için
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -11,6 +12,7 @@ import {
   View,
   ActivityIndicator,
   StyleSheet,
+  Platform,
 } from "react-native";
 
 import HomeScreen from "../screens/HomeScreen";
@@ -38,7 +40,7 @@ import {
 } from "../features/userSlice";
 
 // 2. YENİ TEMA DOSYAMIZI IMPORT ET
-import { lightTheme, darkTheme } from "../../constants/theme";
+import { CustomDarkTheme, CustomLightTheme } from "../../constants/theme";
 import { selectThemeMode } from "../features/uiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -65,15 +67,15 @@ function AppNavigator() {
   const themeMode = useSelector(selectThemeMode); // Redux'tan gelen tercih ('system', 'light', 'dark')
   const systemScheme = useColorScheme(); // Telefonun ayarı ('light' veya 'dark')
 
-  // Hangi tema aktif olacak?
+  // Hangi tema objesini kullanacağız?
   const currentTheme =
     themeMode === "system"
       ? systemScheme === "dark"
-        ? darkTheme
-        : lightTheme
+        ? CustomDarkTheme
+        : CustomLightTheme
       : themeMode === "dark"
-        ? darkTheme
-        : lightTheme;
+        ? CustomDarkTheme
+        : CustomLightTheme;
 
   //  (EKSİK 9): "Kalıcı Giriş" (Persistence) Köprüsü
   // Uygulama başlar başlamaz (bir kereliğine) çalışır
@@ -163,29 +165,72 @@ function MainAppNavigator() {
     <Tab.Navigator
       initialRouteName="CocktailList"
       screenOptions={({ route }) => ({
+        headerShown: false, // Her sayfanın kendi header'ı var
+
+        // --- İKON RENGİ BAĞLANTISI ---
+        // İşte bütünlüğü sağlayan yer burası.
+        // Aktif ikon rengini, senin Bordo (Primary) rengin yapıyoruz.
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
+
+        // --- TEXT STİLİ ---
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "600",
+          marginBottom: Platform.OS === "ios" ? 0 : 3,
+        },
+
+        // --- TAB BAR STİLİ (PREMIUM DOKUNUŞ) ---
+        tabBarStyle: {
+          backgroundColor: colors.card, // Temaya göre Beyaz veya Koyu Gri (Asla Bordo yapma!)
+          borderTopWidth: 0, // O ucuz duran çizgiyi siliyoruz
+
+          // Yükseklik ayarı (Daha ferah bir görünüm için)
+          height: Platform.OS === "ios" ? 90 : 70,
+          paddingBottom: Platform.OS === "ios" ? 30 : 12,
+          paddingTop: 10,
+
+          // Gölge (Shadow) - Barın havada durmasını sağlar
+          ...Platform.select({
+            ios: {
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: -5 }, // Gölge yukarı doğru vursun
+              shadowOpacity: dark ? 0.3 : 0.1, // Koyu modda biraz daha belirgin
+              shadowRadius: 10,
+            },
+            android: {
+              elevation: 20, // Android için güçlü gölge
+            },
+          }),
+        },
+
+        // İkon Ayarları
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === "CocktailList") {
-            iconName = focused ? "wine" : "wine-outline";
+          if (route.name === "Home") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "CocktailList") {
+            // 'book' yerine daha garanti olan 'list' ikonunu kullanıyoruz
+            iconName = focused ? "list" : "list-outline";
           } else if (route.name === "Assistant") {
-            iconName = focused ? "build" : "build-outline";
+            iconName = focused ? "wine" : "wine-outline";
+          } else if (route.name === "Roulette") {
+            iconName = focused ? "shuffle" : "shuffle-outline";
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
-          } else if (route.name === "RouletteTab") {
-            iconName = focused ? "dice" : "dice-outline";
           }
+
+          if (!iconName) {
+            iconName = "alert-circle-outline";
+          }
+
+          // Seçili ise ikonun arkasına hafif bir parlama efekti (Opsiyonel ama şık durur)
           return (
-            <Ionicons name={iconName} size={size} color={color}></Ionicons>
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
+              <Ionicons name={iconName} size={size} color={color} />
+            </View>
           );
         },
-        // GÜNCELLEME: Renkler tema dosyasından geliyor
-        tabBarActiveTintColor: colors.primary, // Aktif ikon rengi
-        tabBarInactiveTintColor: colors.textSecondary || "gray", // Pasif ikon rengi
-        tabBarStyle: {
-          backgroundColor: colors.card, // Tab bar arka planı
-          borderTopColor: colors.border, // Üst çizgi rengi
-        },
-        headerShown: false,
       })}
     >
       {/* SEKME 1: Kokteyl Listesi */}
@@ -195,7 +240,7 @@ function MainAppNavigator() {
         options={{ title: "Kokteyller" }}
       ></Tab.Screen>
       <Tab.Screen
-        name="RouletteTab"
+        name="Roulette"
         component={RouletteStackNavigator}
         options={{ title: "Rulet" }}
       />
@@ -225,7 +270,7 @@ function MainAppNavigator() {
  */
 function HomeStackNavigator() {
   // YENİ: Renkleri hook ile alıyoruz
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   return (
     <Stack.Navigator
