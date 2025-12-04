@@ -10,13 +10,16 @@ const palette = {
   silver: "#C0C0C0",
   platinum: "#E5E4E2",
   royalMerlot: "#4A0E15",
+  // --- YENİ: DARK MOD RENK ---
+  // Bordo'nun "Karanlıkta Parlayan" versiyonu (Yakut Kırmızısı)
+  neonRuby: "#E63946", // Veya biraz daha koyusu: "#D63447"
 
   // --- ARKA PLAN & YÜZEYLER ---
   cream: "#FCFAF2",
   white: "#FFFFFF",
-  pianoBlack: "#050505",
-  charcoal: "#1A1A1A",
-  richGrey: "#2C2C2E",
+  pianoBlack: "#141415", // Hafif metalik, mavimsi olmayan nötr/sıcak siyah
+  charcoal: "#1F1F22", // Kartlar için yüzey rengi
+  richGrey: "#2D2D30", // Modallar ve inputlar için
 
   // --- METİNLER ---
   inkBlack: "#121212",
@@ -160,12 +163,12 @@ export const darkTheme = {
   fonts,
   colors: {
     // Navigation & Temel
-    primary: palette.royalMerlot,
+    primary: palette.neonRuby,
     background: palette.pianoBlack,
     card: palette.charcoal,
     text: palette.cloudWhite,
     border: palette.richGrey,
-    notification: palette.goldPrime,
+    notification: palette.neonRuby,
 
     // Özel Bileşenler
     textSecondary: palette.silver,

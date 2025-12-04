@@ -34,7 +34,7 @@ import {
   clearDetail,
   fetchCocktails,
 } from "../features/cocktails/cocktailSlice";
-
+import PremiumButton from "../ui/PremiumButton";
 /**
  * @desc    Kullanıcı profilini gösterir, "Çıkış Yap" (Logout)
  * ve "Pro'ya Yükselt" işlemlerini yönetir.
@@ -222,85 +222,87 @@ const ProfileScreen = () => {
 
       {/* Ana Eylem Butonları */}
       <View style={styles.buttonContainer}>
-        {/* Dil Değiştir Butonu */}
-        <Pressable
-          style={[
-            styles.button,
-            styles.languageButton,
-            { backgroundColor: colors.card, borderColor: colors.text },
-          ]}
+        {/* 1. DİL DEĞİŞTİR (Silver) */}
+        <PremiumButton
+          variant="silver"
           onPress={toggleLanguage}
+          style={styles.profileBtn} // Sadece genişlik ayarı
         >
-          <Text
-            style={[
-              styles.buttonText,
-              styles.languageButtonText,
-              { color: colors.text },
-            ]}
-          >
-            <Ionicons name="language-outline" size={16} />{" "}
+          <Ionicons
+            name="language-outline"
+            size={20}
+            style={{ marginRight: 10 }}
+          />
+          <Text style={{ fontSize: 16, fontWeight: "600" }}>
             {t("profile.language_select")}:{" "}
             {currentLanguage === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
           </Text>
-        </Pressable>
+        </PremiumButton>
 
-        {/* "Pro'ya Yükselt" butonu (Sadece 'Free' üye ise gösterilir) */}
+        {/* 2. PRO'YA YÜKSELT (Gold - Sadece Free Üyeye) */}
         {!isPro && (
-          <Pressable
-            style={[
-              styles.button,
-              styles.upgradeButton,
-              { backgroundColor: colors.buttonBg, shadowColor: colors.shadow },
-            ]}
+          <PremiumButton
+            variant="gold"
             onPress={() => navigation.navigate("UpgradeToPro")}
+            style={styles.profileBtn}
           >
+            <Ionicons
+              name="star-outline"
+              size={20}
+              // Gold buton üstünde yazı rengi (Theme helper'dan gelmeli ama children olduğu için manuel veriyoruz)
+              color={colors.dark ? "#000" : "#FFF"}
+              style={{ marginRight: 10 }}
+            />
             <Text
-              style={[
-                styles.buttonText,
-                styles.upgradeButtonText,
-                { color: colors.buttonText },
-              ]}
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: colors.dark ? "#000" : "#FFF",
+              }}
             >
-              <Ionicons name="star-outline" size={16} />{" "}
               {t("profile.upgrade_btn")}
             </Text>
-          </Pressable>
+          </PremiumButton>
         )}
-        {/* 2. YENİ: TEMA BUTONU */}
-        <Pressable
-          style={[
-            styles.button,
-            styles.outlineButton,
-            { borderColor: colors.border, backgroundColor: colors.card },
-          ]}
+
+        {/* 3. TEMA DEĞİŞTİR (Silver) */}
+        <PremiumButton
+          variant="silver"
           onPress={cycleTheme}
+          style={styles.profileBtn}
         >
-          <Text style={[styles.buttonText, { color: colors.text }]}>
-            <Ionicons name={getThemeIcon()} size={18} />{" "}
+          <Ionicons
+            name={getThemeIcon()}
+            size={20}
+            style={{ marginRight: 10 }}
+          />
+          <Text style={{ fontSize: 16, fontWeight: "600" }}>
             {t("profile.theme_title") || "Tema"}: {getThemeLabel()}
           </Text>
-        </Pressable>
+        </PremiumButton>
 
-        {/* "Çıkış Yap" Butonu */}
-        <Pressable
-          style={[
-            styles.button,
-            styles.logoutButton,
-            { backgroundColor: colors.card, borderColor: colors.notification },
-          ]}
-          onPress={confirmLogout} // Onay sorusu sor
+        {/* 4. ÇIKIŞ YAP (Silver ama Kırmızı İçerik) */}
+        <PremiumButton
+          variant="silver"
+          onPress={confirmLogout}
+          style={styles.profileBtn}
         >
+          <Ionicons
+            name="log-out-outline"
+            size={20}
+            color={colors.notification} // Kırmızı İkon
+            style={{ marginRight: 10 }}
+          />
           <Text
-            style={[
-              styles.buttonText,
-              styles.logoutButtonText,
-              { color: colors.notification },
-            ]}
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: colors.notification,
+            }}
           >
-            <Ionicons name="log-out-outline" size={16} />
             {t("auth.logout")}
           </Text>
-        </Pressable>
+        </PremiumButton>
       </View>
     </SafeAreaView>
   );
@@ -352,26 +354,10 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     gap: 15,
+    paddingBottom: 40,
   },
-  button: {
+  profileBtn: {
     width: "100%",
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  outlineButton: {
-    borderWidth: 1,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "500",
   },
 });
 

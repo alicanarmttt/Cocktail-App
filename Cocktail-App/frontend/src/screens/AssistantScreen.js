@@ -182,7 +182,7 @@ const AssistantScreen = () => {
             styles.header,
             {
               backgroundColor: colors.background,
-              borderBottomColor: colors.border,
+              // Çizgiyi kaldırdım, sadece gölge kalsın
               shadowColor: colors.shadow,
             },
           ]}
@@ -201,7 +201,7 @@ const AssistantScreen = () => {
           <View
             style={[
               styles.searchContainer,
-              { backgroundColor: colors.inputBg },
+              { backgroundColor: colors.card }, // Daha belirgin bir input alanı için card rengi
             ]}
           >
             <Ionicons name="search" size={20} color={colors.textSecondary} />
@@ -227,14 +227,14 @@ const AssistantScreen = () => {
           </View>
 
           {/* Kategoriler */}
-          <View style={{ height: 50 }}>
+          <View style={{ height: 45 }}>
             <FlatList
               data={categories}
               horizontal
               showsHorizontalScrollIndicator={false}
               keyExtractor={(item) => item}
               contentContainerStyle={{
-                paddingHorizontal: 16,
+                paddingHorizontal: 20,
                 alignItems: "center",
               }}
               renderItem={({ item }) => {
@@ -246,12 +246,9 @@ const AssistantScreen = () => {
                     style={[
                       styles.catTab,
                       {
-                        backgroundColor: colors.card,
-                        borderColor: colors.border,
-                      },
-                      isActive && {
-                        backgroundColor: colors.primary,
-                        borderColor: colors.primary,
+                        backgroundColor: isActive
+                          ? colors.primary
+                          : colors.card,
                       },
                     ]}
                     onPress={() => setActiveCategory(item)}
@@ -260,7 +257,10 @@ const AssistantScreen = () => {
                       style={[
                         styles.catText,
                         { color: colors.textSecondary },
-                        isActive && { color: colors.buttonText },
+                        isActive && {
+                          color: colors.buttonText,
+                          fontWeight: "700",
+                        },
                       ]}
                     >
                       {label}
@@ -269,6 +269,26 @@ const AssistantScreen = () => {
                 );
               }}
             />
+            {/* MİNİK DOKUNUŞ: Sağa kaydırma ipucu (Overlay İkon) */}
+            <View
+              pointerEvents="none" // Tıklamayı engelleme, arkadaki listeye geçsin
+              style={{
+                position: "absolute",
+                right: 0,
+                top: 0,
+                bottom: 0,
+                justifyContent: "center",
+
+                backgroundColor: "transparent",
+              }}
+            >
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={colors.textSecondary}
+                style={{ opacity: 0.5 }} // Hafif silik, rahatsız etmesin
+              />
+            </View>
           </View>
         </View>
 
@@ -276,7 +296,11 @@ const AssistantScreen = () => {
         <FlatList
           data={filteredList}
           keyExtractor={(item) => item.ingredient_id.toString()}
-          contentContainerStyle={{ paddingBottom: 100, paddingTop: 10 }} // Footer için boşluk
+          contentContainerStyle={{
+            paddingBottom: 100,
+            paddingTop: 15,
+            paddingHorizontal: 20, // Kenarlardan boşluk bırakarak kart görünümü sağla
+          }}
           initialNumToRender={15} // Performans için
           removeClippedSubviews={true} // Performans için
           ListEmptyComponent={
@@ -291,9 +315,14 @@ const AssistantScreen = () => {
             return (
               <Pressable
                 style={[
-                  styles.row,
-                  { borderBottomColor: colors.border },
-                  isSelected && { backgroundColor: colors.subCard },
+                  styles.itemCard,
+                  {
+                    backgroundColor: isSelected
+                      ? colors.primary + "15" // Seçiliyse çok hafif bir renk tonu
+                      : colors.card,
+                    borderColor: isSelected ? colors.primary : "transparent",
+                    borderWidth: 1, // Seçiliyse çerçeve ekle
+                  },
                 ]}
                 onPress={() => toggleSelection(item.ingredient_id)}
               >
@@ -305,7 +334,7 @@ const AssistantScreen = () => {
                       { color: colors.text },
                       isSelected && {
                         color: colors.primary,
-                        fontWeight: "600",
+                        fontWeight: "700",
                       },
                     ]}
                   >
@@ -322,9 +351,9 @@ const AssistantScreen = () => {
 
                 {/* Seçim İkonu */}
                 <Ionicons
-                  name={isSelected ? "checkbox" : "square-outline"}
-                  size={24}
-                  color={isSelected ? colors.primary : colors.border}
+                  name={isSelected ? "checkmark-circle" : "add-circle-outline"} // Checkbox yerine daha modern ikonlar
+                  size={28}
+                  color={isSelected ? colors.primary : colors.textSecondary}
                 />
               </Pressable>
             );
@@ -402,22 +431,25 @@ const styles = StyleSheet.create({
   // --- HEADER ---
   header: {
     paddingTop: 10,
-    borderBottomWidth: 1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.03,
-    shadowRadius: 3,
-    elevation: 2,
-    zIndex: 1, // Listenin üstünde kalsın
+    paddingBottom: 10,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 5, // Android gölgesi
+    zIndex: 1,
+    borderBottomLeftRadius: 24, // Header'ın altını hafif yuvarlat
+    borderBottomRightRadius: 24,
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     paddingHorizontal: 20,
+    marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
     paddingHorizontal: 20,
-    marginBottom: 15,
+    marginBottom: 20,
   },
   searchContainer: {
     flexDirection: "row",
@@ -425,8 +457,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 15,
     paddingHorizontal: 15,
-    height: 46,
-    borderRadius: 12,
+    height: 50,
+    borderRadius: 25, // Tam yuvarlak (pill shape)
   },
   searchInput: {
     flex: 1,
@@ -436,35 +468,43 @@ const styles = StyleSheet.create({
   },
   // --- KATEGORİ TABLARI ---
   catTab: {
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    marginRight: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginRight: 10,
     borderRadius: 20,
-    borderWidth: 1,
     justifyContent: "center",
+    alignItems: "center",
   },
   catText: {
     fontSize: 14,
     fontWeight: "500",
   },
-  // --- LİSTE SATIRI ---
-  row: {
+  // --- LİSTE ELEMANI (CARD TASARIM) ---
+  itemCard: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 10, // Kartlar arası boşluk
+    borderRadius: 16, // Kart köşe yumuşaklığı
+    // Hafif gölge ekleyerek derinlik katalım
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   rowContent: {
     flex: 1,
   },
   rowText: {
     fontSize: 17,
+    fontWeight: "500",
+    marginBottom: 4,
   },
   rowSubText: {
-    fontSize: 12,
-    marginTop: 2,
+    fontSize: 13,
   },
   emptyContainer: {
     alignItems: "center",
@@ -476,25 +516,37 @@ const styles = StyleSheet.create({
   // --- FOOTER BUTON ---
   footerContainer: {
     position: "absolute",
-    bottom: 20, // SafeAreaView içinde olduğu için bottom inset'e gerek kalmayabilir ama garanti olsun
+    bottom: 20,
     left: 20,
     right: 20,
-
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 10,
+    gap: 12,
   },
-  //Sıfırlama Butonu Stili
+  // Sıfırlama Butonu Stili
   resetButton: {
-    width: 56,
-    height: 56,
+    width: 60, // Biraz büyüttüm
+    height: 60,
+    borderRadius: 30, // Tam daire
     paddingVertical: 0,
     paddingHorizontal: 0,
+    // Butona gölge ekleyelim ki listeden ayrılsın
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   actionButton: {
-    flex: 1, // Kalan tüm alanı kaplasın
-    height: 56,
+    flex: 1,
+    height: 60, // Biraz büyüttüm
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   actionButtonText: {
     fontSize: 18,
@@ -502,10 +554,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   badge: {
-    backgroundColor: "rgba(7, 0, 0, 0.25)",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
   },
   badgeText: {
     fontSize: 16,

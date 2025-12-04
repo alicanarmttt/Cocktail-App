@@ -18,7 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import PremiumButton from "../ui/PremiumButton";
-
+import { LinearGradient } from "expo-linear-gradient";
 import {
   fetchRoulettePool,
   selectRoulettePool,
@@ -323,7 +323,7 @@ const RouletteScreen = () => {
         <View style={styles.resultButtons}>
           {/* 1. TARİFE GİT (Gold - Ana Aksiyon) */}
           <PremiumButton
-            variant="gold"
+            variant="arcade"
             title={t("roulette.go_recipe")}
             onPress={() =>
               navigation.navigate("CocktailDetail", {
@@ -335,7 +335,7 @@ const RouletteScreen = () => {
 
           {/* 2. TEKRAR ÇEVİR (Silver - İkincil Aksiyon) */}
           <PremiumButton
-            variant="arcade"
+            variant="cyber"
             onPress={() => setStep("wheel")}
             style={styles.resultBtn} // Aynı genişlik
           >
