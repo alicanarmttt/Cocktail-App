@@ -29,7 +29,9 @@ import PremiumButton from "../ui/PremiumButton";
  * @param   {object} route - React Navigation tarafından sağlanan prop.
  */
 const CocktailDetailScreen = ({ route }) => {
+  // HOOK: useTheme'den hem renkleri hem de YENİ fontları (typography) çekiyoruz
   const { colors, fonts } = useTheme();
+
   // 1. Çeviri Hook'u
   const { t, i18n } = useTranslation();
   // 2. Helper: Dile Göre Metin Seçici
@@ -83,7 +85,13 @@ const CocktailDetailScreen = ({ route }) => {
           { backgroundColor: colors.background },
         ]}
       >
-        <Text style={[styles.errorText, { color: colors.notification }]}>
+        <Text
+          style={[
+            styles.errorText,
+            fonts.styles.body,
+            { color: colors.notification },
+          ]}
+        >
           {error || t("general.error")}
         </Text>
       </View>
@@ -97,15 +105,21 @@ const CocktailDetailScreen = ({ route }) => {
       >
         <ScrollView contentContainerStyle={styles.scrollContentContainer}>
           <Image source={{ uri: cocktail.image_url }} style={styles.image} />
-          <Text style={[styles.title, { color: colors.primary }]}>
+
+          {/* KOKTEYL ADI (H1 - Serif/Tırnaklı) */}
+          <Text
+            style={[styles.title, fonts.styles.h1, { color: colors.primary }]}
+          >
             {getLocaleText(cocktail.name_tr, cocktail.name_en)}
           </Text>
 
           {/* Bölüm: Malzemeler */}
           <View style={styles.section}>
+            {/* Bölüm Başlığı (H2 - Serif) */}
             <Text
               style={[
                 styles.sectionTitle,
+                fonts.styles.h2,
                 {
                   color: colors.textSecondary,
                   borderBottomColor: colors.border,
@@ -116,8 +130,18 @@ const CocktailDetailScreen = ({ route }) => {
             </Text>
             {cocktail.ingredients.map((ing) => (
               <View key={ing.requirement_id} style={styles.ingredientItem}>
-                <Text style={[styles.ingredientText, { color: colors.text }]}>
-                  {getLocaleText(ing.amount_tr, ing.amount_en)}{" "}
+                {/* Malzeme Listesi (Body - Sans) */}
+                <Text
+                  style={[
+                    styles.ingredientText,
+                    fonts.styles.body,
+                    { color: colors.text },
+                  ]}
+                >
+                  {/* Miktar kısmını belki kalın (bodyBold) yapmak istersin, şimdilik düz yapıyoruz */}
+                  <Text style={fonts.styles.bodyBold}>
+                    {getLocaleText(ing.amount_tr, ing.amount_en)}{" "}
+                  </Text>
                   {getLocaleText(ing.name_tr, ing.name_en)}
                 </Text>
               </View>
@@ -137,6 +161,7 @@ const CocktailDetailScreen = ({ route }) => {
             <Text
               style={[
                 styles.sectionTitle,
+                fonts.styles.h2,
                 {
                   color: colors.textSecondary,
                   borderBottomColor: colors.border,
@@ -145,7 +170,10 @@ const CocktailDetailScreen = ({ route }) => {
             >
               {t("detail.instructions_title")}
             </Text>
-            <Text style={[styles.text, { color: colors.text }]}>
+            {/* Metin (Body - Sans - Okunaklı) */}
+            <Text
+              style={[styles.text, fonts.styles.body, { color: colors.text }]}
+            >
               {getLocaleText(
                 cocktail.instructions_tr,
                 cocktail.instructions_en
@@ -158,6 +186,7 @@ const CocktailDetailScreen = ({ route }) => {
             <Text
               style={[
                 styles.sectionTitle,
+                fonts.styles.h2,
                 {
                   color: colors.textSecondary,
                   borderBottomColor: colors.border,
@@ -166,7 +195,9 @@ const CocktailDetailScreen = ({ route }) => {
             >
               {t("detail.history_title")}
             </Text>
-            <Text style={[styles.text, { color: colors.text }]}>
+            <Text
+              style={[styles.text, fonts.styles.body, { color: colors.text }]}
+            >
               {getLocaleText(
                 cocktail.history_notes_tr,
                 cocktail.history_notes_en
@@ -189,7 +220,14 @@ const CocktailDetailScreen = ({ route }) => {
             <Pressable
               style={[styles.modalContent, { backgroundColor: colors.card }]}
             >
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
+              {/* Modal Başlığı (H3 - Serif) */}
+              <Text
+                style={[
+                  styles.modalTitle,
+                  fonts.styles.h3,
+                  { color: colors.text },
+                ]}
+              >
                 {t("detail.modal_title")}
               </Text>
 
@@ -201,7 +239,12 @@ const CocktailDetailScreen = ({ route }) => {
                 ]}
               >
                 <Text
-                  style={[styles.legendTitle, { color: colors.textSecondary }]}
+                  style={[
+                    styles.legendTitle,
+                    // Caption stili (küçük), ama başlık olduğu için bold ekliyoruz
+                    fonts.styles.caption,
+                    { color: colors.textSecondary, fontWeight: "bold" },
+                  ]}
                 >
                   {t("detail.legend_title")}
                 </Text>
@@ -216,7 +259,13 @@ const CocktailDetailScreen = ({ route }) => {
                       },
                     ]}
                   />
-                  <Text style={[styles.legendText, { color: colors.text }]}>
+                  <Text
+                    style={[
+                      styles.legendText,
+                      fonts.styles.caption,
+                      { color: colors.text },
+                    ]}
+                  >
                     {t("detail.legend_required")} (No Alt)
                   </Text>
                 </View>
@@ -231,7 +280,13 @@ const CocktailDetailScreen = ({ route }) => {
                       },
                     ]}
                   />
-                  <Text style={[styles.legendText, { color: colors.text }]}>
+                  <Text
+                    style={[
+                      styles.legendText,
+                      fonts.styles.caption,
+                      { color: colors.text },
+                    ]}
+                  >
                     {t("detail.legend_required")} (Pro)
                   </Text>
                 </View>
@@ -246,7 +301,13 @@ const CocktailDetailScreen = ({ route }) => {
                       },
                     ]}
                   />
-                  <Text style={[styles.legendText, { color: colors.text }]}>
+                  <Text
+                    style={[
+                      styles.legendText,
+                      fonts.styles.caption,
+                      { color: colors.text },
+                    ]}
+                  >
                     {t("detail.legend_garnish")}
                   </Text>
                 </View>
@@ -261,7 +322,13 @@ const CocktailDetailScreen = ({ route }) => {
                       },
                     ]}
                   />
-                  <Text style={[styles.legendText, { color: colors.text }]}>
+                  <Text
+                    style={[
+                      styles.legendText,
+                      fonts.styles.caption,
+                      { color: colors.text },
+                    ]}
+                  >
                     {t("detail.legend_garnish")} (Pro)
                   </Text>
                 </View>
@@ -297,7 +364,9 @@ const CocktailDetailScreen = ({ route }) => {
                     <Text
                       style={[
                         styles.ingredientButtonText,
-                        { color: colors.text },
+                        // Buton içi olduğu için 'body' kullanıyoruz ama boyutu 14px tutuyoruz
+                        fonts.styles.body,
+                        { color: colors.text, fontSize: 14 },
                       ]}
                     >
                       {getLocaleText(ing.name_tr, ing.name_en)}
@@ -334,7 +403,13 @@ const CocktailDetailScreen = ({ route }) => {
                           color={colors.gold}
                           style={styles.proIcon}
                         />
-                        <Text style={[styles.proTitle, { color: colors.text }]}>
+                        <Text
+                          style={[
+                            styles.proTitle,
+                            fonts.styles.h2,
+                            { color: colors.text },
+                          ]}
+                        >
                           {t("detail.pro_alt_title")}
                         </Text>
 
@@ -342,6 +417,7 @@ const CocktailDetailScreen = ({ route }) => {
                         <Text
                           style={[
                             styles.proText,
+                            fonts.styles.body,
                             { color: colors.textSecondary },
                           ]}
                         >
@@ -356,6 +432,7 @@ const CocktailDetailScreen = ({ route }) => {
                         <Text
                           style={[
                             styles.proText,
+                            fonts.styles.body,
                             { marginBottom: 15, color: colors.textSecondary },
                           ]}
                         >
@@ -387,6 +464,7 @@ const CocktailDetailScreen = ({ route }) => {
                                   <Text
                                     style={[
                                       styles.altListItemText,
+                                      fonts.styles.body,
                                       { color: colors.text },
                                     ]}
                                   >
@@ -419,12 +497,19 @@ const CocktailDetailScreen = ({ route }) => {
                           color={colors.primary}
                           style={styles.proLockIcon}
                         />
-                        <Text style={[styles.proTitle, { color: colors.text }]}>
+                        <Text
+                          style={[
+                            styles.proTitle,
+                            fonts.styles.h2,
+                            { color: colors.text },
+                          ]}
+                        >
                           {t("detail.pro_feature")}
                         </Text>
                         <Text
                           style={[
                             styles.proText,
+                            fonts.styles.body,
                             { color: colors.textSecondary },
                           ]}
                         >
@@ -445,6 +530,7 @@ const CocktailDetailScreen = ({ route }) => {
                           <Text
                             style={[
                               styles.proButtonText,
+                              fonts.styles.button,
                               { color: colors.buttonText },
                             ]}
                           >
@@ -480,7 +566,9 @@ const CocktailDetailScreen = ({ route }) => {
     <View
       style={[styles.centeredContainer, { backgroundColor: colors.background }]}
     >
-      <Text style={[styles.errorText, { color: colors.text }]}>
+      <Text
+        style={[styles.errorText, fonts.styles.body, { color: colors.text }]}
+      >
         {t("results.not_found")}
       </Text>
     </View>
@@ -506,8 +594,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   title: {
-    fontSize: 26,
-    fontWeight: "bold",
+    // fontSize: 26, -> fonts.styles.h1 (32px)
+    // fontWeight: "bold",
     margin: 15,
     textAlign: "center",
   },
@@ -517,8 +605,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "600",
+    // fontSize: 20, -> fonts.styles.h2 (24px)
+    // fontWeight: "600",
     marginBottom: 10,
     borderBottomWidth: 1,
     paddingBottom: 5,
@@ -529,15 +617,15 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   ingredientText: {
-    fontSize: 16,
+    // fontSize: 16, -> fonts.styles.body
     flexShrink: 1,
   },
   text: {
-    fontSize: 16,
-    lineHeight: 24,
+    // fontSize: 16, -> fonts.styles.body
+    // lineHeight: 24,
   },
   errorText: {
-    fontSize: 16,
+    // fontSize: 16,
   },
   prepareButton: {
     marginBottom: 15,
@@ -562,8 +650,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    // fontSize: 18, -> fonts.styles.h3
+    // fontWeight: "bold",
     marginBottom: 15,
   },
   legendContainer: {
@@ -573,8 +661,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   legendTitle: {
-    fontSize: 12,
-    fontWeight: "bold",
+    // fontSize: 12, -> fonts.styles.caption
+    // fontWeight: "bold",
     marginBottom: 5,
   },
   legendItem: {
@@ -590,7 +678,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   legendText: {
-    fontSize: 12,
+    // fontSize: 12, -> fonts.styles.caption
   },
   modalButtonsContainer: {
     width: "100%",
@@ -607,8 +695,8 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   ingredientButtonText: {
-    fontSize: 14,
-    fontWeight: "500",
+    // fontSize: 14,
+    // fontWeight: "500",
   },
   // İç İçe Modal (Modal 2) Stilleri
   modalOverlay2: {
@@ -631,17 +719,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   proTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
+    // fontSize: 22, -> fonts.styles.h2
+    // fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
   },
   proText: {
-    fontSize: 16,
+    // fontSize: 16, -> fonts.styles.body
     textAlign: "center",
     marginBottom: 5,
   },
-  // YENİ EKLENDİ: Alternatif Liste Elemanı Stili
   altListItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -650,7 +737,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   altListItemText: {
-    fontSize: 16,
+    // fontSize: 16, -> fonts.styles.body
     marginLeft: 10,
   },
   proLockContainer: {
@@ -671,8 +758,8 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   proButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
+    // fontSize: 16, -> fonts.styles.button
+    // fontWeight: "bold",
   },
 });
 

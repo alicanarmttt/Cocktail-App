@@ -30,7 +30,7 @@ import {
   // 'selectCocktailById' selector'ünü (bulucu) slice'ımızdan import ediyoruz.
   selectCocktailById,
 } from "../features/cocktails/cocktailSlice.js";
-
+import VINTAGE_FRAME_URL from "../../assets/gold_frame.png";
 /**
  * @desc    Uygulamanın ana ekranı. Üstte bir gösterge, altta bir "Rulet" (Picker) gösterir.
  * @param {object} navigation - React Navigation tarafından sağlanır.
@@ -201,42 +201,44 @@ const HomeScreen = ({ navigation }) => {
           {t("home.quote")}
         </Text>
 
-        {/* "Altın Çerçeve" Eklendi (İç içe View kullanarak) */}
-        <View
-          style={[
-            styles.frameOuter,
-            { backgroundColor: colors.gold, shadowColor: colors.shadow },
-          ]}
-        >
-          <View style={[styles.frameInner, { backgroundColor: colors.card }]}>
-            {
-              // GÜNCELLEME: Başlangıçta (ID 'null' iken) resim yerine
-              // "Bir Kokteyl Seçin" yazısı gösterilir.
-              selectedCocktail ? (
-                <Image
-                  source={{ uri: selectedCocktail.image_url }}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
-              ) : (
-                <View
-                  style={[
-                    styles.placeholderContainer,
-                    { backgroundColor: colors.subCard },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      styles.placeholderText,
-                      { color: colors.textSecondary },
-                    ]}
-                  >
-                    {t("home.pick_cocktail")}
-                  </Text>
-                </View>
-              )
-            }
-          </View>
+        {/* --- YENİ ÇERÇEVE ALANI (Image Frame) --- */}
+        <View style={[styles.imageWrapper, { shadowColor: "#000" }]}>
+          {/* KATMAN 1 (En Alt): KOKTEYL RESMİ */}
+          {selectedCocktail ? (
+            <Image
+              source={{ uri: selectedCocktail.image_url }}
+              style={styles.cocktailImage}
+              resizeMode="cover"
+            />
+          ) : (
+            // Resim yoksa gösterilecek Placeholder kutusu
+            <View
+              style={[
+                styles.cocktailImage,
+                styles.placeholderContainer,
+                { backgroundColor: colors.subCard },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.placeholderText,
+                  fonts.styles.caption,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                {t("home.pick_cocktail")}
+              </Text>
+            </View>
+          )}
+
+          {/* KATMAN 2 (En Üst): ÇERÇEVE RESMİ */}
+          {/* pointerEvents="none" sayesinde tıklamalar çerçeveye takılmaz, arkaya geçer */}
+          <Image
+            source={VINTAGE_FRAME_URL}
+            style={styles.frameOverlay}
+            resizeMode="stretch" // Çerçeveyi kutuya tam yayar
+            pointerEvents="none"
+          />
         </View>
 
         {/*BUTON */}
@@ -443,42 +445,43 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-  frameOuter: {
-    padding: 6,
-    borderRadius: 15,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 8,
-  },
-  frameInner: {
-    padding: 2,
-    borderRadius: 5,
-  },
-  image: {
-    width: 250, // Biraz küçülttük ki arama butonuna yer kalsın
-    height: 250,
-    borderRadius: 5,
-  },
-  placeholderContainer: {
-    width: 220,
-    height: 220,
-    borderRadius: 5,
+  // --- YENİ ÇERÇEVE SİSTEMİ ---
+  imageWrapper: {
+    width: 300,
+    height: 300,
     justifyContent: "center",
     alignItems: "center",
+    position: "relative", // Çocukları absolute konumlandırmak için referans
+    // 3D Gölge Efekti
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 15,
+    elevation: 20, // Android için güçlü gölge
+  },
+  cocktailImage: {
+    width: 220, // Çerçevenin "içine" sığacak kadar küçük olmalı (Deneme yanılma ile ayarla)
+    height: 220,
+    borderRadius: 5, // Yuvarlak veya kare, çerçevenin şekline göre ayarla
+    // position: 'absolute' gerekmez çünkü wrapper flex center yapıyor
+  },
+  frameOverlay: {
+    position: "absolute", // Kutunun üzerine yapış
+    top: 0,
+    left: 0,
+    width: "100%", // Wrapper'ı tam kapla
+    height: "100%",
+    zIndex: 10, // En üstte dur
+  },
+  placeholderContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 110, // Resimle aynı şekil
   },
   placeholderText: {
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  cocktailName: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 10,
     textAlign: "center",
   },
   prepareButton: {
-    marginTop: 15,
+    marginTop: 5,
   },
   prepareButtonDisabled: {
     opacity: 0.6,

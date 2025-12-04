@@ -36,10 +36,10 @@
     "close": "Kapat"
   },
   "detail": {
-    "ingredients_title": "Ingredients (Malzemeler)",
+    "ingredients_title": "Malzemeler",
     "missing_ingredients_btn": "Eksik malzemem var",
-    "instructions_title": "Instructions (Hazırlanışı)",
-    "history_title": "History & Notes",
+    "instructions_title": "Hazırlanışı",
+    "history_title": "İlgili Notlar",
     "modal_title": "Eksik Malzemeyi Seçin",
     "legend_title": "Malzeme Göstergesi:",
     "legend_required": "Gerekli",
