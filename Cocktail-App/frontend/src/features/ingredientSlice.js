@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
+import apiClient from "../api/apiClient";
 
 /**
  * @desc    Fetches all ingredients (categorized) from the backend API.
@@ -13,7 +11,7 @@ export const fetchIngredients = createAsyncThunk(
     // 1. Redux Store'dan mevcut dili oku (uiSlice'tan)
     // (Eğer uiSlice henüz yoksa varsayılan olarak 'tr' alırız)
 
-    const response = await axios.get(`${BASE_API_URL}/api/ingredients`);
+    const response = await apiClient.get(`/ingredients`);
     return response.data;
   }
 );

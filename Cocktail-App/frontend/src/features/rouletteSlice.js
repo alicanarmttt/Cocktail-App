@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-// API URL'ini ortam değişkenlerinden alıyoruz
-const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
+import apiClient from "../api/apiClient";
 
 /**
  * @desc    Backend'den Rulet havuzunu çeker.
@@ -14,13 +11,10 @@ export const fetchRoulettePool = createAsyncThunk(
   async ({ mode, filter }, { rejectWithValue }) => {
     try {
       // POST isteği atıyoruz çünkü 'body' içinde veri gönderiyoruz
-      const response = await axios.post(
-        `${BASE_API_URL}/api/roulette/get-pool`,
-        {
-          mode, // 'driver', 'popular', 'spirit', 'taste', 'random'
-          filter, // Varsa ID (55) veya String ('Sweet')
-        }
-      );
+      const response = await apiClient.post(`/roulette/get-pool`, {
+        mode, // 'driver', 'popular', 'spirit', 'taste', 'random'
+        filter, // Varsa ID (55) veya String ('Sweet')
+      });
 
       return response.data; // Karıştırılmış (Shuffled) kokteyl listesi döner
     } catch (error) {

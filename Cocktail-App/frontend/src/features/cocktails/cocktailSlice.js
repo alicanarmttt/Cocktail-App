@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
+import apiClient from "../../api/apiClient";
 
 /**
  * @desc Fetches all cocktails from the backend API
@@ -10,7 +8,7 @@ const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
 export const fetchCocktails = createAsyncThunk(
   "cocktails/fetchCocktails",
   async () => {
-    const response = await axios.get(`${BASE_API_URL}/api/cocktails`);
+    const response = await apiClient.get(`/cocktails`);
     return response.data;
   }
 );
@@ -24,9 +22,7 @@ export const fetchCocktailById = createAsyncThunk(
   "cocktails/fetchCocktailById",
   async (cocktail_id) => {
     // '/api/cocktails/:id' rotası backend'de getCocktailById (JOIN'lu) modelini çağırır
-    const response = await axios.get(
-      `${BASE_API_URL}/api/cocktails/${cocktail_id}`
-    );
+    const response = await apiClient.get(`/cocktails/${cocktail_id}`);
     return response.data;
   }
 );

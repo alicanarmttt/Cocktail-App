@@ -5,6 +5,17 @@ const cors = require("cors");
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+// === GÜVENLİK ADIMI 1: Middleware dosyasını içe aktar ===
+const verifyToken = require("./src/middleware/authMiddleware");
+
+// --- DEBUG LOGGER (YENİ EKLENDİ) ---
+// Gelen her isteğin metodunu ve tam adresini konsola yazar.
+// Örn: [ISTEK]: POST /api/users/loginOrRegister
+app.use((req, res, next) => {
+  console.log(`[ISTEK]: ${req.method} ${req.url}`);
+  next();
+});
+// -----------------------------------
 
 // === Middleware (Ara Yazılımlar) ===
 
@@ -16,40 +27,19 @@ app.use(express.json());
 // === Rota (Route) Tanımlamaları ===
 
 // Kokteyl rotalarını (src/api/cocktails.js) içe aktar
+
 const cocktailRoutes = require("./src/api/cocktails");
-
 const ingredientRoutes = require("./src/api/ingredients");
-
 const barmenRoutes = require("./src/api/barmen");
-
 const userRoutes = require("./src/api/users");
 const rouletteRoutes = require("./src/api/roulette");
 
-/**
- * @desc Ana Rota Yönlendiricisi (Main App Router)
- * '/api/cocktails' ile başlayan tüm istekleri 'cocktailRoutes' dosyasına yönlendirir.
- */
 app.use("/api/cocktails", cocktailRoutes);
-
-/**
- * @desc Ana Rota Yönlendiricisi (Main App Router)
- * '/api/ingredients' ile başlayan tüm istekleri 'ingredientRoutes' dosyasına yönlendirir.
- */
 app.use("/api/ingredients", ingredientRoutes);
-
-/**
- * @desc Ana Rota Yönlendiricisi (Main App Router)
- * '/api/barmen' ile başlayan tüm istekleri 'barmenRoutes' dosyasına yönlendirir.
- */
 app.use("/api/barmen", barmenRoutes);
-
-/**
- * @desc Ana Rota Yönlendiricisi (Main App Router)
- * '/api/users' ile başlayan tüm istekleri 'userRoutes' dosyasına yönlendirir.
- */
-app.use("/api/users", userRoutes);
-
 app.use("/api/roulette", rouletteRoutes);
+
+app.use("/api/users", verifyToken, userRoutes);
 
 // Sunucunun ayakta olup olmadığını test etmek için kök rota
 app.get("/", (req, res) => {

@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-
-const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
+import apiClient from "../api/apiClient";
 
 /**
  * @desc    Backend'deki 'Akıllı Filtreleme' API'sine POST isteği gönderir.
@@ -13,8 +11,8 @@ export const findRecipes = createAsyncThunk(
   async (payload) => {
     // ÖNEMLİ: ingredientSlice'taki 'GET'ten farklı olarak,
     // biz 'POST' kullanıyoruz ve 'payload' (gövde) gönderiyoruz.
-    const response = await axios.post(
-      `${BASE_API_URL}/api/barmen/find-recipes`,
+    const response = await apiClient.post(
+      `barmen/find-recipes`,
       payload // { inventoryIds: [...], mode: '...' }
     );
     return response.data;

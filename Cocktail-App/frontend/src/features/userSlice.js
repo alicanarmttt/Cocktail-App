@@ -1,14 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// YENİ EKLENDİ: API isteği için
-import axios from "axios";
-
-// YENİ EKLENDİ: (barmenSlice.js'teki gibi .env dosyasından)
-const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
-
-// === MOCK (SAHTE) VERİ SİLİNDİ ===
-// const mockProUser = { ... };
-// const mockFreeUser = { ... };
-// =================================
+import apiClient from "../api/apiClient";
 
 /**
  * @desc    Backend'deki 'Kullanıcıyı Bul/Oluştur' API'sine POST isteği gönderir.
@@ -18,13 +9,8 @@ const BASE_API_URL = process.env.EXPO_PUBLIC_API_URL;
 export const loginOrRegisterUser = createAsyncThunk(
   "user/loginOrRegisterUser",
   async (payload) => {
-    // Backend'de EKSİK 4 olarak oluşturduğumuz API'yi çağır
-    const response = await axios.post(
-      `${BASE_API_URL}/api/users/loginOrRegister`,
-      payload // { firebase_uid, email }
-    );
-    // Backend'den dönen (ve 'is_pro' bayrağını içeren)
-    // tam kullanıcı objesini (user object) döndürür
+    const response = await apiClient.post(`/users/loginOrRegister`, payload);
+
     return response.data;
   }
 );
@@ -32,26 +18,12 @@ export const loginOrRegisterUser = createAsyncThunk(
 /**
  * @desc    Backend'deki 'Pro'ya Yükselt' API'sine POST isteği gönderir.
  * @name    user/upgradeToPro
- * @param   {object} thunkAPI - 'getState' fonksiyonunu (Redux state'ini okumak için) içerir
+ * @param   {object} thunkAPI
  */
-export const upgradeToPro = createAsyncThunk(
-  "/user/upgradeToPro",
-  async (_, { getState }) => {
-    const { currentUser } = getState().user;
-
-    if (!currentUser) {
-      throw new Error("Giriş ypamış kullanıcı bulunamadı.");
-    }
-
-    const response = await axios.post(
-      `${BASE_API_URL}/api/users/upgrade-to-pro`,
-      { firebase_uid: currentUser.firebase_uid } // 'uid'yi body'de gönder
-    );
-    // Backend'den dönen GÜNCELLENMİŞ (artık 'is_pro: true' olan)
-    // kullanıcı objesini (user object) döndürür
-    return response.data;
-  }
-);
+export const upgradeToPro = createAsyncThunk("/user/upgradeToPro", async () => {
+  const response = await apiClient.post(`/users/upgrade-to-pro`, {});
+  return response.data;
+});
 
 const initialState = {
   // GÜNCELLEME: 'mockProUser' yerine 'null'

@@ -16,14 +16,22 @@ const {
  */
 router.post("/loginOrRegister", async (req, res) => {
   try {
-    // 1. Frontend'den (Firebase'den) gelen 'firebase_uid' ve 'email'i al
-    const { firebase_uid, email } = req.body;
+    // 1. UID'yi artık Body'den değil, Middleware'in çözdüğü Token'dan alıyoruz.
+    // (server.js'de req.user = decodedToken yapmıştık)
+    const firebase_uid = req.user.uid;
 
-    // 2. Gelen veriyi doğrula
-    if (!firebase_uid || !email) {
-      return res
-        .status(400) // 400 = Bad Request (Hatalı İstek)
-        .json({ msg: "firebase_uid ve email alanları zorunludur." });
+    // Email hala body'den gelebilir (veya token'ın içinde de vardır: req.user.email)
+    // Şimdilik body'den almaya devam edelim, frontend gönderiyor.
+    const { email } = req.body;
+
+    // 2. Validasyon
+    if (!firebase_uid) {
+      // Bu hatayı alıyorsan Middleware (verifyToken) server.js'de bu rotaya eklenmemiş demektir!
+      return res.status(401).json({ msg: "Kimlik doğrulanamadı (UID eksik)." });
+    }
+
+    if (!email) {
+      return res.status(400).json({ msg: "Email alanı zorunludur." });
     }
 
     // 3. Veri geçerliyse, "BEYNİ" (Model) çağır
@@ -49,8 +57,10 @@ router.post("/loginOrRegister", async (req, res) => {
  */
 router.post("/upgrade-to-pro", async (req, res) => {
   try {
-    // 1. Frontend'den (Redux) gelen 'firebase_uid'yi al
-    const { firebase_uid } = req.body;
+    // GÜVENLİK DÜZELTMESİ:
+    // Frontend artık body'de hiçbir şey göndermiyor (boş obje {}).
+    // Kimin Pro olacağını Token'daki UID belirler.
+    const firebase_uid = req.user.uid;
 
     if (!firebase_uid) {
       return res.status(400).json({ msg: "firebase_uid alanı zorunludur." });
