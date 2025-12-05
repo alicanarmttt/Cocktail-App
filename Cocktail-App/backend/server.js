@@ -3,19 +3,25 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const rateLimit = require("express-rate-limit");
 
 const PORT = process.env.PORT || 5000;
 // === GÜVENLİK ADIMI 1: Middleware dosyasını içe aktar ===
 const verifyToken = require("./src/middleware/authMiddleware");
 
-// --- DEBUG LOGGER (YENİ EKLENDİ) ---
-// Gelen her isteğin metodunu ve tam adresini konsola yazar.
-// Örn: [ISTEK]: POST /api/users/loginOrRegister
-app.use((req, res, next) => {
-  console.log(`[ISTEK]: ${req.method} ${req.url}`);
-  next();
+// === GÜVENLİK ADIMI 2: Rate Limiter (Hız Sınırlayıcı) ===
+// Bu ayar, aynı IP adresinden gelen istekleri sınırlar.
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 Dakika
+  max: 100, // Her IP için 15 dakikada maksimum 100 istek
+  standardHeaders: true, // `RateLimit-*` başlıklarını (header) yanıtla birlikte gönder
+  legacyHeaders: false, // `X-RateLimit-*` başlıklarını devre dışı bırak
+  message: {
+    error: "Too Many Requests",
+    message:
+      "Çok fazla istek gönderdiniz, lütfen 15 dakika sonra tekrar deneyin.",
+  },
 });
-// -----------------------------------
 
 // === Middleware (Ara Yazılımlar) ===
 
@@ -23,6 +29,8 @@ app.use((req, res, next) => {
 app.use(cors());
 // Gelen JSON formatlı istek (body) gövdelerini parse etmek (okumak) için
 app.use(express.json());
+
+app.use(limiter);
 
 // === Rota (Route) Tanımlamaları ===
 
