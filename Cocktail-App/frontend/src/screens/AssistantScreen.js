@@ -44,7 +44,7 @@ const AssistantScreen = () => {
 
   // --- STATE ---
   const [searchText, setSearchText] = useState("");
-  const [selectedIds, setSelectedIds] = useState([]); // Sadece ID'leri tutmak yeterli ve performanslıdır
+  const [selectedIds, setSelectedIds] = useState([]);
   const [activeCategory, setActiveCategory] = useState("ALL");
 
   // --- REDUX DATA ---
@@ -66,7 +66,6 @@ const AssistantScreen = () => {
     }
   }, [ingredientsStatus, dispatch]);
 
-  // Sayfaya her gelindiğinde önceki sonuçları temizle ama SEÇİMLERİ KORU (Kullanıcı geri dönerse seçtikleri kalsın)
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       dispatch(clearSearchResults());
@@ -77,7 +76,6 @@ const AssistantScreen = () => {
   // --- 2. KATEGORİLERİ HESAPLA ---
   const categories = useMemo(() => {
     if (!allIngredients) return ["ALL"];
-    // Benzersiz kategorileri bul
     const uniqueCats = new Set(allIngredients.map(getCategoryName));
     return ["ALL", ...Array.from(uniqueCats)];
   }, [allIngredients, i18n.language]);
@@ -87,11 +85,8 @@ const AssistantScreen = () => {
     if (!allIngredients) return [];
 
     return allIngredients.filter((item) => {
-      // 1. Kategori Filtresi
       const itemCat = getCategoryName(item);
       const catMatch = activeCategory === "ALL" || itemCat === activeCategory;
-
-      // 2. Arama Filtresi
       const itemName = getName(item).toLowerCase();
       const searchMatch =
         !searchText || itemName.includes(searchText.toLowerCase());
@@ -104,32 +99,24 @@ const AssistantScreen = () => {
   const toggleSelection = (id) => {
     setSelectedIds((prev) => {
       if (prev.includes(id)) {
-        return prev.filter((itemId) => itemId !== id); // Varsa çıkar
+        return prev.filter((itemId) => itemId !== id);
       } else {
-        return [...prev, id]; // Yoksa ekle
+        return [...prev, id];
       }
     });
   };
 
-  // --- SEÇİMLERİ SIFIRLA ---
   const handleClearSelection = () => {
-    setSelectedIds([]); // Diziyi boşaltır, tikleri kaldırır.
+    setSelectedIds([]);
   };
 
-  // --- 5. TARİF BULMA (Action) ---
   const handleFindRecipes = async () => {
     if (searchStatus === "loading" || selectedIds.length === 0) return;
-
-    // Klavye açıksa kapat
     Keyboard.dismiss();
-
     try {
-      // Mod: Artık kullanıcıya sormuyoruz, her zaman 'flexible' gönderiyoruz.
-      // Sonuç ekranında biz gruplayacağız.
       await dispatch(
         findRecipes({ inventoryIds: selectedIds, mode: "flexible" })
       ).unwrap();
-
       navigation.navigate("AssistantResult");
     } catch (error) {
       console.error("Tarif arama hatası:", error);
@@ -176,13 +163,12 @@ const AssistantScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
-        {/* HEADER KISMI (Sabit) */}
+        {/* HEADER KISMI */}
         <View
           style={[
             styles.header,
             {
               backgroundColor: colors.background,
-              // Çizgiyi kaldırdım, sadece gölge kalsın
               shadowColor: colors.shadow,
             },
           ]}
@@ -199,10 +185,7 @@ const AssistantScreen = () => {
 
           {/* Arama Çubuğu */}
           <View
-            style={[
-              styles.searchContainer,
-              { backgroundColor: colors.card }, // Daha belirgin bir input alanı için card rengi
-            ]}
+            style={[styles.searchContainer, { backgroundColor: colors.card }]}
           >
             <Ionicons name="search" size={20} color={colors.textSecondary} />
             <TextInput
@@ -269,16 +252,14 @@ const AssistantScreen = () => {
                 );
               }}
             />
-            {/* MİNİK DOKUNUŞ: Sağa kaydırma ipucu (Overlay İkon) */}
             <View
-              pointerEvents="none" // Tıklamayı engelleme, arkadaki listeye geçsin
+              pointerEvents="none"
               style={{
                 position: "absolute",
                 right: 0,
                 top: 0,
                 bottom: 0,
                 justifyContent: "center",
-
                 backgroundColor: "transparent",
               }}
             >
@@ -286,7 +267,7 @@ const AssistantScreen = () => {
                 name="chevron-forward"
                 size={20}
                 color={colors.textSecondary}
-                style={{ opacity: 0.5 }} // Hafif silik, rahatsız etmesin
+                style={{ opacity: 0.5 }}
               />
             </View>
           </View>
@@ -299,10 +280,10 @@ const AssistantScreen = () => {
           contentContainerStyle={{
             paddingBottom: 100,
             paddingTop: 15,
-            paddingHorizontal: 20, // Kenarlardan boşluk bırakarak kart görünümü sağla
+            paddingHorizontal: 20,
           }}
-          initialNumToRender={15} // Performans için
-          removeClippedSubviews={true} // Performans için
+          initialNumToRender={15}
+          removeClippedSubviews={true}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
@@ -314,20 +295,34 @@ const AssistantScreen = () => {
             const isSelected = selectedIds.includes(item.ingredient_id);
             return (
               <Pressable
-                style={[
+                // Ripple'ı daha belirgin yapıyoruz
+                android_ripple={{ color: colors.primary + "30" }}
+                style={({ pressed }) => [
                   styles.itemCard,
                   {
+                    // DÜZELTME: Seçili olduğunda elevation'ı (gölgeyi) sıfırlıyoruz.
+                    // Böylece renk çakışması olmuyor ve "düz" ama renkli bir görünüm elde ediyoruz.
+                    elevation: isSelected ? 0 : 2,
+                    shadowOpacity: isSelected ? 0 : 0.05,
+
+                    // Seçiliyken %15 opaklıkta primary renk, değilse normal kart rengi
                     backgroundColor: isSelected
-                      ? colors.primary + "15" // Seçiliyse çok hafif bir renk tonu
+                      ? colors.primary + "20" // Biraz daha belirgin (%20)
                       : colors.card,
+
+                    // Çerçeve: Seçiliyken primary, değilse şeffaf (layout zıplamasın diye)
                     borderColor: isSelected ? colors.primary : "transparent",
-                    borderWidth: 1, // Seçiliyse çerçeve ekle
+                    borderWidth: 1.5, // Biraz daha kalın çerçeve
+
+                    // Android'de rengin taşmasını önlemek için kritik:
+                    overflow: "hidden",
+
+                    opacity: Platform.OS === "ios" && pressed ? 0.7 : 1,
                   },
                 ]}
                 onPress={() => toggleSelection(item.ingredient_id)}
               >
                 <View style={styles.rowContent}>
-                  {/* İsim */}
                   <Text
                     style={[
                       styles.rowText,
@@ -341,7 +336,6 @@ const AssistantScreen = () => {
                     {getName(item)}
                   </Text>
 
-                  {/* Kategori (Küçük gri yazı) */}
                   <Text
                     style={[styles.rowSubText, { color: colors.textSecondary }]}
                   >
@@ -349,9 +343,8 @@ const AssistantScreen = () => {
                   </Text>
                 </View>
 
-                {/* Seçim İkonu */}
                 <Ionicons
-                  name={isSelected ? "checkmark-circle" : "add-circle-outline"} // Checkbox yerine daha modern ikonlar
+                  name={isSelected ? "checkmark-circle" : "add-circle-outline"}
                   size={28}
                   color={isSelected ? colors.primary : colors.textSecondary}
                 />
@@ -360,10 +353,9 @@ const AssistantScreen = () => {
           }}
         />
 
-        {/* FOOTER (Yüzen Buton) - Sadece seçim varsa görünür */}
+        {/* FOOTER (Yüzen Buton) */}
         {selectedIds.length > 0 && (
           <View style={styles.footerContainer}>
-            {/* YENİ SİLVER SIFIRLAMA BUTTON */}
             <PremiumButton
               onPress={handleClearSelection}
               variant="silver"
@@ -371,9 +363,9 @@ const AssistantScreen = () => {
               gradientStyle={{
                 paddingHorizontal: 0,
                 paddingVertical: 0,
-                width: "100%", // Gradyan kutuyu tam doldursun
-                height: "100%", // Gradyan kutuyu tam doldursun
-                justifyContent: "center", // İkonu tam ortala
+                width: "100%",
+                height: "100%",
+                justifyContent: "center",
                 alignItems: "center",
               }}
             >
@@ -384,7 +376,6 @@ const AssistantScreen = () => {
               />
             </PremiumButton>
 
-            {/* YENİ GÜÇLÜ GOLD BUTTON */}
             <PremiumButton
               variant="gold"
               onPress={handleFindRecipes}
@@ -392,19 +383,16 @@ const AssistantScreen = () => {
               isLoading={searchStatus === "loading"}
               style={styles.actionButton}
             >
-              {/* 1. Badge (Sayı) */}
               <View style={styles.badge}>
                 <Text style={[styles.badgeText, { color: colors.buttonText }]}>
                   {selectedIds.length}
                 </Text>
               </View>
-              {/* 2. Ana Metin */}
               <Text
                 style={[styles.actionButtonText, { color: colors.buttonText }]}
               >
                 {t("assistant.show_recipes_btn", "Kokteylleri Bul")}
               </Text>
-              {/* 3. İkon */}
               <Ionicons
                 name="arrow-forward"
                 size={20}
@@ -428,16 +416,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  // --- HEADER ---
   header: {
     paddingTop: 10,
     paddingBottom: 10,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
-    elevation: 5, // Android gölgesi
+    elevation: 5,
     zIndex: 1,
-    borderBottomLeftRadius: 24, // Header'ın altını hafif yuvarlat
+    borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
   title: {
@@ -458,7 +445,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 15,
     height: 50,
-    borderRadius: 25, // Tam yuvarlak (pill shape)
+    borderRadius: 25,
   },
   searchInput: {
     flex: 1,
@@ -466,7 +453,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: "100%",
   },
-  // --- KATEGORİ TABLARI ---
   catTab: {
     paddingVertical: 8,
     paddingHorizontal: 20,
@@ -479,21 +465,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
   },
-  // --- LİSTE ELEMANI (CARD TASARIM) ---
   itemCard: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 14,
     paddingHorizontal: 16,
-    marginBottom: 10, // Kartlar arası boşluk
-    borderRadius: 16, // Kart köşe yumuşaklığı
-    // Hafif gölge ekleyerek derinlik katalım
+    marginBottom: 10,
+    borderRadius: 16,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
+    // Varsayılan gölge
     elevation: 2,
+    borderWidth: 1,
   },
   rowContent: {
     flex: 1,
@@ -513,7 +499,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
   },
-  // --- FOOTER BUTON ---
   footerContainer: {
     position: "absolute",
     bottom: 20,
@@ -524,14 +509,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 12,
   },
-  // Sıfırlama Butonu Stili
   resetButton: {
-    width: 60, // Biraz büyüttüm
+    width: 60,
     height: 60,
-    borderRadius: 30, // Tam daire
+    borderRadius: 30,
     paddingVertical: 0,
     paddingHorizontal: 0,
-    // Butona gölge ekleyelim ki listeden ayrılsın
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -540,7 +523,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     flex: 1,
-    height: 60, // Biraz büyüttüm
+    height: 60,
     borderRadius: 30,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },

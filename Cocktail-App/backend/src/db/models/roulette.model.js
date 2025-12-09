@@ -78,8 +78,9 @@ const getRoulettePool = async (mode, filter = null) => {
               "cocktail_requirements.ingredient_id",
               "ingredients.ingredient_id"
             )
-            .whereRaw(
-              "cocktail_requirements.cocktail_id = cocktails.cocktail_id"
+            .where(
+              "cocktail_requirements.cocktail_id",
+              db.ref("cocktails.cocktail_id")
             )
             .andWhere(function () {
               // --- ÖZEL VİSKİ MANTIĞI ---

@@ -4,7 +4,8 @@
     "error": "Bir hata oluştu",
     "or": "VEYA",
     "cancel": "İptal",
-    "ok": "Tamam"
+    "ok": "Tamam",
+    "close":"Kapat"
   },
   "auth": {
     "login": "Giriş Yap",
@@ -33,7 +34,8 @@
     "search_btn": "Kokteyl Ara...",
     "search_modal_title": "Hangi kokteyli arıyorsunuz?",
     "search_modal_placeholder": "Kokteyl adı yazın...",
-    "close": "Kapat"
+    "close": "Kapat",
+    "picker_prompt": "Bir Kokteyl Seçiniz"
   },
   "detail": {
     "ingredients_title": "Malzemeler",
@@ -45,7 +47,7 @@
     "legend_required": "Gerekli",
     "legend_garnish": "Süsleme",
     "pro_alt_title": "PRO Alternatif",
-    "pro_use_instead": "yerine:",
+    "pro_use_instead": "{{ingredient}} yerine seçeneklerin: ",
     "pro_can_use": "kullanabilirsiniz.",
     "pro_feature": "PRO Özellik",
     "pro_lock_msg": "Bu kokteylin alternatif tariflerini görmek ve 'Barmen Asistanı' özelliğini tam kapasite kullanmak için Pro üyeliğe geçin!",

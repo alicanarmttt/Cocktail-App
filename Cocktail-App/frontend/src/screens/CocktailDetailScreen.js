@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   Modal,
   Pressable,
-  Button,
+  Platform,
 } from "react-native";
 import {
   fetchCocktailById,
@@ -29,12 +29,11 @@ import PremiumButton from "../ui/PremiumButton";
  * @param   {object} route - React Navigation tarafından sağlanan prop.
  */
 const CocktailDetailScreen = ({ route }) => {
-  // HOOK: useTheme'den hem renkleri hem de YENİ fontları (typography) çekiyoruz
   const { colors, fonts } = useTheme();
-
-  // 1. Çeviri Hook'u
+  // useTranslation hook'u dil değişimini dinler ve bileşeni yeniden render eder.
   const { t, i18n } = useTranslation();
-  // 2. Helper: Dile Göre Metin Seçici
+
+  // Helper: Dile Göre Metin Seçici
   const getLocaleText = (tr, en) => (i18n.language === "tr" ? tr : en);
 
   const { cocktailId } = route.params;
@@ -42,30 +41,22 @@ const CocktailDetailScreen = ({ route }) => {
   const navigation = useNavigation();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  // YENİ EKLENDİ (EKSİK 3): "İç İçe Modal" (Modal 2) için state
-  // (Tıklanan malzemenin 'ing' objesini (artık içinde 'alternatives' dizisi var) tutar)
   const [selectedAlternative, setSelectedAlternative] = useState(null);
 
   const cocktail = useSelector(selectDetailedCocktail);
   const status = useSelector(getDetailedCocktailStatus);
   const error = useSelector(getDetailedCocktailError);
-  // YENİ EKLENDİ: Pro üyelik durumunu Redux'tan (userSlice) oku
   const isPro = useSelector(selectIsPro);
 
-  // 3. Adım: Ekran yüklendiğinde API isteğini tetikle
   useEffect(() => {
     if (cocktailId !== undefined && cocktailId !== null) {
       dispatch(fetchCocktailById(cocktailId));
     }
-
-    // 4. Adım (Cleanup): Ekran kapandığında state'i temizle.
     return () => {
       dispatch(clearDetail());
     };
   }, [cocktailId, dispatch]);
 
-  // 5. Adım: Duruma göre içeriği render et
   if (status === "loading" || status === "idle") {
     return (
       <View
@@ -96,9 +87,7 @@ const CocktailDetailScreen = ({ route }) => {
         </Text>
       </View>
     );
-  }
-  // 'succeeded' durumu
-  else if (status === "succeeded" && cocktail) {
+  } else if (status === "succeeded" && cocktail) {
     return (
       <View
         style={[styles.listContainer, { backgroundColor: colors.background }]}
@@ -106,16 +95,13 @@ const CocktailDetailScreen = ({ route }) => {
         <ScrollView contentContainerStyle={styles.scrollContentContainer}>
           <Image source={{ uri: cocktail.image_url }} style={styles.image} />
 
-          {/* KOKTEYL ADI (H1 - Serif/Tırnaklı) */}
           <Text
             style={[styles.title, fonts.styles.h1, { color: colors.primary }]}
           >
             {getLocaleText(cocktail.name_tr, cocktail.name_en)}
           </Text>
 
-          {/* Bölüm: Malzemeler */}
           <View style={styles.section}>
-            {/* Bölüm Başlığı (H2 - Serif) */}
             <Text
               style={[
                 styles.sectionTitle,
@@ -130,7 +116,6 @@ const CocktailDetailScreen = ({ route }) => {
             </Text>
             {cocktail.ingredients.map((ing) => (
               <View key={ing.requirement_id} style={styles.ingredientItem}>
-                {/* Malzeme Listesi (Body - Sans) */}
                 <Text
                   style={[
                     styles.ingredientText,
@@ -138,7 +123,6 @@ const CocktailDetailScreen = ({ route }) => {
                     { color: colors.text },
                   ]}
                 >
-                  {/* Miktar kısmını belki kalın (bodyBold) yapmak istersin, şimdilik düz yapıyoruz */}
                   <Text style={fonts.styles.bodyBold}>
                     {getLocaleText(ing.amount_tr, ing.amount_en)}{" "}
                   </Text>
@@ -148,7 +132,6 @@ const CocktailDetailScreen = ({ route }) => {
             ))}
           </View>
 
-          {/* "Eksik Malzemem Var" Butonu */}
           <PremiumButton
             style={styles.prepareButton}
             onPress={() => setIsModalVisible(true)}
@@ -156,7 +139,6 @@ const CocktailDetailScreen = ({ route }) => {
             title={t("detail.missing_ingredients_btn")}
           ></PremiumButton>
 
-          {/* Bölüm2: Hazırlanışı */}
           <View style={styles.section}>
             <Text
               style={[
@@ -170,7 +152,6 @@ const CocktailDetailScreen = ({ route }) => {
             >
               {t("detail.instructions_title")}
             </Text>
-            {/* Metin (Body - Sans - Okunaklı) */}
             <Text
               style={[styles.text, fonts.styles.body, { color: colors.text }]}
             >
@@ -181,7 +162,6 @@ const CocktailDetailScreen = ({ route }) => {
             </Text>
           </View>
 
-          {/* Bölüm3: Tarihçe */}
           <View style={styles.section}>
             <Text
               style={[
@@ -220,7 +200,6 @@ const CocktailDetailScreen = ({ route }) => {
             <Pressable
               style={[styles.modalContent, { backgroundColor: colors.card }]}
             >
-              {/* Modal Başlığı (H3 - Serif) */}
               <Text
                 style={[
                   styles.modalTitle,
@@ -231,7 +210,6 @@ const CocktailDetailScreen = ({ route }) => {
                 {t("detail.modal_title")}
               </Text>
 
-              {/* Bilgilendirme (Legend) kutusu */}
               <View
                 style={[
                   styles.legendContainer,
@@ -241,7 +219,6 @@ const CocktailDetailScreen = ({ route }) => {
                 <Text
                   style={[
                     styles.legendTitle,
-                    // Caption stili (küçük), ama başlık olduğu için bold ekliyoruz
                     fonts.styles.caption,
                     { color: colors.textSecondary, fontWeight: "bold" },
                   ]}
@@ -334,17 +311,13 @@ const CocktailDetailScreen = ({ route }) => {
                 </View>
               </View>
 
-              {/* Malzeme Butonları */}
               <View style={styles.modalButtonsContainer}>
                 {cocktail?.ingredients.map((ing) => (
                   <Pressable
                     key={ing.requirement_id}
-                    // Stil 'has_alternative' bayrağına göre dinamik
                     style={[
                       styles.ingredientButton,
-                      // 1. Çerçeve Rengi
                       { borderColor: ing.color_code || colors.border },
-                      // 2. Arka Plan Rengi
                       {
                         backgroundColor: ing.has_alternative
                           ? colors.proCardBg
@@ -352,11 +325,9 @@ const CocktailDetailScreen = ({ route }) => {
                       },
                     ]}
                     onPress={() => {
-                      // Eğer alternatif varsa detay modalını aç
                       if (ing.has_alternative) {
                         setSelectedAlternative(ing);
                       } else {
-                        // Basit alert (veya toast) kalabilir
                         alert(t("assistant.not_found"));
                       }
                     }}
@@ -364,7 +335,6 @@ const CocktailDetailScreen = ({ route }) => {
                     <Text
                       style={[
                         styles.ingredientButtonText,
-                        // Buton içi olduğu için 'body' kullanıyoruz ama boyutu 14px tutuyoruz
                         fonts.styles.body,
                         { color: colors.text, fontSize: 14 },
                       ]}
@@ -375,9 +345,7 @@ const CocktailDetailScreen = ({ route }) => {
                 ))}
               </View>
 
-              {/* --- MODAL 2: ALTERNATİF DETAYI (İÇ İÇE) --- 
-                  GÜNCELLENDİ: Artık liste (array) yapısını destekler.
-              */}
+              {/* --- MODAL 2: ALTERNATİF DETAYI --- */}
               <Modal
                 visible={!!selectedAlternative}
                 transparent={true}
@@ -394,7 +362,6 @@ const CocktailDetailScreen = ({ route }) => {
                       { backgroundColor: colors.background },
                     ]}
                   >
-                    {/* === Pro Kullanıcı Arayüzü === */}
                     {isPro && selectedAlternative ? (
                       <>
                         <Ionicons
@@ -412,39 +379,29 @@ const CocktailDetailScreen = ({ route }) => {
                         >
                           {t("detail.pro_alt_title")}
                         </Text>
-
-                        {/* Dinamik Başlık: X Malzemesi Yerine... */}
-                        <Text
-                          style={[
-                            styles.proText,
-                            fonts.styles.body,
-                            { color: colors.textSecondary },
-                          ]}
-                        >
-                          "
-                          {getLocaleText(
+                        {/* 1. Önce malzemenin adını değişkene alıyoruz */}
+                        {(() => {
+                          const ingredientName = getLocaleText(
                             selectedAlternative.name_tr,
                             selectedAlternative.name_en
-                          )}
-                          " {t("detail.pro_use_instead")}
-                        </Text>
+                          );
 
-                        <Text
-                          style={[
-                            styles.proText,
-                            fonts.styles.body,
-                            { marginBottom: 15, color: colors.textSecondary },
-                          ]}
-                        >
-                          {t(
-                            "detail.pro_can_use_list",
-                            "Aşağıdakilerden birini kullanabilirsiniz:"
-                          )}
-                        </Text>
-
-                        {/* GÜNCELLEME: ALTERNATİFLER LİSTESİ 
-                            Dizi (Array) üzerinden map yaparak hepsini listeliyoruz.
-                        */}
+                          return (
+                            <Text
+                              style={[
+                                styles.proText,
+                                fonts.styles.body,
+                                { color: colors.textSecondary },
+                              ]}
+                            >
+                              {/* 2. 't' fonksiyonuna bu ismi 'ingredient' parametresi olarak gönderiyoruz */}
+                              {/* JSON'da: "use this instead of: {{ingredient}}" olduğu için otomatik yerleşecek */}
+                              {t("detail.pro_use_instead", {
+                                ingredient: ingredientName,
+                              })}
+                            </Text>
+                          );
+                        })()}
                         <ScrollView style={{ maxHeight: 150, width: "100%" }}>
                           {selectedAlternative.alternatives &&
                             selectedAlternative.alternatives.map(
@@ -468,7 +425,6 @@ const CocktailDetailScreen = ({ route }) => {
                                       { color: colors.text },
                                     ]}
                                   >
-                                    {/* Miktar */}
                                     <Text
                                       style={{
                                         fontWeight: "bold",
@@ -480,7 +436,6 @@ const CocktailDetailScreen = ({ route }) => {
                                         alt.amount_en
                                       )}{" "}
                                     </Text>
-                                    {/* İsim */}
                                     {getLocaleText(alt.name_tr, alt.name_en)}
                                   </Text>
                                 </View>
@@ -489,7 +444,6 @@ const CocktailDetailScreen = ({ route }) => {
                         </ScrollView>
                       </>
                     ) : (
-                      /* === Free Kullanıcı Arayüzü (Satın Al Uyarısı) === */
                       <View style={styles.proLockContainer}>
                         <Ionicons
                           name="lock-closed"
@@ -515,16 +469,15 @@ const CocktailDetailScreen = ({ route }) => {
                         >
                           {t("detail.pro_lock_msg")}
                         </Text>
-
                         <Pressable
                           style={[
                             styles.proButton,
                             { backgroundColor: colors.gold },
                           ]}
                           onPress={() => {
-                            setSelectedAlternative(null); // Modalı kapat
-                            setIsModalVisible(false); // Ana modalı kapat
-                            navigation.navigate("UpgradeToPro"); // Yönlendir
+                            setSelectedAlternative(null);
+                            setIsModalVisible(false);
+                            navigation.navigate("UpgradeToPro");
                           }}
                         >
                           <Text
@@ -540,28 +493,42 @@ const CocktailDetailScreen = ({ route }) => {
                       </View>
                     )}
 
-                    <Button
-                      title={t("general.close", "Kapat")}
+                    {/* DÜZELTME: 'general.close' kullanarak JSON yapısına uyum sağladık */}
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.modalCloseButton,
+                        { backgroundColor: colors.primary },
+                        pressed && { opacity: 0.8 },
+                      ]}
                       onPress={() => setSelectedAlternative(null)}
-                      color={colors.primary}
-                    />
+                    >
+                      <Text style={styles.modalCloseButtonText}>
+                        {t("general.close", "Kapat")}
+                      </Text>
+                    </Pressable>
                   </Pressable>
                 </Pressable>
               </Modal>
-              {/* === "İÇ İÇE MODAL" SONU === */}
 
-              <Button
-                title={t("general.close", "Kapat")}
+              {/* DÜZELTME: 'general.close' kullanımı */}
+              <Pressable
+                style={({ pressed }) => [
+                  styles.modalCloseButton,
+                  { backgroundColor: colors.primary },
+                  pressed && { opacity: 0.8 },
+                ]}
                 onPress={() => setIsModalVisible(false)}
-                color={colors.primary}
-              />
+              >
+                <Text style={styles.modalCloseButtonText}>
+                  {t("general.close", "Kapat")}
+                </Text>
+              </Pressable>
             </Pressable>
           </Pressable>
         </Modal>
       </View>
     );
   }
-  // 'succeeded' ama 'cocktail' 'null' ise
   return (
     <View
       style={[styles.centeredContainer, { backgroundColor: colors.background }]}
@@ -594,8 +561,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   title: {
-    // fontSize: 26, -> fonts.styles.h1 (32px)
-    // fontWeight: "bold",
     margin: 15,
     textAlign: "center",
   },
@@ -605,8 +570,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sectionTitle: {
-    // fontSize: 20, -> fonts.styles.h2 (24px)
-    // fontWeight: "600",
     marginBottom: 10,
     borderBottomWidth: 1,
     paddingBottom: 5,
@@ -617,22 +580,14 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   ingredientText: {
-    // fontSize: 16, -> fonts.styles.body
     flexShrink: 1,
   },
-  text: {
-    // fontSize: 16, -> fonts.styles.body
-    // lineHeight: 24,
-  },
-  errorText: {
-    // fontSize: 16,
-  },
+  text: {},
+  errorText: {},
   prepareButton: {
     marginBottom: 15,
     alignSelf: "center",
   },
-
-  // Modal Stilleri
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -650,8 +605,6 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalTitle: {
-    // fontSize: 18, -> fonts.styles.h3
-    // fontWeight: "bold",
     marginBottom: 15,
   },
   legendContainer: {
@@ -661,8 +614,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   legendTitle: {
-    // fontSize: 12, -> fonts.styles.caption
-    // fontWeight: "bold",
     marginBottom: 5,
   },
   legendItem: {
@@ -677,9 +628,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     borderWidth: 2,
   },
-  legendText: {
-    // fontSize: 12, -> fonts.styles.caption
-  },
+  legendText: {},
   modalButtonsContainer: {
     width: "100%",
     flexDirection: "row",
@@ -694,11 +643,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     margin: 4,
   },
-  ingredientButtonText: {
-    // fontSize: 14,
-    // fontWeight: "500",
-  },
-  // İç İçe Modal (Modal 2) Stilleri
+  ingredientButtonText: {},
   modalOverlay2: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -719,13 +664,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   proTitle: {
-    // fontSize: 22, -> fonts.styles.h2
-    // fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
   },
   proText: {
-    // fontSize: 16, -> fonts.styles.body
     textAlign: "center",
     marginBottom: 5,
   },
@@ -737,7 +679,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   altListItemText: {
-    // fontSize: 16, -> fonts.styles.body
     marginLeft: 10,
   },
   proLockContainer: {
@@ -757,9 +698,24 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 4,
   },
-  proButtonText: {
-    // fontSize: 16, -> fonts.styles.button
-    // fontWeight: "bold",
+  proButtonText: {},
+  modalCloseButton: {
+    width: "100%",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  modalCloseButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

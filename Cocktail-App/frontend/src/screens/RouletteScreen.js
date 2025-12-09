@@ -12,7 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next"; // Çeviri kancası
+import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
@@ -27,8 +27,6 @@ import {
 } from "../features/rouletteSlice";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
-
-// --- SABİT VERİLER (Label Key'leri ile) ---
 
 const MODES = [
   {
@@ -67,14 +65,10 @@ const SPIRITS = [
   { id: "Gin", labelKey: "roulette.spirit_gin", icon: "flask" },
   { id: "Vodka", labelKey: "roulette.spirit_vodka", icon: "water" },
   { id: "Rum", labelKey: "roulette.spirit_rum", icon: "boat" },
-
-  // DÜZELTME: ID'yi özel anahtarımız yapıyoruz
   { id: "WhiskeyFamily", labelKey: "roulette.spirit_whiskey", icon: "beer" },
-
   { id: "Tequila", labelKey: "roulette.spirit_tequila", icon: "bonfire" },
 ];
 
-// Tat Profilleri (Backend Tag'leri ve Çeviri Key'leri)
 const TASTES = [
   { id: "Sweet", labelKey: "roulette.taste_sweet", icon: "ice-cream" },
   { id: "Sour", labelKey: "roulette.taste_sour", icon: "nutrition" },
@@ -86,21 +80,18 @@ const RouletteScreen = () => {
   const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { t, i18n } = useTranslation(); // Çeviri fonksiyonu
+  const { t, i18n } = useTranslation();
 
-  // State
-  const [step, setStep] = useState("menu"); // menu, filter, wheel, result
+  const [step, setStep] = useState("menu");
   const [selectedMode, setSelectedMode] = useState(null);
   const [filterType, setFilterType] = useState(null);
 
   const pool = useSelector(selectRoulettePool);
   const status = useSelector(getRouletteStatus);
 
-  // Animasyon
   const spinValue = useRef(new Animated.Value(0)).current;
   const [winner, setWinner] = useState(null);
 
-  // Temizlik
   useEffect(() => {
     if (step === "menu") {
       dispatch(clearRoulette());
@@ -109,7 +100,6 @@ const RouletteScreen = () => {
     }
   }, [step, dispatch]);
 
-  // Mod Seçimi
   const handleModeSelect = (modeId) => {
     setSelectedMode(modeId);
     if (modeId === "spirit") {
@@ -123,12 +113,10 @@ const RouletteScreen = () => {
     }
   };
 
-  // Filtre Seçimi
   const handleFilterSelect = (filterValue) => {
     startFetching(selectedMode, filterValue);
   };
 
-  // Veri Çekme
   const startFetching = async (mode, filter) => {
     setStep("wheel");
     const result = await dispatch(fetchRoulettePool({ mode, filter }));
@@ -139,7 +127,6 @@ const RouletteScreen = () => {
     }
   };
 
-  // Çarkı Döndür
   const spinWheel = () => {
     if (!pool || pool.length === 0) return;
 
@@ -149,7 +136,7 @@ const RouletteScreen = () => {
     spinValue.setValue(0);
 
     Animated.timing(spinValue, {
-      toValue: 5 + Math.random() * 3, // 5-8 tur
+      toValue: 5 + Math.random() * 3,
       duration: 4000,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
@@ -166,13 +153,9 @@ const RouletteScreen = () => {
     outputRange: ["0deg", "360deg"],
   });
 
-  // Helper: Dinamik İsim (Result için)
   const getCocktailName = (item) =>
     i18n.language === "tr" ? item.name_tr : item.name_en;
 
-  // --- RENDER ---
-
-  // 1. MENÜ
   const renderMenu = () => (
     <View style={styles.menuContainer}>
       <Text style={[styles.headerTitle, { color: colors.text }]}>
@@ -208,7 +191,6 @@ const RouletteScreen = () => {
     </View>
   );
 
-  // 2. FİLTRE
   const renderFilter = () => {
     const list = filterType === "spirit" ? SPIRITS : TASTES;
     const titleKey =
@@ -251,7 +233,6 @@ const RouletteScreen = () => {
     );
   };
 
-  // 3. ÇARK
   const renderWheel = () => {
     if (status === "loading") {
       return (
@@ -266,9 +247,30 @@ const RouletteScreen = () => {
 
     return (
       <View style={styles.wheelContainer}>
-        <Text style={[styles.wheelTitle, { color: colors.text }]}>
-          {pool.length} {t("roulette.options_found")}
-        </Text>
+        {/* YENİ ŞIK GERİ BUTONU */}
+        <View style={styles.wheelHeader}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.backButton,
+              {
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+                shadowColor: "#000",
+                opacity: pressed ? 0.8 : 1, // Tıklama efekti
+              },
+            ]}
+            onPress={() => setStep("menu")}
+          >
+            <Ionicons name="arrow-back" size={24} color={colors.primary} />
+          </Pressable>
+
+          <Text style={[styles.wheelTitle, { color: colors.text }]}>
+            {pool.length} {t("roulette.options_found")}
+          </Text>
+
+          {/* Başlığı ortalamak için dengeleyici boş kutu */}
+          <View style={{ width: 45 }} />
+        </View>
 
         <View style={styles.wheelWrapper}>
           <View style={styles.indicatorContainer}>
@@ -280,7 +282,7 @@ const RouletteScreen = () => {
             resizeMode="contain"
           />
         </View>
-        {/* ÇARKI ÇEVİR BUTONU */}
+
         <PremiumButton
           variant="arcade"
           onPress={spinWheel}
@@ -291,7 +293,6 @@ const RouletteScreen = () => {
     );
   };
 
-  // 4. SONUÇ
   const renderResult = () => {
     if (!winner) return null;
 
@@ -321,7 +322,6 @@ const RouletteScreen = () => {
         </View>
 
         <View style={styles.resultButtons}>
-          {/* 1. TARİFE GİT (Gold - Ana Aksiyon) */}
           <PremiumButton
             variant="arcade"
             title={t("roulette.go_recipe")}
@@ -330,16 +330,14 @@ const RouletteScreen = () => {
                 cocktailId: winner.cocktail_id,
               })
             }
-            style={styles.resultBtn} // Sadece genişlik ayarı kalacak
+            style={styles.resultBtn}
           />
 
-          {/* 2. TEKRAR ÇEVİR (Silver - İkincil Aksiyon) */}
           <PremiumButton
             variant="cyber"
             onPress={() => setStep("wheel")}
-            style={styles.resultBtn} // Aynı genişlik
+            style={styles.resultBtn}
           >
-            {/* İkon + Yazı (PremiumButton bunları yan yana dizer) */}
             <Ionicons
               name="refresh"
               size={20}
@@ -417,7 +415,22 @@ const styles = StyleSheet.create({
   },
   modeText: { fontWeight: "bold", textAlign: "center" },
   filterContainer: { flex: 1, padding: 20 },
-  backButton: { marginBottom: 20 },
+  // Eski backButton stili sadeydi, burayı renderFilter içinde de güncelleyebiliriz istersen
+  // ama şu anlık sadece wheelHeader içindeki backButton'u özelleştirdik.
+  backButton: {
+    // YENİ BUTON STİLİ
+    width: 45,
+    height: 45,
+    borderRadius: 22.5, // Tam daire
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    // Gölge ayarları
+    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
   listWrapper: { marginTop: 20 },
   filterItem: {
     flexDirection: "row",
@@ -430,9 +443,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-around",
-    paddingVertical: 40,
+    paddingVertical: 20,
   },
-  wheelTitle: { fontSize: 22, fontWeight: "bold" },
+  wheelHeader: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  wheelTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   wheelWrapper: {
     width: SCREEN_WIDTH * 0.8,
     height: SCREEN_WIDTH * 0.8,

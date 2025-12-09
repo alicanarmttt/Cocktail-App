@@ -4,7 +4,9 @@
     "error": "An error occurred",
     "or": "OR",
     "cancel": "Cancel",
-    "ok": "OK"
+    "ok": "OK",
+    "close":"Close"
+
   },
   "auth": {
     "login": "Login",
@@ -33,7 +35,8 @@
     "search_btn": "Search Cocktail...",
     "search_modal_title": "Which cocktail are you looking for?",
     "search_modal_placeholder": "Type cocktail name...",
-    "close": "Close"
+    "close": "Close",
+    "picker_prompt": "Select a Cocktail..."
   },
   "detail": {
     "ingredients_title": "Ingredients",
@@ -45,7 +48,7 @@
     "legend_required": "Required",
     "legend_garnish": "Garnish",
     "pro_alt_title": "PRO Alternative",
-    "pro_use_instead": "use instead of:",
+    "pro_use_instead": "Use this instead of: {{ingredient}}",
     "pro_can_use": "you can use.",
     "pro_feature": "PRO Feature",
     "pro_lock_msg": "Upgrade to Pro to see alternative recipes and use the 'Barman Assistant' to its full potential!",

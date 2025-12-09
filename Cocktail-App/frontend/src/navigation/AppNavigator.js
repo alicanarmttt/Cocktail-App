@@ -167,9 +167,13 @@ function MainAppNavigator() {
       screenOptions={({ route }) => ({
         headerShown: false, // Her sayfanın kendi header'ı var
 
+        // #8. PROBLEM ÇÖZÜMÜ: Navigasyon Karışıklığını Önleme
+        // Bir sekmeden çıkıp diğerine gidince, eski sekmedeki her şeyi (Detay sayfası vb.) kapatır.
+        // Böylece geri döndüğünde "Acaba hangi kokteyl açıktı?" karmaşası olmaz, temiz liste görürsün.
+        // Bu aynı zamanda Redux'taki 'selectedCocktail' verisinin çakışmasını engeller.
+        unmountOnBlur: true,
+
         // --- İKON RENGİ BAĞLANTISI ---
-        // İşte bütünlüğü sağlayan yer burası.
-        // Aktif ikon rengini, senin Bordo (Primary) rengin yapıyoruz.
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSecondary,
 
@@ -182,24 +186,24 @@ function MainAppNavigator() {
 
         // --- TAB BAR STİLİ (PREMIUM DOKUNUŞ) ---
         tabBarStyle: {
-          backgroundColor: colors.card, // Temaya göre Beyaz veya Koyu Gri (Asla Bordo yapma!)
-          borderTopWidth: 0, // O ucuz duran çizgiyi siliyoruz
+          backgroundColor: colors.card,
+          borderTopWidth: 0,
 
-          // Yükseklik ayarı (Daha ferah bir görünüm için)
+          // Yükseklik ayarı
           height: Platform.OS === "ios" ? 90 : 70,
           paddingBottom: Platform.OS === "ios" ? 30 : 12,
           paddingTop: 10,
 
-          // Gölge (Shadow) - Barın havada durmasını sağlar
+          // Gölge (Shadow)
           ...Platform.select({
             ios: {
               shadowColor: "#000",
-              shadowOffset: { width: 0, height: -5 }, // Gölge yukarı doğru vursun
-              shadowOpacity: dark ? 0.3 : 0.1, // Koyu modda biraz daha belirgin
+              shadowOffset: { width: 0, height: -5 },
+              shadowOpacity: dark ? 0.3 : 0.1,
               shadowRadius: 10,
             },
             android: {
-              elevation: 20, // Android için güçlü gölge
+              elevation: 20,
             },
           }),
         },
@@ -210,7 +214,6 @@ function MainAppNavigator() {
           if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
           } else if (route.name === "CocktailList") {
-            // 'book' yerine daha garanti olan 'list' ikonunu kullanıyoruz
             iconName = focused ? "list" : "list-outline";
           } else if (route.name === "Assistant") {
             iconName = focused ? "wine" : "wine-outline";
@@ -224,7 +227,6 @@ function MainAppNavigator() {
             iconName = "alert-circle-outline";
           }
 
-          // Seçili ise ikonun arkasına hafif bir parlama efekti (Opsiyonel ama şık durur)
           return (
             <View style={{ alignItems: "center", justifyContent: "center" }}>
               <Ionicons name={iconName} size={size} color={color} />
@@ -276,6 +278,10 @@ function HomeStackNavigator() {
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
+        // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
+        // Android'de sola yapışık olan başlığı merkeze çeker. iOS'ta zaten merkezdedir.
+        headerTitleAlign: "center",
+
         // GÜNCELLEME: Header renkleri dinamik
         headerStyle: { backgroundColor: "transparent" },
         headerTintColor: "#fff", // Primary üstündeki yazı rengi
@@ -307,12 +313,14 @@ function HomeStackNavigator() {
  * İçinde Rulet ve Detay sayfası olur.
  */
 function RouletteStackNavigator() {
-  // YENİ: Renkleri hook ile alıyoruz
   const { colors } = useTheme();
 
   return (
     <Stack.Navigator
       screenOptions={{
+        // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
+        headerTitleAlign: "center",
+
         // GÜNCELLEME: Header renkleri dinamik
         headerStyle: { backgroundColor: colors.primary },
         headerTintColor: colors.buttonText || "#fff",
@@ -324,21 +332,15 @@ function RouletteStackNavigator() {
         component={RouletteScreen}
         options={{
           title: "Kokteyl Çarkı 🎲",
-
-          // Yazı rengini Beyaz yapıyoruz (Renkli arka planda okunsun diye)
           headerTintColor: "#FFFFFF",
-
-          // Header'ın altındaki ince gölge çizgisini kaldırıyoruz (Daha temiz durur)
           headerShadowVisible: false,
           headerStyle: { backgroundColor: "transparent" },
-          //Arka planı Gradyan yapıyoruz
           headerBackground: () => (
             <LinearGradient
-              // Parti Renkleri: Mor -> Fuşya -> Turuncu
               colors={colors.partyGradient}
               style={{ flex: 1 }}
-              start={{ x: 0, y: 0 }} // Sol Üstten
-              end={{ x: 1, y: 1 }} // Sağ Alta
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
             />
           ),
         }}
@@ -356,14 +358,14 @@ function RouletteStackNavigator() {
  * @desc    YENİ EKLENDİ: "Asistan" sekmesinin (Assistant, Results) iç yığınını yönetir.
  */
 function AssistantStackNavigator() {
-  // YENİ: Renkleri hook ile alıyoruz
   const { colors } = useTheme();
 
   return (
     <Stack.Navigator
-      // Bu yığının da stilini diğeriyle aynı yapalım
       screenOptions={{
-        // GÜNCELLEME: Header renkleri dinamik
+        // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
+        headerTitleAlign: "center",
+
         headerStyle: { backgroundColor: "transparent" },
         headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
@@ -371,12 +373,12 @@ function AssistantStackNavigator() {
       }}
     >
       <Stack.Screen
-        name="AssistantHome" // Yığının ana ekranı
+        name="AssistantHome"
         component={AssistantScreen}
         options={{ title: "Barmen'in Asistanı" }}
       />
       <Stack.Screen
-        name="AssistantResult" // AssistantScreen'in yönlendireceği ekran
+        name="AssistantResult"
         component={AssistantResultScreen}
         options={{ title: "Bulunan Tarifler" }}
       />
@@ -393,14 +395,14 @@ function AssistantStackNavigator() {
  * @desc    "Profil" sekmesinin (Profile, UpgradeToPro) iç yığınını yönetir.
  */
 function ProfileStackNavigator() {
-  // YENİ: Renkleri hook ile alıyoruz
   const { colors } = useTheme();
 
   return (
-    // ÖNEMLİ: Bu yığının (Stack) kendi başlığı (header) VARDIR
     <ProfileStack.Navigator
       screenOptions={{
-        // GÜNCELLEME: Header renkleri dinamik
+        // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
+        headerTitleAlign: "center",
+
         headerStyle: { backgroundColor: "transparent" },
         headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
@@ -408,12 +410,12 @@ function ProfileStackNavigator() {
       }}
     >
       <ProfileStack.Screen
-        name="ProfileHome" // Yığının ana ekranı
+        name="ProfileHome"
         component={ProfileScreen}
         options={{ title: "Profil" }}
       />
       <ProfileStack.Screen
-        name="UpgradeToPro" // 'Satın Alma' ekranı
+        name="UpgradeToPro"
         component={UpgradeToProScreen}
         options={{ title: "PRO'ya Yükselt" }}
       />
@@ -427,7 +429,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "#fff", // SİLİNDİ: Inline style ile dinamik veriliyor
   },
 });
 

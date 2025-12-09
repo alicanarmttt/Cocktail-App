@@ -35,7 +35,13 @@
       "web": {
         "favicon": "./assets/favicon.png"
       }
-    }
-   
+    },
+    "android": {
+      "package": "com.anonymous.frontend"
+    },
+    "plugins": [
+      "expo-localization",
+      "expo-web-browser"
+    ]
   }
 }
