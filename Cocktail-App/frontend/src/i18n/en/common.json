@@ -5,7 +5,8 @@
     "or": "OR",
     "cancel": "Cancel",
     "ok": "OK",
-    "close":"Close"
+    "close":"Close",
+    "selected": "Selected"
 
   },
   "auth": {
@@ -99,11 +100,12 @@
   "roulette": {
     "menu_title": "Choose Roulette Mode",
     "menu_subtitle": "Pick a mode to start the party.",
-    "mode_driver": "Driver Mode 🚗",
-    "mode_popular": "Hall of Fame ⭐",
-    "mode_taste": "Pick Your Vibe 🍋",
-    "mode_spirit": "Pick Your Poison 🥃",
-    "mode_random": "Bartender's Choice 🎲",
+    "mode_custom":"Create your Roulette",
+    "mode_driver": "Driver Mode",
+    "mode_popular": "Hall of Fame",
+    "mode_taste": "Pick Your Vibe",
+    "mode_spirit": "Pick Your Poison",
+    "mode_random": "Bartender's Choice",
     "pick_spirit": "Which Spirit?",
     "pick_taste": "Which Vibe?",
     "spirit_gin": "Gin",
@@ -122,6 +124,9 @@
     "go_recipe": "Go to Recipe",
     "spin_again": "Spin Again",
     "back_menu": "Back to Menu",
-    "no_cocktail_found": "No cocktails found for these criteria."
+    "no_cocktail_found": "No cocktails found for these criteria.",
+    "create_wheel_btn":"Create your roulette",
+    "create_custom_title":"Choose your cocktails"
+
   }
 }

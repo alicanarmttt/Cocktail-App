@@ -5,7 +5,8 @@
     "or": "VEYA",
     "cancel": "İptal",
     "ok": "Tamam",
-    "close":"Kapat"
+    "close":"Kapat",
+    "selected": "Seçildi"
   },
   "auth": {
     "login": "Giriş Yap",
@@ -99,11 +100,12 @@
   "roulette": {
     "menu_title": "Rulet Modunu Seç",
     "menu_subtitle": "Partiyi başlatmak için bir mod seç.",
-    "mode_driver": "Sürücü Modu     🚗",
-    "mode_popular": "Şöhretler Karması⭐",
-    "mode_taste": "Damak Tadı 🍋",
-    "mode_spirit": "Zehrini Seç 🥃",
-    "mode_random": "Şansına Güven 🎲",
+    "mode_custom":"Ruletini oluştur",
+    "mode_driver": "Sürücü Modu",
+    "mode_popular": "Şöhretler Karması",
+    "mode_taste": "Damak Tadı",
+    "mode_spirit": "Zehrini Seç",
+    "mode_random": "Şansına Güven",
     "pick_spirit": "Hangi İçki?",
     "pick_taste": "Hangi Tat?",
     "spirit_gin": "Cin",
@@ -122,6 +124,9 @@
     "go_recipe": "Tarife Git",
     "spin_again": "Tekrar Çevir",
     "back_menu": "Menüye Dön",
-    "no_cocktail_found": "Bu kriterlere uygun kokteyl bulunamadı."
+    "no_cocktail_found": "Bu kriterlere uygun kokteyl bulunamadı.",
+    "create_wheel_btn":"Ruletini oluştur",
+    "create_custom_title":"Kokteylleri seçin"
+
   }
 }

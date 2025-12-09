@@ -11,7 +11,6 @@ import {
   Image,
   Pressable,
   Modal,
-  TextInput,
   FlatList,
   TouchableOpacity,
   Platform, // GÜNCELLEME: Platform kontrolü için eklendi
@@ -23,6 +22,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { useTheme } from "@react-navigation/native";
 import PremiumButton from "../ui/PremiumButton.js";
+import CocktailSelectorModal from "../components/CocktailSelectorModal.js";
 import {
   fetchCocktails,
   selectAllCocktails,
@@ -86,7 +86,6 @@ const HomeScreen = ({ navigation }) => {
 
   // Arama modalı için stateler
   const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
-  const [searchText, setSearchText] = useState("");
 
   // YENİ: Android Özel Picker Modalı için State
   const [isAndroidPickerVisible, setIsAndroidPickerVisible] = useState(false);
@@ -130,14 +129,6 @@ const HomeScreen = ({ navigation }) => {
     return [...populars, ...others];
   }, [allCocktails, i18n.language]);
 
-  // --- ARAMA FİLTRELEME FONKSİYONU ---
-  const filteredCocktails = useMemo(() => {
-    return sortedCocktails.filter((cocktail) => {
-      const name = getName(cocktail);
-      return name.toLowerCase().includes(searchText.toLowerCase());
-    });
-  }, [sortedCocktails, searchText, i18n.language]);
-
   // Otomatik açılış ekranında cosmopolitanı getir.
   useEffect(() => {
     if (sortedCocktails.length > 0 && selectedCocktailId === null) {
@@ -155,7 +146,6 @@ const HomeScreen = ({ navigation }) => {
   const handleSelectFromSearch = (id) => {
     setSelectedCocktailId(id); // Ruleti güncelle
     setIsSearchModalVisible(false); // Modalı kapat
-    setSearchText(""); // Arama metnini temizle
   };
 
   // --- YENİ: ANDROID MODALDAN SEÇİM YAPMA ---
@@ -375,96 +365,13 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* --- ARAMA MODALI (Search) --- */}
-      <Modal
+      {/* --- YENİ KULLANIM: ORTAK ARAMA MODALI --- */}
+      <CocktailSelectorModal
         visible={isSearchModalVisible}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setIsSearchModalVisible(false)}
-      >
-        <View
-          style={[
-            styles.modalContainer,
-            { backgroundColor: colors.background },
-          ]}
-        >
-          {/* ... Arama Modal İçeriği ... */}
-          <View
-            style={[styles.modalHeader, { borderBottomColor: colors.border }]}
-          >
-            <Text style={[styles.modalTitle, { color: colors.text }]}>
-              {t("home.search_modal_title")}
-            </Text>
-            <Pressable onPress={() => setIsSearchModalVisible(false)}>
-              <Ionicons
-                name="close-circle"
-                size={30}
-                color={colors.textSecondary}
-              />
-            </Pressable>
-          </View>
-
-          <View
-            style={[
-              styles.modalInputContainer,
-              { backgroundColor: colors.subCard },
-            ]}
-          >
-            <Ionicons
-              name="search"
-              size={20}
-              color={colors.textSecondary}
-              style={{ marginRight: 10 }}
-            />
-            <TextInput
-              style={[styles.modalInput, { color: colors.text }]}
-              placeholder={t("home.search_modal_placeholder")}
-              placeholderTextColor={colors.textSecondary}
-              value={searchText}
-              onChangeText={setSearchText}
-              autoFocus={true}
-            />
-          </View>
-
-          <FlatList
-            data={filteredCocktails}
-            keyExtractor={(item) => item.cocktail_id.toString()}
-            contentContainerStyle={{ paddingBottom: 20 }}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[
-                  styles.searchItem,
-                  { borderBottomColor: colors.border },
-                ]}
-                onPress={() => handleSelectFromSearch(item.cocktail_id)}
-              >
-                <Image
-                  source={{ uri: item.image_url }}
-                  style={[
-                    styles.searchItemImage,
-                    { backgroundColor: colors.subCard },
-                  ]}
-                />
-                <Text style={[styles.searchItemText, { color: colors.text }]}>
-                  {getName(item)}
-                </Text>
-                <Ionicons
-                  name="chevron-forward"
-                  size={20}
-                  color={colors.border}
-                />
-              </TouchableOpacity>
-            )}
-            ListEmptyComponent={
-              <Text
-                style={[styles.noResultText, { color: colors.textSecondary }]}
-              >
-                {t("assistant.not_found")}
-              </Text>
-            }
-          />
-        </View>
-      </Modal>
+        onClose={() => setIsSearchModalVisible(false)}
+        onSelect={handleSelectFromSearch}
+        multiSelect={false} // Home ekranı tekli seçim yapar
+      />
 
       {/* --- ANDROID İÇİN SEÇİM MODALI --- */}
       {Platform.OS === "android" && (
@@ -603,8 +510,8 @@ const styles = StyleSheet.create({
     }),
   },
   cocktailImage: {
-    width: 220,
-    height: 220,
+    width: 265,
+    height: 265,
     borderRadius: 5,
   },
   frameOverlay: {
@@ -735,14 +642,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  modalInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    margin: 15,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    height: 50,
-  },
+
   modalInput: {
     flex: 1,
     height: 50,
