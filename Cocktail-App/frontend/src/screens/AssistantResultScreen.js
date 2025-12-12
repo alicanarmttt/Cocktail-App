@@ -20,6 +20,7 @@ import {
   getSearchStatus,
   getSearchError,
 } from "../features/barmenSlice";
+import CocktailImage from "../components/CocktailImage";
 
 /**
  * @desc    Barmen Asistanı Sonuç Ekranı (AssistantResultScreen)
@@ -106,13 +107,10 @@ const AssistantResultScreen = () => {
         onPress={() => handlePressCocktail(item.cocktail_id)}
       >
         {/* Sol: Resim */}
-        <Image
-          source={{
-            uri:
-              item.image_url || "https://placehold.co/100x100/eee/999?text=Bar",
-          }}
+        <CocktailImage
+          uri={item.image_url}
           style={[styles.cardImage, { backgroundColor: colors.subCard }]}
-        />
+        ></CocktailImage>
 
         {/* Orta: İçerik */}
         <View style={styles.cardContent}>

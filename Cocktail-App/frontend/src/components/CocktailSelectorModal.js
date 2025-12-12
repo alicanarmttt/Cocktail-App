@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { selectAllCocktails } from "../features/cocktails/cocktailSlice";
 import PremiumButton from "../ui/PremiumButton";
-
+import CocktailImage from "../components/CocktailImage.js";
 /**
  * @desc    Hem tekli (Home) hem çoklu (Rulet) seçim yapabilen akıllı modal.
  * Tasarım, HomeScreen'deki orijinal modal yapısından alındı.
@@ -160,13 +160,14 @@ const CocktailSelectorModal = ({
                 ]}
                 onPress={() => handleItemPress(item.cocktail_id)}
               >
-                <Image
-                  source={{ uri: item.image_url }}
+                <CocktailImage
+                  uri={item.image_url}
                   style={[
                     styles.searchItemImage,
                     { backgroundColor: colors.subCard },
                   ]}
-                />
+                ></CocktailImage>
+
                 <Text
                   style={[
                     styles.searchItemText,

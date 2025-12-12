@@ -23,6 +23,7 @@ import { selectIsPro } from "../features/userSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import PremiumButton from "../ui/PremiumButton";
+import CocktailImage from "../components/CocktailImage";
 
 /**
  * @desc    Tek bir kokteylin detaylarını gösterir.
@@ -97,8 +98,10 @@ const CocktailDetailScreen = ({ route }) => {
         style={[styles.listContainer, { backgroundColor: colors.background }]}
       >
         <ScrollView contentContainerStyle={styles.scrollContentContainer}>
-          <Image source={{ uri: cocktail.image_url }} style={styles.image} />
-
+          <CocktailImage
+            uri={cocktail.image_url}
+            style={styles.image}
+          ></CocktailImage>
           <Text
             style={[styles.title, fonts.styles.h1, { color: colors.primary }]}
           >

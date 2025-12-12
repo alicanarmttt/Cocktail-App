@@ -33,6 +33,7 @@ import {
   selectCocktailById,
 } from "../features/cocktails/cocktailSlice.js";
 import VINTAGE_FRAME_URL from "../../assets/gold_frame.png";
+import CocktailImage from "../components/CocktailImage.js";
 
 // ... (Component mantığı ve state'ler aynen korunuyor) ...
 /**
@@ -209,11 +210,10 @@ const HomeScreen = ({ navigation }) => {
         <View style={[styles.imageWrapper, { shadowColor: "#000" }]}>
           {/* KATMAN 1 (En Alt): KOKTEYL RESMİ */}
           {selectedCocktail ? (
-            <Image
-              source={{ uri: selectedCocktail.image_url }}
+            <CocktailImage
+              uri={selectedCocktail.image_url}
               style={styles.cocktailImage}
-              resizeMode="cover"
-            />
+            ></CocktailImage>
           ) : (
             // Resim yoksa gösterilecek Placeholder kutusu
             <View
