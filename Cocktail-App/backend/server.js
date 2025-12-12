@@ -60,3 +60,8 @@ app.listen(PORT, () => {
     `Backend sunucusu http://localhost:${PORT} adresinde çalışıyor...`
   );
 });
+
+// Render Health Check için basit bir route
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
