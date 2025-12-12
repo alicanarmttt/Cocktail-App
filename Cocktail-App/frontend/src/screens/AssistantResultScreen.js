@@ -31,10 +31,12 @@ const AssistantResultScreen = () => {
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
 
-  // --- HELPER: Dinamik İsim ---
-  // Veritabanı şemanda name_tr ve name_en var.
-  const getName = (item) =>
-    i18n.language === "tr" ? item.name_tr : item.name_en;
+  // --- HELPER: Dinamik İsim (YENİ HALİ) ---
+  const getName = (item) => {
+    if (!item || !item.name) return "";
+    // name_tr yerine name[lang] kullanıyoruz
+    return item.name[i18n.language] || item.name["en"] || "";
+  };
 
   // --- REDUX DATA ---
   const rawResults = useSelector(selectSearchResults);

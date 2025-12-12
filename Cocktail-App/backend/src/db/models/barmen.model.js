@@ -10,27 +10,25 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
     return [];
   }
 
-  // === MOD: FLEXIBLE (MSSQL DÜZELTMESİ) ===
+  // === MOD: FLEXIBLE (AKILLI SIRALAMA) ===
   if (mode === "flexible") {
-    // Alt Sorgu: Eksik Malzeme Sayısını Hesapla (db.raw yerine subquery)
+    // Alt Sorgu: Eksik Malzeme Sayısını Hesapla
     const missingCountSubquery = db("cocktail_requirements as r")
-      .count("*") // COUNT(*)
-      // db.ref() sayesinde 'c.cocktail_id'nin dış tablodan geldiğini Knex anlar
+      .count("*")
       .where("r.cocktail_id", db.ref("c.cocktail_id"))
-      .andWhere("r.level_id", 1)
+      .andWhere("r.level_id", 1) // Sadece ZORUNLU malzemeleri say
       .whereNotIn("r.ingredient_id", inventoryIds)
       .whereNotExists((qb) => {
         qb.select(1)
           .from("recipe_alternatives as a")
-          // db.ref ile korelasyon (Correlation)
           .where("a.original_ingredient_id", db.ref("r.ingredient_id"))
           .andWhere("a.cocktail_id", db.ref("c.cocktail_id"))
           .whereIn("a.alternative_ingredient_id", inventoryIds);
       })
-      .as("missing_count"); // Sütun adı
+      .as("missing_count");
 
     const smartMatches = await db("cocktails as c")
-      // A) ÖN FİLTRELEME
+      // A) ÖN FİLTRELEME (Eşleşme mantığı aynı kalıyor)
       .whereExists((qb) => {
         qb.select(1)
           .from("cocktail_requirements as req")
@@ -41,35 +39,34 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
               "alt.original_ingredient_id"
             ).andOn("req.cocktail_id", "=", "alt.cocktail_id");
           })
-          .where("req.cocktail_id", db.ref("c.cocktail_id")) // Raw yerine db.ref
+          .where("req.cocktail_id", db.ref("c.cocktail_id"))
           .andWhere((subQb) => {
             subQb
               .whereIn("req.ingredient_id", inventoryIds)
               .orWhereIn("alt.alternative_ingredient_id", inventoryIds);
           });
       })
-      // B) SEÇME (Subquery'yi buraya ekliyoruz)
+      // B) SEÇME (GÜNCELLENDİ: JSONB Yapısı)
       .select(
         "c.cocktail_id",
-        "c.name_tr",
-        "c.name_en",
+        "c.name", // { en: "Mojito", tr: "Mojito" } olarak döner
         "c.image_url",
-        missingCountSubquery // <--- Hesaplama burada
+        missingCountSubquery
       )
-      // C) SIRALAMA
+      // C) SIRALAMA (GÜNCELLENDİ: JSON İçindeki EN isme göre)
       .orderBy("missing_count", "asc")
-      .orderBy("c.name_en", "asc");
+      .orderByRaw("c.name->>'en' ASC"); // PostgreSQL JSON operatörü
 
     return smartMatches;
   }
 
-  // === MOD: STRICT (Geri Uyumluluk) ===
+  // === MOD: STRICT (TAM EŞLEŞME) ===
   if (mode === "strict") {
     const exactMatches = await db("cocktails as c")
       .whereNotExists((qb) => {
-        qb.select(1) // .from öncesi select eklemek best practice'tir
+        qb.select(1)
           .from("cocktail_requirements as req")
-          .where("req.cocktail_id", db.ref("c.cocktail_id")) // Raw yerine ref
+          .where("req.cocktail_id", db.ref("c.cocktail_id"))
           .andWhere("req.level_id", 1)
           .whereNotIn("req.ingredient_id", inventoryIds)
           .whereNotExists((subQb) => {
@@ -81,7 +78,8 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
               .whereIn("alt.alternative_ingredient_id", inventoryIds);
           });
       })
-      .select("c.cocktail_id", "c.name_tr", "c.name_en", "c.image_url");
+      // GÜNCELLENDİ: JSONB Yapısı
+      .select("c.cocktail_id", "c.name", "c.image_url");
 
     return exactMatches.map((c) => ({ ...c, missing_count: 0 }));
   }

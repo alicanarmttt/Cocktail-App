@@ -53,11 +53,18 @@ const AssistantScreen = () => {
   const ingredientsError = useSelector(getIngredientsError);
   const searchStatus = useSelector(getSearchStatus);
 
-  // --- HELPER: Çeviri ---
-  const getName = (item) =>
-    i18n.language === "tr" ? item.name_tr : item.name_en;
-  const getCategoryName = (item) =>
-    i18n.language === "tr" ? item.category_name_tr : item.category_name_en;
+  // --- HELPER: Çeviri (YENİ HALİ) ---
+  const getName = (item) => {
+    // Backend artık { en: "Lime", tr: "Misket Limonu" } gönderiyor
+    if (!item || !item.name) return "";
+    return item.name[i18n.language] || item.name["en"] || "";
+  };
+
+  const getCategoryName = (item) => {
+    // Backend artık { en: "Spirits", tr: "Ana İçkiler" } gönderiyor
+    if (!item || !item.category_name) return "";
+    return item.category_name[i18n.language] || item.category_name["en"] || "";
+  };
 
   // --- 1. VERİ YÜKLEME ---
   useEffect(() => {
@@ -80,11 +87,12 @@ const AssistantScreen = () => {
     return ["ALL", ...Array.from(uniqueCats)];
   }, [allIngredients, i18n.language]);
 
-  // --- 3. LİSTEYİ FİLTRELE ---
+  // --- 3. LİSTEYİ FİLTRELE VE SIRALA ---
   const filteredList = useMemo(() => {
     if (!allIngredients) return [];
 
-    return allIngredients.filter((item) => {
+    // 1. Önce Filtrele
+    const filtered = allIngredients.filter((item) => {
       const itemCat = getCategoryName(item);
       const catMatch = activeCategory === "ALL" || itemCat === activeCategory;
       const itemName = getName(item).toLowerCase();
@@ -92,6 +100,21 @@ const AssistantScreen = () => {
         !searchText || itemName.includes(searchText.toLowerCase());
 
       return catMatch && searchMatch;
+    });
+
+    // 2. Sonra SIRALA (Türkçe karakter duyarlı)
+    return filtered.sort((a, b) => {
+      // Önce Kategoriye Göre Sırala
+      const catA = getCategoryName(a);
+      const catB = getCategoryName(b);
+      const catCompare = catA.localeCompare(catB, i18n.language);
+
+      if (catCompare !== 0) return catCompare;
+
+      // Kategoriler aynıysa, Malzeme İsmine Göre Sırala
+      const nameA = getName(a);
+      const nameB = getName(b);
+      return nameA.localeCompare(nameB, i18n.language);
     });
   }, [allIngredients, activeCategory, searchText, i18n.language]);
 
