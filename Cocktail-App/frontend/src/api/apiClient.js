@@ -3,9 +3,11 @@ import { auth } from "./firebaseConfig"; // Dosya yolunun ve adının doğru old
 
 // NOT: Fiziksel cihazda test ediyorsan .env dosyana bilgisayarının
 // yerel IP adresini (örn: 192.168.1.X) yazmalısın.
-export const API_URL =
-  process.env.EXPO_PUBLIC_API_URL || "http://10.0.2.2:5000/api";
+// export const API_URL =
+//   process.env.EXPO_PUBLIC_API_URL || "http://10.0.2.2:5000/api";
 
+export const API_URL = "https://cocktail-app-backend-0bba.onrender.com/api";
+console.log("🚀 GÜNCEL API URL:", API_URL);
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
