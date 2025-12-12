@@ -247,9 +247,10 @@ const RouletteScreen = () => {
     outputRange: ["0deg", "360deg"],
   });
 
-  const getCocktailName = (item) =>
-    i18n.language === "tr" ? item.name_tr : item.name_en;
-
+  const getCocktailName = (item) => {
+    if (!item || !item.name) return "";
+    return item.name[i18n.language] || item.name["en"] || "";
+  };
   // --- RENDER ---
 
   // 1. MENÜ (YENİLENMİŞ TASARIM)

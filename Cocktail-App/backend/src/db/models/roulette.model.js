@@ -1,8 +1,7 @@
 const knexConfig = require("../../../knexfile").development;
 const db = require("knex")(knexConfig);
 
-// Sabit Popüler Listesi (Frontend ile uyumlu olmalı veya DB'de flag tutulmalı)
-// Şimdilik isim bazlı filtreleme yapıyoruz.
+// Sabit Popüler Listesi (İsimler İngilizce olarak eşleşmeli)
 const POPULAR_NAMES = [
   "Margarita",
   "Mojito",
@@ -28,19 +27,18 @@ const POPULAR_NAMES = [
 
 /**
  * @desc    Rulet için belirtilen moda göre kokteyl havuzunu getirir.
- * @param   {string} mode - 'random', 'driver', 'popular', 'taste', 'spirit'
+ * @param   {string} mode - 'random', 'driver', 'popular', 'taste', 'spirit', 'custom'
  * @param   {any} filter - Moduna göre filtre değeri (tag, ingredientId vb.)
  */
-
 const getRoulettePool = async (mode, filter = null) => {
-  // Temel Sorgu: Bize sadece ID, İsim ve Resim lazım. (Detaylara gerek yok)
+  // Temel Sorgu: JSONB yapısını (name) çekiyoruz
   let query = db("cocktails").select(
     "cocktail_id",
-    "name_tr",
-    "name_en",
+    "name", // { en: "...", tr: "..." }
     "image_url",
     "is_alcoholic"
   );
+
   switch (mode) {
     // 1. MOD: SÜRÜCÜ (Alkolsüzler)
     case "driver":
@@ -48,20 +46,24 @@ const getRoulettePool = async (mode, filter = null) => {
       break;
 
     // 2. MOD: ŞÖHRETLER KARMASI (Popülerler)
+    // İngilizce isme göre filtreliyoruz (JSON içinde 'en' anahtarı)
     case "popular":
-      query = query.whereIn("name_en", POPULAR_NAMES);
+      query = query.whereRaw("name->>'en' = ANY(?)", [POPULAR_NAMES]);
+      // Alternatif (Daha basit): whereIn kullanamayız çünkü sütun JSON.
+      // O yüzden whereRaw en garantisi.
       break;
 
     // 3. MOD: DAMAK TADI (Tag Filtreleme)
-    // filter örn: "Sweet", "Sour", "Bitter"
+    // Tags alanı da JSONB olduğu için arama şekli değişiyor.
+    // filter örn: "Sweet"
     case "taste":
       if (filter) {
-        // Hem TR hem EN taglarda arayalım
+        // Tagler veritabanında JSON array olarak duruyor olabilir veya string.
+        // Güvenli yöntem: JSONB içindeki metinlerde ara.
         query = query.where(function () {
-          this.where("tags_en", "like", `%${filter}%`).orWhere(
-            "tags_tr",
-            "like",
-            `%${filter}%`
+          this.whereRaw("tags->>'en' ILIKE ?", [`%${filter}%`]).orWhereRaw(
+            "tags->>'tr' ILIKE ?",
+            [`%${filter}%`]
           );
         });
       }
@@ -84,36 +86,40 @@ const getRoulettePool = async (mode, filter = null) => {
             )
             .andWhere(function () {
               // --- ÖZEL VİSKİ MANTIĞI ---
-              // Eğer Frontend "WhiskeyFamily" gönderirse, tüm viski türlerini ara.
               if (filter === "WhiskeyFamily") {
-                this.where("ingredients.name_en", "like", `%Whisk%`) // Whiskey, Whisky
-                  .orWhere("ingredients.name_en", "like", `%Bourbon%`)
-                  .orWhere("ingredients.name_en", "like", `%Scotch%`)
-                  .orWhere("ingredients.name_tr", "like", `%Viski%`)
-                  .orWhere("ingredients.name_tr", "like", `%Burbon%`);
+                this.whereRaw("ingredients.name->>'en' ILIKE ?", [`%Whisk%`])
+                  .orWhereRaw("ingredients.name->>'en' ILIKE ?", [`%Bourbon%`])
+                  .orWhereRaw("ingredients.name->>'en' ILIKE ?", [`%Scotch%`])
+                  .orWhereRaw("ingredients.name->>'tr' ILIKE ?", [`%Viski%`])
+                  .orWhereRaw("ingredients.name->>'tr' ILIKE ?", [`%Burbon%`]);
               }
               // --- DİĞERLERİ (Votka, Cin, Rom vb.) ---
               else {
-                this.where(
-                  "ingredients.name_en",
-                  "like",
-                  `%${filter}%`
-                ).orWhere("ingredients.name_tr", "like", `%${filter}%`);
+                this.whereRaw("ingredients.name->>'en' ILIKE ?", [
+                  `%${filter}%`,
+                ]).orWhereRaw("ingredients.name->>'tr' ILIKE ?", [
+                  `%${filter}%`,
+                ]);
               }
             });
         });
       }
       break;
 
+    // YENİ MOD: CUSTOM (Kullanıcının Seçtikleri)
+    case "custom":
+      if (Array.isArray(filter) && filter.length > 0) {
+        query = query.whereIn("cocktail_id", filter);
+      }
+      break;
+
     // 5. MOD: BARMEN'İN SÜRPRİZİ (Hepsi / Random)
     case "random":
     default:
-      // Hiçbir filtre uygulama, hepsini getir.
-      // (Rastgele seçimi frontend veya backend yapabilir, burada havuzu veriyoruz)
+      // Filtre yok, hepsi gelir
       break;
   }
 
-  // Sonuçları çalıştır
   return await query;
 };
 
