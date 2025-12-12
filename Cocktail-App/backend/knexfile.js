@@ -12,6 +12,8 @@ module.exports = {
       connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false }, // Supabase için bu ayar BURADA olmalı
     },
+    // ---> AŞAĞIDAKİ SATIRI EKLEMEN ÇOK ÖNEMLİ <---
+    family: 4,
     migrations: {
       directory: "./src/db/migrations",
     },
