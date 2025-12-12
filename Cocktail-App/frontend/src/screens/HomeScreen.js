@@ -69,10 +69,13 @@ const HomeScreen = ({ navigation }) => {
 
   // 1. Dil Kancasını (Hook) Başlat
   const { t, i18n } = useTranslation();
-  // Dinamik İsim Seçici (Helper)
+  // Helper: Dinamik İsim Seçici
   const getName = (item) => {
-    if (!item) return "";
-    return i18n.language === "tr" ? item.name_tr : item.name_en;
+    if (!item || !item.name) return "";
+
+    // 1. Öncelik: Seçili dil (örn: item.name['tr'])
+    // 2. Öncelik: İngilizce (Fallback) (örn: item.name['en'])
+    return item.name[i18n.language] || item.name["en"] || "";
   };
 
   // 1. ADIM: Tüm kokteylleri Redux'tan çek (4 kokteylimiz)
@@ -113,7 +116,7 @@ const HomeScreen = ({ navigation }) => {
 
     allCocktails.forEach((cocktail) => {
       // İngilizce ismine göre popüler mi diye bakıyoruz (Data tutarlılığı için)
-      if (POPULAR_COCKTAILS.includes(cocktail.name_en)) {
+      if (POPULAR_COCKTAILS.includes(cocktail.name.en)) {
         populars.push(cocktail);
       } else {
         others.push(cocktail);
@@ -133,7 +136,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     if (sortedCocktails.length > 0 && selectedCocktailId === null) {
       const targetCocktail = sortedCocktails.find(
-        (c) => c.name_en === "Cosmopolitan"
+        (c) => c.name && c.name.en === "Cosmopolitan"
       );
 
       if (targetCocktail) {
@@ -313,7 +316,7 @@ const HomeScreen = ({ navigation }) => {
                 color={colors.text}
               />
               {sortedCocktails.map((cocktail) => {
-                const isPopular = POPULAR_COCKTAILS.includes(cocktail.name_en);
+                const isPopular = POPULAR_COCKTAILS.includes(cocktail.name.en);
                 const labelPrefix = isPopular ? "⭐ " : "";
                 return (
                   <Picker.Item
@@ -409,7 +412,7 @@ const HomeScreen = ({ navigation }) => {
               contentContainerStyle={{ paddingBottom: 20 }}
               renderItem={({ item }) => {
                 const isSelected = selectedCocktailId === item.cocktail_id;
-                const isPopular = POPULAR_COCKTAILS.includes(item.name_en);
+                const isPopular = POPULAR_COCKTAILS.includes(item.name.en);
 
                 return (
                   <TouchableOpacity

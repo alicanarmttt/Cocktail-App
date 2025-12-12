@@ -34,7 +34,11 @@ const CocktailDetailScreen = ({ route }) => {
   const { t, i18n } = useTranslation();
 
   // Helper: Dile Göre Metin Seçici
-  const getLocaleText = (tr, en) => (i18n.language === "tr" ? tr : en);
+  // YENİ HALİ):
+  const getLocaleText = (obj) => {
+    if (!obj) return "";
+    return obj[i18n.language] || obj["en"] || "";
+  };
 
   const { cocktailId } = route.params;
   const dispatch = useDispatch();
@@ -98,7 +102,7 @@ const CocktailDetailScreen = ({ route }) => {
           <Text
             style={[styles.title, fonts.styles.h1, { color: colors.primary }]}
           >
-            {getLocaleText(cocktail.name_tr, cocktail.name_en)}
+            {getLocaleText(cocktail.name)}
           </Text>
 
           <View style={styles.section}>
@@ -124,9 +128,10 @@ const CocktailDetailScreen = ({ route }) => {
                   ]}
                 >
                   <Text style={fonts.styles.bodyBold}>
-                    {getLocaleText(ing.amount_tr, ing.amount_en)}{" "}
+                    {getLocaleText(ing.amount)}
+                    {"  "}
                   </Text>
-                  {getLocaleText(ing.name_tr, ing.name_en)}
+                  {getLocaleText(ing.name)}
                 </Text>
               </View>
             ))}
@@ -155,10 +160,7 @@ const CocktailDetailScreen = ({ route }) => {
             <Text
               style={[styles.text, fonts.styles.body, { color: colors.text }]}
             >
-              {getLocaleText(
-                cocktail.instructions_tr,
-                cocktail.instructions_en
-              )}
+              {getLocaleText(cocktail.instructions, cocktail.instructions)}
             </Text>
           </View>
 
@@ -178,10 +180,7 @@ const CocktailDetailScreen = ({ route }) => {
             <Text
               style={[styles.text, fonts.styles.body, { color: colors.text }]}
             >
-              {getLocaleText(
-                cocktail.history_notes_tr,
-                cocktail.history_notes_en
-              )}
+              {getLocaleText(cocktail.history_notes, cocktail.history_notes)}
             </Text>
           </View>
         </ScrollView>
@@ -339,7 +338,7 @@ const CocktailDetailScreen = ({ route }) => {
                         { color: colors.text, fontSize: 14 },
                       ]}
                     >
-                      {getLocaleText(ing.name_tr, ing.name_en)}
+                      {getLocaleText(ing.name)}
                     </Text>
                   </Pressable>
                 ))}
@@ -382,8 +381,8 @@ const CocktailDetailScreen = ({ route }) => {
                         {/* 1. Önce malzemenin adını değişkene alıyoruz */}
                         {(() => {
                           const ingredientName = getLocaleText(
-                            selectedAlternative.name_tr,
-                            selectedAlternative.name_en
+                            selectedAlternative.name,
+                            selectedAlternative.name
                           );
 
                           return (
@@ -432,11 +431,11 @@ const CocktailDetailScreen = ({ route }) => {
                                       }}
                                     >
                                       {getLocaleText(
-                                        alt.amount_tr,
-                                        alt.amount_en
+                                        alt.amount,
+                                        alt.amount
                                       )}{" "}
                                     </Text>
-                                    {getLocaleText(alt.name_tr, alt.name_en)}
+                                    {getLocaleText(alt.name, alt.name)}
                                   </Text>
                                 </View>
                               )

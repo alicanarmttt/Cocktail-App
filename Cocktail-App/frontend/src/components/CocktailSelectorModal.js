@@ -52,8 +52,10 @@ const CocktailSelectorModal = ({
   }, [visible]);
 
   // Helper: İsim Çevirisi
-  const getName = (item) =>
-    i18n.language === "tr" ? item.name_tr : item.name_en;
+  const getName = (item) => {
+    if (!item || !item.name) return "";
+    return item.name[i18n.language] || item.name["en"] || "";
+  };
 
   // Filtreleme Mantığı
   const filteredCocktails = useMemo(() => {

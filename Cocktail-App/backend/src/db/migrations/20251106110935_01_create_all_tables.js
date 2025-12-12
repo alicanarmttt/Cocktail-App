@@ -3,26 +3,23 @@
  * @returns { Promise<void> }
  */
 exports.up = async function (knex) {
-  // 1. IMPORTANCE LEVELS (Önem Seviyeleri - Çevirili)
+  // 1. IMPORTANCE LEVELS
   await knex.schema.createTable("importance_levels", (table) => {
     table.increments("level_id").primary();
-    table.string("level_name_tr").notNullable(); // 'Gerekli'
-    table.string("level_name_en").notNullable(); // 'Required'
+    // JSONB: { "en": "Required", "tr": "Gerekli" ... }
+    table.jsonb("level_name").notNullable();
     table.string("color_code");
   });
 
-  // 2. INGREDIENT CATEGORIES (Malzeme Kategorileri - Çevirili)
+  // 2. INGREDIENT CATEGORIES
   await knex.schema.createTable("ingredient_categories", (table) => {
     table.increments("category_id").primary();
-    // Türkçe
-    table.string("category_name_tr").notNullable(); // 'Alkol'
-    table.string("parent_category_name_tr");
-    // İngilizce
-    table.string("category_name_en").notNullable(); // 'Alcohol'
-    table.string("parent_category_name_en");
+    // JSONB: { "en": "Spirits", "tr": "Ana İçkiler" ... }
+    table.jsonb("category_name").notNullable();
+    table.jsonb("parent_category_name"); // Opsiyonel
   });
 
-  // 3. USERS (Kullanıcılar - Değişmedi, email evrenseldir)
+  // 3. USERS
   await knex.schema.createTable("users", (table) => {
     table.increments("user_id").primary();
     table.string("firebase_uid").notNullable().unique();
@@ -31,40 +28,28 @@ exports.up = async function (knex) {
     table.timestamps(true, true);
   });
 
-  // 4. COCKTAILS (Kokteyller - Çevirili)
+  // 4. COCKTAILS (Çok Dilli Ana Tablo)
   await knex.schema.createTable("cocktails", (table) => {
     table.increments("cocktail_id").primary();
     table.string("api_id").unique();
 
-    // --- TÜRKÇE ALANLAR ---
-    table.string("name_tr").notNullable();
-    table.text("instructions_tr").notNullable();
-    table.string("glass_type_tr"); // 'Yüksek bardak'
-    table.text("tags_tr"); // 'Ekşi,Yaz,Parti'
-    table.text("history_notes_tr");
-
-    // --- İNGİLİZCE ALANLAR ---
-    table.string("name_en").notNullable();
-    table.text("instructions_en").notNullable();
-    table.string("glass_type_en"); // 'Highball glass'
-    table.text("tags_en"); // 'Sour,Summer,Party'
-    table.text("history_notes_en");
+    // --- EVRENSEL ALANLAR (JSONB) ---
+    table.jsonb("name").notNullable(); // { "en": "Mojito", "tr": "Mojito" }
+    table.jsonb("instructions").notNullable(); // { "en": "Mix...", "tr": "Karıştır..." }
+    table.jsonb("glass_type"); // { "en": "Highball", "tr": "Highball bardağı" }
+    table.jsonb("tags"); // { "en": ["Sour"], "tr": ["Ekşi"] }
+    table.jsonb("history_notes");
 
     // --- ORTAK ALANLAR ---
     table.boolean("is_alcoholic").defaultTo(true);
-    table.string("image_url");
+    table.string("image_url"); // Resim URL'i evrenseldir
   });
 
-  // 5. INGREDIENTS (Malzemeler - Çevirili)
+  // 5. INGREDIENTS
   await knex.schema.createTable("ingredients", (table) => {
     table.increments("ingredient_id").primary();
-
-    table.string("name_tr").notNullable(); // 'Misket Limonu'
-    table.string("name_en").notNullable(); // 'Lime'
-
-    // Benzersizlik kontrolü: Artık tek başına name değil, tr ve en kombinasyonu veya ayrı ayrı unique olabilir.
-    // Genelde api'den gelen unique name_en olur ama biz ikisine de index atabiliriz.
-    // table.unique('name_en');
+    // { "en": "Lime", "tr": "Misket Limonu" }
+    table.jsonb("name").notNullable();
 
     table
       .integer("category_id")
@@ -74,7 +59,7 @@ exports.up = async function (knex) {
       .onDelete("SET NULL");
   });
 
-  // 6. USER PROFILES (Değişmedi)
+  // 6. USER PROFILES
   await knex.schema.createTable("user_profiles", (table) => {
     table.increments("profile_id").primary();
     table
@@ -88,13 +73,12 @@ exports.up = async function (knex) {
     table.string("profile_image_url");
   });
 
-  // 7. COCKTAIL REQUIREMENTS (Gereksinimler - Miktar Çevirili)
+  // 7. COCKTAIL REQUIREMENTS
   await knex.schema.createTable("cocktail_requirements", (table) => {
     table.increments("requirement_id").primary();
 
-    // Miktar metin olduğu için çevrilmeli (örn: "Juice of 1" vs "1 adet suyu")
-    table.string("amount_tr").notNullable();
-    table.string("amount_en").notNullable();
+    // Miktar: { "en": "2 oz", "tr": "6 cl" }
+    table.jsonb("amount").notNullable();
 
     table
       .integer("cocktail_id")
@@ -118,7 +102,7 @@ exports.up = async function (knex) {
       .inTable("importance_levels");
   });
 
-  // 8. RECIPE ALTERNATIVES (Alternatifler - Miktar Çevirili)
+  // 8. RECIPE ALTERNATIVES
   await knex.schema.createTable("recipe_alternatives", (table) => {
     table.increments("alternative_id").primary();
 
@@ -129,9 +113,7 @@ exports.up = async function (knex) {
       .references("ingredient_id")
       .inTable("ingredients");
 
-    // Alternatif miktarı da dilli olmalı
-    table.string("alternative_amount_tr").notNullable();
-    table.string("alternative_amount_en").notNullable();
+    table.jsonb("alternative_amount").notNullable();
 
     table
       .integer("cocktail_id")
@@ -148,12 +130,11 @@ exports.up = async function (knex) {
       .inTable("ingredients");
   });
 
-  // 9. BARMENS CORNER (Kullanıcı İçeriği - Çevrilmez)
-  // Not: Kullanıcı gönderileri genelde orijinal dilinde kalır.
+  // 9. BARMENS CORNER
   await knex.schema.createTable("barmens_corner_posts", (table) => {
     table.increments("post_id").primary();
     table.string("image_url").notNullable();
-    table.text("caption"); // Kullanıcının yazdığı dil neyse o kalır.
+    table.text("caption");
     table.timestamps(true, true);
 
     table
@@ -182,8 +163,9 @@ exports.down = async function (knex) {
   await knex.schema.dropTableIfExists("recipe_alternatives");
   await knex.schema.dropTableIfExists("cocktail_requirements");
   await knex.schema.dropTableIfExists("user_profiles");
-  await knex.schema.dropTableIfExists("ingredients");
   await knex.schema.dropTableIfExists("cocktails");
+  await knex.schema.dropTableIfExists("ingredients");
+  await knex.schema.dropTableIfExists("user_profiles"); // Tekrar kontrol
   await knex.schema.dropTableIfExists("users");
   await knex.schema.dropTableIfExists("ingredient_categories");
   await knex.schema.dropTableIfExists("importance_levels");

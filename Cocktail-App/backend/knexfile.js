@@ -1,20 +1,34 @@
-//.env variables -> process.env
+// backend/knexfile.js
 require("dotenv").config();
 
-//Mssql connection settings (came from env)
+/**
+ * @type { Object.<string, import("knex").Knex.Config> }
+ */
 module.exports = {
   development: {
-    client: "mssql",
+    client: "pg",
+    // DÜZELTME: connection'ı string yerine obje yapıyoruz
     connection: {
-      host: process.env.DB_HOST || "localhost",
-      port: parseInt(process.env.DB_PORT) || 1433,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      options: {
-        encrypt: false,
-        trustServerCertificate: true,
-      },
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }, // Supabase için bu ayar BURADA olmalı
+    },
+    migrations: {
+      directory: "./src/db/migrations",
+    },
+    seeds: {
+      directory: "./src/db/seeds",
+    },
+    pool: {
+      min: 2,
+      max: 10,
+    },
+  },
+
+  production: {
+    client: "pg",
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
     },
     migrations: {
       directory: "./src/db/migrations",
@@ -23,6 +37,4 @@ module.exports = {
       directory: "./src/db/seeds",
     },
   },
-
-  production: {},
 };
