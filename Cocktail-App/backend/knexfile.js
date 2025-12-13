@@ -11,9 +11,10 @@ module.exports = {
     connection: {
       connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false }, // Supabase için bu ayar BURADA olmalı
+      // ---> AŞAĞIDAKİ SATIRI EKLEMEN ÇOK ÖNEMLİ <---
+      family: 4,
     },
-    // ---> AŞAĞIDAKİ SATIRI EKLEMEN ÇOK ÖNEMLİ <---
-    family: 4,
+
     migrations: {
       directory: "./src/db/migrations",
     },
@@ -31,12 +32,17 @@ module.exports = {
     connection: {
       connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false },
+      family: 4,
     },
     migrations: {
       directory: "./src/db/migrations",
     },
     seeds: {
       directory: "./src/db/seeds",
+    },
+    pool: {
+      min: 2,
+      max: 10, // Bağlantı havuzunu biraz artırdık, daha sağlıklı olur
     },
   },
 };
