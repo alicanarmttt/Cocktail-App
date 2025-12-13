@@ -1,5 +1,11 @@
 require("dotenv").config();
 
+// server.js dosyasının EN ÜST SATIRI
+const dns = require("node:dns");
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder("ipv4first");
+}
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
