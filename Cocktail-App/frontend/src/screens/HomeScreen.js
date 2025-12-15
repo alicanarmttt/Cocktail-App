@@ -34,6 +34,8 @@ import {
 } from "../features/cocktails/cocktailSlice.js";
 import VINTAGE_FRAME_URL from "../../assets/gold_frame.png";
 import CocktailImage from "../components/CocktailImage.js";
+import SkeletonCard from "../components/common/SkeletonCard";
+import ErrorView from "../components/common/ErrorView";
 
 // ... (Component mantığı ve state'ler aynen korunuyor) ...
 /**
@@ -82,6 +84,7 @@ const HomeScreen = ({ navigation }) => {
   // 1. ADIM: Tüm kokteylleri Redux'tan çek (4 kokteylimiz)
   const allCocktails = useSelector(selectAllCocktails);
   const status = useSelector(getCocktailsListStatus);
+
   const error = useSelector(getCocktailsListError);
 
   // 2. ADIM: Rulette 'o an' hangisinin seçili olduğunu tutmak için lokal 'state'
@@ -169,9 +172,13 @@ const HomeScreen = ({ navigation }) => {
           { backgroundColor: colors.background },
         ]}
       >
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={{ marginTop: 10, color: colors.text }}>
-          {t("general.loading")}
+        {/* Spinner yerine İskelet Kartı */}
+        {/* Kullanıcıya içeriğin yapısı hakkında ipucu verir */}
+        <SkeletonCard />
+
+        {/* Altına isteğe bağlı küçük bir yazı */}
+        <Text style={{ marginTop: 20, color: colors.textSecondary }}>
+          {t("general.loading", "Kokteyller Hazırlanıyor...")}
         </Text>
       </View>
     );
@@ -180,16 +187,15 @@ const HomeScreen = ({ navigation }) => {
   // Hata durumu
   if (status === "failed") {
     return (
-      <View
-        style={[
-          styles.centeredContainer,
-          { backgroundColor: colors.background },
-        ]}
-      >
-        <Text style={[styles.errorText, { color: colors.notification }]}>
-          {error || t("general.error")}
-        </Text>
-      </View>
+      <ErrorView
+        // Başlık ve mesajı dil desteğiyle (veya varsayılanla) veriyoruz
+        title={t("home.error_title", "Bağlantı Kurulamadı")}
+        message={
+          error || t("general.error", "Veriler yüklenirken bir sorun oluştu.")
+        }
+        // "Tekrar Dene" butonuna basınca API isteğini yeniden tetikler
+        onRetry={() => dispatch(fetchCocktails())}
+      />
     );
   }
 

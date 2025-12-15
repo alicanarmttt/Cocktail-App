@@ -25,6 +25,9 @@ import { useNavigation, useTheme } from "@react-navigation/native";
 import PremiumButton from "../ui/PremiumButton";
 import CocktailImage from "../components/CocktailImage";
 
+import CocktailDetailSkeleton from "../components/common/CocktailDetailSkeleton";
+import ErrorView from "../components/common/ErrorView";
+
 /**
  * @desc    Tek bir kokteylin detaylarını gösterir.
  * @param   {object} route - React Navigation tarafından sağlanan prop.
@@ -63,34 +66,14 @@ const CocktailDetailScreen = ({ route }) => {
   }, [cocktailId, dispatch]);
 
   if (status === "loading" || status === "idle") {
-    return (
-      <View
-        style={[
-          styles.centeredContainer,
-          { backgroundColor: colors.background },
-        ]}
-      >
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
+    return <CocktailDetailSkeleton />;
   } else if (status === "failed") {
     return (
-      <View
-        style={[
-          styles.centeredContainer,
-          { backgroundColor: colors.background },
-        ]}
-      >
-        <Text
-          style={[
-            styles.errorText,
-            fonts.styles.body,
-            { color: colors.notification },
-          ]}
-        >
-          {error || t("general.error")}
-        </Text>
-      </View>
+      <ErrorView
+        title={t("general.error_title", "Bir Hata Oluştu")}
+        message={error || t("general.error")}
+        onRetry={() => dispatch(fetchCocktailById(cocktailId))}
+      />
     );
   } else if (status === "succeeded" && cocktail) {
     return (
@@ -532,15 +515,14 @@ const CocktailDetailScreen = ({ route }) => {
     );
   }
   return (
-    <View
-      style={[styles.centeredContainer, { backgroundColor: colors.background }]}
-    >
-      <Text
-        style={[styles.errorText, fonts.styles.body, { color: colors.text }]}
-      >
-        {t("results.not_found")}
-      </Text>
-    </View>
+    <ErrorView
+      title={t("results.not_found", "Sonuç Bulunamadı")}
+      message={t(
+        "results.no_cocktail_msg",
+        "Aradığınız kokteyl bilgilerine ulaşılamadı."
+      )}
+      iconName="search-off"
+    />
   );
 };
 

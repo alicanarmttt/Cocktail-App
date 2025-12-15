@@ -22,6 +22,9 @@ import {
 } from "../features/barmenSlice";
 import CocktailImage from "../components/CocktailImage";
 
+import ResultCardSkeleton from "../components/common/ResultCardSkeleton";
+import ErrorView from "../components/common/ErrorView";
+
 /**
  * @desc    Barmen Asistanı Sonuç Ekranı (AssistantResultScreen)
  * Gelen sonuçları "Yapılabilir", "Az Eksik" ve "Diğer" olarak gruplar.
@@ -197,13 +200,29 @@ const AssistantResultScreen = () => {
   if (status === "loading") {
     return (
       <SafeAreaView
-        style={[
-          styles.centeredContainer,
-          { backgroundColor: colors.background },
-        ]}
+        style={[styles.container, { backgroundColor: colors.background }]}
       >
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
+        {/* Header taklidi */}
+        <View
+          style={{
+            height: 60,
+            borderBottomWidth: 1,
+            borderColor: colors.border,
+            marginBottom: 20,
+          }}
+        />
+
+        <FlatList
+          data={[1, 2, 3, 4, 5, 6]} // 6 tane sahte sonuç kartı
+          keyExtractor={(item) => item.toString()}
+          renderItem={() => <ResultCardSkeleton />}
+        />
+        <Text
+          style={[
+            styles.loadingText,
+            { color: colors.textSecondary, textAlign: "center", marginTop: 10 },
+          ]}
+        >
           {t("results.loading", "En uygun tarifler aranıyor...")}
         </Text>
       </SafeAreaView>
@@ -212,43 +231,26 @@ const AssistantResultScreen = () => {
 
   if (status === "failed") {
     return (
-      <SafeAreaView
-        style={[
-          styles.centeredContainer,
-          { backgroundColor: colors.background },
-        ]}
-      >
-        <Ionicons
-          name="alert-circle-outline"
-          size={48}
-          color={colors.notification}
-        />
-        <Text style={[styles.errorText, { color: colors.notification }]}>
-          {error || t("general.error")}
-        </Text>
-      </SafeAreaView>
+      <ErrorView
+        title={t("general.error_title", "Bir Hata Oluştu")}
+        message={error || t("general.error")}
+        // Result ekranında retry mantığı zor (parametreleri bilmiyoruz),
+        // bu yüzden kullanıcı geri dönüp tekrar denemeli.
+        iconName="alert-circle-outline"
+      />
     );
   }
 
   if (status === "succeeded" && rawResults.length === 0) {
     return (
-      <SafeAreaView
-        style={[
-          styles.centeredContainer,
-          { backgroundColor: colors.background },
-        ]}
-      >
-        <Ionicons name="wine-outline" size={64} color={colors.textSecondary} />
-        <Text style={[styles.emptyTitle, { color: colors.text }]}>
-          {t("results.no_result_title", "Sonuç Bulunamadı")}
-        </Text>
-        <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
-          {t(
-            "results.no_result_msg",
-            "Seçtiğin malzemelerle eşleşen bir tarif bulamadık."
-          )}
-        </Text>
-      </SafeAreaView>
+      <ErrorView
+        title={t("results.no_result_title", "Sonuç Bulunamadı")}
+        message={t(
+          "results.no_result_msg",
+          "Seçtiğin malzemelerle eşleşen bir tarif bulamadık."
+        )}
+        iconName="search-off"
+      />
     );
   }
 

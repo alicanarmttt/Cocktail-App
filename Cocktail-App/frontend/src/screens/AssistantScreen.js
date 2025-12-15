@@ -32,6 +32,9 @@ import {
   clearSearchResults,
 } from "../features/barmenSlice.js";
 
+import IngredientSkeleton from "../components/common/IngredientSkeleton";
+import ErrorView from "../components/common/ErrorView";
+
 /**
  * @desc    Barmen'in Asistanı (YENİ SADE TASARIM)
  * Karmaşık kutular yerine temiz bir liste ve seçim mantığı.
@@ -150,29 +153,28 @@ const AssistantScreen = () => {
   if (ingredientsStatus === "loading") {
     return (
       <SafeAreaView
-        style={[
-          styles.centeredContainer,
-          { backgroundColor: colors.background },
-        ]}
+        style={[styles.container, { backgroundColor: colors.background }]}
       >
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={{ marginTop: 10, color: colors.textSecondary }}>
-          {t("assistant.loading_market", "Malzemeler yükleniyor...")}
-        </Text>
+        {/* Header benzeri boşluk */}
+        <View style={{ height: 150 }} />
+
+        <FlatList
+          data={[1, 2, 3, 4, 5, 6, 7, 8]} // 8 tane sahte satır
+          keyExtractor={(item) => item.toString()}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+          renderItem={() => <IngredientSkeleton />}
+        />
       </SafeAreaView>
     );
   }
 
   if (ingredientsStatus === "failed") {
     return (
-      <SafeAreaView
-        style={[
-          styles.centeredContainer,
-          { backgroundColor: colors.background },
-        ]}
-      >
-        <Text style={{ color: colors.notification }}>{ingredientsError}</Text>
-      </SafeAreaView>
+      <ErrorView
+        title={t("assistant.error_title", "Malzemeler Yüklenemedi")}
+        message={ingredientsError || t("general.error")}
+        onRetry={() => dispatch(fetchIngredients())}
+      />
     );
   }
 
