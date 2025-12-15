@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-// Adım 4.A'da oluşturduğumuz "BEYİN" (Model/Veritabanı Mantığı) dosyasını içe aktar
-// (Sağdaki user.model.js dosyasından)
 const {
   findOrCreateUser,
   upgradeUserToPro,
