@@ -1,4 +1,4 @@
-const db = require("../knex"); // Knex bağlantı yolunu kendine göre ayarla
+const knex = require("../knex"); // Knex bağlantı yolunu kendine göre ayarla
 
 module.exports = {
   // Kullanıcının favorilerini getir (Detaylarıyla)

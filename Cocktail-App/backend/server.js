@@ -47,12 +47,13 @@ const ingredientRoutes = require("./src/api/ingredients");
 const barmenRoutes = require("./src/api/barmen");
 const userRoutes = require("./src/api/users");
 const rouletteRoutes = require("./src/api/roulette");
+const favoriteRoutes = require("./routes/favoriteRoutes");
 
 app.use("/api/cocktails", cocktailRoutes);
 app.use("/api/ingredients", ingredientRoutes);
 app.use("/api/barmen", barmenRoutes);
 app.use("/api/roulette", rouletteRoutes);
-
+app.use("/api/favorites", favoriteRoutes);
 app.use("/api/users", verifyToken, userRoutes);
 
 // Sunucunun ayakta olup olmadığını test etmek için kök rota
