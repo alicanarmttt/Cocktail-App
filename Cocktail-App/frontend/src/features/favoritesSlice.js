@@ -1,14 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../api/apiClient";
 
-// 1. FAVORİLERİ GETİR (Listeleme)
+// 1. FAVORİLERİ GETİR
+// Backend Beklentisi: GET /api/favorites/:userId
+// DİKKAT: Artık bu fonksiyon çağrılırken dispatch(fetchFavorites(userId)) şeklinde ID verilmeli!
 export const fetchFavorites = createAsyncThunk(
   "favorites/fetchFavorites",
-  async (_, { rejectWithValue }) => {
+  async (userId, { rejectWithValue }) => {
     try {
-      // apiClient zaten base URL'i (/api) ve Token'ı içeriyor.
-      // Sadece endpoint'i yazıyoruz.
-      const response = await apiClient.get("/favorites");
+      if (!userId) throw new Error("Kullanıcı ID bulunamadı!");
+
+      // URL'in sonuna userId ekliyoruz
+      const response = await apiClient.get(`/favorites/${userId}`);
       return response.data;
     } catch (error) {
       console.error("Favori çekme hatası:", error);
@@ -20,12 +23,13 @@ export const fetchFavorites = createAsyncThunk(
 );
 
 // 2. FAVORİYE EKLE
+// Backend Beklentisi: POST /api/favorites -> Body: { userId, cocktailId }
+// Kullanım: dispatch(addFavorite({ userId: 2, cocktailId: 154 }))
 export const addFavorite = createAsyncThunk(
   "favorites/addFavorite",
-  async (cocktailId, { rejectWithValue }) => {
+  async ({ userId, cocktailId }, { rejectWithValue }) => {
     try {
-      // Body olarak { cocktailId } gönderiyoruz
-      await apiClient.post("/favorites", { cocktailId });
+      await apiClient.post("/favorites", { userId, cocktailId });
       return cocktailId;
     } catch (error) {
       console.error("Favori ekleme hatası:", error);
@@ -35,12 +39,14 @@ export const addFavorite = createAsyncThunk(
 );
 
 // 3. FAVORİDEN ÇIKAR
+// Backend Beklentisi: DELETE /api/favorites/:userId/:cocktailId
+// Kullanım: dispatch(removeFavorite({ userId: 2, cocktailId: 154 }))
 export const removeFavorite = createAsyncThunk(
   "favorites/removeFavorite",
-  async (cocktailId, { rejectWithValue }) => {
+  async ({ userId, cocktailId }, { rejectWithValue }) => {
     try {
-      // ID'yi URL'e ekliyoruz
-      await apiClient.delete(`/favorites/${cocktailId}`);
+      // Backend route yapımız: /:userId/:cocktailId
+      await apiClient.delete(`/favorites/${userId}/${cocktailId}`);
       return cocktailId;
     } catch (error) {
       console.error("Favori silme hatası:", error);
@@ -52,12 +58,11 @@ export const removeFavorite = createAsyncThunk(
 const favoritesSlice = createSlice({
   name: "favorites",
   initialState: {
-    items: [], // Favori listesi (Resim, isim vs. dolu objeler)
-    status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+    items: [],
+    status: "idle",
     error: null,
   },
   reducers: {
-    // Kullanıcı çıkış yaparsa (Logout) bu fonksiyonu çağırıp temizleyeceğiz
     clearFavorites: (state) => {
       state.items = [];
       state.status = "idle";
@@ -66,41 +71,33 @@ const favoritesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // --- FETCH FAVORITES ---
+      // FETCH
       .addCase(fetchFavorites.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchFavorites.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.items = action.payload; // Backend'den gelen dolu listeyi kaydet
+        state.items = action.payload;
       })
       .addCase(fetchFavorites.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
-
-      // --- REMOVE FAVORITE ---
+      // REMOVE (Anında arayüzden silmek için)
       .addCase(removeFavorite.fulfilled, (state, action) => {
-        // Silinen kokteyli listeden anında uçur (Tekrar fetch yapmaya gerek kalmaz)
         state.items = state.items.filter(
           (item) => item.cocktail_id !== action.payload
         );
       });
-
-    // Not: addFavorite için burada bir işlem yapmıyoruz.
-    // Çünkü favori ekleme genelde Detay sayfasında yapılır.
-    // Favoriler sayfasına gelince zaten "fetchFavorites" çalışacağı için liste güncellenir.
   },
 });
 
 export const { clearFavorites } = favoritesSlice.actions;
 
-// SELECTORS
 export const selectAllFavorites = (state) => state.favorites.items;
 export const getFavoritesStatus = (state) => state.favorites.status;
 export const getFavoritesError = (state) => state.favorites.error;
 
-// Bir kokteyl favori mi? (Kalp ikonunu boyamak için)
 export const selectIsFavorite = (state, cocktailId) => {
   return state.favorites.items.some((item) => item.cocktail_id === cocktailId);
 };

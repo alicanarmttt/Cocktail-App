@@ -1,327 +1,95 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  StatusBar,
-  Platform,
-} from "react-native";
-// GÜNCELLEME: SafeAreaView (Home'daki gibi)
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useEffect } from "react";
+import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useTheme } from "@react-navigation/native"; // ✅ DOĞRU TEMA KULLANIMI
-import { useTranslation } from "react-i18next"; // ✅ DİL DESTEĞİ
 
-// Redux Actions & Selectors
+// 1. Senin yazdığın userSlice'dan hazır selector'ü çekiyoruz
+import { selectCurrentUser } from "../features/userSlice";
 import {
   fetchFavorites,
   selectAllFavorites,
   getFavoritesStatus,
-  getFavoritesError,
 } from "../features/favoritesSlice";
 
-// Components
-import CocktailCard from "../components/common/CocktailCard";
-import SkeletonCard from "../components/common/SkeletonCard";
-import ErrorView from "../components/common/ErrorView";
-
 const FavoritesScreen = () => {
-  // 1. TEMA VE DİL KANCALARI
-  const { colors } = useTheme(); // ✅ Navigasyon temasını çekiyoruz
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const { t, i18n } = useTranslation();
+
+  // 2. Kullanıcı verisine ulaşmanın EN DOĞRU yolu (Senin koduna göre)
+  // Bu bize direkt { user_id: 1, email: '...', is_pro: false } objesini verir.
+  const currentUser = useSelector(selectCurrentUser);
 
   const favorites = useSelector(selectAllFavorites);
   const status = useSelector(getFavoritesStatus);
-  const error = useSelector(getFavoritesError);
 
-  const [searchText, setSearchText] = useState("");
-
-  // 2. HELPER: DİNAMİK İSİM SEÇİCİ (Home ile aynı mantık)
-  const getName = (item) => {
-    if (!item || !item.name) return "";
-    // Veri yapısı { en: "Mojito", tr: "Mojito" } şeklinde ise:
-    if (typeof item.name === "object") {
-      return item.name[i18n.language] || item.name["en"] || "";
-    }
-    // Eğer eski veri yapısı (string) gelirse diye fallback:
-    return item.name;
-  };
-
-  // Ekran açıldığında favorileri çek
   useEffect(() => {
-    dispatch(fetchFavorites());
-  }, [dispatch]);
+    // 3. currentUser null değilse ve bir ID'si varsa isteği at
+    // Backend'inden dönen ID alanı 'id' mi yoksa 'user_id' mi?
+    // Genelde veritabanı çıktılarında 'user_id' olur, ikisini de kontrol edelim.
+    const userId = currentUser?.user_id || currentUser?.id;
 
-  // 3. ARAMA FİLTRESİ (Dinamik isme göre)
-  const filteredFavorites = favorites.filter((item) => {
-    const name = getName(item);
-    return name.toLowerCase().includes(searchText.toLowerCase());
-  });
+    if (userId) {
+      console.log("Favoriler isteniyor. User ID:", userId);
+      dispatch(fetchFavorites(userId));
+    } else {
+      console.log("Kullanıcı oturum açmamış, favori isteği atılmadı.");
+    }
+  }, [dispatch, currentUser]);
 
-  // --- HEADER ---
-  const renderHeader = () => (
-    <View
-      style={[styles.headerContainer, { backgroundColor: colors.background }]}
-    >
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backButton}
-      >
-        <Ionicons name="arrow-back" size={24} color={colors.text} />
-      </TouchableOpacity>
-      <Text style={[styles.headerTitle, { color: colors.text }]}>
-        {t("favorites.title")}
-      </Text>
-      <View style={{ width: 24 }} />
-    </View>
-  );
+  // --- UI KISMI ---
 
-  // --- SEARCH BAR ---
-  const renderSearchBar = () => (
-    <View
-      style={[
-        styles.searchContainer,
-        { borderColor: colors.border, backgroundColor: colors.card },
-      ]}
-    >
-      <Ionicons
-        name="search"
-        size={20}
-        color={colors.text}
-        style={[styles.searchIcon, { opacity: 0.5 }]}
-      />
-      <TextInput
-        style={[styles.searchInput, { color: colors.text }]}
-        placeholder={t("favorites.searchPlaceholder")}
-        placeholderTextColor={colors.text} // Opacity ile soluklaştırılabilir veya textSecondary kullanılabilir
-        value={searchText}
-        onChangeText={setSearchText}
-      />
-      {searchText.length > 0 && (
-        <TouchableOpacity onPress={() => setSearchText("")}>
-          <Ionicons
-            name="close-circle"
-            size={20}
-            color={colors.text}
-            style={{ opacity: 0.5 }}
-          />
-        </TouchableOpacity>
-      )}
-    </View>
-  );
-
-  // --- LOADING STATE ---
-  if (status === "loading" && favorites.length === 0) {
+  if (!currentUser) {
     return (
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: colors.background }]}
-        edges={["top", "left", "right"]}
-      >
-        {renderHeader()}
-        <View style={styles.gridContainer}>
-          <FlatList
-            data={[1, 2, 3, 4, 5, 6]}
-            keyExtractor={(item) => item.toString()}
-            numColumns={2}
-            renderItem={() => (
-              <View style={{ flex: 1, margin: 8 }}>
-                <SkeletonCard />
-              </View>
-            )}
-          />
-        </View>
-      </SafeAreaView>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Favorilerinizi görmek için lütfen giriş yapın.</Text>
+      </View>
     );
   }
 
-  // --- ERROR STATE ---
+  if (status === "loading") {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   if (status === "failed") {
     return (
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: colors.background }]}
-      >
-        {renderHeader()}
-        <ErrorView
-          message={error || t("favorites.loadError")}
-          onRetry={() => dispatch(fetchFavorites())}
-        />
-      </SafeAreaView>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Favoriler yüklenirken hata oluştu.</Text>
+      </View>
     );
   }
 
-  // --- SUCCESS STATE ---
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      edges={["top", "left", "right"]}
-    >
-      <StatusBar
-        barStyle={
-          colors.background === "#000000" ? "light-content" : "dark-content"
-        }
-        backgroundColor={colors.background}
-      />
-
-      {/* HEADER */}
-      {renderHeader()}
-
-      {/* SEARCH BAR (Sadece liste doluysa göster) */}
-      {favorites.length > 0 && renderSearchBar()}
-
-      {/* CONTENT */}
+    <View style={{ flex: 1, padding: 10 }}>
       {favorites.length === 0 ? (
-        // --- BOŞ DURUM (EMPTY STATE) ---
-        <View style={styles.emptyContainer}>
-          <Ionicons
-            name="heart-dislike-outline"
-            size={80}
-            color={colors.border}
-          />
-          <Text style={[styles.emptyTitle, { color: colors.text }]}>
-            {t("favorites.emptyTitle")}
-          </Text>
-          <Text style={[styles.emptyText, { color: colors.text }]}>
-            {/* textSecondary yerine opacity kullanarak text rengini yumuşatıyoruz */}
-            {t("favorites.emptyDescription")}
-          </Text>
-          <TouchableOpacity
-            style={[styles.exploreButton, { backgroundColor: colors.primary }]}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <Text style={[styles.exploreButtonText, { color: "#FFF" }]}>
-              {t("favorites.startExploring")}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={{ textAlign: "center", marginTop: 20 }}>
+          Henüz hiç favori kokteyliniz yok.
+        </Text>
       ) : (
-        // --- LİSTE GÖRÜNÜMÜ ---
         <FlatList
-          data={filteredFavorites}
+          data={favorites}
           keyExtractor={(item) => item.cocktail_id.toString()}
-          numColumns={2}
-          contentContainerStyle={styles.listContent}
-          columnWrapperStyle={styles.columnWrapper}
-          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <View style={{ flex: 0.5 }}>
-              <CocktailCard
-                item={item}
-                // Eğer CocktailCard içinde dil desteği yoksa,
-                // ismini burada override edip gönderebilirsin.
-                // Ancak ideal olan item'ı olduğu gibi gönderip CocktailCard'ın da getName kullanmasıdır.
-                // Şimdilik item'ı olduğu gibi yolluyoruz, card içinde handle edildiğini varsayıyoruz.
-                displayName={getName(item)} // Opsiyonel: Card komponentin bu prop'u destekliyorsa kullan
-                onPress={() =>
-                  navigation.navigate("CocktailDetail", {
-                    id: item.cocktail_id,
-                  })
-                }
-              />
+            <View
+              style={{
+                marginBottom: 15,
+                padding: 10,
+                backgroundColor: "#f9f9f9",
+              }}
+            >
+              <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+              <Text>
+                Favorilenme Tarihi:{" "}
+                {new Date(item.favorited_at).toLocaleDateString()}
+              </Text>
+              {/* Buraya kendi Card bileşenini koyabilirsin */}
             </View>
           )}
-          ListEmptyComponent={
-            <View style={styles.emptySearchContainer}>
-              <Text style={{ color: colors.text, opacity: 0.6 }}>
-                {t("favorites.noSearchResult", { query: searchText })}
-              </Text>
-            </View>
-          }
         />
       )}
-    </SafeAreaView>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  backButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginHorizontal: 16,
-    marginBottom: 10,
-    paddingHorizontal: 12,
-    paddingVertical: Platform.OS === "ios" ? 10 : 0, // Android input yüksekliği farklı olabilir
-    height: 45,
-    borderRadius: 12,
-    borderWidth: 1,
-  },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-  },
-  listContent: {
-    paddingHorizontal: 8,
-    paddingBottom: 20,
-  },
-  columnWrapper: {
-    justifyContent: "space-between",
-  },
-  gridContainer: {
-    paddingHorizontal: 8,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 40,
-    marginTop: -50,
-  },
-  emptyTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  emptyText: {
-    fontSize: 16,
-    textAlign: "center",
-    lineHeight: 24,
-    marginBottom: 30,
-    opacity: 0.7,
-  },
-  exploreButton: {
-    paddingVertical: 14,
-    paddingHorizontal: 30,
-    borderRadius: 30,
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-  exploreButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  emptySearchContainer: {
-    padding: 20,
-    alignItems: "center",
-  },
-});
 
 export default FavoritesScreen;
