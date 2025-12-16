@@ -129,12 +129,11 @@
     "create_custom_title":"Kokteylleri seçin"
 
   },"favorites": {
-    "title": "Favorilerim",
-    "searchPlaceholder": "Favorilerimde ara...",
-    "emptyTitle": "Henüz Favorin Yok",
-    "emptyDescription": "Beğendiğin kokteylleri kalp ikonuna basarak buraya ekleyebilirsin.",
-    "startExploring": "Keşfetmeye Başla",
-    "loadError": "Favoriler yüklenirken bir sorun oluştu.",
-    "noSearchResult": "{{query}} aramasıyla eşleşen favori bulunamadı."
+   "title": "Favorilerim",
+    "loginRequired": "Favorilerinizi görmek için lütfen giriş yapın.",
+    "noFavorites": "Henüz hiç favori kokteyliniz yok.",
+    "errorTitle": "Bir şeyler ters gitti",
+    "loadError": "Favoriler yüklenirken bir hata oluştu.",
+    "retry": "Tekrar Dene"
   }
 }

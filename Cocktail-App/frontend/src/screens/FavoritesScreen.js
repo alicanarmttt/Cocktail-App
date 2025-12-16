@@ -1,8 +1,20 @@
-import React, { useEffect } from "react";
-import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import React, { useEffect, useCallback } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigation, useTheme } from "@react-navigation/native";
+import { useTranslation } from "react-i18next"; // i18n hook
 
-// 1. Senin yazdığın userSlice'dan hazır selector'ü çekiyoruz
+// --- COMPONENTS ---
+import CocktailCard from "../components/common/CocktailCard";
+import ErrorView from "../components/common/ErrorView";
+
+// --- REDUX FEATURES ---
 import { selectCurrentUser } from "../features/userSlice";
 import {
   fetchFavorites,
@@ -12,84 +24,129 @@ import {
 
 const FavoritesScreen = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const { colors } = useTheme();
 
-  // 2. Kullanıcı verisine ulaşmanın EN DOĞRU yolu (Senin koduna göre)
-  // Bu bize direkt { user_id: 1, email: '...', is_pro: false } objesini verir.
+  // 1. Dil Kancasını (Hook) Başlat
+  const { t, i18n } = useTranslation();
+
+  // --- HELPER: Dinamik İsim Seçici ---
+  // Backend'den name: {"tr": "Mojito", "en": "Mojito"} gibi gelirse patlamamak için.
+  const getName = (item) => {
+    if (!item || !item.name) return "";
+
+    // Eğer name zaten düz bir string geliyorsa (veritabanı sorgusunda halledildiyse) direkt döndür
+    if (typeof item.name === "string") return item.name;
+
+    // Obje geliyorsa dile göre seç
+    // 1. Öncelik: Seçili dil (örn: item.name['tr'])
+    // 2. Öncelik: İngilizce (Fallback)
+    return item.name[i18n.language] || item.name["en"] || "";
+  };
+
+  // Redux Selectors
   const currentUser = useSelector(selectCurrentUser);
-
   const favorites = useSelector(selectAllFavorites);
   const status = useSelector(getFavoritesStatus);
 
-  useEffect(() => {
-    // 3. currentUser null değilse ve bir ID'si varsa isteği at
-    // Backend'inden dönen ID alanı 'id' mi yoksa 'user_id' mi?
-    // Genelde veritabanı çıktılarında 'user_id' olur, ikisini de kontrol edelim.
-    const userId = currentUser?.user_id || currentUser?.id;
+  const userId = currentUser?.user_id || currentUser?.id;
 
+  const loadFavorites = useCallback(() => {
     if (userId) {
-      console.log("Favoriler isteniyor. User ID:", userId);
       dispatch(fetchFavorites(userId));
-    } else {
-      console.log("Kullanıcı oturum açmamış, favori isteği atılmadı.");
     }
-  }, [dispatch, currentUser]);
+  }, [dispatch, userId]);
 
-  // --- UI KISMI ---
+  useEffect(() => {
+    loadFavorites();
+  }, [loadFavorites]);
+
+  // --- UI DURUMLARI ---
 
   if (!currentUser) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Favorilerinizi görmek için lütfen giriş yapın.</Text>
+      <View
+        style={[styles.centerContainer, { backgroundColor: colors.background }]}
+      >
+        <Text style={{ color: colors.text, fontSize: 16, textAlign: "center" }}>
+          {t("favorites.loginRequired")}
+        </Text>
       </View>
     );
   }
 
   if (status === "loading") {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View
+        style={[styles.centerContainer, { backgroundColor: colors.background }]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
 
   if (status === "failed") {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Favoriler yüklenirken hata oluştu.</Text>
+      <ErrorView
+        title={t("favorites.errorTitle")}
+        message={t("favorites.loadError")}
+        onRetry={loadFavorites}
+        iconName="error-outline"
+      />
+    );
+  }
+
+  if (favorites.length === 0) {
+    return (
+      <View
+        style={[styles.centerContainer, { backgroundColor: colors.background }]}
+      >
+        <Text style={{ color: colors.text, fontSize: 16, textAlign: "center" }}>
+          {t("favorites.noFavorites")}
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      {favorites.length === 0 ? (
-        <Text style={{ textAlign: "center", marginTop: 20 }}>
-          Henüz hiç favori kokteyliniz yok.
-        </Text>
-      ) : (
-        <FlatList
-          data={favorites}
-          keyExtractor={(item) => item.cocktail_id.toString()}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                marginBottom: 15,
-                padding: 10,
-                backgroundColor: "#f9f9f9",
-              }}
-            >
-              <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-              <Text>
-                Favorilenme Tarihi:{" "}
-                {new Date(item.favorited_at).toLocaleDateString()}
-              </Text>
-              {/* Buraya kendi Card bileşenini koyabilirsin */}
-            </View>
-          )}
-        />
-      )}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <FlatList
+        data={favorites}
+        keyExtractor={(item) => item.cocktail_id.toString()}
+        contentContainerStyle={{ padding: 10 }}
+        renderItem={({ item }) => {
+          // İSMİ BURADA ÇÖZÜMLÜYORUZ
+          // item.name'i o anki dile çevirip, yeni bir obje gibi karta gönderiyoruz.
+          // Böylece CocktailCard içinde ekstra mantık kurmaya gerek kalmıyor.
+          const localizedItem = {
+            ...item,
+            name: getName(item),
+          };
+
+          return (
+            <CocktailCard
+              item={localizedItem} // Çevrilmiş ismi gönderiyoruz
+              onPress={() =>
+                navigation.navigate("CocktailDetail", { id: item.cocktail_id })
+              }
+            />
+          );
+        }}
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+});
 
 export default FavoritesScreen;

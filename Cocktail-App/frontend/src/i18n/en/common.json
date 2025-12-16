@@ -130,12 +130,11 @@
 
   },
   "favorites": {
-    "title": "My Favorites",
-    "searchPlaceholder": "Search in favorites...",
-    "emptyTitle": "No Favorites Yet",
-    "emptyDescription": "You can add cocktails here by tapping the heart icon.",
-    "startExploring": "Start Exploring",
-    "loadError": "An error occurred while loading favorites.",
-    "noSearchResult": "No favorites found matching {{query}}"
-  }
+  "title": "Favorites",
+  "loginRequired": "Please log in to view your favorites.",
+  "noFavorites": "You have no favorite cocktails yet.",
+  "errorTitle": "Something went wrong",
+  "loadError": "An error occurred while loading favorites.",
+  "retry": "Try Again"
+}
 }
