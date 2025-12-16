@@ -1,6 +1,4 @@
-const knexConfig = require("../../../knexfile.js").development;
-const db = require("knex")(knexConfig);
-
+const knex = require("../knex");
 /**
  * @desc    Tüm kokteylleri çeker.
  * @returns {Promise<Array>} JSONB yapısında kokteyl listesi

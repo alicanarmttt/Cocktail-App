@@ -1,6 +1,4 @@
-const knexConfig = require("../../../knexfile").development;
-const db = require("knex")(knexConfig);
-
+const knex = require("../knex");
 /**
  * @desc    Tüm malzemeleri kategorileriyle birlikte getirir.
  * @returns {Promise<Array>} { ingredient_id, name: {en, tr}, category_name: {en, tr} }

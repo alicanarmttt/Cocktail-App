@@ -1,5 +1,4 @@
-const knexConfig = require("../../../knexfile").development;
-const db = require("knex")(knexConfig);
+const knex = require("../knex");
 
 // Sabit Popüler Listesi (İsimler İngilizce olarak eşleşmeli)
 const POPULAR_NAMES = [
