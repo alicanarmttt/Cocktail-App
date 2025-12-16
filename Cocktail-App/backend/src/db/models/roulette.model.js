@@ -1,4 +1,4 @@
-const knex = require("../knex");
+const db = require("../knex");
 
 // Sabit Popüler Listesi (İsimler İngilizce olarak eşleşmeli)
 const POPULAR_NAMES = [

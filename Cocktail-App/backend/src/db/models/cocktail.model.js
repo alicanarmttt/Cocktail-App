@@ -1,4 +1,4 @@
-const knex = require("../knex");
+const db = require("../knex");
 /**
  * @desc    Tüm kokteylleri çeker.
  * @returns {Promise<Array>} JSONB yapısında kokteyl listesi

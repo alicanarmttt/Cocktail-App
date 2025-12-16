@@ -1,4 +1,4 @@
-const knex = require("../knex");
+const db = require("../knex");
 
 /**
  * @desc    Finds a user by their Firebase UID. If they don't exist,

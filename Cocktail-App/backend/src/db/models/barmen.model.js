@@ -1,4 +1,4 @@
-const knex = require("../knex");
+const db = require("../knex");
 
 /**
  * @desc    Verilen malzeme listesine göre kokteylleri filtreler ve EKSİK SAYISINI hesaplar.

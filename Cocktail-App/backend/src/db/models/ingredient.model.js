@@ -1,4 +1,4 @@
-const knex = require("../knex");
+const db = require("../knex");
 /**
  * @desc    Tüm malzemeleri kategorileriyle birlikte getirir.
  * @returns {Promise<Array>} { ingredient_id, name: {en, tr}, category_name: {en, tr} }
