@@ -128,5 +128,13 @@
     "create_wheel_btn":"Ruletini oluştur",
     "create_custom_title":"Kokteylleri seçin"
 
+  },"favorites": {
+    "title": "Favorilerim",
+    "searchPlaceholder": "Favorilerimde ara...",
+    "emptyTitle": "Henüz Favorin Yok",
+    "emptyDescription": "Beğendiğin kokteylleri kalp ikonuna basarak buraya ekleyebilirsin.",
+    "startExploring": "Keşfetmeye Başla",
+    "loadError": "Favoriler yüklenirken bir sorun oluştu.",
+    "noSearchResult": "{{query}} aramasıyla eşleşen favori bulunamadı."
   }
 }

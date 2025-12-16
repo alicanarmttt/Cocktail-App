@@ -23,6 +23,7 @@ import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import UpgradeToProScreen from "../screens/UpgradeToProScreen";
 import RouletteScreen from "../screens/RouletteScreen";
+import FavoritesScreen from "../screens/FavoritesScreen";
 
 // YENİ EKLENDİ: 'userSlice'taki 'selector' (veri okuyucu)
 import { useSelector, useDispatch } from "react-redux";
@@ -419,6 +420,10 @@ function ProfileStackNavigator() {
         component={UpgradeToProScreen}
         options={{ title: "PRO'ya Yükselt" }}
       />
+      <ProfileStack.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+      ></ProfileStack.Screen>
     </ProfileStack.Navigator>
   );
 }

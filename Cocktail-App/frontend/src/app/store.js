@@ -6,7 +6,7 @@ import barmenReducer from "../features/barmenSlice.js";
 import useReducer from "../features/userSlice.js";
 import uiReducer from "../features/uiSlice.js";
 import rouletteReducer from "../features/rouletteSlice.js";
-
+import favoriteReducer from "../features/favoritesSlice.js";
 /**
  * @desc    Configures and creates the main Redux store for the application.
  * Tüm 'reducer'ları (veri mantığı dilimlerini) burada birleştiririz.
@@ -24,5 +24,6 @@ export const store = configureStore({
     user: useReducer,
     ui: uiReducer,
     roulette: rouletteReducer,
+    favorites: favoriteReducer,
   },
 });

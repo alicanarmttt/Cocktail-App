@@ -21,8 +21,7 @@ apiClient.interceptors.request.use(
 
     if (user) {
       try {
-        // DÜZELTME: 'true' parametresi kaldırıldı.
-        // Artık sadece token süresi dolmuşsa yeniler, aksi halde cache'ten okur.
+        //token süresi dolmuşsa yeniler, aksi halde cache'ten okur.
         const token = await user.getIdToken();
 
         config.headers.Authorization = `Bearer ${token}`;

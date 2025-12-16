@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -35,6 +35,7 @@ import {
   fetchCocktails,
 } from "../features/cocktails/cocktailSlice";
 import PremiumButton from "../ui/PremiumButton";
+
 /**
  * @desc    Kullanıcı profilini gösterir, "Çıkış Yap" (Logout)
  * ve "Pro'ya Yükselt" işlemlerini yönetir.
@@ -111,29 +112,20 @@ const ProfileScreen = () => {
     await dispatch(fetchCocktails());
 
     // 4. Navigasyon Resetleme Mantığı
-    // navigation.getParent(), bizi ProfileStack'ten çıkarıp Tab Navigator'a ulaştırır.
     navigation.getParent()?.dispatch((state) => {
       if (!state) return;
 
-      // Tab'daki rotaları (CocktailList, Assistant, Profile) tek tek geziyoruz
       const freshRoutes = state.routes.map((route) => {
-        // Eğer sıra şu anki aktif tab'a (Profile) geldiyse:
-        // ONUN MEVCUT DURUMUNU KORU (Böylece profil sayfası yenilenmez/kapanmaz)
         if (route.key === state.routes[state.index].key) {
           return route;
         }
-
-        // Diğer tablar (CocktailList ve Assistant) için:
-        // Sadece ismini döndürerek içindeki Stack geçmişini (history) SIFIRLIYORUZ.
-        // React Navigation, state vermediğimiz için bunları "ilk açılış" varsayar.
         return { name: route.name };
       });
 
-      // Yeni oluşturduğumuz temizlenmiş rota yapısını navigasyona zorluyoruz
       return CommonActions.reset({
         ...state,
         routes: freshRoutes,
-        index: state.index, // Kullanıcının odağını (focus) değiştirmeden Profil'de tut
+        index: state.index,
       });
     });
     Alert.alert(
@@ -167,7 +159,6 @@ const ProfileScreen = () => {
   };
 
   const getThemeLabel = () => {
-    // Bu metinleri de dil dosyasına eklemelisin! (Şimdilik hardcoded örnek)
     switch (currentThemeMode) {
       case "light":
         return t("profile.theme_light");
@@ -222,18 +213,43 @@ const ProfileScreen = () => {
 
       {/* Ana Eylem Butonları */}
       <View style={styles.buttonContainer}>
+        {/* FAVORİLER BUTONU (YENİ EKLENDİ) */}
+        <PremiumButton
+          variant="silver"
+          onPress={() => navigation.navigate("Favorites")}
+          style={styles.profileBtn}
+        >
+          <Ionicons
+            name="heart"
+            size={20}
+            color="#FF5757"
+            style={{ marginRight: 10 }}
+          />
+          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
+            {t("favorites.title")}
+          </Text>
+          <View style={{ flex: 1, alignItems: "flex-end" }}>
+            <Ionicons
+              name="chevron-forward"
+              size={18}
+              color={colors.textSecondary}
+            />
+          </View>
+        </PremiumButton>
+
         {/* 1. DİL DEĞİŞTİR (Silver) */}
         <PremiumButton
           variant="silver"
           onPress={toggleLanguage}
-          style={styles.profileBtn} // Sadece genişlik ayarı
+          style={styles.profileBtn}
         >
           <Ionicons
             name="language-outline"
             size={20}
             style={{ marginRight: 10 }}
+            color={colors.text}
           />
-          <Text style={{ fontSize: 16, fontWeight: "600" }}>
+          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
             {t("profile.language_select")}:{" "}
             {currentLanguage === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
           </Text>
@@ -249,7 +265,7 @@ const ProfileScreen = () => {
             <Ionicons
               name="star-outline"
               size={20}
-              // Gold buton üstünde yazı rengi (Theme helper'dan gelmeli ama children olduğu için manuel veriyoruz)
+              // Gold buton üstünde yazı rengi
               color={colors.dark ? "#000" : "#FFF"}
               style={{ marginRight: 10 }}
             />
@@ -275,8 +291,9 @@ const ProfileScreen = () => {
             name={getThemeIcon()}
             size={20}
             style={{ marginRight: 10 }}
+            color={colors.text}
           />
-          <Text style={{ fontSize: 16, fontWeight: "600" }}>
+          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
             {t("profile.theme_title") || "Tema"}: {getThemeLabel()}
           </Text>
         </PremiumButton>
@@ -358,6 +375,11 @@ const styles = StyleSheet.create({
   },
   profileBtn: {
     width: "100%",
+  },
+  errorText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 20,
   },
 });
 

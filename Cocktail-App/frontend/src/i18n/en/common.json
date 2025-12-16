@@ -128,5 +128,14 @@
     "create_wheel_btn":"Create your roulette",
     "create_custom_title":"Choose your cocktails"
 
+  },
+  "favorites": {
+    "title": "My Favorites",
+    "searchPlaceholder": "Search in favorites...",
+    "emptyTitle": "No Favorites Yet",
+    "emptyDescription": "You can add cocktails here by tapping the heart icon.",
+    "startExploring": "Start Exploring",
+    "loadError": "An error occurred while loading favorites.",
+    "noSearchResult": "No favorites found matching {{query}}"
   }
 }
