@@ -47,7 +47,7 @@ const ingredientRoutes = require("./src/api/ingredients");
 const barmenRoutes = require("./src/api/barmen");
 const userRoutes = require("./src/api/users");
 const rouletteRoutes = require("./src/api/roulette");
-const favoriteRoutes = require("./routes/favoriteRoutes");
+const favoriteRoutes = require("./src/api/favoriteRoutes");
 
 app.use("/api/cocktails", cocktailRoutes);
 app.use("/api/ingredients", ingredientRoutes);
