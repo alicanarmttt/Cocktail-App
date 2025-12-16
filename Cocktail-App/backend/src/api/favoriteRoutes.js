@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const favoriteModel = require("../models/favoriteModel"); // Model dosyanın yolu
+const favoriteModel = require("../db/models/favoriteModel"); // Model dosyanın yolu
 
 // 1. GET: Kullanıcının favorilerini çek
 // Modeldeki fonksiyon: getUserFavorites(userId)
