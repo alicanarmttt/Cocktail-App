@@ -24,7 +24,7 @@ router.post("/find-recipes", async (req, res) => {
 
     // 3. Mod Belirleme (Akıllı Varsayılan)
     // Eğer frontend 'mode' göndermediyse, otomatik olarak 'flexible' (Akıllı Sıralama) yap.
-    // Bu sayede eski frontend kodu da, yeni frontend kodu da çalışır.
+
     const searchMode = mode || "flexible";
 
     // 3. Veri geçerliyse, "BEYNİ" (Model) çağır
