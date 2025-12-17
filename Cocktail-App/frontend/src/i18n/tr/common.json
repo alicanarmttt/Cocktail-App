@@ -8,6 +8,18 @@
     "close":"Kapat",
     "selected": "Seçildi"
   },
+  "navigation": {
+    "cocktails": "Kokteyller",
+    "roulette": "Rulet",
+    "assistant": "Asistan",
+    "profile": "Profil",
+    "favorites": "Favorilerim",
+    "recipe_detail": "Tarif Detayı",
+    "roulette_wheel": "Kokteyl Çarkı 🎲",
+    "assistant_title": "Barmen'in Asistanı",
+    "found_recipes": "Bulunan Tarifler",
+    "upgrade_pro": "PRO'ya Yükselt"
+  },
   "auth": {
     "login": "Giriş Yap",
     "register": "Kayıt Ol",

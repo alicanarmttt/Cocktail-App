@@ -14,6 +14,8 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
+// YENİ EKLENDİ: Dil desteği için import
+import { useTranslation } from "react-i18next";
 
 import HomeScreen from "../screens/HomeScreen";
 import CocktailDetailScreen from "../screens/CocktailDetailScreen";
@@ -46,6 +48,7 @@ import { selectThemeMode } from "../features/uiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 
 import MerlotHeader from "../ui/MerlotHeader";
+
 // "Stack" (Yığın) tipinde bir navigasyon oluşturucu başlatıyoruz
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -161,6 +164,7 @@ function AuthNavigator() {
 function MainAppNavigator() {
   // YENİ: Renkleri hook ile alıyoruz
   const { colors } = useTheme();
+  const { t } = useTranslation(); // Çeviri kancası
 
   return (
     <Tab.Navigator
@@ -169,9 +173,6 @@ function MainAppNavigator() {
         headerShown: false, // Her sayfanın kendi header'ı var
 
         // #8. PROBLEM ÇÖZÜMÜ: Navigasyon Karışıklığını Önleme
-        // Bir sekmeden çıkıp diğerine gidince, eski sekmedeki her şeyi (Detay sayfası vb.) kapatır.
-        // Böylece geri döndüğünde "Acaba hangi kokteyl açıktı?" karmaşası olmaz, temiz liste görürsün.
-        // Bu aynı zamanda Redux'taki 'selectedCocktail' verisinin çakışmasını engeller.
         unmountOnBlur: true,
 
         // --- İKON RENGİ BAĞLANTISI ---
@@ -240,26 +241,26 @@ function MainAppNavigator() {
       <Tab.Screen
         name="CocktailList"
         component={HomeStackNavigator}
-        options={{ title: "Kokteyller" }}
+        options={{ title: t("navigation.cocktails") }}
       ></Tab.Screen>
       <Tab.Screen
         name="Roulette"
         component={RouletteStackNavigator}
-        options={{ title: "Rulet" }}
+        options={{ title: t("navigation.roulette") }}
       />
       {/* SEKME 2: Barmen Asistanı */}
       <Tab.Screen
         name="Assistant"
         component={AssistantStackNavigator}
         options={{
-          title: "Asistan",
+          title: t("navigation.assistant"),
         }}
       ></Tab.Screen>
       <Tab.Screen
         name="Profile"
         component={ProfileStackNavigator}
         options={{
-          title: "Profil",
+          title: t("navigation.profile"),
         }}
       ></Tab.Screen>
     </Tab.Navigator>
@@ -268,24 +269,20 @@ function MainAppNavigator() {
 
 /**
  * @desc    Manages the application's navigation structure (the "map").
- * Defines which screens exist and how they transition.
- * <NavigationContainer> is the root component for navigation.
  */
 function HomeStackNavigator() {
-  // YENİ: Renkleri hook ile alıyoruz
   const { colors, fonts } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
         // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
-        // Android'de sola yapışık olan başlığı merkeze çeker. iOS'ta zaten merkezdedir.
         headerTitleAlign: "center",
-
         // GÜNCELLEME: Header renkleri dinamik
         headerStyle: { backgroundColor: "transparent" },
-        headerTintColor: "#fff", // Primary üstündeki yazı rengi
+        headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
         headerBackground: () => <MerlotHeader />,
       }}
@@ -293,17 +290,17 @@ function HomeStackNavigator() {
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ title: "Kokteyller" }}
+        options={{ title: t("navigation.cocktails") }}
       />
       <Stack.Screen
         name="CocktailDetail"
         component={CocktailDetailScreen}
-        options={{ title: "Tarif Detayı" }}
+        options={{ title: t("navigation.recipe_detail") }}
       />
       <Stack.Screen
         name="Roulette"
         component={RouletteScreen}
-        options={{ title: "Kokteyl Çarkı 🎲" }}
+        options={{ title: t("navigation.roulette_wheel") }}
       />
     </Stack.Navigator>
   );
@@ -311,18 +308,15 @@ function HomeStackNavigator() {
 
 /**
  * @desc   Rulet sekmesi için navigasyon yığını.
- * İçinde Rulet ve Detay sayfası olur.
  */
 function RouletteStackNavigator() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Stack.Navigator
       screenOptions={{
-        // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
         headerTitleAlign: "center",
-
-        // GÜNCELLEME: Header renkleri dinamik
         headerStyle: { backgroundColor: colors.primary },
         headerTintColor: colors.buttonText || "#fff",
         headerTitleStyle: { fontWeight: "bold" },
@@ -332,7 +326,7 @@ function RouletteStackNavigator() {
         name="RouletteHome"
         component={RouletteScreen}
         options={{
-          title: "Kokteyl Çarkı 🎲",
+          title: t("navigation.roulette_wheel"),
           headerTintColor: "#FFFFFF",
           headerShadowVisible: false,
           headerStyle: { backgroundColor: "transparent" },
@@ -349,7 +343,7 @@ function RouletteStackNavigator() {
       <Stack.Screen
         name="CocktailDetail"
         component={CocktailDetailScreen}
-        options={{ title: "Tarif Detayı" }}
+        options={{ title: t("navigation.recipe_detail") }}
       />
     </Stack.Navigator>
   );
@@ -360,13 +354,12 @@ function RouletteStackNavigator() {
  */
 function AssistantStackNavigator() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Stack.Navigator
       screenOptions={{
-        // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
         headerTitleAlign: "center",
-
         headerStyle: { backgroundColor: "transparent" },
         headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
@@ -376,17 +369,17 @@ function AssistantStackNavigator() {
       <Stack.Screen
         name="AssistantHome"
         component={AssistantScreen}
-        options={{ title: "Barmen'in Asistanı" }}
+        options={{ title: t("navigation.assistant_title") }}
       />
       <Stack.Screen
         name="AssistantResult"
         component={AssistantResultScreen}
-        options={{ title: "Bulunan Tarifler" }}
+        options={{ title: t("navigation.found_recipes") }}
       />
       <Stack.Screen
         name="CocktailDetail"
         component={CocktailDetailScreen}
-        options={{ title: "Tarif Detayı" }}
+        options={{ title: t("navigation.recipe_detail") }}
       />
     </Stack.Navigator>
   );
@@ -397,13 +390,12 @@ function AssistantStackNavigator() {
  */
 function ProfileStackNavigator() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <ProfileStack.Navigator
       screenOptions={{
-        // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
         headerTitleAlign: "center",
-
         headerStyle: { backgroundColor: "transparent" },
         headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
@@ -413,16 +405,17 @@ function ProfileStackNavigator() {
       <ProfileStack.Screen
         name="ProfileHome"
         component={ProfileScreen}
-        options={{ title: "Profil" }}
+        options={{ title: t("navigation.profile") }}
       />
       <ProfileStack.Screen
         name="UpgradeToPro"
         component={UpgradeToProScreen}
-        options={{ title: "PRO'ya Yükselt" }}
+        options={{ title: t("navigation.upgrade_pro") }}
       />
       <ProfileStack.Screen
         name="Favorites"
         component={FavoritesScreen}
+        options={{ title: t("navigation.favorites") }}
       ></ProfileStack.Screen>
     </ProfileStack.Navigator>
   );

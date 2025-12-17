@@ -225,14 +225,20 @@ const ProfileScreen = () => {
             color="#FF5757"
             style={{ marginRight: 10 }}
           />
-          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: colors.buttonVariants.silver.textColor,
+            }}
+          >
             {t("favorites.title")}
           </Text>
           <View style={{ flex: 1, alignItems: "flex-end" }}>
             <Ionicons
               name="chevron-forward"
               size={18}
-              color={colors.textSecondary}
+              color={colors.buttonVariants.silver.textColor}
             />
           </View>
         </PremiumButton>
@@ -247,9 +253,15 @@ const ProfileScreen = () => {
             name="language-outline"
             size={20}
             style={{ marginRight: 10 }}
-            color={colors.text}
+            color={colors.buttonVariants.silver.textColor}
           />
-          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: colors.buttonVariants.silver.textColor,
+            }}
+          >
             {t("profile.language_select")}:{" "}
             {currentLanguage === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
           </Text>
@@ -291,9 +303,15 @@ const ProfileScreen = () => {
             name={getThemeIcon()}
             size={20}
             style={{ marginRight: 10 }}
-            color={colors.text}
+            color={colors.buttonVariants.silver.textColor}
           />
-          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.text }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              color: colors.buttonVariants.silver.textColor,
+            }}
+          >
             {t("profile.theme_title") || "Tema"}: {getThemeLabel()}
           </Text>
         </PremiumButton>

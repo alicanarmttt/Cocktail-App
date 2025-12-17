@@ -9,6 +9,18 @@
     "selected": "Selected"
 
   },
+  "navigation": {
+    "cocktails": "Cocktails",
+    "roulette": "Roulette",
+    "assistant": "Assistant",
+    "profile": "Profile",
+    "favorites": "Favorites",
+    "recipe_detail": "Recipe Detail",
+    "roulette_wheel": "Cocktail Wheel 🎲",
+    "assistant_title": "Barman's Assistant",
+    "found_recipes": "Found Recipes",
+    "upgrade_pro": "Upgrade to PRO"
+  },
   "auth": {
     "login": "Login",
     "register": "Sign Up",
