@@ -6,6 +6,9 @@
   <a href="https://reactnative.dev/">
     <img src="https://img.shields.io/badge/Mobile-React%20Native-blue?style=for-the-badge&logo=react" />
   </a>
+  <a href="https://expo.dev/">
+    <img src="https://img.shields.io/badge/Framework-Expo-000020?style=for-the-badge&logo=expo&logoColor=white" />
+  </a>
   <a href="https://nodejs.org/">
     <img src="https://img.shields.io/badge/Backend-Node.js-green?style=for-the-badge&logo=nodedotjs" />
   </a>
@@ -87,9 +90,10 @@ Proje, modern bulut servislerinin orkestrasyonu ile çalışır:
   <code>Supabase (PostgreSQL DB)</code>
 </div>
 <br>
-* **Backend (Render):** Node.js servisi Render üzerinde çalışır. Rulet hesaplamaları ve Asistan algoritmaları burada işlenir.
-* **Database (Supabase):** Veriler ilişkisel tablolar ve JSONB veri tipleriyle Supabase (PostgreSQL) üzerinde tutulur.
-* **Media (Cloudinary):** Yüksek çözünürlüklü görseller CDN üzerinden servis edilerek uygulama boyutu optimize edilmiştir.
+*Frontend (Expo & React Native): Mobil uygulama, platformlar arası (cross-platform) uyumluluk ve hızlı geliştirme süreçleri için React Native ve Expo çerçevesi kullanılarak geliştirilmiştir. Kullanıcı arayüzü (UI) ve istemci taraflı etkileşimler bu katmanda yönetilir.
+*Backend (Render): Node.js servisi Render üzerinde çalışır. Rulet hesaplamaları ve Asistan algoritmaları burada işlenir.
+*Database (Supabase): Veriler ilişkisel tablolar ve JSONB veri tipleriyle Supabase (PostgreSQL) üzerinde tutulur.
+*Media (Cloudinary): Yüksek çözünürlüklü görseller CDN üzerinden servis edilerek uygulama boyutu optimize edilmiştir.
 
 <br>
 
