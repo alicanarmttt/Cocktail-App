@@ -11,6 +11,7 @@ import {
   Modal,
   Pressable,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import {
   fetchCocktailById,
@@ -19,7 +20,7 @@ import {
   getDetailedCocktailError,
   clearDetail,
 } from "../features/cocktails/cocktailSlice";
-import { selectIsPro } from "../features/userSlice";
+import { selectIsPro, selectCurrentUser } from "../features/userSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import PremiumButton from "../ui/PremiumButton";
@@ -27,7 +28,12 @@ import CocktailImage from "../components/CocktailImage";
 
 import CocktailDetailSkeleton from "../components/common/CocktailDetailSkeleton";
 import ErrorView from "../components/common/ErrorView";
-
+import { MaterialIcons } from "@expo/vector-icons";
+import {
+  addFavorite,
+  removeFavorite,
+  selectIsFavorite,
+} from "../features/favoritesSlice";
 /**
  * @desc    Tek bir kokteylin detaylarını gösterir.
  * @param   {object} route - React Navigation tarafından sağlanan prop.
@@ -51,6 +57,7 @@ const CocktailDetailScreen = ({ route }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedAlternative, setSelectedAlternative] = useState(null);
 
+  const currentUser = useSelector(selectCurrentUser);
   const cocktail = useSelector(selectDetailedCocktail);
   const status = useSelector(getDetailedCocktailStatus);
   const error = useSelector(getDetailedCocktailError);
@@ -64,6 +71,31 @@ const CocktailDetailScreen = ({ route }) => {
       dispatch(clearDetail());
     };
   }, [cocktailId, dispatch]);
+
+  // 1. Bu kokteyl favori mi? (Redux Store'dan kontrol et)
+  const isFavorite = useSelector((state) =>
+    selectIsFavorite(state, cocktailId)
+  );
+  // 2. Kalp butonuna basılınca çalışacak fonksiyon
+  const handleToggleFavorite = () => {
+    // A. Kullanıcı giriş yapmamışsa uyar
+    if (!currentUser) {
+      alert(t("favorites.loginRequired")); // "Giriş yapmalısınız"
+      // İstersen burada navigation.navigate('Login') yapabilirsin
+      return;
+    }
+
+    const userId = currentUser.user_id || currentUser.id;
+
+    // B. Favori durumuna göre Ekle veya Çıkar
+    if (isFavorite) {
+      // Zaten favoriyse sil
+      dispatch(removeFavorite({ userId, cocktailId }));
+    } else {
+      // Değilse ekle
+      dispatch(addFavorite({ userId, cocktail: cocktail }));
+    }
+  };
 
   if (status === "loading" || status === "idle") {
     return <CocktailDetailSkeleton />;
@@ -81,10 +113,21 @@ const CocktailDetailScreen = ({ route }) => {
         style={[styles.listContainer, { backgroundColor: colors.background }]}
       >
         <ScrollView contentContainerStyle={styles.scrollContentContainer}>
-          <CocktailImage
-            uri={cocktail.image_url}
-            style={styles.image}
-          ></CocktailImage>
+          {/* RESİM VE FAVORİ BUTONU (YENİ HALİ) */}
+          <View style={{ position: "relative" }}>
+            <CocktailImage uri={cocktail.image_url} style={styles.image} />
+
+            <TouchableOpacity
+              onPress={handleToggleFavorite}
+              style={styles.favoriteOverlay}
+            >
+              <MaterialIcons
+                name={isFavorite ? "favorite" : "favorite-border"}
+                size={28}
+                color="white" // Resim üzerinde beyaz ikon her zaman nettir
+              />
+            </TouchableOpacity>
+          </View>
           <Text
             style={[styles.title, fonts.styles.h1, { color: colors.primary }]}
           >
@@ -543,6 +586,16 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
     resizeMode: "cover",
+  },
+  // styles objesinin içine ekle:
+  favoriteOverlay: {
+    position: "absolute",
+    top: 15, // Yukarıdan boşluk
+    right: 15, // Sağdan boşluk
+    zIndex: 10, // Resmin önünde durması için
+    backgroundColor: "rgba(0,0,0,0.3)", // Yarı saydam siyah arka plan (Okunurluk için)
+    borderRadius: 20, // Yuvarlak olması için
+    padding: 8, // İkon etrafındaki boşluk
   },
   title: {
     margin: 15,

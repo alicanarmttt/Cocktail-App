@@ -36,7 +36,8 @@ import VINTAGE_FRAME_URL from "../../assets/gold_frame.png";
 import CocktailImage from "../components/CocktailImage.js";
 import SkeletonCard from "../components/common/SkeletonCard";
 import ErrorView from "../components/common/ErrorView";
-
+import { fetchFavorites } from "../features/favoritesSlice";
+import { selectCurrentUser } from "../features/userSlice.js";
 // ... (Component mantığı ve state'ler aynen korunuyor) ...
 /**
  * @desc    Uygulamanın ana ekranı. Üstte bir gösterge, altta bir "Rulet" (Picker) gösterir.
@@ -69,6 +70,17 @@ const HomeScreen = ({ navigation }) => {
   ];
 
   const dispatch = useDispatch();
+
+  const currentUser = useSelector(selectCurrentUser);
+  const userId = currentUser?.user_id || currentUser?.id;
+  // 3. userId varsa favorileri güncelle
+  // Bu sayede kalp ikonları Home sayfasında veya Detay'a girince doğru gözükür.
+  useEffect(() => {
+    if (userId) {
+      // console.log("Home açıldı, favoriler güncelleniyor...", userId);
+      dispatch(fetchFavorites(userId));
+    }
+  }, [dispatch, userId]);
 
   // 1. Dil Kancasını (Hook) Başlat
   const { t, i18n } = useTranslation();

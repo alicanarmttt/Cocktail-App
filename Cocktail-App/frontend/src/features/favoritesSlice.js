@@ -25,12 +25,17 @@ export const fetchFavorites = createAsyncThunk(
 // 2. FAVORİYE EKLE
 // Backend Beklentisi: POST /api/favorites -> Body: { userId, cocktailId }
 // Kullanım: dispatch(addFavorite({ userId: 2, cocktailId: 154 }))
+// Artık parametre olarak { userId, cocktail } objesi alıyoruz
 export const addFavorite = createAsyncThunk(
   "favorites/addFavorite",
-  async ({ userId, cocktailId }, { rejectWithValue }) => {
+  async ({ userId, cocktail }, { rejectWithValue }) => {
     try {
+      // API bizden sadece ID istiyor
+      const cocktailId = cocktail.cocktail_id || cocktail.id;
       await apiClient.post("/favorites", { userId, cocktailId });
-      return cocktailId;
+
+      // Ama Reducer'a tüm kokteyli döndürüyoruz ki listeye ekleyebilelim
+      return cocktail;
     } catch (error) {
       console.error("Favori ekleme hatası:", error);
       return rejectWithValue(error.response?.data?.error || "Eklenemedi");
@@ -82,6 +87,24 @@ const favoritesSlice = createSlice({
       .addCase(fetchFavorites.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      // ADD (Ekleme işlemi artık listeyi güncelliyor!)
+      .addCase(addFavorite.fulfilled, (state, action) => {
+        // Eklenen kokteyl zaten listede yoksa ekle
+        const newCocktail = action.payload;
+        // API'den dönen ID yapısını garantiye alalım
+        const cocktailId = newCocktail.cocktail_id || newCocktail.id;
+
+        const exists = state.items.some(
+          (item) => item.cocktail_id === cocktailId
+        );
+        if (!exists) {
+          state.items.push({
+            ...newCocktail,
+            cocktail_id: cocktailId, // ID yapısını standartlaştır
+            favorited_at: new Date().toISOString(), // Anlık tarih at
+          });
+        }
       })
       // REMOVE (Anında arayüzden silmek için)
       .addCase(removeFavorite.fulfilled, (state, action) => {
