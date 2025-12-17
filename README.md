@@ -1,8 +1,7 @@
 # 🍹 Cocktail App: The Smart Barman & Party Assistant
 
 <div align="center">
-  <img src="/docs/banner.jpg" alt="Cocktail App Banner" width="100%" />
-  <br><br>
+
   
   <a href="https://reactnative.dev/">
     <img src="https://img.shields.io/badge/Mobile-React%20Native-blue?style=for-the-badge&logo=react" />
@@ -32,7 +31,29 @@ Modern mobil mimari prensipleriyle (Monorepo) geliştirilen uygulama, **Render (
 <br>
 
 ## Ekran Görüntüleri
+<div align="center">
+  <img src="Cocktail-App/docs/home.jpeg" width="20%" />
+  <img src="Cocktail-App/docs/Roulette.jpeg" width="20%" />
+  <img src="Cocktail-App/docs/AssistantScreen.jpeg" width="20%" />
+</div>
 
+<br>
+
+<details>
+  <summary><b>📸 Diğer Ekran Görüntülerini Gör (8 Fotoğraf)</b></summary>
+  <br>
+  <div align="center">
+      <img src="Cocktail-App/docs/CocktailDetailScreen.jpeg" width="20%" />
+      <img src="Cocktail-App/docs/IngredientsModal.jpeg" width="20%" />
+      <img src="Cocktail-App/docs/IngredientAlternativeModal.jpeg" width="20%" />
+      <br><br>
+      <img src="Cocktail-App/docs/RouletteMod.jpeg" width="20%" />
+      <img src="Cocktail-App/docs/Roulette.jpeg" width="20%" />
+      <img src="Cocktail-App/docs/AssistantResult.jpeg" width="20%" />
+      <img src="Cocktail-App/docs/ProfileScreen.jpeg" width="20%" />
+      <img src="Cocktail-App/docs/FavoriteScreen.jpeg" width="20%" />
+  </div>
+</details>
 <br>
 
 ## ✨ Öne Çıkan Özellikler (UX & Fun)
@@ -57,7 +78,7 @@ Detay sayfalarında, eğer kullanıcının malzemesi eksikse ancak veritabanınd
 ## 🏗️ Sistem Mimarisi & Altyapı
 
 Proje, modern bulut servislerinin orkestrasyonu ile çalışır:
-
+<br>
 <div align="center">
   <code>React Native (Frontend)</code> 
   ↔️ 
@@ -65,7 +86,7 @@ Proje, modern bulut servislerinin orkestrasyonu ile çalışır:
   ↔️ 
   <code>Supabase (PostgreSQL DB)</code>
 </div>
-
+<br>
 * **Backend (Render):** Node.js servisi Render üzerinde çalışır. Rulet hesaplamaları ve Asistan algoritmaları burada işlenir.
 * **Database (Supabase):** Veriler ilişkisel tablolar ve JSONB veri tipleriyle Supabase (PostgreSQL) üzerinde tutulur.
 * **Media (Cloudinary):** Yüksek çözünürlüklü görseller CDN üzerinden servis edilerek uygulama boyutu optimize edilmiştir.
