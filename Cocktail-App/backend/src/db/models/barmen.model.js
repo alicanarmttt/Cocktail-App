@@ -12,25 +12,25 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
   // === MOD: FLEXIBLE (AKILLI SIRALAMA) ===
   if (mode === "flexible") {
     // Alt Sorgu: Eksik Malzeme Sayısını Hesapla
-    // NOT: Bu sorgu normalde String döner, aşağıda Integer'a çevireceğiz.
+    // DÜZELTME: .as("missing_count") KALDIRILDI.
+    // Çünkü bunu db.raw içinde zaten alias olarak veriyoruz.
     const missingCountSubquery = db("cocktail_requirements as r")
       .count("*")
       .where("r.cocktail_id", db.ref("c.cocktail_id"))
-      .andWhere("r.level_id", 1) // Sadece ZORUNLU malzemeleri say (Garnish sayılmaz)
+      .andWhere("r.level_id", 1) // Sadece ZORUNLU malzemeleri say
       .whereNotIn("r.ingredient_id", inventoryIds)
       .whereNotExists((qb) => {
-        // Alternatif kontrolü: Eğer eksik olan malzemenin bir alternatifi inventory'de varsa, eksik sayma.
+        // Alternatif kontrolü
         qb.select(1)
           .from("recipe_alternatives as a")
           .where("a.original_ingredient_id", db.ref("r.ingredient_id"))
           .andWhere("a.cocktail_id", db.ref("c.cocktail_id"))
           .whereIn("a.alternative_ingredient_id", inventoryIds);
-      })
-      .as("missing_count");
+      });
+    // .as("missing_count") BURADAN SİLİNDİ!
 
     const smartMatches = await db("cocktails as c")
-      // A) ÖN FİLTRELEME: En az 1 malzemesi (veya alternatifi) tutanları getir
-      // Bu sayede veritabanını yormadan, tamamen alakasız kokteylleri eliyoruz.
+      // A) ÖN FİLTRELEME
       .whereExists((qb) => {
         qb.select(1)
           .from("cocktail_requirements as req")
@@ -48,35 +48,31 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
               .orWhereIn("alt.alternative_ingredient_id", inventoryIds);
           });
       })
-      // B) SEÇME (GÜNCELLENDİ: Type Casting)
+      // B) SEÇME
       .select(
         "c.cocktail_id",
-        "c.name", // { en: "Mojito", tr: "Mojito" }
+        "c.name",
         "c.image_url",
-        // KRİTİK DÜZELTME: PostgreSQL count sonucunu String ("0") döner.
-        // Frontend'de === 0 kontrolü yapabilmek için burada Integer'a çeviriyoruz.
+        // CAST işlemi şimdi hatasız çalışacak:
         db.raw("CAST((?) AS INTEGER) as missing_count", missingCountSubquery)
       )
       // C) SIRALAMA
-      // 1. Eksik sayısına göre (En az eksik en üstte)
       .orderBy("missing_count", "asc")
-      // 2. İsim sırasına göre (Bozuk sıralamayı önler - İngilizce isme göre)
       .orderByRaw("c.name->>'en' ASC");
 
     return smartMatches;
   }
 
-  // === MOD: STRICT (TAM EŞLEŞME - "Elimdekilerle ne yapabilirim?") ===
+  // === MOD: STRICT (TAM EŞLEŞME) ===
   if (mode === "strict") {
     const exactMatches = await db("cocktails as c")
       .whereNotExists((qb) => {
         qb.select(1)
           .from("cocktail_requirements as req")
           .where("req.cocktail_id", db.ref("c.cocktail_id"))
-          .andWhere("req.level_id", 1) // Zorunlu malzeme
-          .whereNotIn("req.ingredient_id", inventoryIds) // Elimde yok mu?
+          .andWhere("req.level_id", 1)
+          .whereNotIn("req.ingredient_id", inventoryIds)
           .whereNotExists((subQb) => {
-            // Alternatifi de mi yok?
             subQb
               .select(1)
               .from("recipe_alternatives as alt")
@@ -87,7 +83,6 @@ const findRecipesByIngredients = async (inventoryIds, mode = "strict") => {
       })
       .select("c.cocktail_id", "c.name", "c.image_url");
 
-    // Strict modda eksik sayısı daima 0'dır, manuel ekliyoruz.
     return exactMatches.map((c) => ({ ...c, missing_count: 0 }));
   }
 
