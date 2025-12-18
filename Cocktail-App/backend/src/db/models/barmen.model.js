@@ -127,7 +127,7 @@ const getGuideStep2Options = async (familyKey, lang = "en") => {
     })
     .join("ingredients as i", "cr.ingredient_id", "i.ingredient_id")
     // FİLTRE: Sadece Şişeli Ürünler (Likör, Şarap, Yancı, Şurup, Diğer)
-    .whereIn("i.category_id", [2, 3, 4, 6, 9, 10])
+    .whereIn("i.category_id", [3, 5, 6, 8])
     .andWhere((builder) => {
       builder.where("i.family", "!=", familyKey).orWhereNull("i.family");
     })
@@ -159,7 +159,7 @@ const getGuideStep3Options = async (familyKey, lang = "en") => {
     })
     .join("ingredients as i", "cr.ingredient_id", "i.ingredient_id")
     // FİLTRE: Sadece Taze ve Kiler (Meyve Suyu, Meyve, Kiler)
-    .whereIn("i.category_id", [5, 7, 8])
+    .whereIn("i.category_id", [2, 4, 7])
     .distinct("i.ingredient_id")
     .select(
       "i.ingredient_id",
