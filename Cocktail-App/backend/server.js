@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-// server.js dosyasının EN ÜST SATIRI
+// DNS Ayarı (Aynen kalıyor)
 const dns = require("node:dns");
 if (dns.setDefaultResultOrder) {
   dns.setDefaultResultOrder("ipv4first");
@@ -12,16 +12,32 @@ const app = express();
 const rateLimit = require("express-rate-limit");
 
 const PORT = process.env.PORT || 5000;
-// === GÜVENLİK ADIMI 1: Middleware dosyasını içe aktar ===
 const verifyToken = require("./src/middleware/authMiddleware");
 
-// === GÜVENLİK ADIMI 2: Rate Limiter (Hız Sınırlayıcı) ===
-// Bu ayar, aynı IP adresinden gelen istekleri sınırlar.
+// ============================================================
+// DÜZELTME 1: PROXY GÜVENİ (Render/Heroku için ZORUNLU)
+// Bu satır olmadan Rate Limiter herkesi aynı kişi sanar!
+// ============================================================
+app.set("trust proxy", 1);
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// ============================================================
+// DÜZELTME 2: HEALTH CHECK (Limiter'dan ÖNCE olmalı)
+// Render bu adrese sürekli ping atar. Bunu sınırlarsan sunucu çöker.
+// ============================================================
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+// Rate Limiter Ayarı
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 Dakika
-  max: 100, // Her IP için 15 dakikada maksimum 100 istek
-  standardHeaders: true, // `RateLimit-*` başlıklarını (header) yanıtla birlikte gönder
-  legacyHeaders: false, // `X-RateLimit-*` başlıklarını devre dışı bırak
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
   message: {
     error: "Too Many Requests",
     message:
@@ -29,19 +45,14 @@ const limiter = rateLimit({
   },
 });
 
-// === Middleware (Ara Yazılımlar) ===
-
-// Frontend'in (farklı port/adresten) API'ye erişebilmesi için CORS'u etkinleştir
-app.use(cors());
-// Gelen JSON formatlı istek (body) gövdelerini parse etmek (okumak) için
-app.use(express.json());
-
+// ============================================================
+// DÜZELTME 3: LIMITER'I DEVREYE ALMA
+// Artık limiter sadece buradan sonraki rotalar için geçerli.
+// Health check yukarıda olduğu için kurtuldu.
+// ============================================================
 app.use(limiter);
 
-// === Rota (Route) Tanımlamaları ===
-
-// Kokteyl rotalarını (src/api/cocktails.js) içe aktar
-
+// Rota Tanımlamaları
 const cocktailRoutes = require("./src/api/cocktails");
 const ingredientRoutes = require("./src/api/ingredients");
 const barmenRoutes = require("./src/api/barmen");
@@ -56,19 +67,14 @@ app.use("/api/roulette", rouletteRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/users", verifyToken, userRoutes);
 
-// Sunucunun ayakta olup olmadığını test etmek için kök rota
+// Root Rota (Bu da limitlenmeli, o yüzden aşağıda kalabilir)
 app.get("/", (req, res) => {
   res.status(200).send("Cocktail API Server is running.");
 });
 
-//sunucuyu başlat
+// Sunucuyu Başlat
 app.listen(PORT, () => {
   console.log(
     `Backend sunucusu http://localhost:${PORT} adresinde çalışıyor...`
   );
-});
-
-// Render Health Check için basit bir route
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
 });

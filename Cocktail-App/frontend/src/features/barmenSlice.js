@@ -206,11 +206,20 @@ export const barmenSlice = createSlice({
         state.guideError = action.payload || "Bir hata oluştu";
       });
 
-    //REHBER ADIM 3
-    builder.addCase(fetchGuideStep3.fulfilled, (state, action) => {
-      state.guideStatus = "succeeded";
-      state.guideStep3Options = action.payload;
-    });
+    // --- REHBER ADIM 3  ---
+    builder
+      .addCase(fetchGuideStep3.pending, (state) => {
+        state.guideStatus = "loading";
+        state.guideError = null;
+      })
+      .addCase(fetchGuideStep3.fulfilled, (state, action) => {
+        state.guideStatus = "succeeded";
+        state.guideStep3Options = action.payload;
+      })
+      .addCase(fetchGuideStep3.rejected, (state, action) => {
+        state.guideStatus = "failed";
+        state.guideError = action.payload;
+      });
 
     builder
       .addCase(fetchWizardResults.pending, (state) => {
@@ -243,6 +252,7 @@ export const getHintsStatus = (state) => state.barmen.hintsStatus;
 // --- YENİ REHBER SELECTORLARI ---
 export const selectGuideStep1 = (state) => state.barmen.guideStep1Options;
 export const selectGuideStep2 = (state) => state.barmen.guideStep2Options;
+export const selectGuideStep3 = (state) => state.barmen.guideStep3Options;
 export const getGuideStatus = (state) => state.barmen.guideStatus;
 
 export default barmenSlice.reducer;
