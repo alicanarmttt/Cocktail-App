@@ -131,7 +131,9 @@ const getGuideStep2Options = async (familyKey, lang = "en") => {
     .join("ingredients as i", "cr.ingredient_id", "i.ingredient_id")
     // 3. Filtreleme Kuralları
     .whereNot("i.category_id", 1) // Ana içki olmasın (Viski seçtiyse yanına votka önerme)
-    .andWhere("i.family", "!=", familyKey) // Kendi grubundan bir şey gelmesin
+    .andWhere((builder) => {
+      builder.where("i.family", "!=", familyKey).orWhereNull("i.family");
+    })
     .distinct("i.ingredient_id")
     .select(
       "i.ingredient_id",
