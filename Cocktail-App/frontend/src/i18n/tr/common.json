@@ -67,16 +67,24 @@
     "get_pro_btn": "PRO'ya Geç"
   },
   "assistant": {
+   "landing_title": "Barmen Asistan",
+   "landing_subtitle": "Bugün modun nasıl?",
+    "landing_desc": "İster sana rehberlik edeyim, ister dolabını kendin karıştır.",
+    "mode_wizard": "Bana Rehberlik Et",
+    "mode_wizard_desc": "Adım adım sorularla en iyi tarifi bulalım.",
+   "mode_manual": "Kendim Seçerim",
+    "mode_manual_desc": "Tüm malzeme listesini göster, ben hallederim.",
+    "wizard_wip": "Barmen hazırlanıyor...",
+  
+    "manual_title": "Manuel Seçim",
+    "manual_subtitle": "Dolabındaki malzemeleri işaretle",
+    "title": "Barmen'in Asistanı", 
+    "subtitle": "Elinde ne varsa seç, gerisini bana bırak.",
+  
+    "search_placeholder": "Malzeme ara (örn: Cin, Limon)",
     "tab_all": "Tümü",
-    "bench_title": "Tezgah",
-    "bench_empty": "Pazar'dan malzeme seçin...",
-    "market_title": "Malzemeler",
-    "search_placeholder": "Pazar'da ara...",
-    "toggle_strict": "Elimde sadece bunlar var",
-    "toggle_flexible": "Bunları içeren kokteyller",
-    "show_recipes_btn": "Kokteylleri Göster",
-    "loading_market": "Pazar kuruluyor...",
-    "not_found": "bulunamadı..."
+    "show_recipes_btn": "Kokteylleri Bul",
+    "error_title": "Malzemeler Yüklenemedi"
   },
   "results": {
     "title": "Bulunan Tarifler",
@@ -147,5 +155,12 @@
     "errorTitle": "Bir şeyler ters gitti",
     "loadError": "Favoriler yüklenirken bir hata oluştu.",
     "retry": "Tekrar Dene"
-  }
+  },"wizard": {
+  "step1_msg": "Önce temeli atalım. Elinde hangi ana içkiler (Cin, Votka, Viski vb.) var?",
+  "step2_msg": "Harika seçim. Peki bunları neyle karıştırabiliriz? Meyve suyu veya gazlı içecek var mı?",
+  "step3_msg": "Son dokunuşlar! Mutfakta şeker, bal, limon veya buz gibi temel malzemeler var mı?",
+  "btn_next": "Devam Et",
+  "btn_finish": "Kokteylleri Bul",
+  "empty_cat": "Bu kategoride gösterilecek malzeme yok."
+}
 }

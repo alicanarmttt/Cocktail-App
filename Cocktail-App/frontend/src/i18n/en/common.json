@@ -68,16 +68,25 @@
     "get_pro_btn": "Upgrade to PRO"
   },
   "assistant": {
+    "landing_title": "Bartender Assistant",
+    "landing_subtitle": "What's your mood?",
+    "landing_desc": "Let me guide you, or explore your cabinet yourself.",
+    "mode_wizard": "Guide Me",
+   "mode_wizard_desc": "Let's find the best recipe step by step.",
+    "mode_manual": "I'll Choose",
+    "mode_manual_desc": "Show me the full list, I'll handle it.",
+    "wizard_wip": "Bartender is preparing...",
+
+    "manual_title": "Manual Selection",
+    "manual_subtitle": "Mark ingredients in your cabinet",
+    "title": "Bartender's Assistant",
+    "subtitle": "Select what you have, leave the rest to me.",
+
+    "search_placeholder": "Search ingredients...",
     "tab_all": "All",
-    "bench_title": "Workbench",
-    "bench_empty": "Select ingredients from Market...",
-    "market_title": "Market",
-    "search_placeholder": "Search Market...",
-    "toggle_strict": "I only have these",
-    "toggle_flexible": "Cocktails containing these",
-    "show_recipes_btn": "Show Cocktails",
-    "loading_market": "Setting up market...",
-    "not_found": "not found..."
+    "show_recipes_btn": "Find Cocktails",
+    "error_title": "Failed to Load",
+    "not_found": "No ingredients found."
   },
   "results": {
     "title": "Found Recipes",
@@ -148,5 +157,12 @@
   "errorTitle": "Something went wrong",
   "loadError": "An error occurred while loading favorites.",
   "retry": "Try Again"
+},"wizard": {
+  "step1_msg": "Let's start with the base. What spirits do you have?",
+  "step2_msg": "Great choice. Now, do you have any mixers, juices or sodas?",
+  "step3_msg": "Final touches! Do you have pantry basics like sugar, honey, lime or ice?",
+  "btn_next": "Next Step",
+  "btn_finish": "Find Cocktails",
+  "empty_cat": "No ingredients found in this category."
 }
 }
