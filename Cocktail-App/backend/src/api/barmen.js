@@ -109,14 +109,24 @@ router.post("/guide/step-2", async (req, res) => {
 
 /**
  * @route   POST /api/barmen/guide/step-3
- * @desc    Rehber Adım 3: Taze malzemeleri getirir.
+ * @desc    Rehber Adım 3: Taze malzemeleri (Adım 2'ye göre önceliklendirerek) getirir.
  */
 router.post("/guide/step-3", async (req, res) => {
   try {
-    const { family, lang } = req.body;
-    if (!family) return res.status(400).json({ msg: "Ana içki grubu eksik." });
+    // Frontend'den 'selectedIds' adıyla gönderirsen buraya step2Ids olarak alabiliriz
+    const { family, lang, step2Ids } = req.body;
 
-    const options = await getGuideStep3Options(family, lang || "en");
+    if (!family) {
+      return res.status(400).json({ msg: "Ana içki grubu eksik." });
+    }
+
+    // Modele 2. parametre olarak step2Ids'i (veya boş dizi) gönderiyoruz
+    const options = await getGuideStep3Options(
+      family,
+      step2Ids || [],
+      lang || "en"
+    );
+
     res.status(200).json(options);
   } catch (error) {
     console.error("Hata (/guide/step-3):", error.message);

@@ -160,34 +160,67 @@ const getGuideStep2Options = async (familyKey, lang = "en") => {
     )
     .orderBy("name", "asc");
 };
-
 /**
- * @desc    REHBER ADIM 3: Taze ve Kiler (Meyve, Meyve Suyu, Yumurta, Nane)
+ * @desc    REHBER ADIM 3: Taze ve Kiler (Akıllı Sıralama Özellikli)
+ * @param   {string} familyKey - Ana içki (örn: vodka)
+ * @param   {Array} step2Ids - [YENİ] Adım 2'de seçilen şişelerin ID'leri
  */
-const getGuideStep3Options = async (familyKey, lang = "en") => {
+const getGuideStep3Options = async (familyKey, step2Ids = [], lang = "en") => {
   if (!familyKey) return [];
 
-  return await db("cocktail_requirements as cr")
-    .whereIn("cr.cocktail_id", function () {
-      this.select("cr_sub.cocktail_id")
-        .from("cocktail_requirements as cr_sub")
-        .join(
-          "ingredients as i_sub",
-          "cr_sub.ingredient_id",
-          "i_sub.ingredient_id"
-        )
-        .where("i_sub.family", familyKey);
-    })
+  let query = db("cocktail_requirements as cr")
     .join("ingredients as i", "cr.ingredient_id", "i.ingredient_id")
-    // FİLTRE: Sadece Taze ve Kiler (Meyve Suyu, Meyve, Kiler)
-    .whereIn("i.category_id", [2, 4, 7])
-    .distinct("i.ingredient_id")
-    .select(
+    // 1. Temel Filtre: Kokteylin içinde MUTLAKA Ana İçki (familyKey) olmalı
+    .whereExists(function () {
+      this.select(1)
+        .from("cocktail_requirements as cr_base")
+        .join(
+          "ingredients as i_base",
+          "cr_base.ingredient_id",
+          "i_base.ingredient_id"
+        )
+        .whereRaw("cr_base.cocktail_id = cr.cocktail_id")
+        .andWhere("i_base.family", familyKey);
+    })
+    // 2. Kategori Filtresi: Sadece Taze/Kiler (2, 4, 7)
+    .whereIn("i.category_id", [2, 4, 7]);
+
+  // 3. DİNAMİK SIRALAMA MANTIĞI
+  if (step2Ids && step2Ids.length > 0) {
+    // Adım 2'de seçilenlerle ortak kokteylleri saymak için JOIN yapıyoruz
+    query.leftJoin("cocktail_requirements as cr_match", function () {
+      this.on("cr.cocktail_id", "=", "cr_match.cocktail_id").andOnIn(
+        "cr_match.ingredient_id",
+        step2Ids
+      );
+    });
+
+    query.select(
       "i.ingredient_id",
-      db.raw("i.name->>? as name", [lang]),
+      db.raw("MIN(i.name->>? ) as name", [lang]),
+      "i.category_id",
+      // Alaka Puanı: Bu malzeme, seçilen şişelerle kaç kokteylde beraber geçiyor?
+      db.raw("COUNT(cr_match.ingredient_id) as relevance_score")
+    );
+
+    query.groupBy("i.ingredient_id", "i.category_id");
+
+    // Önce en alakalı olanları göster (Puanı yüksek olanlar)
+    query.orderBy("relevance_score", "desc");
+  } else {
+    // Adım 2 boşsa normal listele
+    query.select(
+      "i.ingredient_id",
+      db.raw("MIN(i.name->>? ) as name", [lang]),
       "i.category_id"
-    )
-    .orderBy("name", "asc");
+    );
+    query.groupBy("i.ingredient_id", "i.category_id");
+  }
+
+  // İkinci kriter olarak her zaman isme göre sırala (A-Z)
+  query.orderBy("name", "asc");
+
+  return await query;
 };
 
 /**

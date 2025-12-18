@@ -77,17 +77,22 @@ export const fetchGuideStep2 = createAsyncThunk(
   }
 );
 
+/**
+ * @desc    REHBER ADIM 3: Seçilen aileye ve ŞİŞELERE uygun taze malzemeleri çeker.
+ */
 export const fetchGuideStep3 = createAsyncThunk(
   "barmen/fetchGuideStep3",
-  async ({ family, lang }, { rejectWithValue }) => {
+  // Parametreye 'step2Ids' eklendi
+  async ({ family, step2Ids, lang }, { rejectWithValue }) => {
     try {
       const response = await apiClient.post(`barmen/guide/step-3`, {
         family,
+        step2Ids, // Backend'e gönderiyoruz
         lang,
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data);
+      return rejectWithValue(error.response?.data || "Taze ürünler alınamadı");
     }
   }
 );

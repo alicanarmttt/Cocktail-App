@@ -66,12 +66,15 @@ const AssistantWizard = ({ onCancel }) => {
     await dispatch(fetchGuideStep2({ family: familyKey, lang: i18n.language }));
     setCurrentStep(2);
   };
-
   // ADIM 2 -> 3 (Şişeler Seçildi, Tazelere Geç)
   const handleNextToStep3 = async () => {
-    // Adım 3 verilerini çek (Yine aileye göre filtrelenmiş taze malzemeler)
+    // GÜNCELLEME: Adım 2 seçimlerini (step2Selection) de gönderiyoruz
     await dispatch(
-      fetchGuideStep3({ family: selectedFamilyKey, lang: i18n.language })
+      fetchGuideStep3({
+        family: selectedFamilyKey,
+        step2Ids: step2Selection, // <--- YENİ EKLENEN KISIM
+        lang: i18n.language,
+      })
     );
     setCurrentStep(3);
   };
