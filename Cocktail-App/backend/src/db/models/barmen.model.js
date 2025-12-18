@@ -109,14 +109,12 @@ const getSpiritFamilies = async (lang = "en") => {
 };
 
 /**
- * @desc    REHBER ADIM 2: Seçilen aileye (familyKey) göre filtreleme yapar.
- * 'key' yani string ID üzerinden çalışır.
+ * @desc    REHBER ADIM 2: Şişeli Yancılar (Likör, Şurup, Vermut vb.)
  */
 const getGuideStep2Options = async (familyKey, lang = "en") => {
   if (!familyKey) return [];
 
   return await db("cocktail_requirements as cr")
-    // 1. İçinde bu ailenin (örn: 'whiskey') geçtiği kokteylleri bul
     .whereIn("cr.cocktail_id", function () {
       this.select("cr_sub.cocktail_id")
         .from("cocktail_requirements as cr_sub")
@@ -125,21 +123,48 @@ const getGuideStep2Options = async (familyKey, lang = "en") => {
           "cr_sub.ingredient_id",
           "i_sub.ingredient_id"
         )
-        .where("i_sub.family", familyKey); // String key ile eşleştirme
+        .where("i_sub.family", familyKey);
     })
-    // 2. O kokteyllerin diğer malzemelerini getir
     .join("ingredients as i", "cr.ingredient_id", "i.ingredient_id")
-    // 3. Filtreleme Kuralları
-    .whereNot("i.category_id", 1) // Ana içki olmasın (Viski seçtiyse yanına votka önerme)
+    // FİLTRE: Sadece Şişeli Ürünler (Likör, Şarap, Yancı, Şurup, Diğer)
+    .whereIn("i.category_id", [2, 3, 4, 6, 9, 10])
     .andWhere((builder) => {
       builder.where("i.family", "!=", familyKey).orWhereNull("i.family");
     })
     .distinct("i.ingredient_id")
     .select(
       "i.ingredient_id",
-      db.raw("i.name->>? as name", [lang]), // Postgres JSON çevirisi
+      db.raw("i.name->>? as name", [lang]),
       "i.category_id"
-      // Image URL de kaldırdım, sadece isim ve ID odaklı
+    )
+    .orderBy("name", "asc");
+};
+
+/**
+ * @desc    REHBER ADIM 3: Taze ve Kiler (Meyve, Meyve Suyu, Yumurta, Nane)
+ */
+const getGuideStep3Options = async (familyKey, lang = "en") => {
+  if (!familyKey) return [];
+
+  return await db("cocktail_requirements as cr")
+    .whereIn("cr.cocktail_id", function () {
+      this.select("cr_sub.cocktail_id")
+        .from("cocktail_requirements as cr_sub")
+        .join(
+          "ingredients as i_sub",
+          "cr_sub.ingredient_id",
+          "i_sub.ingredient_id"
+        )
+        .where("i_sub.family", familyKey);
+    })
+    .join("ingredients as i", "cr.ingredient_id", "i.ingredient_id")
+    // FİLTRE: Sadece Taze ve Kiler (Meyve Suyu, Meyve, Kiler)
+    .whereIn("i.category_id", [5, 7, 8])
+    .distinct("i.ingredient_id")
+    .select(
+      "i.ingredient_id",
+      db.raw("i.name->>? as name", [lang]),
+      "i.category_id"
     )
     .orderBy("name", "asc");
 };
@@ -172,4 +197,5 @@ module.exports = {
   getSpiritFamilies,
   getGuideStep2Options,
   findWizardResults,
+  getGuideStep3Options,
 };

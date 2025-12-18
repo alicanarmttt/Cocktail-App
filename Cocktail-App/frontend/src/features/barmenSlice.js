@@ -77,6 +77,21 @@ export const fetchGuideStep2 = createAsyncThunk(
   }
 );
 
+export const fetchGuideStep3 = createAsyncThunk(
+  "barmen/fetchGuideStep3",
+  async ({ family, lang }, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.post(`barmen/guide/step-3`, {
+        family,
+        lang,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
 /**
  * @desc    REHBER SONUÇLARINI GETİR
  * Backend'deki /guide/results endpoint'ine istek atar.
@@ -107,6 +122,7 @@ const initialState = {
   // --- YENİ REHBER STATE'LERİ ---
   guideStep1Options: [], // [{ key: 'whiskey', name: 'Viski' }, ...]
   guideStep2Options: [], // [{ id: 55, name: 'Kahve Likörü' }, ...]
+  guideStep3Options: [],
   guideStatus: "idle", // 'loading' | 'succeeded' | 'failed'
   guideError: null,
 };
@@ -191,6 +207,10 @@ export const barmenSlice = createSlice({
       });
 
     //REHBER ADIM 3
+    builder.addCase(fetchGuideStep3.fulfilled, (state, action) => {
+      state.guideStatus = "succeeded";
+      state.guideStep3Options = action.payload;
+    });
 
     builder
       .addCase(fetchWizardResults.pending, (state) => {

@@ -17,9 +17,11 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   fetchGuideStep1,
   fetchGuideStep2,
-  fetchWizardResults, // <--- 1. DEĞİŞİKLİK: YENİ FONKSİYONU IMPORT ETTİK
+  fetchGuideStep3, // <--- YENİ: ADIM 3 VERİSİ
+  fetchWizardResults,
   selectGuideStep1,
   selectGuideStep2,
+  selectGuideStep3, // <--- YENİ: ADIM 3 SELECTOR
   getGuideStatus,
   clearGuideData,
 } from "../../features/barmenSlice";
@@ -37,11 +39,15 @@ const AssistantWizard = ({ onCancel }) => {
   // --- STATE ---
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedFamilyKey, setSelectedFamilyKey] = useState(null);
-  const [selectedIngredientIds, setSelectedIngredientIds] = useState([]);
+
+  // Seçimleri adımlara göre ayırdık ki karışmasın
+  const [step2Selection, setStep2Selection] = useState([]); // Likörler/Şişeler
+  const [step3Selection, setStep3Selection] = useState([]); // Taze/Kiler
 
   // --- SELECTORS ---
   const step1Options = useSelector(selectGuideStep1);
   const step2Options = useSelector(selectGuideStep2);
+  const step3Options = useSelector(selectGuideStep3); // <--- YENİ
   const status = useSelector(getGuideStatus);
 
   // --- INIT ---
@@ -54,48 +60,68 @@ const AssistantWizard = ({ onCancel }) => {
 
   // --- HANDLERS ---
 
+  // ADIM 1 -> 2 (Ana İçki Seçildi)
   const handleSelectFamily = async (familyKey) => {
     setSelectedFamilyKey(familyKey);
     await dispatch(fetchGuideStep2({ family: familyKey, lang: i18n.language }));
     setCurrentStep(2);
   };
 
-  const toggleIngredientSelection = (id) => {
-    setSelectedIngredientIds((prev) => {
-      if (prev.includes(id)) return prev.filter((i) => i !== id);
-      return [...prev, id];
-    });
+  // ADIM 2 -> 3 (Şişeler Seçildi, Tazelere Geç)
+  const handleNextToStep3 = async () => {
+    // Adım 3 verilerini çek (Yine aileye göre filtrelenmiş taze malzemeler)
+    await dispatch(
+      fetchGuideStep3({ family: selectedFamilyKey, lang: i18n.language })
+    );
+    setCurrentStep(3);
   };
 
-  const handleBack = () => {
-    if (currentStep === 2) {
-      setCurrentStep(1);
-      setSelectedIngredientIds([]);
-      setSelectedFamilyKey(null);
-    } else {
-      if (onCancel) onCancel();
-    }
-  };
-
-  // --- 2. DEĞİŞİKLİK: FİNİŞ FONKSİYONU GÜNCELLENDİ ---
+  // ADIM 3 -> SONUÇ (Bitir ve Ara)
   const handleFinish = async () => {
     try {
-      // Flexible (findRecipes) yerine, Aile bilgisini de işleyen yeni fonksiyonu çağırıyoruz.
+      // Step 2 ve Step 3 seçimlerini tek bir havuzda birleştir
+      const totalInventory = [...step2Selection, ...step3Selection];
+
       await dispatch(
         fetchWizardResults({
-          family: selectedFamilyKey, // Örn: "whiskey"
-          selectedIds: selectedIngredientIds, // Örn: [12, 55] (Seçilen Yancılar)
+          family: selectedFamilyKey,
+          selectedIds: totalInventory,
         })
       ).unwrap();
 
-      // Sonuçlar Redux'a yüklendi, şimdi sonuç ekranına git
       navigation.navigate("AssistantResult");
     } catch (err) {
       console.error("Arama hatası:", err);
     }
   };
 
-  // --- UI PART (Aynen Kalıyor) ---
+  // Seçim Toggle Fonksiyonu (Hangi adımda olduğumuza göre doğru state'i günceller)
+  const toggleIngredientSelection = (id) => {
+    if (currentStep === 2) {
+      setStep2Selection((prev) =>
+        prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      );
+    } else if (currentStep === 3) {
+      setStep3Selection((prev) =>
+        prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      );
+    }
+  };
+
+  // Geri Gelme Mantığı
+  const handleBack = () => {
+    if (currentStep === 3) {
+      setCurrentStep(2);
+    } else if (currentStep === 2) {
+      setCurrentStep(1);
+      setStep2Selection([]); // Geri dönünce seçimleri temizlemek opsiyoneldir
+      setSelectedFamilyKey(null);
+    } else {
+      if (onCancel) onCancel();
+    }
+  };
+
+  // --- UI PART ---
   const getBartenderMessage = () => {
     if (status === "loading")
       return t("wizard.thinking", "Hımm, mahzene bakıyorum...");
@@ -109,13 +135,26 @@ const AssistantWizard = ({ onCancel }) => {
       case 2:
         return t(
           "wizard.step2_msg",
-          "Harika seçim! Peki yanında bunlardan hangileri var?"
+          "Harika! Peki eşlikçi olarak elinde hangi şişeler var?"
+        );
+      case 3:
+        return t(
+          "wizard.step3_msg",
+          "Son olarak, dolapta taze meyve veya kiler malzemesi var mı?"
         );
       default:
         return "";
     }
   };
 
+  // Hangi veriyi göstereceğiz?
+  const getCurrentData = () => {
+    if (currentStep === 1) return step1Options;
+    if (currentStep === 2) return step2Options;
+    return step3Options;
+  };
+
+  // Adım 1 Kartı (Değişmedi)
   const renderFamilyItem = ({ item }) => {
     const isSelected = selectedFamilyKey === item.key;
     return (
@@ -141,8 +180,14 @@ const AssistantWizard = ({ onCancel }) => {
     );
   };
 
+  // Adım 2 ve 3 Kartı (Seçime göre check ikonu değişir)
   const renderIngredientItem = ({ item }) => {
-    const isSelected = selectedIngredientIds.includes(item.ingredient_id);
+    // Hangi listede olduğunu kontrol et
+    const isSelected =
+      currentStep === 2
+        ? step2Selection.includes(item.ingredient_id)
+        : step3Selection.includes(item.ingredient_id);
+
     return (
       <Pressable
         style={[
@@ -200,7 +245,7 @@ const AssistantWizard = ({ onCancel }) => {
               textAlign: "right",
             }}
           >
-            {currentStep} / 2
+            {currentStep} / 3
           </Text>
         </View>
       </View>
@@ -211,7 +256,7 @@ const AssistantWizard = ({ onCancel }) => {
         </View>
       ) : (
         <FlatList
-          data={currentStep === 1 ? step1Options : step2Options}
+          data={getCurrentData()}
           keyExtractor={(item) =>
             currentStep === 1 ? item.key : item.ingredient_id.toString()
           }
@@ -248,7 +293,30 @@ const AssistantWizard = ({ onCancel }) => {
           <Ionicons name="arrow-back" size={24} color={colors.textSecondary} />
         </Pressable>
 
+        {/* ADIM 2 İSE: 'DEVAM ET' GÖSTER */}
         {currentStep === 2 && (
+          <PremiumButton
+            onPress={handleNextToStep3}
+            variant="outline"
+            disabled={status === "loading"}
+            style={{ flex: 1, marginLeft: 15 }}
+          >
+            <Text
+              style={{ fontWeight: "bold", color: colors.text, fontSize: 16 }}
+            >
+              {t("wizard.btn_next", "Devam Et")} ({step2Selection.length})
+            </Text>
+            <Ionicons
+              name="arrow-forward"
+              size={20}
+              color={colors.text}
+              style={{ marginLeft: 8 }}
+            />
+          </PremiumButton>
+        )}
+
+        {/* ADIM 3 İSE: 'BİTİR' GÖSTER */}
+        {currentStep === 3 && (
           <PremiumButton
             onPress={handleFinish}
             variant="gold"
@@ -262,8 +330,7 @@ const AssistantWizard = ({ onCancel }) => {
                 fontSize: 16,
               }}
             >
-              {t("wizard.btn_finish", "Kokteylleri Bul")} (
-              {selectedIngredientIds.length})
+              {t("wizard.btn_finish", "Kokteylleri Bul")}
             </Text>
             <Ionicons
               name="search"

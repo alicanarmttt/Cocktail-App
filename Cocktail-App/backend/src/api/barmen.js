@@ -8,6 +8,7 @@ const {
   getSpiritFamilies, // <--- YENİ (Adım 1)
   getGuideStep2Options, // <--- YENİ (Adım 2)
   findWizardResults,
+  getGuideStep3Options,
 } = require("../db/models/barmen.model");
 
 // ============================================================
@@ -103,6 +104,23 @@ router.post("/guide/step-2", async (req, res) => {
   } catch (error) {
     console.error("Hata (/guide/step-2):", error.message);
     res.status(500).json({ msg: "Seçenekler getirilemedi." });
+  }
+});
+
+/**
+ * @route   POST /api/barmen/guide/step-3
+ * @desc    Rehber Adım 3: Taze malzemeleri getirir.
+ */
+router.post("/guide/step-3", async (req, res) => {
+  try {
+    const { family, lang } = req.body;
+    if (!family) return res.status(400).json({ msg: "Ana içki grubu eksik." });
+
+    const options = await getGuideStep3Options(family, lang || "en");
+    res.status(200).json(options);
+  } catch (error) {
+    console.error("Hata (/guide/step-3):", error.message);
+    res.status(500).json({ msg: "Adım 3 verileri alınamadı." });
   }
 });
 
