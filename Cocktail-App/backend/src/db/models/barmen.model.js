@@ -1,24 +1,18 @@
 const db = require("../knex");
 
-/**
- * @desc    Verilen malzeme listesine göre kokteylleri filtreler ve EKSİK SAYISINI hesaplar.
- * @note    Artık sadece "Flexible" (Akıllı) mod çalışmaktadır.
- */
-const findRecipesByIngredients = async (inventoryIds, mode = "flexible") => {
-  // 1. Boş kontrolü
-  if (!inventoryIds || inventoryIds.length === 0) {
-    return [];
-  }
+// ============================================================
+//               MEVCUT FONKSİYONLAR (DEĞİŞMEDİ)
+// ============================================================
 
-  // === MOD: FLEXIBLE (AKILLI SIRALAMA) - Varsayılan ===
-  // Alt Sorgu: Eksik Malzeme Sayısını Hesapla
+const findRecipesByIngredients = async (inventoryIds, mode = "flexible") => {
+  if (!inventoryIds || inventoryIds.length === 0) return [];
+
   const missingCountSubquery = db("cocktail_requirements as r")
     .count("*")
     .where("r.cocktail_id", db.ref("c.cocktail_id"))
-    .andWhere("r.level_id", 1) // Sadece ZORUNLU malzemeleri say
+    .andWhere("r.level_id", 1)
     .whereNotIn("r.ingredient_id", inventoryIds)
     .whereNotExists((qb) => {
-      // Alternatif kontrolü
       qb.select(1)
         .from("recipe_alternatives as a")
         .where("a.original_ingredient_id", db.ref("r.ingredient_id"))
@@ -27,7 +21,6 @@ const findRecipesByIngredients = async (inventoryIds, mode = "flexible") => {
     });
 
   const smartMatches = await db("cocktails as c")
-    // A) ÖN FİLTRELEME
     .whereExists((qb) => {
       qb.select(1)
         .from("cocktail_requirements as req")
@@ -45,54 +38,136 @@ const findRecipesByIngredients = async (inventoryIds, mode = "flexible") => {
             .orWhereIn("alt.alternative_ingredient_id", inventoryIds);
         });
     })
-    // B) SEÇME
     .select(
       "c.cocktail_id",
       "c.name",
       "c.image_url",
-      // Count sonucunu Integer'a çeviriyoruz
       db.raw("CAST((?) AS INTEGER) as missing_count", missingCountSubquery)
     )
-    // C) SIRALAMA
     .orderBy("missing_count", "asc")
     .orderByRaw("c.name->>'en' ASC");
 
   return smartMatches;
 };
 
-/**
- * @desc    WIZARD MODU İÇİN YARDIMCI (BAĞLAMSAL DARALTMA)
- * Seçilen Ana İçkilerle (örn: Cin) yapılabilecek kokteyllerin
- * içinde geçen DİĞER malzemeleri getirir.
- * @param   {Array} baseSpiritIds - Kullanıcının seçtiği ana içki ID'leri
- */
 const getMenuHints = async (baseSpiritIds) => {
   if (!baseSpiritIds || baseSpiritIds.length === 0) return [];
 
-  // 1. Bu ana içkileri Ana Malzeme (Level 1) olarak kullanan kokteyl ID'lerini bul
   const possibleCocktailIds = db("cocktail_requirements")
     .distinct("cocktail_id")
     .whereIn("ingredient_id", baseSpiritIds)
     .andWhere("level_id", 1);
 
-  // 2. Bu kokteyllerde kullanılan DİĞER malzemeleri (Yancı, Süs vb.) getir
   const relatedIngredients = await db("cocktail_requirements as r")
     .join("ingredients as i", "r.ingredient_id", "i.ingredient_id")
-    .join("categories as c", "i.category_id", "c.category_id")
-    .select(
-      "i.ingredient_id",
-      "i.name", // { en: "Lime", tr: "Misket Limonu" }
-      "i.image_url",
-      "c.category_name" // Frontend'de Step 2 ve Step 3 ayrımı için lazım
-    )
-    .whereIn("r.cocktail_id", possibleCocktailIds) // Sadece ilgili kokteyller
-    .whereNotIn("i.ingredient_id", baseSpiritIds) // Ana içkinin kendisini tekrar getirme
-    .distinct("i.ingredient_id"); // Aynı malzemeyi defalarca getirme
+    .join("ingredient_categories as c", "i.category_id", "c.category_id")
+    .select("i.ingredient_id", "i.name", "i.image_url", "c.category_name")
+    .whereIn("r.cocktail_id", possibleCocktailIds)
+    .whereNotIn("i.ingredient_id", baseSpiritIds)
+    .distinct("i.ingredient_id");
 
   return relatedIngredients;
+};
+
+// ============================================================
+//               YENİ REHBER (WIZARD) FONKSİYONLARI
+// ============================================================
+
+/**
+ * @desc    REHBER ADIM 1: Ana içki ailelerini getirir.
+ * Resim yok, sadece Key (ID niyetine) ve Çevrilmiş İsim döner.
+ */
+const getSpiritFamilies = async (lang = "en") => {
+  // 1. Veritabanındaki 'family' değerlerini (whiskey, rum vs.) çek
+  const families = await db("ingredients")
+    .distinct("family")
+    .where("category_id", 1) // Sadece Spirits
+    .whereNotNull("family");
+
+  // 2. Çeviri Sözlüğü (Backend'de yönetilen tek yer)
+  // İleride İspanyolca gelirse sadece buraya 'es' eklenecek.
+  const FAMILY_TRANSLATIONS = {
+    whiskey: { tr: "Viski", en: "Whiskey" },
+    rum: { tr: "Rom", en: "Rum" },
+    gin: { tr: "Cin", en: "Gin" },
+    vodka: { tr: "Votka", en: "Vodka" },
+    tequila: { tr: "Tekila", en: "Tequila" },
+    brandy: { tr: "Konyak & Brandy", en: "Brandy & Cognac" },
+  };
+
+  return families
+    .map((f) => {
+      const trans = FAMILY_TRANSLATIONS[f.family];
+      if (!trans) return null;
+
+      return {
+        key: f.family, // Bu bizim ID'miz gibi çalışır (Frontend bunu geri yollayacak)
+        name: trans[lang] || trans["en"], // İstenen dil yoksa İngilizce dön
+      };
+    })
+    .filter(Boolean); // Tanımsız olanları temizle
+};
+
+/**
+ * @desc    REHBER ADIM 2: Seçilen aileye (familyKey) göre filtreleme yapar.
+ * 'key' yani string ID üzerinden çalışır.
+ */
+const getGuideStep2Options = async (familyKey, lang = "en") => {
+  if (!familyKey) return [];
+
+  return await db("cocktail_requirements as cr")
+    // 1. İçinde bu ailenin (örn: 'whiskey') geçtiği kokteylleri bul
+    .whereIn("cr.cocktail_id", function () {
+      this.select("cr_sub.cocktail_id")
+        .from("cocktail_requirements as cr_sub")
+        .join(
+          "ingredients as i_sub",
+          "cr_sub.ingredient_id",
+          "i_sub.ingredient_id"
+        )
+        .where("i_sub.family", familyKey); // String key ile eşleştirme
+    })
+    // 2. O kokteyllerin diğer malzemelerini getir
+    .join("ingredients as i", "cr.ingredient_id", "i.ingredient_id")
+    // 3. Filtreleme Kuralları
+    .whereNot("i.category_id", 1) // Ana içki olmasın (Viski seçtiyse yanına votka önerme)
+    .andWhere("i.family", "!=", familyKey) // Kendi grubundan bir şey gelmesin
+    .distinct("i.ingredient_id")
+    .select(
+      "i.ingredient_id",
+      db.raw("i.name->>? as name", [lang]), // Postgres JSON çevirisi
+      "i.category_id"
+      // Image URL de kaldırdım, sadece isim ve ID odaklı
+    )
+    .orderBy("name", "asc");
+};
+
+/**
+ * @desc    REHBER SONUÇ (WIZARD RESULT) - KÖPRÜ FONKSİYON
+ * Bu fonksiyon, Rehberden gelen 'family' (örn: whiskey) string'ini
+ * veritabanındaki ID'lere dönüştürür ve seçilen yancılarla birleştirir.
+ * Sonra senin mevcut 'flexible' modunu çağırır.
+ */
+const findWizardResults = async (familyKey, adjunctIds = []) => {
+  // 1. Önce seçilen ailenin (örn: Whiskey) TÜM ID'lerini bulalım.
+  // Kullanıcı "Viski" dediği için elimizdeki tüm viskileri (ID: 47, 55, 68...) çekiyoruz.
+  const spiritIds = await db("ingredients")
+    .where("family", familyKey)
+    .pluck("ingredient_id"); // Bize sadece [47, 55, 68] gibi temiz bir dizi döner.
+
+  // 2. Bu viski ID'lerini, kullanıcının seçtiği yancı ID'leri (örn: [12]) ile birleştirelim.
+  // Sonuç: [47, 55, 68, 12] -> Yani "Elimde her türlü viski ve vermut var" demiş oluyoruz.
+  const totalInventory = [...spiritIds, ...adjunctIds];
+
+  // 3. Mevcut "Akıllı Arama" motorumuzu bu tam listeyle çalıştıralım.
+  // İşte senin 'flexible' modun burada devreye giriyor!
+  return await findRecipesByIngredients(totalInventory, "flexible");
 };
 
 module.exports = {
   findRecipesByIngredients,
   getMenuHints,
+  getSpiritFamilies,
+  getGuideStep2Options,
+  findWizardResults,
 };

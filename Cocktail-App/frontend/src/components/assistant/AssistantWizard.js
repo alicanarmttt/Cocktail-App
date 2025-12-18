@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,25 +13,21 @@ import {
 import { useTheme, useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
-// Redux
-import { selectAllIngredients } from "../../features/ingredientSlice";
-// DİKKAT: barmenSlice içinden yeni aksiyonları çekiyoruz
+// --- REDUX IMPORTS ---
 import {
-  findRecipes,
-  fetchMenuHints,
-  selectHints,
-  getHintsStatus,
-  clearHints,
+  fetchGuideStep1,
+  fetchGuideStep2,
+  fetchWizardResults, // <--- 1. DEĞİŞİKLİK: YENİ FONKSİYONU IMPORT ETTİK
+  selectGuideStep1,
+  selectGuideStep2,
+  getGuideStatus,
+  clearGuideData,
 } from "../../features/barmenSlice";
+
 import PremiumButton from "../../ui/PremiumButton";
 
 const { width } = Dimensions.get("window");
 
-/**
- * @desc    YENİ NESİL BARMEN MODU (Smart Contextual Wizard)
- * Adım 1: Ana Grupları Gösterir (Backend'den bağımsız Frontend Gruplaması)
- * Adım 2 & 3: Seçilen gruba uygun "Akıllı Öneriler" sunar (Backend /hints endpoint'i)
- */
 const AssistantWizard = ({ onCancel }) => {
   const { colors } = useTheme();
   const dispatch = useDispatch();
@@ -40,203 +36,98 @@ const AssistantWizard = ({ onCancel }) => {
 
   // --- STATE ---
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedIds, setSelectedIds] = useState([]); // Tüm adımlarda toplanan ID'ler
+  const [selectedFamilyKey, setSelectedFamilyKey] = useState(null);
+  const [selectedIngredientIds, setSelectedIngredientIds] = useState([]);
 
-  // --- DATA ---
-  const allIngredients = useSelector(selectAllIngredients);
-  const hints = useSelector(selectHints); // Backend'den gelen akıllı öneriler
-  const hintsStatus = useSelector(getHintsStatus);
+  // --- SELECTORS ---
+  const step1Options = useSelector(selectGuideStep1);
+  const step2Options = useSelector(selectGuideStep2);
+  const status = useSelector(getGuideStatus);
 
-  // --- HELPER: Çeviri ---
-  const getName = (item) => item.name[i18n.language] || item.name["en"] || "";
-  const getCatName = (item) =>
-    item.category_name["en"] ? item.category_name["en"].toLowerCase() : "";
+  // --- INIT ---
+  useEffect(() => {
+    dispatch(fetchGuideStep1(i18n.language));
+    return () => {
+      dispatch(clearGuideData());
+    };
+  }, [dispatch, i18n.language]);
 
-  // --- ADIM 1: GRUPLAMA MANTIĞI (PARENT GROUPS) ---
-  const groupData = useMemo(() => {
-    if (currentStep !== 1 || !allIngredients) return [];
+  // --- HANDLERS ---
 
-    // Ana İçki Ailelerini Tanımlıyoruz
-    const GROUPS = [
-      { id: "gin", label: "Cin", keywords: ["gin"] },
-      { id: "vodka", label: "Votka", keywords: ["vodka"] },
-      {
-        id: "whiskey",
-        label: "Viski",
-        keywords: ["whisk", "scotch", "bourbon", "rye"],
-      },
-      { id: "rum", label: "Rom", keywords: ["rum", "bacardi"] },
-      { id: "tequila", label: "Tekila", keywords: ["tequila", "mezcal"] },
-      { id: "brandy", label: "Konyak", keywords: ["brandy", "cognac"] },
-      { id: "wine", label: "Şarap", keywords: ["wine", "champagne"] },
-    ];
-
-    // Her grup için veritabanındaki karşılık gelen ID'leri buluyoruz
-    return GROUPS.map((group) => {
-      const matchingIngredients = allIngredients.filter((item) => {
-        const cat = getCatName(item);
-        const name = getName(item).toLowerCase();
-        // Hem kategoriye hem isme bakıyoruz
-        return group.keywords.some((k) => cat.includes(k) || name.includes(k));
-      });
-
-      // Sadece en az 1 tane malzemesi veritabanında olan grupları göster
-      if (matchingIngredients.length === 0) return null;
-
-      return {
-        ...group,
-        ingredientIds: matchingIngredients.map((i) => i.ingredient_id), // Bu grubun tüm ID paketleri
-        count: matchingIngredients.length,
-      };
-    }).filter(Boolean); // Boşları at
-  }, [allIngredients, currentStep, i18n.language]);
-
-  // --- ADIM 2 & 3: HINTS FİLTRELEME (Backend Verisiyle) ---
-  const hintData = useMemo(() => {
-    if (!hints) return [];
-
-    const mixerKeywords = [
-      "liqueur",
-      "vermouth",
-      "aperitif",
-      "syrup",
-      "juice",
-      "soda",
-      "water",
-      "tonic",
-      "bitter",
-      "mixer",
-    ];
-
-    // Adım 2: Karıştırıcılar (Mixers & Modifiers)
-    if (currentStep === 2) {
-      return hints.filter((item) => {
-        const cat = getCatName(item);
-        return mixerKeywords.some((k) => cat.includes(k));
-      });
-    }
-
-    // Adım 3: Mutfak & Süs (Pantry)
-    if (currentStep === 3) {
-      return hints.filter((item) => {
-        const cat = getCatName(item);
-        // Mixer değilse buradadır (Meyve, Ot, Şeker vb.)
-        return !mixerKeywords.some((k) => cat.includes(k));
-      });
-    }
-
-    return [];
-  }, [hints, currentStep]);
-
-  // --- ACTIONS ---
-
-  // Adım 1 için: Grubu seç/kaldır
-  const toggleGroupSelection = (groupIds) => {
-    // Basılan grubun ID'leri zaten seçili mi?
-    const isSelected = groupIds.every((id) => selectedIds.includes(id));
-
-    if (isSelected) {
-      // Çıkar
-      setSelectedIds((prev) => prev.filter((id) => !groupIds.includes(id)));
-    } else {
-      // Ekle (Mevcutları koru, yenileri ekle, duplicate önle)
-      const uniqueIds = [...new Set([...selectedIds, ...groupIds])];
-      setSelectedIds(uniqueIds);
-    }
+  const handleSelectFamily = async (familyKey) => {
+    setSelectedFamilyKey(familyKey);
+    await dispatch(fetchGuideStep2({ family: familyKey, lang: i18n.language }));
+    setCurrentStep(2);
   };
 
-  // Adım 2 ve 3 için: Tekil malzeme seçimi
   const toggleIngredientSelection = (id) => {
-    setSelectedIds((prev) => {
+    setSelectedIngredientIds((prev) => {
       if (prev.includes(id)) return prev.filter((i) => i !== id);
       return [...prev, id];
     });
   };
 
-  const handleNext = async () => {
-    if (currentStep === 1) {
-      // Step 1 bitti, Backend'e sor: "Bu içkilerle ne gider?"
-      if (selectedIds.length === 0) {
-        // Uyarı vermek yerine devam ettirmiyoruz, basit bir alert veya UI feedback eklenebilir.
-        // Şimdilik alert koyalım (veya toast)
-        // alert("Lütfen en az bir içki grubu seçin.");
-        return;
-      }
-
-      // Hintleri Getir (Redux Action)
-      await dispatch(fetchMenuHints(selectedIds));
-      setCurrentStep(2);
-    } else if (currentStep < 3) {
-      setCurrentStep((prev) => prev + 1);
-    } else {
-      handleFinish();
-    }
-  };
-
   const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
-      // Geri gelince Hintleri silmeye gerek yok, cache gibi kalsın.
+    if (currentStep === 2) {
+      setCurrentStep(1);
+      setSelectedIngredientIds([]);
+      setSelectedFamilyKey(null);
     } else {
-      dispatch(clearHints()); // Çıkarken temizle
       if (onCancel) onCancel();
     }
   };
 
+  // --- 2. DEĞİŞİKLİK: FİNİŞ FONKSİYONU GÜNCELLENDİ ---
   const handleFinish = async () => {
     try {
+      // Flexible (findRecipes) yerine, Aile bilgisini de işleyen yeni fonksiyonu çağırıyoruz.
       await dispatch(
-        findRecipes({ inventoryIds: selectedIds, mode: "flexible" })
+        fetchWizardResults({
+          family: selectedFamilyKey, // Örn: "whiskey"
+          selectedIds: selectedIngredientIds, // Örn: [12, 55] (Seçilen Yancılar)
+        })
       ).unwrap();
+
+      // Sonuçlar Redux'a yüklendi, şimdi sonuç ekranına git
       navigation.navigate("AssistantResult");
     } catch (err) {
-      console.error(err);
+      console.error("Arama hatası:", err);
     }
   };
 
-  // --- UI TEXTS ---
+  // --- UI PART (Aynen Kalıyor) ---
   const getBartenderMessage = () => {
-    if (hintsStatus === "loading")
-      return t("wizard.thinking", "Hımm, bir saniye düşünüyorum...");
+    if (status === "loading")
+      return t("wizard.thinking", "Hımm, mahzene bakıyorum...");
 
     switch (currentStep) {
       case 1:
         return t(
           "wizard.step1_msg",
-          "Önce temeli atalım. Elinde hangi ana içki aileleri var?"
+          "Hoş geldin! Bugün temel olarak ne içmek istersin?"
         );
       case 2:
         return t(
           "wizard.step2_msg",
-          "Güzel seçim. Bunlara uygun şu yan malzemelerden hangileri var?"
-        );
-      case 3:
-        return t(
-          "wizard.step3_msg",
-          "Son dokunuşlar. Mutfakta veya dolapta şunlar bulunuyor mu?"
+          "Harika seçim! Peki yanında bunlardan hangileri var?"
         );
       default:
         return "";
     }
   };
 
-  // --- RENDER ---
-
-  // Render Item: Adım 1 (Grup Kartları - BÜYÜK)
-  const renderGroupItem = ({ item }) => {
-    const isSelected = item.ingredientIds.every((id) =>
-      selectedIds.includes(id)
-    );
-
+  const renderFamilyItem = ({ item }) => {
+    const isSelected = selectedFamilyKey === item.key;
     return (
       <Pressable
         style={[styles.cardBig, isSelected && styles.cardSelected]}
-        onPress={() => toggleGroupSelection(item.ingredientIds)}
+        onPress={() => handleSelectFamily(item.key)}
       >
         <Ionicons
-          name={isSelected ? "checkmark-circle" : "radio-button-off"}
+          name={isSelected ? "radio-button-on" : "radio-button-off"}
           size={24}
           color={isSelected ? colors.primary : colors.textSecondary}
+          style={{ marginBottom: 10 }}
         />
         <Text
           style={[
@@ -244,22 +135,18 @@ const AssistantWizard = ({ onCancel }) => {
             { color: isSelected ? colors.primary : colors.text },
           ]}
         >
-          {item.label}
-        </Text>
-        <Text style={{ fontSize: 12, color: colors.textSecondary }}>
-          {item.count} {t("wizard.varieties", "çeşit")}
+          {item.name}
         </Text>
       </Pressable>
     );
   };
 
-  // Render Item: Adım 2 & 3 (Malzeme Kartları - KÜÇÜK)
   const renderIngredientItem = ({ item }) => {
-    const isSelected = selectedIds.includes(item.ingredient_id);
+    const isSelected = selectedIngredientIds.includes(item.ingredient_id);
     return (
       <Pressable
         style={[
-          styles.card,
+          styles.cardSmall,
           {
             backgroundColor: isSelected ? colors.primary + "20" : colors.card,
             borderColor: isSelected ? colors.primary : "transparent",
@@ -278,13 +165,13 @@ const AssistantWizard = ({ onCancel }) => {
           ]}
           numberOfLines={2}
         >
-          {getName(item)}
+          {item.name}
         </Text>
         {isSelected && (
           <View style={styles.checkIcon}>
             <Ionicons
               name="checkmark-circle"
-              size={20}
+              size={18}
               color={colors.primary}
             />
           </View>
@@ -295,7 +182,6 @@ const AssistantWizard = ({ onCancel }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* CHAT BUBBLE */}
       <View style={styles.chatContainer}>
         <View
           style={[styles.avatarCircle, { backgroundColor: colors.primary }]}
@@ -314,24 +200,20 @@ const AssistantWizard = ({ onCancel }) => {
               textAlign: "right",
             }}
           >
-            {currentStep} / 3
+            {currentStep} / 2
           </Text>
         </View>
       </View>
 
-      {/* CONTENT AREA */}
-      {hintsStatus === "loading" ? (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
+      {status === "loading" ? (
+        <View style={styles.centerLoading}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       ) : (
         <FlatList
-          // Step 1 ise Grup verisini, değilse Hint verisini kullan
-          data={currentStep === 1 ? groupData : hintData}
+          data={currentStep === 1 ? step1Options : step2Options}
           keyExtractor={(item) =>
-            currentStep === 1 ? item.id : item.ingredient_id.toString()
+            currentStep === 1 ? item.key : item.ingredient_id.toString()
           }
           numColumns={2}
           columnWrapperStyle={{
@@ -340,7 +222,7 @@ const AssistantWizard = ({ onCancel }) => {
           }}
           contentContainerStyle={{ paddingBottom: 100, paddingTop: 10 }}
           renderItem={
-            currentStep === 1 ? renderGroupItem : renderIngredientItem
+            currentStep === 1 ? renderFamilyItem : renderIngredientItem
           }
           ListEmptyComponent={
             <Text
@@ -350,18 +232,12 @@ const AssistantWizard = ({ onCancel }) => {
                 marginTop: 20,
               }}
             >
-              {currentStep === 1
-                ? t("wizard.no_ingredients", "Malzeme verisi yüklenemedi.")
-                : t(
-                    "wizard.no_hints",
-                    "Bu seçimlere uygun ek malzeme gerekmiyor veya bulunamadı. Devam edebilirsiniz."
-                  )}
+              {t("wizard.no_data", "Seçenek bulunamadı.")}
             </Text>
           }
         />
       )}
 
-      {/* FOOTER */}
       <View
         style={[
           styles.footer,
@@ -372,30 +248,31 @@ const AssistantWizard = ({ onCancel }) => {
           <Ionicons name="arrow-back" size={24} color={colors.textSecondary} />
         </Pressable>
 
-        <PremiumButton
-          onPress={handleNext}
-          variant="gold"
-          disabled={hintsStatus === "loading"}
-          style={{ flex: 1, marginLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: colors.buttonText,
-              fontSize: 16,
-            }}
+        {currentStep === 2 && (
+          <PremiumButton
+            onPress={handleFinish}
+            variant="gold"
+            disabled={status === "loading"}
+            style={{ flex: 1, marginLeft: 15 }}
           >
-            {currentStep === 3
-              ? `${t("wizard.btn_finish", "Kokteylleri Bul")} (${selectedIds.length})`
-              : t("wizard.btn_next", "Devam Et")}
-          </Text>
-          <Ionicons
-            name={currentStep === 3 ? "search" : "arrow-forward"}
-            size={20}
-            color={colors.buttonText}
-            style={{ marginLeft: 8 }}
-          />
-        </PremiumButton>
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: colors.buttonText,
+                fontSize: 16,
+              }}
+            >
+              {t("wizard.btn_finish", "Kokteylleri Bul")} (
+              {selectedIngredientIds.length})
+            </Text>
+            <Ionicons
+              name="search"
+              size={20}
+              color={colors.buttonText}
+              style={{ marginLeft: 8 }}
+            />
+          </PremiumButton>
+        )}
       </View>
     </View>
   );
@@ -403,6 +280,7 @@ const AssistantWizard = ({ onCancel }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  centerLoading: { flex: 1, justifyContent: "center", alignItems: "center" },
   chatContainer: {
     flexDirection: "row",
     padding: 20,
@@ -425,50 +303,32 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   bubbleText: { fontSize: 16, lineHeight: 22 },
-
-  // Step 1: Büyük Grup Kartları
   cardBig: {
     width: (width - 55) / 2,
-    height: 100,
+    height: 110,
     borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 15,
     backgroundColor: "#fff",
+    elevation: 2,
     borderWidth: 2,
     borderColor: "transparent",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
   },
-  cardSelected: {
-    borderColor: "#FFD700", // Gold veya Primary color
-    backgroundColor: "#FFD700" + "10", // %10 opacity
-  },
-  cardBigTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 8,
-  },
-
-  // Step 2-3: Küçük Malzeme Kartları
-  card: {
+  cardSelected: { borderColor: "#FFD700", backgroundColor: "#FFFBE6" },
+  cardBigTitle: { fontSize: 18, fontWeight: "bold", textAlign: "center" },
+  cardSmall: {
     width: (width - 55) / 2,
-    height: 80,
-    borderRadius: 16,
+    height: 70,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 15,
-    padding: 10,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    marginBottom: 12,
+    padding: 8,
+    elevation: 1,
   },
-  itemText: { textAlign: "center", fontSize: 15 },
-  checkIcon: { position: "absolute", top: 5, right: 5 },
-
+  itemText: { textAlign: "center", fontSize: 14 },
+  checkIcon: { position: "absolute", top: 4, right: 4 },
   footer: {
     position: "absolute",
     bottom: 0,

@@ -32,6 +32,30 @@ exports.seed = async function (knex) {
 
   console.log("🗑️ Eski veriler temizlendi.");
 
+  // --- YENİ EKLENECEK FONKSİYON (Dosyanın en üstüne, importların altına) ---
+  function getSpiritFamily(engName) {
+    if (!engName) return null;
+
+    // Büyük/küçük harf duyarlılığını kaldırmak için
+    const name = engName.toLowerCase();
+
+    if (
+      name.includes("whisky") ||
+      name.includes("whiskey") ||
+      name.includes("scotch") ||
+      name.includes("bourbon") ||
+      name.includes("rye")
+    )
+      return "whiskey";
+    if (name.includes("rum") || name.includes("cachaça")) return "rum";
+    if (name.includes("gin")) return "gin";
+    if (name.includes("vodka")) return "vodka";
+    if (name.includes("tequila") || name.includes("mezcal")) return "tequila";
+    if (name.includes("brandy") || name.includes("cognac")) return "brandy";
+
+    return null;
+  }
+
   // 2. IMPORTANCE LEVELS (Sabit Veriler - JSONB)
   const levelsData = [
     { level_name: { en: "Required", tr: "Gerekli" }, color_code: "#FF4136" }, // Kırmızı
@@ -104,11 +128,28 @@ exports.seed = async function (knex) {
     if (!ing.name || !ing.name.en) return;
 
     if (!uniqueIngredients.has(ing.name.en)) {
+      // --- BURASI GÜNCELLENDİ: Family Mantığı Entegre Edildi ---
+
+      // 1. Önce kategori ID'sini buluyoruz
+      const catId = categoryMap[ing.category] || categoryMap["Other"] || null;
+
+      // 2. Family (Grup) tespiti yapıyoruz
+      let family = null;
+
+      // Eğer bu malzeme 'Spirits' (Ana İçkiler) kategorisindeyse family hesapla
+      if (catId === categoryMap["Spirits"]) {
+        family = getSpiritFamily(ing.name.en);
+      }
+
       uniqueIngredients.set(ing.name.en, {
         name: ing.name, // Zaten {en:..., tr:...} formatında
-        category_id: categoryMap[ing.category] || categoryMap["Other"] || null,
+        category_id: catId,
+        family: family, // <--- Yeni family bilgisi buraya eklendi
       });
+
+      // ---------------------------------------------------------
     }
+
     // Alternatifleri de topla
     if (ing.alternatives && ing.alternatives.length > 0) {
       ing.alternatives.forEach((alt) => collectIngredient(alt));
