@@ -4,9 +4,14 @@ const db = require("../knex");
 //               MEVCUT FONKSİYONLAR (DEĞİŞMEDİ)
 // ============================================================
 
-const findRecipesByIngredients = async (inventoryIds, mode = "flexible") => {
+const findRecipesByIngredients = async (
+  inventoryIds,
+  mode = "flexible",
+  mustHaveIds = [] // Varsayılan değer BOŞ dizi. Manuel mod burayı boş bırakır.
+) => {
   if (!inventoryIds || inventoryIds.length === 0) return [];
 
+  // 1. EKSİK MALZEME SAYISINI HESAPLAYAN ALT SORGU (AYNEN KORUNDU)
   const missingCountSubquery = db("cocktail_requirements as r")
     .count("*")
     .where("r.cocktail_id", db.ref("c.cocktail_id"))
@@ -20,24 +25,40 @@ const findRecipesByIngredients = async (inventoryIds, mode = "flexible") => {
         .whereIn("a.alternative_ingredient_id", inventoryIds);
     });
 
-  const smartMatches = await db("cocktails as c")
-    .whereExists((qb) => {
+  // 2. TEMEL FİLTRELEME SORGUSU (AYNEN KORUNDU)
+  // "await" kullanmadan önce sorguyu bir değişkene (query) atıyoruz.
+  let query = db("cocktails as c").whereExists((qb) => {
+    qb.select(1)
+      .from("cocktail_requirements as req")
+      .leftJoin("recipe_alternatives as alt", function () {
+        this.on("req.ingredient_id", "=", "alt.original_ingredient_id").andOn(
+          "req.cocktail_id",
+          "=",
+          "alt.cocktail_id"
+        );
+      })
+      .where("req.cocktail_id", db.ref("c.cocktail_id"))
+      .andWhere((subQb) => {
+        subQb
+          .whereIn("req.ingredient_id", inventoryIds)
+          .orWhereIn("alt.alternative_ingredient_id", inventoryIds);
+      });
+  });
+
+  // 3. [YENİ] GÜVENLİ FİLTRE EKLEMESİ
+  // Manuel modda 'mustHaveIds' boş olduğu için burası ASLA çalışmaz.
+  // Sadece Rehber modu için devreye girer.
+  if (mustHaveIds && mustHaveIds.length > 0) {
+    query = query.whereExists((qb) => {
       qb.select(1)
-        .from("cocktail_requirements as req")
-        .leftJoin("recipe_alternatives as alt", function () {
-          this.on("req.ingredient_id", "=", "alt.original_ingredient_id").andOn(
-            "req.cocktail_id",
-            "=",
-            "alt.cocktail_id"
-          );
-        })
-        .where("req.cocktail_id", db.ref("c.cocktail_id"))
-        .andWhere((subQb) => {
-          subQb
-            .whereIn("req.ingredient_id", inventoryIds)
-            .orWhereIn("alt.alternative_ingredient_id", inventoryIds);
-        });
-    })
+        .from("cocktail_requirements as r2")
+        .where("r2.cocktail_id", db.ref("c.cocktail_id"))
+        .whereIn("r2.ingredient_id", mustHaveIds);
+    });
+  }
+
+  // 4. SONUÇLARI ÇEKME VE SIRALAMA (AYNEN KORUNDU)
+  const smartMatches = await query
     .select(
       "c.cocktail_id",
       "c.name",
@@ -188,7 +209,7 @@ const findWizardResults = async (familyKey, adjunctIds = []) => {
 
   // 3. Mevcut "Akıllı Arama" motorumuzu bu tam listeyle çalıştıralım.
   // İşte senin 'flexible' modun burada devreye giriyor!
-  return await findRecipesByIngredients(totalInventory, "flexible");
+  return await findRecipesByIngredients(totalInventory, "flexible", spiritIds);
 };
 
 module.exports = {
