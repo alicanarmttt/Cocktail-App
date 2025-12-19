@@ -67,27 +67,33 @@
     "pro_lock_msg": "Upgrade to Pro to see alternative recipes and use the 'Barman Assistant' to its full potential!",
     "get_pro_btn": "Upgrade to PRO"
   },
-  "assistant": {
+"assistant": {
     "landing_title": "Bartender Assistant",
-    "landing_subtitle": "What's your mood?",
+    "landing_subtitle": "What's your mood today?",
     "landing_desc": "Let me guide you, or explore your cabinet yourself.",
+    
     "mode_wizard": "Guide Me",
-   "mode_wizard_desc": "Let's find the best recipe step by step.",
+    "mode_wizard_desc": "Let's find the best recipe with step-by-step questions.",
     "mode_manual": "I'll Choose",
-    "mode_manual_desc": "Show me the full list, I'll handle it.",
-    "wizard_wip": "Bartender is preparing...",
-
+    "mode_manual_desc": "Show me the full ingredient list, I'll handle it.",
+    
     "manual_title": "Manual Selection",
-    "manual_subtitle": "Mark ingredients in your cabinet",
-    "title": "Bartender's Assistant",
-    "subtitle": "Select what you have, leave the rest to me.",
-
+    "manual_subtitle": "Select ingredients from your cabinet",
     "search_placeholder": "Search ingredients...",
     "tab_all": "All",
     "show_recipes_btn": "Find Cocktails",
-    "error_title": "Failed to Load",
-    "not_found": "No ingredients found."
-  },
+    "error_title": "Error",
+    "not_found": "Ingredient not found.",
+    
+    "wizard_thinking": "Hmm, checking the cellar...",
+    "wizard_step1_msg": "Welcome! What would you like to drink as a base today?",
+    "wizard_step2_msg": "Great choice! Which bottles do you have to accompany it?",
+    "wizard_step3_msg": "Finally, any fresh fruit or pantry items in the kitchen?",
+    "wizard_no_data": "No options found.",
+    "wizard_btn_next": "Continue",
+    "wizard_btn_finish": "Find Cocktails",
+    "wizard_step1_hint": "Next suggestions will be filtered based on this choice..."
+},
   "results": {
     "title": "Found Recipes",
     "loading": "Loading results...",

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme, useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,6 +9,8 @@ import { Ionicons } from "@expo/vector-icons";
 import AssistantManual from "../components/assistant/AssistantManual";
 import AssistantWizard from "../components/assistant/AssistantWizard";
 
+const BarmenMascot = require("../../assets/barmen_mascot.png");
+const BarShelf = require("../../assets/bar_shelf.png");
 /**
  * @desc    Assistant Main Container
  * @note    Kullanıcıyı karşılar ve "Rehber (Wizard)" veya "Manuel" mod seçimine yönlendirir.
@@ -89,7 +91,11 @@ const AssistantScreen = () => {
                 { backgroundColor: colors.primary + "20" },
               ]}
             >
-              <Ionicons name="chatbubbles" size={30} color={colors.primary} />
+              <Image
+                source={BarmenMascot}
+                style={{ width: 70, height: 70 }}
+                resizeMode="contain"
+              />
             </View>
             <View style={styles.cardTextContent}>
               <Text style={[styles.cardTitle, { color: colors.text }]}>
@@ -120,10 +126,21 @@ const AssistantScreen = () => {
             <View
               style={[
                 styles.iconCircle,
-                { backgroundColor: colors.textSecondary + "20" },
+                {
+                  backgroundColor: colors.textSecondary + "20",
+                  overflow: "hidden",
+                },
               ]}
             >
-              <Ionicons name="list" size={30} color={colors.textSecondary} />
+              <Image
+                source={BarShelf}
+                style={{
+                  width: 60,
+                  height: 60,
+                  paddingRight: 0,
+                }}
+                resizeMode="contain"
+              />
             </View>
             <View style={styles.cardTextContent}>
               <Text style={[styles.cardTitle, { color: colors.text }]}>

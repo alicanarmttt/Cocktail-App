@@ -6,8 +6,8 @@ import {
   StyleSheet,
   SectionList,
   Pressable,
-  Image,
-  ActivityIndicator,
+  FlatList,
+  Platform, // Platform kontrolü için eklendi
 } from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation, useTheme } from "@react-navigation/native";
@@ -27,18 +27,24 @@ import ErrorView from "../components/common/ErrorView";
 
 /**
  * @desc    Barmen Asistanı Sonuç Ekranı (AssistantResultScreen)
- * Gelen sonuçları "Yapılabilir", "Az Eksik" ve "Diğer" olarak gruplar.
- * Çok eksiği olanlarda negatif bir dil yerine "İlham" odaklı dil kullanır.
  */
 const AssistantResultScreen = () => {
-  const { colors, fonts } = useTheme();
+  const { colors, dark } = useTheme();
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
 
-  // --- HELPER: Dinamik İsim (YENİ HALİ) ---
+  // --- RENK PALETİ ---
+  const themeColors = {
+    ready: dark ? "#81C784" : colors.success,
+    almost: dark ? "#FFB74D" : colors.primary,
+    explore: colors.textSecondary,
+    cardBg: colors.card,
+    shadow: dark ? "#000" : colors.shadow,
+  };
+
+  // --- HELPER: Dinamik İsim ---
   const getName = (item) => {
     if (!item || !item.name) return "";
-    // name_tr yerine name[lang] kullanıyoruz
     return item.name[i18n.language] || item.name["en"] || "";
   };
 
@@ -47,18 +53,15 @@ const AssistantResultScreen = () => {
   const status = useSelector(getSearchStatus);
   const error = useSelector(getSearchError);
 
-  // --- 1. GRUPLAMA MANTIĞI (Kritik Bölüm) ---
+  // --- 1. GRUPLAMA MANTIĞI ---
   const sections = useMemo(() => {
     if (!rawResults || rawResults.length === 0) return [];
 
-    // 3 ayrı kova (bucket) oluşturuyoruz
-    const readyToDrink = []; // Eksik: 0
-    const almostThere = []; // Eksik: 1 veya 2
-    const inspiration = []; // Eksik: 3+
+    const readyToDrink = [];
+    const almostThere = [];
+    const inspiration = [];
 
     rawResults.forEach((cocktail) => {
-      // Backend 'missing_count' göndermezse varsayılan olarak 0 kabul et (Crash olmasın)
-      // Ama normalde backend bunu hesaplayıp yollar.
       const missing =
         cocktail.missing_count !== undefined ? cocktail.missing_count : 0;
 
@@ -71,7 +74,6 @@ const AssistantResultScreen = () => {
       }
     });
 
-    // SectionList formatına çevir
     const resultSections = [];
 
     if (readyToDrink.length > 0)
@@ -88,74 +90,70 @@ const AssistantResultScreen = () => {
 
   // --- 2. NAVİGASYON ---
   const handlePressCocktail = (cocktailId) => {
-    // Kokteyl Detayına Git
     navigation.navigate("CocktailDetail", { cocktailId: cocktailId });
   };
 
-  // --- 3. KART RENDER (Her satırın tasarımı) ---
+  // --- 3. KART RENDER ---
   const renderCocktailItem = ({ item, section }) => {
     const missingCount = item.missing_count || 0;
-    const sectionType = section.title; // 'ready', 'almost', 'explore'
+    const sectionType = section.title;
 
     return (
       <Pressable
-        style={[
+        style={({ pressed }) => [
           styles.card,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            shadowColor: colors.shadow,
+            backgroundColor: themeColors.cardBg,
+            borderColor: dark ? "rgba(255,255,255,0.15)" : colors.border,
+            borderWidth: dark ? 1 : 0.5,
+            shadowColor: themeColors.shadow,
+            transform: [{ scale: pressed ? 0.98 : 1 }],
           },
         ]}
         onPress={() => handlePressCocktail(item.cocktail_id)}
       >
-        {/* Sol: Resim */}
         <CocktailImage
           uri={item.image_url}
           style={[styles.cardImage, { backgroundColor: colors.subCard }]}
-        ></CocktailImage>
+        />
 
-        {/* Orta: İçerik */}
         <View style={styles.cardContent}>
           <Text style={[styles.cardTitle, { color: colors.text }]}>
             {getName(item)}
           </Text>
 
-          {/* Alt Metin: Hangi gruptaysa ona göre mesaj ver */}
-
-          {/* 1. GRUP: HAZIR */}
           {sectionType === "ready" && (
-            <Text style={[styles.subtitleReady, { color: colors.success }]}>
+            <Text style={[styles.subtitle, { color: themeColors.ready }]}>
               <Ionicons name="checkmark-circle" size={14} />{" "}
               {t("results.ready_msg", "Malzemeler Tam!")}
             </Text>
           )}
 
-          {/* 2. GRUP: AZ EKSİK */}
           {sectionType === "almost" && (
-            <Text style={[styles.subtitleMissing, { color: colors.primary }]}>
-              {missingCount} {t("results.missing_msg", "malzeme daha gerekli")}
+            <Text style={[styles.subtitle, { color: themeColors.almost }]}>
+              <Ionicons name="alert-circle-outline" size={14} /> {missingCount}{" "}
+              {t("results.missing_msg", "malzeme gerekli")}
             </Text>
           )}
 
-          {/* 3. GRUP: İLHAM (Negatiflik Yok!) */}
           {sectionType === "explore" && (
             <Text
-              style={[styles.subtitleGeneric, { color: colors.textSecondary }]}
+              style={[styles.subtitleGeneric, { color: themeColors.explore }]}
             >
               {t("results.explore_msg", "Tarife göz at")}
             </Text>
           )}
         </View>
 
-        {/* Sağ: İkon */}
         <View style={styles.cardAction}>
           {sectionType === "ready" ? (
-            // Hazırsa Yeşil Play Tuşu (Harekete Geçirici)
-            <Ionicons name="play-circle" size={32} color={colors.success} />
+            <Ionicons name="play-circle" size={32} color={themeColors.ready} />
           ) : (
-            // Değilse Gri Ok
-            <Ionicons name="chevron-forward" size={24} color={colors.border} />
+            <Ionicons
+              name="chevron-forward"
+              size={24}
+              color={colors.textSecondary}
+            />
           )}
         </View>
       </Pressable>
@@ -170,15 +168,15 @@ const AssistantResultScreen = () => {
     switch (title) {
       case "ready":
         titleText = "🥂 " + t("results.header_ready", "Hemen Yapabilirsin!");
-        titleColor = colors.success; // Yeşil
+        titleColor = themeColors.ready;
         break;
       case "almost":
         titleText = "🛒 " + t("results.header_almost", "Çok Yaklaşmışsın");
-        titleColor = colors.primary; // Premium Gold (Turuncu yerine)
+        titleColor = themeColors.almost;
         break;
       case "explore":
         titleText = "💡 " + t("results.header_explore", "İlham Al");
-        titleColor = colors.textSecondary; // Gri
+        titleColor = themeColors.explore;
         break;
       default:
         titleText = t("results.header_generic", "Sonuçlar");
@@ -195,34 +193,21 @@ const AssistantResultScreen = () => {
     );
   };
 
-  // --- YÜKLENİYOR / HATA DURUMLARI ---
-
+  // --- LOADING / ERROR ---
   if (status === "loading") {
     return (
       <SafeAreaView
         style={[styles.container, { backgroundColor: colors.background }]}
       >
-        {/* Header taklidi */}
-        <View
-          style={{
-            height: 60,
-            borderBottomWidth: 1,
-            borderColor: colors.border,
-            marginBottom: 20,
-          }}
-        />
-
+        <View style={styles.dummyHeader}>
+          <View style={{ height: 40 }} />
+        </View>
         <FlatList
-          data={[1, 2, 3, 4, 5, 6]} // 6 tane sahte sonuç kartı
+          data={[1, 2, 3, 4, 5, 6]}
           keyExtractor={(item) => item.toString()}
           renderItem={() => <ResultCardSkeleton />}
         />
-        <Text
-          style={[
-            styles.loadingText,
-            { color: colors.textSecondary, textAlign: "center", marginTop: 10 },
-          ]}
-        >
+        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
           {t("results.loading", "En uygun tarifler aranıyor...")}
         </Text>
       </SafeAreaView>
@@ -234,8 +219,6 @@ const AssistantResultScreen = () => {
       <ErrorView
         title={t("general.error_title", "Bir Hata Oluştu")}
         message={error || t("general.error")}
-        // Result ekranında retry mantığı zor (parametreleri bilmiyoruz),
-        // bu yüzden kullanıcı geri dönüp tekrar denemeli.
         iconName="alert-circle-outline"
       />
     );
@@ -260,24 +243,32 @@ const AssistantResultScreen = () => {
       style={[styles.container, { backgroundColor: colors.background }]}
       edges={["top", "left", "right"]}
     >
-      {/* Header */}
+      {/* CUSTOM HEADER / TITLE BAR */}
       <View
         style={[
           styles.header,
           {
-            backgroundColor: colors.background,
             borderBottomColor: colors.border,
+            // iOS'ta buton olmadığı için sola yaslanmasın diye padding veriyoruz
+            paddingLeft: Platform.OS === "ios" ? 20 : 16,
           },
         ]}
       >
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </Pressable>
+        {/* Sadece Android için Geri Butonu (iOS'ta native header var) */}
+        {Platform.OS !== "ios" && (
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          >
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
+          </Pressable>
+        )}
+
         <Text style={[styles.headerTitle, { color: colors.text }]}>
-          {t("results.title", "Bulunan Tarifler")} ({rawResults.length})
+          {t("results.title", "Bulunan Tarifler")}{" "}
+          <Text style={{ fontWeight: "400", fontSize: 18 }}>
+            ({rawResults.length})
+          </Text>
         </Text>
       </View>
 
@@ -287,7 +278,7 @@ const AssistantResultScreen = () => {
         renderItem={renderCocktailItem}
         renderSectionHeader={renderSectionHeader}
         contentContainerStyle={{ paddingBottom: 40 }}
-        stickySectionHeadersEnabled={false} // Başlıklar kayarken yapışmasın (daha sade durur)
+        stickySectionHeadersEnabled={false}
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
@@ -299,36 +290,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  centeredContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
   // Header
   header: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    // iOS'ta native header'a çok yakın olmaması için dikey boşluk ayarı
+    paddingVertical: Platform.OS === "ios" ? 10 : 14,
     borderBottomWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+    zIndex: 10,
   },
   backButton: {
     padding: 8,
     marginRight: 8,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
+    letterSpacing: 0.5,
+  },
+  dummyHeader: {
+    padding: 20,
+    marginBottom: 10,
   },
   // Section Header
   sectionHeader: {
-    paddingTop: 24,
-    paddingBottom: 12,
+    paddingTop: 18,
+    paddingBottom: 8,
     paddingHorizontal: 20,
   },
   sectionHeaderText: {
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: "800",
     letterSpacing: 0.3,
   },
@@ -337,20 +333,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 20,
-    marginBottom: 12,
-    padding: 12,
-    borderRadius: 16,
-    // Soft Gölge
+    marginBottom: 14,
+    padding: 14,
+    borderRadius: 20,
+    // 3D Gölge
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 3,
-    borderWidth: 1,
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   cardImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 12,
+    width: 68,
+    height: 68,
+    borderRadius: 14,
     marginRight: 16,
   },
   cardContent: {
@@ -360,44 +355,27 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 17,
     fontWeight: "700",
-    marginBottom: 4,
+    marginBottom: 6,
+    letterSpacing: 0.2,
   },
-  // Alt Metin Stilleri
-  subtitleReady: {
+  subtitle: {
     fontSize: 14,
     fontWeight: "600",
-  },
-  subtitleMissing: {
-    fontSize: 14,
-    fontWeight: "500",
+    letterSpacing: 0.2,
   },
   subtitleGeneric: {
     fontSize: 13,
     fontStyle: "italic",
+    fontWeight: "500",
   },
   cardAction: {
-    paddingLeft: 10,
+    paddingLeft: 12,
   },
-  // Loading & Error
   loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-  },
-  errorText: {
-    marginTop: 10,
-    fontSize: 16,
-    textAlign: "center",
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
     marginTop: 20,
-  },
-  emptySubtitle: {
     fontSize: 16,
     textAlign: "center",
-    marginTop: 10,
-    paddingHorizontal: 20,
+    fontWeight: "500",
   },
 });
 

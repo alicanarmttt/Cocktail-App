@@ -30,6 +30,7 @@ import {
 } from "../../features/barmenSlice.js";
 import IngredientSkeleton from "../../components/common/IngredientSkeleton";
 import ErrorView from "../../components/common/ErrorView";
+const BarmenMascot = require("../../../assets/barmen_mascot.png");
 
 /**
  * @desc    Barmen Asistanı - MANUEL MOD

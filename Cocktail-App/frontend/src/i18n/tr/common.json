@@ -67,24 +67,31 @@
     "get_pro_btn": "PRO'ya Geç"
   },
   "assistant": {
-   "landing_title": "Barmen Asistan",
-   "landing_subtitle": "Bugün modun nasıl?",
+    "landing_title": "Barmen Asistan",
+    "landing_subtitle": "Bugün modun nasıl?",
     "landing_desc": "İster sana rehberlik edeyim, ister dolabını kendin karıştır.",
+    
     "mode_wizard": "Bana Rehberlik Et",
     "mode_wizard_desc": "Adım adım sorularla en iyi tarifi bulalım.",
-   "mode_manual": "Kendim Seçerim",
+    "mode_manual": "Kendim Seçerim",
     "mode_manual_desc": "Tüm malzeme listesini göster, ben hallederim.",
-    "wizard_wip": "Barmen hazırlanıyor...",
-  
+    
     "manual_title": "Manuel Seçim",
     "manual_subtitle": "Dolabındaki malzemeleri işaretle",
-    "title": "Barmen'in Asistanı", 
-    "subtitle": "Elinde ne varsa seç, gerisini bana bırak.",
-  
-    "search_placeholder": "Malzeme ara (örn: Cin, Limon)",
+    "search_placeholder": "Malzeme ara...",
     "tab_all": "Tümü",
     "show_recipes_btn": "Kokteylleri Bul",
-    "error_title": "Malzemeler Yüklenemedi"
+    "error_title": "Hata",
+    "not_found": "Malzeme bulunamadı.",
+    
+    "wizard_thinking": "Hımm, mahzene bakıyorum...",
+    "wizard_step1_msg": "Hoş geldin! Bugün temel olarak ne içmek istersin?",
+    "wizard_step2_msg": "Harika! Peki eşlikçi olarak elinde hangi şişeler var?",
+    "wizard_step3_msg": "Son olarak, dolapta taze meyve veya kiler malzemesi var mı?",
+    "wizard_no_data": "Seçenek bulunamadı.",
+    "wizard_btn_next": "Devam Et",
+    "wizard_btn_finish": "Kokteylleri Bul",
+    "wizard_step1_hint": "Sıradaki öneriler bu seçimine göre filtrelenecek..."
   },
   "results": {
     "title": "Bulunan Tarifler",

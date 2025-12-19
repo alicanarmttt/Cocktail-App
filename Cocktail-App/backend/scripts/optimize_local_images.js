@@ -2,49 +2,46 @@ const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
 
-// Klasör Yolları
-const rawFolder = path.join(__dirname, "../temp_images/raw");
-const outputFolder = path.join(__dirname, "../temp_images/optimized");
+// Dosya Yolları (Artık klasör değil, doğrudan dosya yolları)
+const inputPath = path.join(__dirname, "../temp_images/raw/bar_shelf.png");
+const outputPath = path.join(
+  __dirname,
+  "../temp_images/optimized/bar_shelf_optimized.png"
+); // Çıktıyı .jpg yapıyoruz
 
-async function processImages() {
+async function processSingleImage() {
   try {
-    // Çıktı klasörü yoksa oluştur
-    if (!fs.existsSync(outputFolder)) {
-      fs.mkdirSync(outputFolder, { recursive: true });
+    // 1. Çıktı klasörü var mı kontrol et, yoksa oluştur
+    const outputDir = path.dirname(outputPath);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    // Klasördeki dosyaları oku
-    const files = fs.readdirSync(rawFolder);
-
-    for (const file of files) {
-      // Sadece resim dosyalarını al (jpg, png, jpeg, webp)
-      if (!file.match(/\.(jpg|jpeg|png|webp)$/i)) continue;
-
-      const inputPath = path.join(rawFolder, file);
-      const outputPath = path.join(outputFolder, file.split(".")[0] + ".jpg"); // Hepsini JPG yapar
-
-      console.log(`İşleniyor: ${file}...`);
-
-      await sharp(inputPath)
-        .resize(700, 700, {
-          fit: "cover", // Resmi kırparak 700x700'e tam oturtur (sündürmez)
-          position: "center", // Merkeze odaklanır
-        })
-        .jpeg({
-          quality: 80, // Kalite %80 (Gözle görülür fark az, boyut çok düşer)
-          mozjpeg: true, // Daha iyi sıkıştırma algoritması kullan
-        })
-        .toFile(outputPath);
-
-      console.log(`✅ Tamamlandı: ${file}`);
+    // 2. Giriş dosyası var mı kontrol et
+    if (!fs.existsSync(inputPath)) {
+      console.error(`❌ Hata: Kaynak dosya bulunamadı: ${inputPath}`);
+      return;
     }
 
-    console.log(
-      "\n🚀 Tüm resimler optimize edildi! 'temp_images/optimized' klasörüne bak."
-    );
+    console.log(`🚀 İşlem başlıyor: barmen_mascot.png...`);
+
+    // 3. Sharp ile tek dosyayı işle
+    await sharp(inputPath)
+      .resize(300, 300, {
+        fit: "cover",
+        position: "center",
+      })
+      .jpeg({
+        quality: 80,
+        mozjpeg: true,
+      })
+      .toFile(outputPath);
+
+    console.log(`✅ İşlem tamamlandı!`);
+    console.log(`📍 Kayıt yeri: ${outputPath}`);
   } catch (error) {
-    console.error("Hata:", error);
+    console.error("❌ Hata oluştu:", error);
   }
 }
 
-processImages();
+processSingleImage();
