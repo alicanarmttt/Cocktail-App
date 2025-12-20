@@ -34,6 +34,7 @@ import {
   clearDetail,
   fetchCocktails,
 } from "../features/cocktails/cocktailSlice";
+import apiClient from "../api/apiClient";
 import PremiumButton from "../ui/PremiumButton";
 
 /**
@@ -182,6 +183,43 @@ const ProfileScreen = () => {
     );
   }
 
+  // --- HESAP SİLME FONKSİYONU ---
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      t("general.delete_account"), // Başlık: "Hesabı Sil"
+      t("general.delete_account_confirm"), // Mesaj: "Emin misiniz?..."
+      [
+        { text: t("general.cancel"), style: "cancel" }, // Vazgeç
+        {
+          text: t("general.delete"), // Sil
+          style: "destructive", // iOS'te kırmızı görünür
+          onPress: async () => {
+            try {
+              // 1. Backend'e 'Sil' isteği at (Veritabanı ve Firebase Admin temizliği)
+              await apiClient.delete("/users/me");
+
+              // 2. Telefondaki Firebase oturumunu kapat
+              await signOut(auth);
+
+              // 3. Redux State'ini temizle (Uygulama hafızasını sıfırla)
+              dispatch(clearUser());
+              dispatch(clearDetail());
+              dispatch(clearSearchResults());
+              // Dil ve Tema ayarlarını silmeye gerek yok (uiSlice), kalsın.
+
+              // 4. Kullanıcı zaten 'currentUser' null olunca otomatik Login ekranına düşecek.
+            } catch (error) {
+              console.error("Hesap silme hatası:", error);
+              Alert.alert(
+                t("general.error"),
+                "Hesap silinemedi. Lütfen internet bağlantınızı kontrol edip tekrar deneyin."
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
   // 4. Arayüzü (UI) Render Et
   return (
     <SafeAreaView
@@ -338,6 +376,34 @@ const ProfileScreen = () => {
             {t("auth.logout")}
           </Text>
         </PremiumButton>
+
+        {/* --- YENİ: HESAP SİLME BUTONU --- */}
+        <View
+          style={{
+            marginTop: 30,
+            marginBottom: 20,
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Pressable
+            onPress={handleDeleteAccount}
+            style={({ pressed }) => [
+              { opacity: pressed ? 0.5 : 1, padding: 10 },
+            ]}
+          >
+            <Text
+              style={{
+                color: colors.notification, // Temadaki kırmızı renk
+                fontSize: 14,
+                fontWeight: "500",
+                textDecorationLine: "underline", // Altı çizili link havası
+              }}
+            >
+              {t("general.delete_my_account")}
+            </Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );

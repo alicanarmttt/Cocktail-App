@@ -11,12 +11,13 @@ import AssistantWizard from "../components/assistant/AssistantWizard";
 
 const BarmenMascot = require("../../assets/barmen_mascot.png");
 const BarShelf = require("../../assets/bar_shelf.png");
+
 /**
  * @desc    Assistant Main Container
  * @note    Kullanıcıyı karşılar ve "Rehber (Wizard)" veya "Manuel" mod seçimine yönlendirir.
  */
 const AssistantScreen = () => {
-  const { colors } = useTheme();
+  const { colors, dark } = useTheme(); // Dark mod kontrolü için 'dark' eklendi
   const navigation = useNavigation();
   const { t } = useTranslation();
 
@@ -32,9 +33,8 @@ const AssistantScreen = () => {
     return <AssistantManual onBackToMode={handleBackToMode} />;
   }
 
-  // --- RENDER: WIZARD MODU (Placeholder) ---
+  // --- RENDER: WIZARD MODU ---
   if (viewMode === "WIZARD") {
-    // Gelecek adımda buraya <AssistantWizard /> gelecek.
     return <AssistantWizard onCancel={handleBackToMode} />;
   }
 
@@ -44,15 +44,7 @@ const AssistantScreen = () => {
       style={[styles.container, { backgroundColor: colors.background }]}
       edges={["top"]}
     >
-      {/* Header: Sadece Kapatma Butonu */}
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={styles.headerBackBtn}
-        >
-          <Ionicons name="close" size={28} color={colors.text} />
-        </Pressable>
-      </View>
+      {/* HEADER (ÇARPI BUTONU) KALDIRILDI */}
 
       <View style={styles.content}>
         {/* Başlık ve Açıklama */}
@@ -79,8 +71,15 @@ const AssistantScreen = () => {
               styles.modeCard,
               {
                 backgroundColor: colors.card,
-                borderColor: colors.primary, // Vurgulu renk
+                borderColor: colors.primary,
+                borderWidth: 1.5, // Daha belirgin çerçeve
                 transform: [{ scale: pressed ? 0.98 : 1 }],
+                // 3D EFEKTİ (GÖLGE)
+                shadowColor: dark ? "#000" : colors.primary, // Light modda hafif renkli gölge
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: dark ? 0.4 : 0.15,
+                shadowRadius: 12,
+                elevation: 10, // Android için güçlü derinlik
               },
             ]}
             onPress={() => setViewMode("WIZARD")}
@@ -88,7 +87,7 @@ const AssistantScreen = () => {
             <View
               style={[
                 styles.iconCircle,
-                { backgroundColor: colors.primary + "20" },
+                { backgroundColor: colors.primary + "15" }, // Daha soft zemin
               ]}
             >
               <Image
@@ -118,7 +117,14 @@ const AssistantScreen = () => {
               {
                 backgroundColor: colors.card,
                 borderColor: colors.border,
+                borderWidth: 1,
                 transform: [{ scale: pressed ? 0.98 : 1 }],
+                // 3D EFEKTİ
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 6 },
+                shadowOpacity: dark ? 0.3 : 0.08,
+                shadowRadius: 8,
+                elevation: 6,
               },
             ]}
             onPress={() => setViewMode("MANUAL")}
@@ -127,7 +133,7 @@ const AssistantScreen = () => {
               style={[
                 styles.iconCircle,
                 {
-                  backgroundColor: colors.textSecondary + "20",
+                  backgroundColor: colors.textSecondary + "10",
                   overflow: "hidden",
                 },
               ]}
@@ -135,9 +141,9 @@ const AssistantScreen = () => {
               <Image
                 source={BarShelf}
                 style={{
-                  width: 60,
-                  height: 60,
-                  paddingRight: 0,
+                  width: 55,
+                  height: 55,
+                  opacity: 0.8,
                 }}
                 resizeMode="contain"
               />
@@ -167,72 +173,62 @@ const AssistantScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  centered: { flex: 1, justifyContent: "center", alignItems: "center" },
-  header: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    alignItems: "flex-end",
-  },
-  headerBackBtn: {
-    padding: 8,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    justifyContent: "center",
-    paddingBottom: 80,
+    // justifyContent: "center" KALDIRILDI -> İçerik yukarı taşındı
+    paddingTop: 60, // Üstten ideal boşluk
   },
   textContainer: {
-    marginBottom: 40,
+    marginBottom: 50, // Başlık ile kartlar arasını biraz açtık
   },
   greetingTitle: {
-    fontSize: 32,
+    fontSize: 34, // Biraz daha büyük ve iddialı
     fontWeight: "800",
-    marginBottom: 8,
+    marginBottom: 10,
+    letterSpacing: 0.5,
   },
   greetingSubtitle: {
-    fontSize: 22, // Biraz küçülttüm
+    fontSize: 22,
     fontWeight: "600",
     marginBottom: 12,
   },
   greetingDesc: {
     fontSize: 16,
     lineHeight: 24,
+    width: "90%", // Metnin çok yayılmasını engeller
   },
   cardsContainer: {
-    gap: 20,
+    gap: 24, // Kartlar arası boşluk artırıldı
   },
   modeCard: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 20,
+    padding: 22, // İç dolgu artırıldı
     borderRadius: 24,
-    borderWidth: 1,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
+    // Shadow özellikleri inline style içinde yönetiliyor (Theme uyumu için)
   },
   iconCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 16,
+    marginRight: 18,
   },
   cardTextContent: {
     flex: 1,
+    paddingRight: 10,
   },
   cardTitle: {
-    fontSize: 17,
-    fontWeight: "700",
-    marginBottom: 4,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 6,
   },
   cardDesc: {
     fontSize: 13,
     lineHeight: 18,
+    fontWeight: "500",
   },
 });
 

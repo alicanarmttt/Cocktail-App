@@ -6,7 +6,11 @@
     "cancel": "İptal",
     "ok": "Tamam",
     "close":"Kapat",
-    "selected": "Seçildi"
+    "selected": "Seçildi",
+    "delete_account": "Hesabı Sil",
+    "delete_my_account": "Hesabımı Kalıcı Olarak Sil",
+    "delete_account_confirm": "Hesabınızı ve tüm verilerinizi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+   "delete": "Sil"
   },
   "navigation": {
     "cocktails": "Kokteyller",
@@ -67,7 +71,7 @@
     "get_pro_btn": "PRO'ya Geç"
   },
   "assistant": {
-    "landing_title": "Barmen Asistan",
+    "landing_title": "Barmen'in Köşesi",
     "landing_subtitle": "Bugün modun nasıl?",
     "landing_desc": "İster sana rehberlik edeyim, ister dolabını kendin karıştır.",
     

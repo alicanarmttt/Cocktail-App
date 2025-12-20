@@ -58,7 +58,19 @@ const upgradeUserToPro = async (firebase_uid) => {
   return updatedUser;
 };
 
+/**
+ * @desc    Kullanıcıyı veritabanından siler.
+ * @param   {string} firebase_uid - Silinecek kullanıcının ID'si
+ */
+const deleteUser = async (firebase_uid) => {
+  // Knex ile 'users' tablosundan, firebase_uid'si eşleşen satırı sil
+  // 'user_favorites' tablosundaki veriler, veritabanını kurarken
+  // ON DELETE CASCADE dediğimiz için otomatik silinecek.
+  return db("users").where({ firebase_uid }).del();
+};
+
 module.exports = {
   findOrCreateUser,
   upgradeUserToPro,
+  deleteUser,
 };

@@ -206,17 +206,7 @@ const RouletteScreen = () => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     };
 
-    // Animasyon sırasında belirli aralıklarla titreşim tetikle
-    // Bu basit bir yaklaşım, daha gerçekçi olması için animasyon değeri dinlenebilir (addListener)
-    // Ancak performans için interval kullanmak daha güvenlidir.
-    // Başlangıçta hızlı, sonra yavaşlayan bir interval kurmak karmaşık olabilir,
-    // o yüzden sabit aralıklı ama animasyon süresince çalışan bir yapı kuruyoruz.
-
-    // Titreşimi animasyonun değerine bağlamak (addListener) daha gerçekçi bir his verir
     const listenerId = spinValue.addListener(({ value }) => {
-      // Her tam turda veya belirli bir açıda titreşim (Örn: her 45 derecede)
-      // Value 0'dan 8'e gidiyor (toValue aşağıda 5-8 arası).
-      // math.floor(value * 8) değiştiğinde titreşim yap diyebiliriz (8 dilim varsa)
       const currentTick = Math.floor(value * 8); // 8 dilim varsayalım
       if (currentTick > tickCount) {
         triggerHaptic();
@@ -253,7 +243,7 @@ const RouletteScreen = () => {
   };
   // --- RENDER ---
 
-  // 1. MENÜ (YENİLENMİŞ TASARIM)
+  // 1. MENÜ (YENİLENMİŞ PREMIUM TASARIM)
   const renderMenu = () => (
     <View style={styles.menuContainer}>
       <Text style={[styles.headerTitle, { color: colors.text }]}>
@@ -270,35 +260,43 @@ const RouletteScreen = () => {
             style={({ pressed }) => [
               styles.modeCard,
               {
-                backgroundColor: colors.card,
-                shadowColor: item.color, // Gölge rengi modun rengi olsun
-                borderColor: item.color, // Çerçeve rengi
-                opacity: pressed ? 0.9 : 1,
-                transform: [{ scale: pressed ? 0.98 : 1 }],
+                // Gölge rengi kartın kendi rengiyle uyumlu olsun
+                shadowColor: item.color,
+                // Basınca küçülme efekti
+                transform: [{ scale: pressed ? 0.96 : 1 }],
               },
             ]}
             onPress={() => handleModeSelect(item.id)}
           >
-            {/* İkon Arka Planı (Hafif Opak Renk) */}
-            <View
-              style={[
-                styles.iconCircle,
-                { backgroundColor: item.color + "20" }, // %20 Opaklık
-              ]}
+            {/* LinearGradient tüm kartı kaplasın */}
+            <LinearGradient
+              colors={item.gradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.cardGradient}
             >
-              <Ionicons name={item.icon} size={32} color={item.color} />
-            </View>
+              {/* Üst Kısım: Glass İkon ve Gizli Arkaplan İkonu */}
+              <View style={styles.cardHeaderRow}>
+                <View style={styles.glassIconContainer}>
+                  <Ionicons name={item.icon} size={24} color="#FFF" />
+                </View>
 
-            <View style={styles.cardTextContainer}>
-              <Text style={[styles.modeText, { color: colors.text }]}>
-                {t(item.labelKey)}
-              </Text>
-            </View>
+                {/* Sağ üstte dekoratif büyük silik ikon */}
+                <Ionicons
+                  name={item.icon}
+                  size={80}
+                  color="rgba(255,255,255,0.15)"
+                  style={styles.bgDecorIcon}
+                />
+              </View>
 
-            {/* Dekoratif Yan Çizgi (Premium His) */}
-            <View
-              style={[styles.accentLine, { backgroundColor: item.color }]}
-            />
+              {/* Alt Kısım: Başlık ve İndikatör */}
+              <View>
+                <Text style={styles.modeText}>{t(item.labelKey)}</Text>
+                {/* Altına minik bir çizgi (Premium hissi için) */}
+                <View style={styles.indicatorCapsule} />
+              </View>
+            </LinearGradient>
           </Pressable>
         ))}
       </View>
@@ -518,52 +516,63 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  // YENİ PREMIUM KART TASARIMI
+  // --- YENİ KART STİLLERİ ---
   modeCard: {
-    width: "48%",
-    height: 120, // Sabit yükseklik
-    borderRadius: 20,
-    marginBottom: 15,
-    padding: 15,
-    borderWidth: 1, // İnce zarif çerçeve
-    justifyContent: "space-between",
-    alignItems: "flex-start", // Sola yaslı içerik daha modern durur
-    // Gölge
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
-    overflow: "hidden", // Accent line için
-    position: "relative",
+    width: "48%", // İki sütun
+    height: 150, // Biraz daha yüksek ve gösterişli
+    borderRadius: 24,
+    marginBottom: 20,
+    // Güçlü ve renkli gölgeler (Glow efekti)
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
   },
-  iconCircle: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
+  cardGradient: {
+    flex: 1,
+    borderRadius: 24,
+    padding: 16,
+    justifyContent: "space-between",
+    overflow: "hidden", // Taşan dekoratif ikonları kesmek için
+  },
+  cardHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  glassIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: "rgba(255, 255, 255, 0.25)", // Buzlu cam efekti
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.4)",
   },
-  cardTextContainer: {
-    flex: 1,
-    justifyContent: "center",
-    width: "100%",
+  bgDecorIcon: {
+    position: "absolute",
+    right: -20,
+    top: -20,
+    transform: [{ rotate: "-15deg" }], // Hafif eğik duruş
   },
   modeText: {
-    fontSize: 16,
-    fontWeight: "700",
-    textAlign: "left",
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#FFFFFF",
+    marginBottom: 8,
+    textShadowColor: "rgba(0,0,0,0.1)",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+    letterSpacing: 0.5,
   },
-  accentLine: {
-    position: "absolute",
-    right: 0,
-    top: 15,
-    bottom: 15,
-    width: 4,
-    borderTopLeftRadius: 2,
-    borderBottomLeftRadius: 2,
-    opacity: 0.8,
+  indicatorCapsule: {
+    width: 24,
+    height: 4,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 2,
   },
+  // -------------------------
 
   filterContainer: { flex: 1, padding: 20 },
   backButton: {

@@ -6,7 +6,11 @@
     "cancel": "Cancel",
     "ok": "OK",
     "close":"Close",
-    "selected": "Selected"
+    "selected": "Selected",
+    "delete_account": "Delete Account",
+    "delete_my_account": "Delete My Account Permanently",
+    "delete_account_confirm": "Are you sure you want to delete your account and all data? This action cannot be undone.",
+    "delete": "Delete"
 
   },
   "navigation": {
@@ -68,7 +72,7 @@
     "get_pro_btn": "Upgrade to PRO"
   },
 "assistant": {
-    "landing_title": "Bartender Assistant",
+    "landing_title": "Bartender's Corner",
     "landing_subtitle": "What's your mood today?",
     "landing_desc": "Let me guide you, or explore your cabinet yourself.",
     

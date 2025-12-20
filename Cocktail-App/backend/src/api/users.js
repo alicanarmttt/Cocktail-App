@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const admin = require("firebase-admin");
 
 const {
   findOrCreateUser,
   upgradeUserToPro,
+  deleteUser,
 } = require("../db/models/user.model");
 
 /**
@@ -72,6 +74,57 @@ router.post("/upgrade-to-pro", async (req, res) => {
       requestBody: req.body,
     });
     res.status(500).json({ msg: "Sunucu hatası", error: error.message });
+  }
+});
+
+/**
+ * @route   DELETE /api/users/me
+ * @desc    Kullanıcı hesabını hem Firebase'den hem DB'den kalıcı siler.
+ * @access  Private (Token gerekli)
+ */
+router.delete("/me", async (req, res) => {
+  try {
+    // 1. Güvenlik Kontrolü: Middleware (verifyToken) sayesinde req.user var mı?
+    // (Bunu server.js'de app.use('/api/users', verifyToken, usersRoutes) diyerek
+    // bağladıysak req.user zaten vardır. Eğer bağlamadıysak buraya middleware eklemeliyiz.)
+    // Biz seninle server.js'yi henüz tam yapılandırmadık sanırım,
+    // o yüzden garanti olsun diye ID'yi şimdilik req.user'dan almayı deneyelim.
+
+    // NOT: authMiddleware'i route seviyesinde kullanmak daha güvenlidir.
+    // Eğer server.js'de global vermediysen, bu kodun çalışması için middleware'i import etmelisin.
+    // Ama şimdilik senin yapında req.user.uid'nin geldiğini varsayıyoruz.
+
+    const firebase_uid = req.user?.uid;
+
+    if (!firebase_uid) {
+      return res
+        .status(401)
+        .json({ msg: "Yetkisiz işlem: Kullanıcı tanınamadı." });
+    }
+
+    console.log(`🗑️ Hesap Silme İsteği: ${firebase_uid}`);
+
+    // 2. Firebase Auth'tan Sil (Artık giriş yapamaz)
+    try {
+      await admin.auth().deleteUser(firebase_uid);
+      console.log("✅ Firebase kullanıcısı silindi.");
+    } catch (fbError) {
+      // Kullanıcı Firebase'de zaten yoksa (nadir durum), akışı bozma devam et
+      console.warn(
+        "⚠️ Firebase silme uyarısı (Önemli olmayabilir):",
+        fbError.message
+      );
+    }
+
+    // 3. Kendi Veritabanımızdan (PostgreSQL) Sil
+    const deletedCount = await deleteUser(firebase_uid);
+    console.log(`✅ Veritabanından silinen kayıt sayısı: ${deletedCount}`);
+
+    // 4. Başarılı Cevap Dön
+    res.status(200).json({ msg: "Hesabınız başarıyla silindi. Elveda!" });
+  } catch (error) {
+    console.error("❌ Hesap silme hatası:", error);
+    res.status(500).json({ msg: "Hesap silinirken bir hata oluştu." });
   }
 });
 
