@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -10,35 +10,33 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Dimensions,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@react-navigation/native";
+import { Video, ResizeMode } from "expo-av";
+import { LinearGradient } from "expo-linear-gradient";
 
-// 1. Firebase Auth servisi
 import { auth } from "../api/firebaseConfig";
-// 2. Firebase'in Email/Şifre fonksiyonlarını içe aktar
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  sendEmailVerification,
 } from "firebase/auth";
-
-// 3. Redux Thunk (API isteği) ve Selector'leri (userSlice.js'ten) içe aktar
 import { loginOrRegisterUser, getLoginStatus } from "../features/userSlice";
-
-// Eğer konsolda "undefined" yazıyorsa, Metro Cache'i temizlemen şarttır.
 import * as WebBrowser from "expo-web-browser";
 import { useAuthRequest, makeRedirectUri } from "expo-auth-session";
-// 'GoogleAuthProvider' (Google'ın 'idToken'ını Firebase'e çevirmek için)
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import { useTranslation } from "react-i18next"; // 1. Çeviri kancasını ekle
+import { useTranslation } from "react-i18next";
 import PremiumButton from "../ui/PremiumButton";
 
-// (Giriş (Auth) akışı web tarayıcısını (web browser) tamamladığında çağrılır)
 WebBrowser.maybeCompleteAuthSession();
 
-// --- YARDIMCI FONKSİYON: Hata Mesajlarını Çevir ---
+// Ekran genişliği
+const { width } = Dimensions.get("window");
+
 const getFriendlyErrorMessage = (error) => {
   switch (error.code) {
     case "auth/email-already-in-use":
@@ -51,119 +49,79 @@ const getFriendlyErrorMessage = (error) => {
       return "Şifre çok zayıf.";
     case "auth/invalid-email":
       return "Geçersiz e-posta formatı.";
+    case "auth/too-many-requests":
+      return "Çok fazla deneme yaptınız. Lütfen bekleyin.";
     default:
       return "Bir hata oluştu.";
   }
 };
 
-/**
- * @desc    Kullanıcıların giriş yapmasını (Login) veya kayıt olmasını (Register) sağlar.
- */
 const LoginScreen = () => {
-  const { colors, fonts } = useTheme();
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   const loginStatus = useSelector(getLoginStatus);
+  const video = useRef(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false); // Mod (Giriş / Kayıt)
-  const { t } = useTranslation(); // 2. Çeviri fonksiyonunu al
+  const [isRegistering, setIsRegistering] = useState(false);
+  const { t, i18n } = useTranslation();
 
-  // Firebase (Adım 1) için lokal 'loading' state'i
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
-  // === YENİ EKLENDİ (EKSİK 11 - Google Girişi Mantığı) ===
-  const [googleLoading, setGoogleLoading] = useState(false); // (Google butonu için ayrı 'loading')
+  const redirectUri = makeRedirectUri({ useProxy: true });
 
-  const redirectUri = makeRedirectUri({
-    useProxy: true,
-  });
-  // 1. 'useAuthRequest' kancasını (hook) .env anahtarlarıyla (keys) başlat
   const [request, response, promptAsync] = useAuthRequest(
     {
-      // iosClientId:
-      //   "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
-      // androidClientId:
-      //   "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
-      // (webClientId .env'de yok, ancak Expo Go için 'expoClientId'yi kullanabiliriz)
       clientId:
         "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
       redirectUri,
-      responseType: "id_token", // önemli: Google için id_token alıyoruz
+      responseType: "id_token",
       scopes: ["openid", "profile", "email"],
-      // optional: prompt: "select_account" // ister isen ekle
     },
-
     {
       authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
       tokenEndpoint: "https://oauth2.googleapis.com/token",
     }
   );
 
-  // 2. Google "popup" (web) ekranından (response) bir yanıt geldiğinde 'useEffect'i tetikle
   useEffect(() => {
-    if (response) {
-      if (response?.type === "success") {
-        const { id_token } = response.params;
-        // 3. Google'ın 'id_token'ı ile 'handleGoogleSignIn'ı (aşağıdaki) çağır
-        handleGoogleSignIn(id_token);
-      } else {
-        // (Kullanıcı popup'ı kapattı veya hata oluştu)
-        setGoogleLoading(false);
-      }
+    if (response?.type === "success") {
+      const { id_token } = response.params;
+      handleGoogleSignIn(id_token);
+    } else if (response?.type === "error" || response?.type === "dismiss") {
+      setGoogleLoading(false);
     }
   }, [response]);
 
-  /**
-   * @desc  Google'dan gelen 'idToken'ı alır, Firebase'e (Auth) gönderir,
-   * ardından bizim Backend'imizle (is_pro) senkronize eder.
-   */
   const handleGoogleSignIn = async (id_token) => {
     try {
-      // 1. ADIM: Google 'id_token'ını Firebase 'credential' (kimlik bilgisi) haline getir
       const credential = GoogleAuthProvider.credential(id_token);
-
-      // 2. ADIM: Firebase (Frontend) - Bu 'credential' (kimlik bilgisi) ile Giriş Yap
       const userCredential = await signInWithCredential(auth, credential);
       const user = userCredential.user;
-
-      // 3. ADIM: Redux (Frontend) -> Backend (Senkronizasyon)
-      // (Email/Şifre ile aynı 'thunk'ı (sağdaki userSlice.js) çağırıyoruz)
       await dispatch(
-        loginOrRegisterUser({
-          firebase_uid: user.uid,
-          email: user.email,
-        })
+        loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
       ).unwrap();
-      // (Başarılı. AppNavigator.js (sağdaki) bizi otomatik olarak Ana Ekrana yönlendirecek)
     } catch (error) {
       console.error("Google Giriş Hatası:", error);
-      Alert.alert(
-        "Google Giriş Hatası",
-        getFriendlyErrorMessage(error) // (Aynı hata çeviriciyi kullan)
-      );
+      Alert.alert("Google Giriş Hatası", getFriendlyErrorMessage(error));
     } finally {
       setGoogleLoading(false);
     }
   };
-  // ==================================================
 
-  /**
-   * @desc  Firebase'e YENİ KULLANICI kaydı yapar,
-   * ardından bizim Backend'imizle senkronize eder.
-   */
   const handleRegister = async () => {
     if (email === "" || password === "") {
       Alert.alert(t("general.error"), t("auth.errors.empty_fields"));
       return;
     }
     if (loginStatus === "loading" || isFirebaseLoading) return;
-
-    // YENİ EKLENDİ (Tepkisizlik Çözümü): Yüklenmeyi başlat
     setIsFirebaseLoading(true);
 
     try {
-      // 1. ADIM: Firebase (Frontend) - Kullanıcıyı Oluştur
+      auth.languageCode = i18n.language;
+      // 1. Kullanıcıyı oluştur
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -171,297 +129,394 @@ const LoginScreen = () => {
       );
       const user = userCredential.user;
 
-      // 2. ADIM: Redux (Frontend) -> Backend (Senkronizasyon)
-      // (userSlice.js'teki 'loginOrRegisterUser' Thunk'ını çağır)
-      await dispatch(
-        loginOrRegisterUser({
-          firebase_uid: user.uid,
-          email: user.email,
-        })
-      ).unwrap();
+      // 2. YENİ ADIM: Doğrulama E-postası Gönder
+      await sendEmailVerification(user);
 
-      // (Başarılı. AppNavigator.js bizi otomatik olarak Ana Ekrana yönlendirecek)
+      // 3. Kullanıcıya bilgi ver
+      Alert.alert(
+        "Kayıt Başarılı!",
+        "E-posta adresinize bir doğrulama bağlantısı gönderdik. Hesabınızın güvenliği ve şifre kurtarma işlemleri için lütfen onaylayın.",
+        [
+          {
+            text: "Tamam",
+            // Kullanıcı "Tamam"a basınca giriş işlemini tamamla
+            onPress: async () => {
+              await dispatch(
+                loginOrRegisterUser({
+                  firebase_uid: user.uid,
+                  email: user.email,
+                })
+              ).unwrap();
+            },
+          },
+        ]
+      );
     } catch (error) {
-      // (Hata yönetimi)
       console.error("Kayıt Hatası:", error);
       Alert.alert(t("general.error"), getFriendlyErrorMessage(error));
     } finally {
-      // YENİ EKLENDİ (Tepkisizlik Çözümü): Yüklenmeyi (her durumda) bitir
       setIsFirebaseLoading(false);
     }
   };
 
-  /**
-   * @desc  Firebase'e GİRİŞ yapar,
-   * ardından bizim Backend'imizle senkronize eder.
-   */
   const handleLogin = async () => {
     if (email === "" || password === "") {
       Alert.alert(t("general.error"), t("auth.errors.empty_fields"));
       return;
     }
     if (loginStatus === "loading" || isFirebaseLoading) return;
-
-    // YENİ EKLENDİ (Tepkisizlik Çözümü): Yüklenmeyi başlat
     setIsFirebaseLoading(true);
-
     try {
-      // 1. ADIM: Firebase (Frontend) - Giriş Yap
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
       const user = userCredential.user;
-
-      // 2. ADIM: Redux (Frontend) -> Backend (Senkronizasyon)
-      // (Aynı Thunk'ı çağırıyoruz. Backend'deki 'findOrCreateUser'
-      // kullanıcıyı bulup 'is_pro' bayrağını döndürecek)
       await dispatch(
-        loginOrRegisterUser({
-          firebase_uid: user.uid,
-          email: user.email,
-        })
+        loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
       ).unwrap();
-
-      // (Başarılı. AppNavigator.js bizi otomatik olarak Ana Ekrana yönlendirecek)
     } catch (error) {
-      // (Hata yönetimi)
       console.error("Giriş Hatası:", error);
       Alert.alert(t("general.error"), getFriendlyErrorMessage(error));
     } finally {
-      // YENİ EKLENDİ (Tepkisizlik Çözümü): Yüklenmeyi (her durumda) bitir
       setIsFirebaseLoading(false);
     }
   };
 
+  // YENİ: Şifre Sıfırlama Fonksiyonu
+  const handleForgotPassword = async () => {
+    if (email === "") {
+      Alert.alert(
+        "Uyarı",
+        "Lütfen şifresini sıfırlamak istediğiniz e-posta adresini yazın."
+      );
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert(
+        "Başarılı",
+        "Şifre sıfırlama bağlantısı e-postana gönderildi."
+      );
+    } catch (error) {
+      Alert.alert("Hata", getFriendlyErrorMessage(error));
+    }
+  };
+
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: colors.background }]}
-    >
+    <View style={{ flex: 1, backgroundColor: "#000" }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
       >
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
           keyboardShouldPersistTaps="handled"
+          bounces={false}
         >
-          <Ionicons
-            name="wine-outline"
-            size={80}
-            color={colors.primary}
-            style={styles.logo}
-          />
-          <Text style={[styles.title, { color: colors.primary }]}>
-            {isRegistering ? t("auth.register") : t("auth.login")}
-          </Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            {t("auth.subtitle")}
-          </Text>
-
-          {/* Email Girişi */}
-          <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: colors.inputBg,
-                borderColor: colors.inputBorder || colors.border,
-                color: colors.text,
-              },
-            ]}
-            placeholder={t("auth.email_placeholder")}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            placeholderTextColor={colors.textSecondary}
-          />
-
-          {/* Şifre Girişi */}
-          <TextInput
-            style={[
-              styles.input,
-              {
-                backgroundColor: colors.inputBg,
-                borderColor: colors.inputBorder || colors.border,
-                color: colors.text,
-              },
-            ]}
-            placeholder={t("auth.password_placeholder")}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry // Şifreyi gizler
-            placeholderTextColor={colors.textSecondary}
-          />
-
-          {/* Ana Buton (Giriş veya Kayıt) */}
-          <PremiumButton
-            title={isRegistering ? t("auth.register") : t("auth.login")}
-            onPress={isRegistering ? handleRegister : handleLogin}
-            variant="gold"
-            // 4. Karmaşık Loading Mantığı (Tek satıra indi!)
-            // Herhangi biri yükleniyorsa buton döner
-            isLoading={
-              loginStatus === "loading" || isFirebaseLoading || googleLoading
-            }
-            // 5. Disabled Mantığı
-            // Yükleme varsa tıklamayı engelle
-            disabled={
-              loginStatus === "loading" || isFirebaseLoading || googleLoading
-            }
-            // 6. Stil (Sadece yerleşim ayarları kalacak)
-            style={styles.button}
-          ></PremiumButton>
-
-          {/* Mod Değiştirme Butonu */}
-          <Pressable
-            style={styles.toggleButton}
-            onPress={() => setIsRegistering(!isRegistering)}
-          >
-            <Text style={[styles.toggleText, { color: colors.primary }]}>
-              {isRegistering ? t("auth.have_account") : t("auth.no_account")}
-            </Text>
-          </Pressable>
-
-          {/* --- Google Giriş Butonu) --- */}
-          <View style={styles.dividerContainer}>
-            <View
-              style={[styles.divider, { backgroundColor: colors.border }]}
+          {/* --- PREMIUM VIDEO ALANI --- */}
+          <View style={styles.videoWrapper}>
+            <Video
+              ref={video}
+              style={styles.video}
+              // NOT: Gerçek cihazda çalışması için assets içindeki dosya adının doğru olduğundan emin ol
+              source={require("../../assets/home_480.mp4")}
+              useNativeControls={false}
+              resizeMode={ResizeMode.COVER} // Arka plan siyah olduğu için COVER kullanıp alttan siliyoruz, sorun yok.
+              isLooping={false}
+              shouldPlay={true}
+              isMuted={true}
             />
-            <Text style={[styles.dividerText, { color: colors.textSecondary }]}>
-              {t("general.or")}
-            </Text>
-            <View
-              style={[styles.divider, { backgroundColor: colors.border }]}
+            {/* Fade Out Effect */}
+            <LinearGradient
+              colors={["transparent", "#000000"]}
+              style={styles.videoOverlay}
             />
           </View>
-          <Pressable
-            style={[
-              styles.button,
-              styles.googleButton,
-              {
-                backgroundColor: colors.card,
-                borderColor: colors.border,
-                shadowColor: colors.shadow,
-              },
-              // GÜNCELLEME: *Herhangi* bir 'loading' durumunda pasif yap
-              (!request ||
+
+          {/* --- FORM ALANI --- */}
+          <View style={styles.formContainer}>
+            <View style={styles.headerTextContainer}>
+              <Text style={styles.welcomeText}>
+                {isRegistering ? t("auth.join_us") : t("auth.welcome_chef")}
+              </Text>
+              <Text style={styles.subText}>{t("auth.subtitle")}</Text>
+            </View>
+
+            {/* Email Girişi */}
+            <View style={styles.inputWrapper}>
+              <Ionicons
+                name="mail-outline"
+                size={20}
+                color="#888"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder={t("auth.email_placeholder")}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                placeholderTextColor="#666"
+              />
+            </View>
+
+            {/* Şifre Girişi */}
+            <View style={styles.inputWrapper}>
+              <Ionicons
+                name="lock-closed-outline"
+                size={20}
+                color="#888"
+                style={styles.inputIcon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder={t("auth.password_placeholder")}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                placeholderTextColor="#666"
+              />
+            </View>
+
+            {/* YENİ: Şifremi Unuttum (Sadece Giriş Modunda) */}
+            {!isRegistering && (
+              <Pressable
+                onPress={handleForgotPassword}
+                style={{ alignSelf: "flex-end", marginBottom: 20 }}
+              >
+                <Text style={{ color: "#aaa", fontSize: 13 }}>
+                  {t("auth.forgot_password")}
+                </Text>
+              </Pressable>
+            )}
+
+            {/* Ana Buton */}
+            <PremiumButton
+              title={isRegistering ? t("auth.register") : t("auth.login")}
+              onPress={isRegistering ? handleRegister : handleLogin}
+              variant="gold"
+              isLoading={
+                loginStatus === "loading" || isFirebaseLoading || googleLoading
+              }
+              disabled={
+                loginStatus === "loading" || isFirebaseLoading || googleLoading
+              }
+              style={styles.mainButton}
+            />
+
+            {/* Mod Değiştirme */}
+            <Pressable
+              style={styles.toggleButton}
+              onPress={() => setIsRegistering(!isRegistering)}
+            >
+              <Text style={styles.toggleText}>
+                {isRegistering ? t("auth.have_account") : t("auth.no_account")}
+                <Text style={{ color: "#D4AF37", fontWeight: "bold" }}>
+                  {" "}
+                  {t("auth.click_here")}
+                </Text>
+              </Text>
+            </Pressable>
+
+            {/* Bölücü Çizgi */}
+            <View style={styles.dividerContainer}>
+              <View style={styles.divider} />
+              <Text style={styles.dividerText}>{t("general.or")}</Text>
+              <View style={styles.divider} />
+            </View>
+
+            {/* Google Butonu */}
+            <Pressable
+              style={[
+                styles.googleButton,
+                (!request ||
+                  loginStatus === "loading" ||
+                  isFirebaseLoading ||
+                  googleLoading) &&
+                  styles.buttonDisabled,
+              ]}
+              disabled={
+                !request ||
                 loginStatus === "loading" ||
                 isFirebaseLoading ||
-                googleLoading) &&
-                styles.buttonDisabled,
-            ]}
-            disabled={
-              !request ||
-              loginStatus === "loading" ||
-              isFirebaseLoading ||
-              googleLoading
-            }
-            onPress={() => {
-              setGoogleLoading(true); // (Firebase 'popup'ı açılmadan hemen önce)
-              promptAsync(); // Google "popup" (web) ekranını açar
-            }}
-          >
-            {googleLoading ? (
-              <ActivityIndicator color={colors.text} /> // Spinner text renginde
-            ) : (
-              <>
-                <Ionicons
-                  name="logo-google"
-                  size={20}
-                  color={colors.text}
-                  style={styles.googleIcon}
-                />
-                <Text style={[styles.googleButtonText, { color: colors.text }]}>
-                  {t("auth.google_login")}
-                </Text>
-              </>
-            )}
-          </Pressable>
+                googleLoading
+              }
+              onPress={() => {
+                setGoogleLoading(true);
+                promptAsync();
+              }}
+            >
+              {googleLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <>
+                  <Ionicons
+                    name="logo-google"
+                    size={20}
+                    color="#fff"
+                    style={{ marginRight: 10 }}
+                  />
+                  <Text style={styles.googleButtonText}>
+                    {t("auth.google_login")}
+                  </Text>
+                </>
+              )}
+            </Pressable>
+
+            {/* YENİ: Yasal Uyarı Metni (Legal Footer) */}
+            <View style={{ marginTop: 30, paddingHorizontal: 10 }}>
+              <Text
+                style={{
+                  color: "#444",
+                  fontSize: 11,
+                  textAlign: "center",
+                  lineHeight: 16,
+                }}
+              >
+                {t("auth.terms_privacy")}
+              </Text>
+            </View>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // backgroundColor: "#fff",
-  },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 30,
-    paddingVertical: 20,
+    paddingBottom: 40,
+    backgroundColor: "#000",
   },
-  logo: {
-    marginBottom: 20,
+  // --- VIDEO STİLLERİ ---
+  videoWrapper: {
+    width: width,
+    // DEĞİŞİKLİK: Videoyu biraz kısalttım (4/3 yerine yaklaşık 1.2 oranı)
+    // Bu sayede form daha yukarı gelebilir.
+    height: width * 1.2,
+    position: "relative",
+    zIndex: 0,
+    backgroundColor: "#000",
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 10,
+  video: {
+    width: "100%",
+    height: "100%",
   },
-  subtitle: {
-    fontSize: 16,
+  videoOverlay: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 200, // Gradyanı biraz daha uzattım, yumuşak geçiş için
+    zIndex: 1,
+  },
+  // --- FORM ALANI ---
+  formContainer: {
+    // DEĞİŞİKLİK: Daha fazla yukarı çektim (-80'den -100'e)
+    // Bu, formun videonun üzerine daha çok binmesini sağlar.
+    marginTop: -100,
+    paddingHorizontal: 24,
+    zIndex: 2,
+    paddingBottom: 40, // Alt kısımda biraz boşluk
+  },
+  headerTextContainer: {
     marginBottom: 30,
+    alignItems: "center",
+  },
+  welcomeText: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#fff",
+    letterSpacing: 1,
+    marginBottom: 8,
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
     textAlign: "center",
   },
-  input: {
-    width: "100%",
-    height: 50,
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    marginBottom: 15,
+  subText: {
+    fontSize: 14,
+    color: "#ccc",
+    opacity: 0.8,
+    textAlign: "center",
+  },
+  // --- INPUT STİLLERİ ---
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1A1A1A",
+    borderRadius: 12,
     borderWidth: 1,
+    borderColor: "#333",
+    marginBottom: 16,
+    height: 56,
+    paddingHorizontal: 16,
   },
-  button: {
-    width: "100%",
-    marginTop: 20, // Üstten boşluk
-    marginBottom: 10,
+  inputIcon: {
+    marginRight: 12,
   },
-
+  input: {
+    flex: 1,
+    color: "#fff",
+    fontSize: 16,
+    height: "100%",
+  },
+  // --- BUTONLAR ---
+  mainButton: {
+    // Şifremi unuttum eklendiği için margin'i biraz azalttım
+    marginTop: 5,
+    shadowColor: "#D4AF37",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
+  },
   toggleButton: {
     marginTop: 20,
+    alignItems: "center",
   },
   toggleText: {
+    color: "#888",
     fontSize: 14,
-    fontWeight: "600",
   },
   dividerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
-    marginTop: 20,
-    marginBottom: 10,
+    marginVertical: 25,
   },
   divider: {
     flex: 1,
     height: 1,
+    backgroundColor: "#333",
   },
   dividerText: {
-    marginHorizontal: 10,
+    marginHorizontal: 12,
+    color: "#666",
     fontWeight: "600",
+    fontSize: 12,
+    textTransform: "uppercase",
   },
   googleButton: {
-    borderWidth: 1,
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 3,
     flexDirection: "row",
     justifyContent: "center",
-  },
-  googleIcon: {
-    marginRight: 10,
+    alignItems: "center",
+    backgroundColor: "#222",
+    height: 56,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#333",
   },
   googleButtonText: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#fff",
+  },
+  buttonDisabled: {
+    opacity: 0.5,
   },
 });
 

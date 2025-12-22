@@ -26,25 +26,25 @@
     "upgrade_pro": "PRO'ya Yükselt"
   },
   "auth": {
-    "login": "Giriş Yap",
-    "register": "Kayıt Ol",
-    "logout": "Çıkış Yap",
-    "subtitle": "Başlamak için lütfen bilgilerinizi girin.",
-    "email_placeholder": "Email Adresiniz",
-    "password_placeholder": "Şifreniz",
-    "google_login": "Google ile Giriş Yap",
-    "have_account": "Zaten hesabınız var mı? Giriş Yapın",
-    "no_account": "Hesabınız yok mu? Kayıt Olun",
-    "logout_confirm_title": "Çıkış Yap",
-    "logout_confirm_msg": "Çıkış yapmak istediğinizden emin misiniz?",
-    "errors": {
-      "email_in_use": "Bu email adresi zaten kullanılıyor.",
-      "invalid_cred": "Email veya şifre hatalı.",
-      "weak_pass": "Şifre çok zayıf (en az 6 karakter).",
-      "invalid_email": "Geçersiz email adresi.",
-      "empty_fields": "Email ve şifre boş bırakılamaz."
-    }
-  },
+  "login": "Giriş Yap",
+  "register": "Kayıt Ol",
+  "welcome_chef": "Hoş Geldiniz",
+  "join_us": "Aramıza Katıl",
+  "subtitle": "Kokteyylleri keşfet, ya da şansına güven! ",
+  "email_placeholder": "E-posta Adresi",
+  "password_placeholder": "Şifre",
+  "forgot_password": "Şifreni mi unuttun?",
+  "no_account": "Hesabın yok mu?",
+  "have_account": "Zaten hesabın var mı?",
+  "click_here": "Buraya Tıkla",
+  "google_login": "Google ile Devam Et",
+  "terms_privacy": "Devam ederek, Kullanım Koşulları ve Gizlilik Politikasını kabul etmiş olursunuz.",
+  "errors": {
+    "empty_fields": "Lütfen tüm alanları doldurun."
+  },"logout": "Çıkış Yap",
+    "logout_confirm_title": "Çıkış Yapılıyor",
+    "logout_confirm_msg": "Çıkış yapmak istediğine emin misin?"
+},
   "home": {
     "quote": "\"Sanat, bir kadehte gizlidir...\"",
     "pick_cocktail": "Bir Kokteyl Seçin",
