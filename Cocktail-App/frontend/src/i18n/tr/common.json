@@ -10,7 +10,8 @@
     "delete_account": "Hesabı Sil",
     "delete_my_account": "Hesabımı Kalıcı Olarak Sil",
     "delete_account_confirm": "Hesabınızı ve tüm verilerinizi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
-   "delete": "Sil"
+   "delete": "Sil",
+   "success":"Başarılı"
   },
   "navigation": {
     "cocktails": "Kokteyller",

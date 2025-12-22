@@ -242,6 +242,16 @@ function MainAppNavigator() {
         name="CocktailList"
         component={HomeStackNavigator}
         options={{ title: t("navigation.cocktails") }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            // 1. Varsayılan eylemi durdur (hafızadaki ekranı getirmesin)
+            e.preventDefault();
+
+            // 2. Bu stack'in en başına ('Home' ekranına) git
+            // Not: 'CocktailList' tabın adı, 'Home' ise o stack'in içindeki ilk ekranın adı
+            navigation.navigate("CocktailList", { screen: "Home" });
+          },
+        })}
       ></Tab.Screen>
       <Tab.Screen
         name="Roulette"

@@ -10,7 +10,8 @@
     "delete_account": "Delete Account",
     "delete_my_account": "Delete My Account Permanently",
     "delete_account_confirm": "Are you sure you want to delete your account and all data? This action cannot be undone.",
-    "delete": "Delete"
+    "delete": "Delete",
+    "success":"Okay"
 
   },
   "navigation": {

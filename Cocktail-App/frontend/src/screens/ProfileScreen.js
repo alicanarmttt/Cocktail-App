@@ -24,7 +24,7 @@ import {
   selectCurrentUser,
   selectIsPro,
   clearUser,
-  // updateAvatar, // <-- İlerde Redux'a bu action'ı ekleyeceğiz
+  updateUserAvatar,
 } from "../features/userSlice";
 import { auth } from "../api/firebaseConfig";
 import { signOut } from "firebase/auth";
@@ -34,7 +34,6 @@ import {
   selectLanguage,
   setThemeMode,
   selectThemeMode,
-  updateUserAvatar,
 } from "../features/uiSlice";
 import { fetchIngredients } from "../features/ingredientSlice";
 import { clearSearchResults } from "../features/barmenSlice";
@@ -88,17 +87,10 @@ const ProfileScreen = () => {
       return;
     }
     try {
-      // 1. Thunk'ı Dispatch Et ve Sonucu Bekle (unwrap)
       await dispatch(updateUserAvatar(avatarId)).unwrap();
 
-      // 2. Başarılıysa buraya düşer
-      Alert.alert(
-        t("general.success") || "Başarılı",
-        "Profil resmi güncellendi!"
-      );
       setModalVisible(false); // Modalı kapat
     } catch (errorMsg) {
-      // 3. Hata olursa buraya düşer (rejectWithValue'den gelen mesaj)
       console.error("Avatar update error:", errorMsg);
       Alert.alert(
         t("general.error") || "Hata",
