@@ -70,12 +70,15 @@ const LoginScreen = () => {
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  const androidClientId = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID;
+  const webClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
+
   const redirectUri = makeRedirectUri({ useProxy: true });
 
   const [request, response, promptAsync] = useAuthRequest(
     {
-      clientId:
-        "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
+      androidClientId: androidClientId,
+      clientId: webClientId,
       redirectUri,
       responseType: "id_token",
       scopes: ["openid", "profile", "email"],

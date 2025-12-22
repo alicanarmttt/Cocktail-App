@@ -37,11 +37,16 @@
       }
     },
     "android": {
-      "package": "com.anonymous.frontend"
+      "package": "com.alican.barmenroulette"
     },
     "plugins": [
       "expo-localization",
       "expo-web-browser"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "84719ddf-f4e7-495b-beca-a776d006dcdc"
+      }
+    }
   }
 }
