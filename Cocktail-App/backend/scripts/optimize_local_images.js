@@ -2,46 +2,65 @@ const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
 
-// Dosya Yolları (Artık klasör değil, doğrudan dosya yolları)
-const inputPath = path.join(__dirname, "../temp_images/raw/bar_shelf.png");
-const outputPath = path.join(
-  __dirname,
-  "../temp_images/optimized/bar_shelf_optimized.png"
-); // Çıktıyı .jpg yapıyoruz
+// 1. Klasör Yolları
+const inputDir = path.join(__dirname, "../temp_images/raw");
+const outputDir = path.join(__dirname, "../temp_images/optimized");
 
-async function processSingleImage() {
+async function processAllImages() {
   try {
-    // 1. Çıktı klasörü var mı kontrol et, yoksa oluştur
-    const outputDir = path.dirname(outputPath);
+    // Çıktı klasörü yoksa oluştur
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    // 2. Giriş dosyası var mı kontrol et
-    if (!fs.existsSync(inputPath)) {
-      console.error(`❌ Hata: Kaynak dosya bulunamadı: ${inputPath}`);
+    // Giriş klasörü var mı kontrol et
+    if (!fs.existsSync(inputDir)) {
+      console.error(`❌ Hata: Kaynak klasör bulunamadı: ${inputDir}`);
       return;
     }
 
-    console.log(`🚀 İşlem başlıyor: barmen_mascot.png...`);
+    const files = fs.readdirSync(inputDir);
+    console.log(`📂 Klasör taranıyor... Toplam ${files.length} dosya bulundu.`);
 
-    // 3. Sharp ile tek dosyayı işle
-    await sharp(inputPath)
-      .resize(300, 300, {
-        fit: "cover",
-        position: "center",
-      })
-      .jpeg({
-        quality: 80,
-        mozjpeg: true,
-      })
-      .toFile(outputPath);
+    for (const file of files) {
+      // Sadece resim dosyalarını filtrele
+      if (!file.match(/\.(jpg|jpeg|png|webp)$/i)) {
+        continue;
+      }
 
-    console.log(`✅ İşlem tamamlandı!`);
-    console.log(`📍 Kayıt yeri: ${outputPath}`);
+      const inputPath = path.join(inputDir, file);
+      const fileNameWithoutExt = path.parse(file).name;
+
+      // DİKKAT: Çıktı uzantısını .png yapıyoruz
+      const outputFilename = `${fileNameWithoutExt}_optimized.png`;
+      const outputPath = path.join(outputDir, outputFilename);
+
+      console.log(`⚙️ İşleniyor: ${file} -> ${outputFilename}`);
+
+      // --- SHARP İŞLEMİ (GÜNCELLENDİ) ---
+      await sharp(inputPath)
+        .resize(300, 300, {
+          fit: "cover", // Resmi kareye sığdırır, taşanları kırpar
+          position: "center",
+          // Arka planın saydam kalmasını garantiye alalım (resize sırasında boşluk kalırsa)
+          background: { r: 0, g: 0, b: 0, alpha: 0 },
+        })
+        .png({
+          // PNG Ayarları (Saydamlığı korur)
+          compressionLevel: 9, // En yüksek sıkıştırma (0-9 arası) - Dosya boyutu küçülür
+          adaptiveFiltering: true, // Daha iyi sıkıştırma sağlar
+          force: true, // Giriş jpg olsa bile zorla png yap
+          quality: 80, // (Bazı sharp versiyonlarında png kalitesini de etkiler)
+          // palette: true // Eğer resimlerin basit ikonlarsa bunu açabilirsin, fotoğrafsa kapalı kalsın.
+        })
+        .toFile(outputPath);
+    }
+
+    console.log(`✅ Tüm işlemler başarıyla tamamlandı!`);
+    console.log(`📍 Kayıt yeri: ${outputDir}`);
   } catch (error) {
-    console.error("❌ Hata oluştu:", error);
+    console.error("❌ Bir hata oluştu:", error);
   }
 }
 
-processSingleImage();
+processAllImages();

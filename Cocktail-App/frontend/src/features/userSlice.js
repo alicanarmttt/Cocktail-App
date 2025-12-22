@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../api/apiClient";
 
+// --- THUNKS (ASENKRON İŞLEMLER) ---
+
 /**
  * @desc    Backend'deki 'Kullanıcıyı Bul/Oluştur' API'sine POST isteği gönderir.
  * @name    user/loginOrRegisterUser
@@ -12,6 +14,27 @@ export const loginOrRegisterUser = createAsyncThunk(
     const response = await apiClient.post(`/users/loginOrRegister`, payload);
 
     return response.data;
+  }
+);
+
+//Yeni Avatar Güncelleme Thunk'ı
+export const updateUserAvatar = createAsyncThunk(
+  "user/updateUserAvatar",
+  async (avatarId, { rejectWithValue }) => {
+    try {
+      // Backend'e istek at
+      const response = await apiClient.put("/users/me/avatar", {
+        avatar_id: avatarId,
+      });
+      // Backend'den dönen veriyi (response.data) reducer'a gönder
+      // Backend şuna benzer bir şey dönüyor: { msg: "...", user: { ...avatar_id: 2... } }
+      return response.data.user;
+    } catch (error) {
+      // Hata olursa yakala
+      return rejectWithValue(
+        error.response?.data?.msg || "Avatar güncellenemedi."
+      );
+    }
   }
 );
 
@@ -80,7 +103,28 @@ export const userSlice = createSlice({
         state.loginError = action.error.message;
         state.currentUser = null; // Hata olursa kullanıcıyı 'null' yap
         state.isAuthLoading = false;
+      });
+
+    // --- AVATAR GÜNCELLEME DURUMLARI ---
+    builder
+      .addCase(updateUserAvatar.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
       })
+      .addCase(updateUserAvatar.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Backend'den gelen güncel user objesini state'e yaz
+        // VEYA sadece avatar_id'yi güncelle:
+        if (state.currentUser) {
+          state.currentUser.avatar_id = action.payload.avatar_id;
+        }
+      })
+      .addCase(updateUserAvatar.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload; // Hata mesajını kaydet
+      })
+
+      // --- PRO DURUMLARI ---
       .addCase(upgradeToPro.pending, (state) => {
         state.upgradeStatus = "loading";
         state.upgradeError = null;

@@ -6,6 +6,7 @@ const {
   findOrCreateUser,
   upgradeUserToPro,
   deleteUser,
+  updateUserAvatar,
 } = require("../db/models/user.model");
 
 /**
@@ -74,6 +75,40 @@ router.post("/upgrade-to-pro", async (req, res) => {
       requestBody: req.body,
     });
     res.status(500).json({ msg: "Sunucu hatası", error: error.message });
+  }
+});
+
+/**
+ * @route   PUT /api/users/me/avatar
+ * @desc    Kullanıcının profil avatarını günceller.
+ * @access  Private
+ */
+router.put("/me/avatar", async (req, res) => {
+  try {
+    const firebase_uid = req.user?.uid; // Middleware'den geliyor
+    const { avatar_id } = req.body; // Frontend'den { avatar_id: 2 } gibi gelecek
+
+    if (!firebase_uid) {
+      return res.status(401).json({ msg: "Yetkisiz işlem." });
+    }
+
+    if (!avatar_id) {
+      return res.status(400).json({ msg: "Avatar ID gerekli." });
+    }
+
+    // Veritabanını güncelle
+    const updatedUserArray = await updateUserAvatar(firebase_uid, avatar_id);
+
+    // Knex .returning('*') array döner, ilk elemanı alalım
+    const updatedUser = updatedUserArray[0];
+
+    res.status(200).json({
+      msg: "Avatar güncellendi.",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Avatar update error:", error);
+    res.status(500).json({ msg: "Avatar güncellenemedi." });
   }
 });
 

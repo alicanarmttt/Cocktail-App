@@ -106,15 +106,15 @@
     "empty_hint": "Try changing the search mode to see cocktails containing your ingredients."
   },
   "profile": {
-    "pro_member": "PRO MEMBER",
-    "free_member": "FREE MEMBER",
-    "upgrade_btn": "Upgrade to PRO",
-    "language_changed": "Language Changed",
-    "language_select": "Change Language",
-    "theme_title": "Appearance",
-    "theme_light":"Light Mode",
-    "theme_dark":"Dark Mode",
-    "theme_system":"System Mode"
+    "account_actions": "Account",
+  "my_favorites": "My Favorites",
+  "app_settings": "App Settings",
+  "language": "Language",
+  "appearance": "Appearance",
+  "info": "Info",
+  "privacy_policy": "Privacy Policy",
+  "version": "Version",
+  "unlock_all": "Unlock all features & recipes!"
   },
   "upgrade": {
     "title": "Upgrade to PRO",

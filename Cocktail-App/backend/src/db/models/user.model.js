@@ -59,6 +59,18 @@ const upgradeUserToPro = async (firebase_uid) => {
 };
 
 /**
+ * @desc    Kullanıcının avatar seçimini günceller.
+ * @param   {string} firebase_uid
+ * @param   {number} avatarId
+ */
+const updateUserAvatar = (firebase_uid, avatarId) => {
+  return db("users")
+    .where({ firebase_uid })
+    .update({ avatar_id: avatarId })
+    .returning("*"); // Güncellenen kullanıcıyı geri dön (Postgres özelliği)
+};
+
+/**
  * @desc    Kullanıcıyı veritabanından siler.
  * @param   {string} firebase_uid - Silinecek kullanıcının ID'si
  */
@@ -73,4 +85,5 @@ module.exports = {
   findOrCreateUser,
   upgradeUserToPro,
   deleteUser,
+  updateUserAvatar,
 };

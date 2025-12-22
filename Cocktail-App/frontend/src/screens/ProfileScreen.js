@@ -1,391 +1,436 @@
-import React from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import React, { useState } from "react"; // <-- useState eklendi
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  Pressable,
+  ScrollView,
+  Switch,
+  Linking,
+  Image,
+  Modal, // <-- Modal eklendi
+  TouchableOpacity, // <-- Modal içi seçim için
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  useNavigation,
-  CommonActions,
-  useTheme,
-} from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
+import { LinearGradient } from "expo-linear-gradient";
 
-// 1. userSlice'tan (sağdaki) gerekli selector ve action'ları import et
+// --- REDUX & FIREBASE ---
 import {
   selectCurrentUser,
   selectIsPro,
   clearUser,
+  // updateAvatar, // <-- İlerde Redux'a bu action'ı ekleyeceğiz
 } from "../features/userSlice";
-
-// 2. Firebase Auth (Çıkış) servisini import et
 import { auth } from "../api/firebaseConfig";
 import { signOut } from "firebase/auth";
 
-// YENİ EKLENDİ (EKSİK 13): Dil yönetimi ve veri yenileme için importlar
 import {
   setLanguage,
   selectLanguage,
   setThemeMode,
   selectThemeMode,
+  updateUserAvatar,
 } from "../features/uiSlice";
 import { fetchIngredients } from "../features/ingredientSlice";
 import { clearSearchResults } from "../features/barmenSlice";
-import {
-  clearDetail,
-  fetchCocktails,
-} from "../features/cocktails/cocktailSlice";
+import { clearDetail } from "../features/cocktails/cocktailSlice";
 import apiClient from "../api/apiClient";
+
+// --- COMPONENTS ---
 import PremiumButton from "../ui/PremiumButton";
 
-/**
- * @desc    Kullanıcı profilini gösterir, "Çıkış Yap" (Logout)
- * ve "Pro'ya Yükselt" işlemlerini yönetir.
- */
+// --- AVATAR SEÇENEKLERİ (BUNLARI KENDİ RESİMLERİNLE DEĞİŞTİR) ---
+const AVATAR_OPTIONS = [
+  { id: 1, source: require("../../assets/avatars/mascot_1_optimized.png") },
+  { id: 2, source: require("../../assets/avatars/mascot_2_optimized.png") },
+  { id: 3, source: require("../../assets/avatars/mascot_3_optimized.png") },
+  { id: 4, source: require("../../assets/avatars/mascot_4_optimized.png") },
+  { id: 5, source: require("../../assets/avatars/mascot_5_optimized.png") },
+  { id: 6, source: require("../../assets/avatars/mascot_6_optimized.png") },
+  // { id: 3, source: require("../../assets/avatars/cool_barman.png") },
+];
+// Varsayılan avatar ID'si (Kullanıcı henüz seçim yapmadıysa)
+const DEFAULT_AVATAR_ID = 1;
+
 const ProfileScreen = () => {
   const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
-  // 1. Çeviri Hook'u
+  const navigation = useNavigation();
   const { t, i18n } = useTranslation();
 
-  // 3. Redux'tan mevcut kullanıcıyı ve Pro durumunu oku
+  // --- LOCAL STATE ---
+  const [modalVisible, setModalVisible] = useState(false); // Avatar modalı için
+
+  // --- SELECTORS ---
   const currentUser = useSelector(selectCurrentUser);
   const isPro = useSelector(selectIsPro);
-  const navigation = useNavigation();
+  const currentLang = useSelector(selectLanguage);
+  const currentTheme = useSelector(selectThemeMode);
 
-  // YENİ EKLENDİ: Mevcut dili oku
-  const currentLanguage = useSelector(selectLanguage);
-  // YENİ: Mevcut tema modunu Redux'tan oku ('system' | 'light' | 'dark')
-  const currentThemeMode = useSelector(selectThemeMode);
+  // Kullanıcının şu anki avatarını belirle (Backend bağlanana kadar DEFAULT kullanır)
+  const currentAvatarId = currentUser?.avatar_id || DEFAULT_AVATAR_ID;
+  const currentAvatarSource =
+    AVATAR_OPTIONS.find((a) => a.id === currentAvatarId)?.source ||
+    AVATAR_OPTIONS[0].source;
 
-  /**
-   * @desc  Kullanıcıyı hem Firebase'den (Servis) hem de
-   * Redux'tan (Lokal State) çıkarır.
-   */
-  const handleLogout = async () => {
+  // --- ACTIONS ---
+
+  // Avatar Seçilince Tetiklenecek Fonksiyon
+  const handleAvatarSelect = async (avatarId) => {
+    // Eğer zaten seçili olan resimse işlem yapma
+    if (avatarId === currentAvatarId) {
+      setModalVisible(false);
+      return;
+    }
     try {
-      // 1. Adım: Firebase servisinden (buluttan) çıkış yap
-      await signOut(auth);
+      // 1. Thunk'ı Dispatch Et ve Sonucu Bekle (unwrap)
+      await dispatch(updateUserAvatar(avatarId)).unwrap();
 
-      // 2. Adım: Redux state'ini (lokal) temizle
-      // (Bu, AppNavigator'ün (sağdaki) bizi LoginScreen'e (sağdaki) atmasını tetikler)
-      dispatch(clearUser());
-    } catch (error) {
-      console.error("Çıkış yaparken hata:", error);
-      Alert.alert("general.error", "Çıkış yapılırken bir sorun oluştu.");
+      // 2. Başarılıysa buraya düşer
+      Alert.alert(
+        t("general.success") || "Başarılı",
+        "Profil resmi güncellendi!"
+      );
+      setModalVisible(false); // Modalı kapat
+    } catch (errorMsg) {
+      // 3. Hata olursa buraya düşer (rejectWithValue'den gelen mesaj)
+      console.error("Avatar update error:", errorMsg);
+      Alert.alert(
+        t("general.error") || "Hata",
+        errorMsg || "Avatar güncellenemedi."
+      );
     }
   };
 
-  /**
-   * @desc  Çıkış yapmadan önce kullanıcıya onay sorusu sorar.
-   */
-  const confirmLogout = () => {
-    Alert.alert(
-      t("auth.logout_confirm_title"), // "Çıkış Yap"
-      t("auth.logout_confirm_msg"), // "Emin misiniz?"
-      [
-        // Butonlar
-        {
-          text: t("general.cancel"),
-          style: "cancel", // (iOS'ta sola yaslar)
-        },
-        {
-          text: t("auth.logout"),
-          style: "destructive", // (iOS'ta kırmızı yazar)
-          onPress: handleLogout, // Sadece 'Çıkış Yap'a basılırsa çalıştır
-        },
-      ]
-    );
-  };
-
-  // YENİ EKLENDİ (EKSİK 13): Dil Değiştirme Fonksiyonu
-  const toggleLanguage = async () => {
-    const newLang = currentLanguage === "tr" ? "en" : "tr";
-
-    // 1. Dili değiştir
+  const handleLanguageToggle = async () => {
+    const newLang = currentLang === "tr" ? "en" : "tr";
+    dispatch(setLanguage(newLang));
     await i18n.changeLanguage(newLang);
-    // 2. Redux state'ini güncelle (UI tercihi olarak saklamak için)
-    await dispatch(setLanguage(newLang));
-
-    // 3. Verileri Yenileme Zinciri
-    await dispatch(fetchIngredients());
-    await dispatch(clearSearchResults());
-    await dispatch(clearDetail());
-    await dispatch(fetchCocktails());
-
-    // 4. Navigasyon Resetleme Mantığı
-    navigation.getParent()?.dispatch((state) => {
-      if (!state) return;
-
-      const freshRoutes = state.routes.map((route) => {
-        if (route.key === state.routes[state.index].key) {
-          return route;
-        }
-        return { name: route.name };
-      });
-
-      return CommonActions.reset({
-        ...state,
-        routes: freshRoutes,
-        index: state.index,
-      });
-    });
-    Alert.alert(
-      t("profile.language_changed"),
-      `Current Language: ${newLang.toUpperCase()}`
-    );
+    dispatch(clearSearchResults());
+    dispatch(clearDetail());
+    dispatch(fetchIngredients());
   };
 
-  // --- YENİ: TEMA DEĞİŞTİRME MANTIĞI ---
-
-  const cycleTheme = () => {
-    // Döngü: system -> light -> dark -> system
-    let newMode;
-    if (currentThemeMode === "system") newMode = "light";
-    else if (currentThemeMode === "light") newMode = "dark";
-    else newMode = "system";
-
+  const handleThemeToggle = (val) => {
+    const newMode = val ? "dark" : "light";
     dispatch(setThemeMode(newMode));
   };
 
-  // Helper: Tema ikonunu ve metnini belirle
-  const getThemeIcon = () => {
-    switch (currentThemeMode) {
-      case "light":
-        return "sunny";
-      case "dark":
-        return "moon";
-      default:
-        return "phone-portrait"; // System için telefon ikonu
-    }
+  const handleLogout = async () => {
+    Alert.alert(t("auth.logout_confirm_title"), t("auth.logout_confirm_msg"), [
+      { text: t("general.cancel"), style: "cancel" },
+      {
+        text: t("auth.logout"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await signOut(auth);
+            dispatch(clearUser());
+            dispatch(clearSearchResults());
+            dispatch(clearDetail());
+          } catch (error) {
+            console.error("Logout Error:", error);
+          }
+        },
+      },
+    ]);
   };
 
-  const getThemeLabel = () => {
-    switch (currentThemeMode) {
-      case "light":
-        return t("profile.theme_light");
-      case "dark":
-        return t("profile.theme_dark");
-      default:
-        return t("profile.theme_system");
-    }
-  };
-
-  // (Kenar durum: Eğer bir şekilde buraya 'null' kullanıcı gelirse)
-  if (!currentUser) {
-    return (
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: colors.background }]}
-      >
-        <Text style={[styles.errorText, { color: colors.notification }]}>
-          Kullanıcı bulunamadı.
-        </Text>
-      </SafeAreaView>
-    );
-  }
-
-  // --- HESAP SİLME FONKSİYONU ---
   const handleDeleteAccount = () => {
     Alert.alert(
-      t("general.delete_account"), // Başlık: "Hesabı Sil"
-      t("general.delete_account_confirm"), // Mesaj: "Emin misiniz?..."
+      t("general.delete_account"),
+      t("general.delete_account_confirm"),
       [
-        { text: t("general.cancel"), style: "cancel" }, // Vazgeç
+        { text: t("general.cancel"), style: "cancel" },
         {
-          text: t("general.delete"), // Sil
-          style: "destructive", // iOS'te kırmızı görünür
+          text: t("general.delete"),
+          style: "destructive",
           onPress: async () => {
             try {
-              // 1. Backend'e 'Sil' isteği at (Veritabanı ve Firebase Admin temizliği)
               await apiClient.delete("/users/me");
-
-              // 2. Telefondaki Firebase oturumunu kapat
               await signOut(auth);
-
-              // 3. Redux State'ini temizle (Uygulama hafızasını sıfırla)
               dispatch(clearUser());
               dispatch(clearDetail());
               dispatch(clearSearchResults());
-              // Dil ve Tema ayarlarını silmeye gerek yok (uiSlice), kalsın.
-
-              // 4. Kullanıcı zaten 'currentUser' null olunca otomatik Login ekranına düşecek.
             } catch (error) {
               console.error("Hesap silme hatası:", error);
-              Alert.alert(
-                t("general.error"),
-                "Hesap silinemedi. Lütfen internet bağlantınızı kontrol edip tekrar deneyin."
-              );
+              Alert.alert(t("general.error"), "Hesap silinemedi.");
             }
           },
         },
       ]
     );
   };
-  // 4. Arayüzü (UI) Render Et
+
+  // --- UI COMPONENTS ---
+
+  const SettingRow = ({ icon, title, rightElement, onPress, isLast }) => (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.settingRow,
+        {
+          borderBottomColor: colors.border,
+          borderBottomWidth: isLast ? 0 : 0.5,
+          opacity: pressed ? 0.7 : 1,
+        },
+      ]}
+      disabled={!onPress}
+    >
+      <View style={styles.rowLeft}>
+        <View style={[styles.iconContainer, { backgroundColor: colors.card }]}>
+          <Ionicons name={icon} size={20} color={colors.text} />
+        </View>
+        <Text
+          style={[
+            styles.rowTitle,
+            { color: colors.text, fontFamily: fonts.families.sans },
+          ]}
+        >
+          {title}
+        </Text>
+      </View>
+      <View>{rightElement}</View>
+    </Pressable>
+  );
+
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      {/* Profil Başlığı */}
-      <View style={styles.header}>
-        <Ionicons name="person-circle-outline" size={80} color={colors.text} />
-        <Text style={[styles.emailText, { color: colors.text }]}>
-          {currentUser.email}
-        </Text>
-
-        {/* Pro / Free Rozeti (Badge) */}
-        {isPro ? (
-          <View style={[styles.proBadge, { backgroundColor: colors.gold }]}>
-            <Ionicons name="star" size={16} color={colors.buttonText} />
-            <Text style={[styles.proText, { color: colors.buttonText }]}>
-              {t("profile.pro_member")}
-            </Text>
-          </View>
-        ) : (
-          <View style={[styles.freeBadge, { backgroundColor: colors.subCard }]}>
-            <Text style={[styles.freeText, { color: colors.textSecondary }]}>
-              {t("profile.free_member")}
-            </Text>
-          </View>
-        )}
-      </View>
-
-      {/* Ana Eylem Butonları */}
-      <View style={styles.buttonContainer}>
-        {/* FAVORİLER BUTONU (YENİ EKLENDİ) */}
-        <PremiumButton
-          variant="silver"
-          onPress={() => navigation.navigate("Favorites")}
-          style={styles.profileBtn}
-        >
-          <Ionicons
-            name="heart"
-            size={20}
-            color="#FF5757"
-            style={{ marginRight: 10 }}
-          />
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "600",
-              color: colors.buttonVariants.silver.textColor,
-            }}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* --- 1. HEADER (Avatar Tıklanabilir Oldu) --- */}
+        <View style={styles.header}>
+          {/* Pressable ile sarmaladık */}
+          <Pressable
+            onPress={() => setModalVisible(true)}
+            style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
           >
-            {t("favorites.title")}
-          </Text>
-          <View style={{ flex: 1, alignItems: "flex-end" }}>
-            <Ionicons
-              name="chevron-forward"
-              size={18}
-              color={colors.buttonVariants.silver.textColor}
-            />
-          </View>
-        </PremiumButton>
+            <View
+              style={[
+                styles.avatarContainer,
+                { borderColor: isPro ? colors.gold : colors.border },
+              ]}
+            >
+              {/* Seçili Avatarı Göster */}
+              <Image
+                source={currentAvatarSource}
+                style={styles.avatarImage}
+                resizeMode="cover"
+              />
+              {/* Düzenleme İkonu (Küçük Kalem) */}
+              <View
+                style={[
+                  styles.editIconBadge,
+                  { backgroundColor: colors.primary },
+                ]}
+              >
+                <Ionicons name="pencil" size={12} color="#fff" />
+              </View>
+            </View>
+          </Pressable>
 
-        {/* 1. DİL DEĞİŞTİR (Silver) */}
-        <PremiumButton
-          variant="silver"
-          onPress={toggleLanguage}
-          style={styles.profileBtn}
-        >
-          <Ionicons
-            name="language-outline"
-            size={20}
-            style={{ marginRight: 10 }}
-            color={colors.buttonVariants.silver.textColor}
-          />
           <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "600",
-              color: colors.buttonVariants.silver.textColor,
-            }}
+            style={[
+              styles.emailText,
+              { color: colors.text, fontFamily: fonts.families.serif },
+            ]}
           >
-            {t("profile.language_select")}:{" "}
-            {currentLanguage === "tr" ? "Türkçe 🇹🇷" : "English 🇬🇧"}
+            {currentUser?.email}
           </Text>
-        </PremiumButton>
 
-        {/* 2. PRO'YA YÜKSELT (Gold - Sadece Free Üyeye) */}
-        {!isPro && (
-          <PremiumButton
-            variant="gold"
-            onPress={() => navigation.navigate("UpgradeToPro")}
-            style={styles.profileBtn}
+          <View
+            style={[
+              styles.badge,
+              {
+                backgroundColor: isPro ? colors.gold : colors.card,
+                borderColor: isPro ? colors.gold : colors.border,
+              },
+            ]}
           >
             <Ionicons
-              name="star-outline"
-              size={20}
-              // Gold buton üstünde yazı rengi
-              color={colors.dark ? "#000" : "#FFF"}
-              style={{ marginRight: 10 }}
+              name={isPro ? "star" : "cube-outline"}
+              size={14}
+              color={isPro ? "#000" : colors.textSecondary}
             />
             <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "600",
-                color: colors.dark ? "#000" : "#FFF",
-              }}
+              style={[
+                styles.badgeText,
+                { color: isPro ? "#000" : colors.textSecondary },
+              ]}
             >
-              {t("profile.upgrade_btn")}
+              {isPro ? "PRO MEMBER" : "FREE MEMBER"}
             </Text>
-          </PremiumButton>
+          </View>
+        </View>
+
+        {/* --- 2. UPSELL BANNER --- */}
+        {!isPro && (
+          <Pressable
+            style={styles.upsellContainer}
+            onPress={() => navigation.navigate("UpgradeToPro")}
+          >
+            <LinearGradient
+              colors={["#FFD700", "#B8860B"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.upsellGradient}
+            >
+              <View>
+                <Text style={styles.upsellTitle}>
+                  {t("navigation.upgrade_pro")}
+                </Text>
+                <Text style={styles.upsellSubtitle}>
+                  {t("profile.unlock_all")}
+                </Text>
+              </View>
+              <Ionicons name="arrow-forward-circle" size={32} color="#2A050A" />
+            </LinearGradient>
+          </Pressable>
         )}
 
-        {/* 3. TEMA DEĞİŞTİR (Silver) */}
-        <PremiumButton
-          variant="silver"
-          onPress={cycleTheme}
-          style={styles.profileBtn}
-        >
-          <Ionicons
-            name={getThemeIcon()}
-            size={20}
-            style={{ marginRight: 10 }}
-            color={colors.buttonVariants.silver.textColor}
-          />
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "600",
-              color: colors.buttonVariants.silver.textColor,
-            }}
-          >
-            {t("profile.theme_title") || "Tema"}: {getThemeLabel()}
+        {/* --- 3. ACCOUNT ACTIONS --- */}
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
+            {t("profile.account_actions")}
           </Text>
-        </PremiumButton>
+        </View>
 
-        {/* 4. ÇIKIŞ YAP (Silver ama Kırmızı İçerik) */}
-        <PremiumButton
-          variant="silver"
-          onPress={confirmLogout}
-          style={styles.profileBtn}
-        >
-          <Ionicons
-            name="log-out-outline"
-            size={20}
-            color={colors.notification} // Kırmızı İkon
-            style={{ marginRight: 10 }}
-          />
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "600",
-              color: colors.notification,
-            }}
-          >
-            {t("auth.logout")}
-          </Text>
-        </PremiumButton>
-
-        {/* --- YENİ: HESAP SİLME BUTONU --- */}
         <View
-          style={{
-            marginTop: 30,
-            marginBottom: 20,
-            width: "100%",
-            alignItems: "center",
-          }}
+          style={[
+            styles.card,
+            { backgroundColor: colors.subCard || "#1A1A1A" },
+          ]}
         >
+          <SettingRow
+            icon="heart"
+            title={t("profile.my_favorites")}
+            onPress={() => navigation.navigate("Favorites")}
+            rightElement={
+              <Ionicons
+                name="chevron-forward"
+                size={16}
+                color={colors.textSecondary}
+              />
+            }
+          />
+        </View>
+
+        {/* --- 4. APP SETTINGS GROUP --- */}
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
+            {t("profile.app_settings")}
+          </Text>
+        </View>
+
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: colors.subCard || "#1A1A1A" },
+          ]}
+        >
+          <SettingRow
+            icon="language-outline"
+            title={t("profile.language")}
+            rightElement={
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ color: colors.textSecondary, marginRight: 5 }}>
+                  {currentLang === "tr" ? "Türkçe" : "English"}
+                </Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={16}
+                  color={colors.textSecondary}
+                />
+              </View>
+            }
+            onPress={handleLanguageToggle}
+          />
+
+          <SettingRow
+            icon={currentTheme === "dark" ? "moon" : "sunny"}
+            title={t("profile.appearance")}
+            isLast={true}
+            rightElement={
+              <Switch
+                value={currentTheme === "dark"}
+                onValueChange={handleThemeToggle}
+                trackColor={{ false: "#767577", true: colors.primary }}
+                thumbColor={colors.text}
+              />
+            }
+          />
+        </View>
+
+        {/* --- 5. INFO GROUP --- */}
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
+            {t("profile.info")}
+          </Text>
+        </View>
+
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: colors.subCard || "#1A1A1A" },
+          ]}
+        >
+          <SettingRow
+            icon="shield-checkmark-outline"
+            title={t("profile.privacy_policy")}
+            onPress={() => Linking.openURL("https://github.com/privacy...")}
+            rightElement={
+              <Ionicons
+                name="open-outline"
+                size={16}
+                color={colors.textSecondary}
+              />
+            }
+          />
+          <SettingRow
+            icon="information-circle-outline"
+            title={t("profile.version")}
+            isLast={true}
+            rightElement={
+              <Text style={{ color: colors.textSecondary, fontSize: 12 }}>
+                v1.0.0
+              </Text>
+            }
+          />
+        </View>
+
+        {/* --- 6. LOGOUT --- */}
+        <View style={styles.actionContainer}>
+          <PremiumButton
+            title={t("auth.logout")}
+            onPress={handleLogout}
+            variant="gold"
+            style={{ width: "100%" }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons
+                name="log-out-outline"
+                size={20}
+                color="#000"
+                style={{ marginRight: 8 }}
+              />
+              <Text style={{ fontWeight: "bold", color: "#000" }}>
+                {t("auth.logout")}
+              </Text>
+            </View>
+          </PremiumButton>
+        </View>
+
+        {/* --- 7. DANGER ZONE --- */}
+        <View style={styles.dangerZone}>
           <Pressable
             onPress={handleDeleteAccount}
             style={({ pressed }) => [
@@ -394,17 +439,80 @@ const ProfileScreen = () => {
           >
             <Text
               style={{
-                color: colors.notification, // Temadaki kırmızı renk
-                fontSize: 14,
-                fontWeight: "500",
-                textDecorationLine: "underline", // Altı çizili link havası
+                color: colors.notification,
+                fontSize: 13,
+                textDecorationLine: "underline",
+                textAlign: "center",
               }}
             >
               {t("general.delete_my_account")}
             </Text>
           </Pressable>
+          <Text
+            style={{ color: colors.textSecondary, fontSize: 10, marginTop: 5 }}
+          >
+            ID: {currentUser?.firebase_uid?.substring(0, 8)}...
+          </Text>
         </View>
-      </View>
+      </ScrollView>
+
+      {/* --- AVATAR SEÇİM MODALI --- */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                {currentLang === "tr" ? "Avatar Seç" : "Choose Avatar"}
+              </Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Ionicons
+                  name="close-circle"
+                  size={24}
+                  color={colors.textSecondary}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.avatarGrid}>
+              {AVATAR_OPTIONS.map((avatar) => (
+                <TouchableOpacity
+                  key={avatar.id}
+                  onPress={() => handleAvatarSelect(avatar.id)}
+                  style={[
+                    styles.avatarOption,
+                    {
+                      borderColor:
+                        currentAvatarId === avatar.id
+                          ? colors.primary
+                          : "transparent",
+                    },
+                  ]}
+                >
+                  <Image
+                    source={avatar.source}
+                    style={styles.avatarOptionImage}
+                  />
+                  {currentAvatarId === avatar.id && (
+                    <View
+                      style={[
+                        styles.selectedCheck,
+                        { backgroundColor: colors.primary },
+                      ]}
+                    >
+                      <Ionicons name="checkmark" size={14} color="#fff" />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -412,58 +520,189 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    padding: 20,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 50,
   },
   header: {
     alignItems: "center",
-    marginTop: 30,
-    marginBottom: 40,
+    marginVertical: 30,
+  },
+  avatarContainer: {
+    width: 90, // Biraz büyüttüm
+    height: 90,
+    borderRadius: 45,
+    borderWidth: 3,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 15,
+    overflow: "visible", // Badge taşsın diye visible yaptım
+    backgroundColor: "rgba(255,255,255,0.05)",
+    position: "relative",
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 45,
+  },
+  editIconBadge: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#fff", // veya arka plan rengi
   },
   emailText: {
     fontSize: 18,
-    fontWeight: "600",
-    marginTop: 15,
+    fontWeight: "bold",
+    marginBottom: 8,
   },
-  proBadge: {
+  badge: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 20,
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    marginTop: 15,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderRadius: 12,
     borderWidth: 1,
   },
-  proText: {
+  badgeText: {
+    fontSize: 12,
     fontWeight: "bold",
     marginLeft: 5,
-    fontSize: 14,
   },
-  freeBadge: {
+  upsellContainer: {
+    marginBottom: 25,
+    borderRadius: 15,
+    shadowColor: "#FFD700",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 4,
+  },
+  upsellGradient: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 15,
+  },
+  upsellTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#2A050A",
+  },
+  upsellSubtitle: {
+    fontSize: 12,
+    color: "#4A0E15",
+    marginTop: 2,
+  },
+  sectionHeader: {
+    marginBottom: 10,
+    marginTop: 10,
+    paddingLeft: 5,
+  },
+  sectionTitle: {
+    fontSize: 13,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+  },
+  card: {
+    borderRadius: 16,
+    overflow: "hidden",
+    marginBottom: 20,
+  },
+  settingRow: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 20,
-    paddingVertical: 6,
+    justifyContent: "space-between",
+    paddingVertical: 16,
     paddingHorizontal: 16,
-    marginTop: 15,
   },
-  freeText: {
-    fontWeight: "600",
-    fontSize: 14,
-  },
-  buttonContainer: {
-    width: "100%",
+  rowLeft: {
+    flexDirection: "row",
     alignItems: "center",
-    gap: 15,
-    paddingBottom: 40,
   },
-  profileBtn: {
-    width: "100%",
+  iconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
   },
-  errorText: {
+  rowTitle: {
     fontSize: 16,
-    textAlign: "center",
-    marginTop: 20,
+    fontWeight: "500",
+  },
+  actionContainer: {
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  dangerZone: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  // --- MODAL STYLES ---
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    paddingBottom: 40,
+    minHeight: 250,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  avatarGrid: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+  },
+  avatarOption: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 3,
+    padding: 2,
+    position: "relative",
+    marginBottom: 15,
+  },
+  avatarOptionImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 40,
+  },
+  selectedCheck: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#fff",
   },
 });
 

@@ -105,17 +105,16 @@
     "empty_hint": "Elinizdeki malzemeyi içeren kokteylleri görmek için geri dönüp arama modunu değiştirebilirsiniz."
   },
   "profile": {
-    "pro_member": "PRO ÜYE",
-    "free_member": "FREE ÜYE",
-    "upgrade_btn": "PRO'ya Yükselt",
-    "language_changed": "Dil Değiştirildi",
-    "language_select": "Dili Değiştir",
-    "theme_title": "Görünüş",
-    "theme_light":"Açık Mod",
-    "theme_dark":"Koyu Mod",
-    "theme_system":"Sistem Modu"
-
-  }
+  "account_actions": "HESABIM",
+  "my_favorites": "Favorilerim",
+  "app_settings": "UYGULAMA AYARLARI",
+  "language": "Dil",
+  "appearance": "Görünüm",
+  "info": "BİLGİ",
+  "privacy_policy": "Gizlilik Politikası",
+  "version": "Sürüm",
+  "unlock_all": "Tüm tariflerin ve özelliklerin kilidini aç!"
+}
   ,"upgrade": {
     "title": "PRO Üyeliğe Geçin",
     "subtitle": "Kokteyl deneyiminizi bir üst seviyeye taşıyın.",
