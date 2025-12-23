@@ -83,7 +83,8 @@ const LoginScreen = () => {
   // --- YENİ: Google Sign-In Konfigürasyonu ---
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: webClientId, // Firebase Console'daki Web Client ID
+      webClientId:
+        "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com", // Firebase Console'daki Web Client ID
       offlineAccess: true,
       scopes: ["profile", "email"],
     });
