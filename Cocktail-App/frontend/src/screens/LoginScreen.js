@@ -18,21 +18,28 @@ import { useTheme } from "@react-navigation/native";
 import { Video, ResizeMode } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 
+// Firebase Imports
 import { auth } from "../api/firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithCredential,
 } from "firebase/auth";
+
+// Redux
 import { loginOrRegisterUser, getLoginStatus } from "../features/userSlice";
-import * as WebBrowser from "expo-web-browser";
-import { useAuthRequest, makeRedirectUri } from "expo-auth-session";
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+
+// Native Google Sign-In Imports (YENİ)
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+
 import { useTranslation } from "react-i18next";
 import PremiumButton from "../ui/PremiumButton";
-
-WebBrowser.maybeCompleteAuthSession();
 
 // Ekran genişliği
 const { width } = Dimensions.get("window");
@@ -52,7 +59,7 @@ const getFriendlyErrorMessage = (error) => {
     case "auth/too-many-requests":
       return "Çok fazla deneme yaptınız. Lütfen bekleyin.";
     default:
-      return "Bir hata oluştu.";
+      return "Bir hata oluştu: " + error.message;
   }
 };
 
@@ -70,50 +77,71 @@ const LoginScreen = () => {
   const [isFirebaseLoading, setIsFirebaseLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const androidClientId = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID;
+  // Ortam değişkenlerini al
   const webClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 
-  const redirectUri = makeRedirectUri({ useProxy: true });
-
-  const [request, response, promptAsync] = useAuthRequest(
-    {
-      androidClientId: androidClientId,
-      clientId: webClientId,
-      redirectUri,
-      responseType: "id_token",
-      scopes: ["openid", "profile", "email"],
-    },
-    {
-      authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
-      tokenEndpoint: "https://oauth2.googleapis.com/token",
-    }
-  );
-
+  // --- YENİ: Google Sign-In Konfigürasyonu ---
   useEffect(() => {
-    if (response?.type === "success") {
-      const { id_token } = response.params;
-      handleGoogleSignIn(id_token);
-    } else if (response?.type === "error" || response?.type === "dismiss") {
-      setGoogleLoading(false);
-    }
-  }, [response]);
+    GoogleSignin.configure({
+      webClientId: webClientId, // Firebase Console'daki Web Client ID
+      offlineAccess: true,
+      scopes: ["profile", "email"],
+    });
+  }, [webClientId]);
 
-  const handleGoogleSignIn = async (id_token) => {
+  // --- YENİ: Native Google Login İşlemi ---
+  const onGoogleButtonPress = async () => {
+    // Zaten işlem yapılıyorsa durdur
+    if (googleLoading || isFirebaseLoading || loginStatus === "loading") return;
+
+    setGoogleLoading(true);
     try {
-      const credential = GoogleAuthProvider.credential(id_token);
-      const userCredential = await signInWithCredential(auth, credential);
+      // 1. Google Play Services kontrolü
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+
+      // 2. Kullanıcı seçimi ve Token alma
+      const userInfo = await GoogleSignin.signIn();
+
+      // Versiyon uyumluluğu için kontrol (idToken bazen data içinde, bazen direkt gelir)
+      const idToken = userInfo.data?.idToken || userInfo.idToken;
+
+      if (!idToken) {
+        throw new Error("Google ID Token alınamadı.");
+      }
+
+      // 3. Firebase Credential oluştur
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+
+      // 4. Firebase'e giriş yap
+      const userCredential = await signInWithCredential(auth, googleCredential);
       const user = userCredential.user;
+
+      // 5. Redux'a haber ver (Backend senkronizasyonu)
       await dispatch(
         loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
       ).unwrap();
     } catch (error) {
-      console.error("Google Giriş Hatası:", error);
-      Alert.alert("Google Giriş Hatası", getFriendlyErrorMessage(error));
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("Kullanıcı girişi iptal etti.");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("İşlem zaten devam ediyor.");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        Alert.alert("Hata", "Google Play Hizmetleri güncel değil veya eksik.");
+      } else {
+        console.error("Google Sign-In Hatası:", error);
+        Alert.alert(
+          "Giriş Başarısız",
+          "Google ile giriş yapılırken bir sorun oluştu."
+        );
+      }
     } finally {
       setGoogleLoading(false);
     }
   };
 
+  // --- Klasik Email/Şifre Kayıt İşlemleri (Dokunulmadı) ---
   const handleRegister = async () => {
     if (email === "" || password === "") {
       Alert.alert(t("general.error"), t("auth.errors.empty_fields"));
@@ -124,25 +152,20 @@ const LoginScreen = () => {
 
     try {
       auth.languageCode = i18n.language;
-      // 1. Kullanıcıyı oluştur
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
       const user = userCredential.user;
-
-      // 2. YENİ ADIM: Doğrulama E-postası Gönder
       await sendEmailVerification(user);
 
-      // 3. Kullanıcıya bilgi ver
       Alert.alert(
         "Kayıt Başarılı!",
-        "E-posta adresinize bir doğrulama bağlantısı gönderdik. Hesabınızın güvenliği ve şifre kurtarma işlemleri için lütfen onaylayın.",
+        "E-posta adresinize bir doğrulama bağlantısı gönderdik. Lütfen onaylayın.",
         [
           {
             text: "Tamam",
-            // Kullanıcı "Tamam"a basınca giriş işlemini tamamla
             onPress: async () => {
               await dispatch(
                 loginOrRegisterUser({
@@ -187,7 +210,6 @@ const LoginScreen = () => {
     }
   };
 
-  // YENİ: Şifre Sıfırlama Fonksiyonu
   const handleForgotPassword = async () => {
     if (email === "") {
       Alert.alert(
@@ -218,20 +240,18 @@ const LoginScreen = () => {
           keyboardShouldPersistTaps="handled"
           bounces={false}
         >
-          {/* --- PREMIUM VIDEO ALANI --- */}
+          {/* --- VIDEO ALANI (Dokunulmadı) --- */}
           <View style={styles.videoWrapper}>
             <Video
               ref={video}
               style={styles.video}
-              // NOT: Gerçek cihazda çalışması için assets içindeki dosya adının doğru olduğundan emin ol
               source={require("../../assets/home_480.mp4")}
               useNativeControls={false}
-              resizeMode={ResizeMode.COVER} // Arka plan siyah olduğu için COVER kullanıp alttan siliyoruz, sorun yok.
+              resizeMode={ResizeMode.COVER}
               isLooping={false}
               shouldPlay={true}
               isMuted={true}
             />
-            {/* Fade Out Effect */}
             <LinearGradient
               colors={["transparent", "#000000"]}
               style={styles.videoOverlay}
@@ -284,7 +304,6 @@ const LoginScreen = () => {
               />
             </View>
 
-            {/* YENİ: Şifremi Unuttum (Sadece Giriş Modunda) */}
             {!isRegistering && (
               <Pressable
                 onPress={handleForgotPassword}
@@ -331,26 +350,19 @@ const LoginScreen = () => {
               <View style={styles.divider} />
             </View>
 
-            {/* Google Butonu */}
+            {/* --- GÜNCELLENEN GOOGLE BUTONU --- */}
             <Pressable
               style={[
                 styles.googleButton,
-                (!request ||
-                  loginStatus === "loading" ||
+                (loginStatus === "loading" ||
                   isFirebaseLoading ||
                   googleLoading) &&
                   styles.buttonDisabled,
               ]}
               disabled={
-                !request ||
-                loginStatus === "loading" ||
-                isFirebaseLoading ||
-                googleLoading
+                loginStatus === "loading" || isFirebaseLoading || googleLoading
               }
-              onPress={() => {
-                setGoogleLoading(true);
-                promptAsync();
-              }}
+              onPress={onGoogleButtonPress} // Yeni fonksiyona bağlandı
             >
               {googleLoading ? (
                 <ActivityIndicator color="#fff" />
@@ -369,7 +381,6 @@ const LoginScreen = () => {
               )}
             </Pressable>
 
-            {/* YENİ: Yasal Uyarı Metni (Legal Footer) */}
             <View style={{ marginTop: 30, paddingHorizontal: 10 }}>
               <Text
                 style={{
@@ -395,11 +406,8 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     backgroundColor: "#000",
   },
-  // --- VIDEO STİLLERİ ---
   videoWrapper: {
     width: width,
-    // DEĞİŞİKLİK: Videoyu biraz kısalttım (4/3 yerine yaklaşık 1.2 oranı)
-    // Bu sayede form daha yukarı gelebilir.
     height: width * 1.2,
     position: "relative",
     zIndex: 0,
@@ -414,17 +422,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 200, // Gradyanı biraz daha uzattım, yumuşak geçiş için
+    height: 200,
     zIndex: 1,
   },
-  // --- FORM ALANI ---
   formContainer: {
-    // DEĞİŞİKLİK: Daha fazla yukarı çektim (-80'den -100'e)
-    // Bu, formun videonun üzerine daha çok binmesini sağlar.
     marginTop: -100,
     paddingHorizontal: 24,
     zIndex: 2,
-    paddingBottom: 40, // Alt kısımda biraz boşluk
+    paddingBottom: 40,
   },
   headerTextContainer: {
     marginBottom: 30,
@@ -447,7 +452,6 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     textAlign: "center",
   },
-  // --- INPUT STİLLERİ ---
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -468,9 +472,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: "100%",
   },
-  // --- BUTONLAR ---
   mainButton: {
-    // Şifremi unuttum eklendiği için margin'i biraz azalttım
     marginTop: 5,
     shadowColor: "#D4AF37",
     shadowOffset: { width: 0, height: 4 },
