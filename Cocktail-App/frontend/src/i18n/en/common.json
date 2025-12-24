@@ -28,6 +28,7 @@
   },
 "auth": {
   "login": "Log In",
+  "logout": "Log Out",
   "register": "Sign Up",
   "welcome_chef": "Welcome Chef",
   "join_us": "Join the Club",
@@ -100,12 +101,20 @@
     "wizard_step1_hint": "Next suggestions will be filtered based on this choice..."
 },
   "results": {
-    "title": "Found Recipes",
-    "loading": "Loading results...",
-    "empty_title": "No Results Found",
-    "empty_msg": "No cocktails found matching your workbench ingredients.",
-    "empty_hint": "Try changing the search mode to see cocktails containing your ingredients."
-  },
+  "title": "Matching Recipes",
+  "loading": "Searching for best recipes...",
+  "ready_msg": "Ingredients Ready!",
+  "missing_msg": "ingredients missing",
+  "explore_msg": "View recipe",
+  "header_ready": "Ready to Drink!",
+  "header_almost": "Almost There",
+  "header_explore": "Get Inspired",
+  "header_generic": "Results",
+  "no_result_title": "No Results Found",
+  "no_result_msg": "We couldn't find any recipes matching your ingredients.",
+  "not_found": "Not Found",
+  "no_cocktail_msg": "The cocktail details could not be found."
+},
   "profile": {
     "pro_member": "PRO MEMBER",
   "free_member": "FREE MEMBER",

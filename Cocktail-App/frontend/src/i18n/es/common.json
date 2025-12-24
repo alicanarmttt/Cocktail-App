@@ -27,6 +27,7 @@
   },
   "auth": {
     "login": "Iniciar Sesión",
+    "logout": "Cerrar sesión",
     "register": "Registrarse",
     "welcome_chef": "Bienvenido Chef",
     "join_us": "Únete al Club",
@@ -41,7 +42,7 @@
     "terms_privacy": "Al continuar, aceptas nuestros Términos de Servicio y Política de Privacidad.",
     "errors": {
       "empty_fields": "Por favor, rellena todos los campos.",
-      "logout": "Cerrar Sesión",
+      
       "logout_confirm_title": "Cerrando Sesión",
       "logout_confirm_msg": "¿Estás seguro de que quieres cerrar sesión?"
     }
@@ -97,12 +98,20 @@
     "wizard_step1_hint": "Las siguientes sugerencias se filtrarán según esta elección..."
   },
   "results": {
-    "title": "Recetas Encontradas",
-    "loading": "Cargando resultados...",
-    "empty_title": "Sin Resultados",
-    "empty_msg": "No se encontraron cócteles que coincidan con tus ingredientes.",
-    "empty_hint": "Intenta cambiar el modo de búsqueda para ver cócteles que contengan tus ingredientes."
-  },
+  "title": "Recetas Encontradas",
+  "loading": "Buscando las mejores recetas...",
+  "ready_msg": "¡Ingredientes listos!",
+  "missing_msg": "ingredientes faltantes",
+  "explore_msg": "Ver receta",
+  "header_ready": "¡Listo para beber!",
+  "header_almost": "Casi allí",
+  "header_explore": "Inspirate",
+  "header_generic": "Resultados",
+  "no_result_title": "No se encontraron resultados",
+  "no_result_msg": "No pudimos encontrar recetas que coincidan con tus ingredientes.",
+  "not_found": "No encontrado",
+  "no_cocktail_msg": "No se pudieron encontrar los detalles del cóctel."
+},
   "profile": {
     "pro_member": "MIEMBRO PRO",
   "free_member": "MIEMBRO GRATUITO",

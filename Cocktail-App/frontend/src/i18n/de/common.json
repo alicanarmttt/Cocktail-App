@@ -27,6 +27,7 @@
   },
   "auth": {
     "login": "Anmelden",
+    "logout": "Abmelden",
     "register": "Registrieren",
     "welcome_chef": "Willkommen Chef",
     "join_us": "Tritt dem Club bei",
@@ -41,7 +42,7 @@
     "terms_privacy": "Durch das Fortfahren stimmst du unseren Nutzungsbedingungen und Datenschutzrichtlinien zu.",
     "errors": {
       "empty_fields": "Bitte fülle alle Felder aus.",
-      "logout": "Abmelden",
+      
       "logout_confirm_title": "Abmelden",
       "logout_confirm_msg": "Möchtest du dich wirklich abmelden?"
     }
@@ -97,12 +98,20 @@
     "wizard_step1_hint": "Nächste Vorschläge basieren auf dieser Wahl..."
   },
   "results": {
-    "title": "Gefundene Rezepte",
-    "loading": "Lade Ergebnisse...",
-    "empty_title": "Keine Ergebnisse",
-    "empty_msg": "Keine Cocktails gefunden, die zu deinen Zutaten passen.",
-    "empty_hint": "Versuche den Suchmodus zu ändern, um Cocktails zu sehen, die deine Zutaten enthalten."
-  },
+  "title": "Passende Rezepte",
+  "loading": "Suche nach den besten Rezepten...",
+  "ready_msg": "Zutaten bereit!",
+  "missing_msg": "Zutaten fehlen",
+  "explore_msg": "Rezept ansehen",
+  "header_ready": "Sofort genießen!",
+  "header_almost": "Fast fertig",
+  "header_explore": "Lass dich inspirieren",
+  "header_generic": "Ergebnisse",
+  "no_result_title": "Keine Ergebnisse",
+  "no_result_msg": "Wir konnten keine Rezepte finden, die zu Ihren Zutaten passen.",
+  "not_found": "Nicht gefunden",
+  "no_cocktail_msg": "Die Cocktail-Details konnten nicht gefunden werden."
+},
   "profile": {
     "pro_member": "PRO-MITGLIED",
   "free_member": "GRATIS-MITGLIED",

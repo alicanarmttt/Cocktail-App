@@ -27,6 +27,7 @@
   },
   "auth": {
   "login": "Giriş Yap",
+  "logout": "Çıkış Yap",
   "register": "Kayıt Ol",
   "welcome_chef": "Hoş Geldiniz",
   "join_us": "Aramıza Katıl",
@@ -41,7 +42,7 @@
   "terms_privacy": "Devam ederek, Kullanım Koşulları ve Gizlilik Politikasını kabul etmiş olursunuz.",
   "errors": {
     "empty_fields": "Lütfen tüm alanları doldurun."
-  },"logout": "Çıkış Yap",
+  },
     "logout_confirm_title": "Çıkış Yapılıyor",
     "logout_confirm_msg": "Çıkış yapmak istediğine emin misin?"
 },
@@ -99,12 +100,20 @@
     "wizard_step1_hint": "Sıradaki öneriler bu seçimine göre filtrelenecek..."
   },
   "results": {
-    "title": "Bulunan Tarifler",
-    "loading": "Sonuçlar yükleniyor...",
-    "empty_title": "Sonuç Bulunamadı",
-    "empty_msg": "Tezgahınızdaki malzemelerle eşleşen bir kokteyl bulunamadı.",
-    "empty_hint": "Elinizdeki malzemeyi içeren kokteylleri görmek için geri dönüp arama modunu değiştirebilirsiniz."
-  },
+  "title": "Bulunan Tarifler",
+  "loading": "En uygun tarifler aranıyor...",
+  "ready_msg": "Malzemeler Tam!",
+  "missing_msg": "malzeme gerekli",
+  "explore_msg": "Tarife göz at",
+  "header_ready": "Hemen Yapabilirsin!",
+  "header_almost": "Çok Yaklaşmışsın",
+  "header_explore": "İlham Al",
+  "header_generic": "Sonuçlar",
+  "no_result_title": "Sonuç Bulunamadı",
+  "no_result_msg": "Seçtiğin malzemelerle eşleşen bir tarif bulamadık.",
+  "not_found": "Sonuç Bulunamadı",
+  "no_cocktail_msg": "Aradığınız kokteyl bilgilerine ulaşılamadı."
+},
   "profile": {
     "pro_member": "PRO ÜYE",
   "free_member": "ÜCRETSİZ ÜYE",

@@ -27,6 +27,7 @@
   },
   "auth": {
     "login": "Accedi",
+    "logout": "Disconnetti",
     "register": "Registrati",
     "welcome_chef": "Benvenuto Chef",
     "join_us": "Unisciti al Club",
@@ -41,7 +42,7 @@
     "terms_privacy": "Continuando, accetti i nostri Termini di Servizio e l'Informativa sulla Privacy.",
     "errors": {
       "empty_fields": "Per favore compila tutti i campi.",
-      "logout": "Esci",
+      
       "logout_confirm_title": "Disconnessione",
       "logout_confirm_msg": "Sei sicuro di voler uscire?"
     }
@@ -97,12 +98,20 @@
     "wizard_step1_hint": "I prossimi suggerimenti saranno filtrati in base a questa scelta..."
   },
   "results": {
-    "title": "Ricette Trovate",
-    "loading": "Caricamento risultati...",
-    "empty_title": "Nessun Risultato",
-    "empty_msg": "Nessun cocktail trovato corrispondente ai tuoi ingredienti.",
-    "empty_hint": "Prova a cambiare modalità di ricerca per vedere cocktail che contengono i tuoi ingredienti."
-  },
+  "title": "Ricette Trovate",
+  "loading": "Ricerca delle migliori ricette...",
+  "ready_msg": "Ingredienti pronti!",
+  "missing_msg": "ingredienti mancanti",
+  "explore_msg": "Vedi ricetta",
+  "header_ready": "Pronto da bere!",
+  "header_almost": "Quasi fatto",
+  "header_explore": "Lasciati ispirare",
+  "header_generic": "Risultati",
+  "no_result_title": "Nessun risultato trovato",
+  "no_result_msg": "Non abbiamo trovato ricette corrispondenti ai tuoi ingredienti.",
+  "not_found": "Non trovato",
+  "no_cocktail_msg": "Impossibile trovare i dettagli del cocktail."
+},
   "profile": {
     "pro_member": "MEMBRO PRO",
   "free_member": "MEMBRO GRATUITO",
