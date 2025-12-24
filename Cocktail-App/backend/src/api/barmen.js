@@ -5,14 +5,14 @@ const router = express.Router();
 const {
   findRecipesByIngredients,
   getMenuHints,
-  getSpiritFamilies, // <--- YENİ (Adım 1)
-  getGuideStep2Options, // <--- YENİ (Adım 2)
+  getSpiritFamilies,
+  getGuideStep2Options,
   findWizardResults,
   getGuideStep3Options,
 } = require("../db/models/barmen.model");
 
 // ============================================================
-//               MEVCUT ENDPOINTLER (MANUEL MOD)
+//              MEVCUT ENDPOINTLER (MANUEL MOD)
 // ============================================================
 
 /**
@@ -40,7 +40,6 @@ router.post("/find-recipes", async (req, res) => {
 /**
  * @route   POST /api/barmen/hints
  * @desc    MANUEL MOD İPUÇLARI (Mevcut)
- * Not: Rehber modundan bağımsızdır, manuel seçimlerde kullanılır.
  */
 router.post("/hints", async (req, res) => {
   try {
@@ -59,22 +58,18 @@ router.post("/hints", async (req, res) => {
 });
 
 // ============================================================
-//               YENİ REHBER (WIZARD) ENDPOINTLERİ
+//              YENİ REHBER (WIZARD) ENDPOINTLERİ
 // ============================================================
 
 /**
  * @route   GET /api/barmen/guide/step-1
  * @desc    Rehber Başlangıcı: Ana içki ailelerini getirir.
- * @query   ?lang=tr (Varsayılan: en)
- * @return  [{ key: "whiskey", name: "Viski" }, ...]
+ * GÜNCELLEME: Lang parametresi kaldırıldı.
  */
 router.get("/guide/step-1", async (req, res) => {
   try {
-    // Dil tercihini query string'den alıyoruz (?lang=tr)
-    const lang = req.query.lang || "en";
-
-    // Model, resimsiz ve sadeleştirilmiş listeyi döner
-    const families = await getSpiritFamilies(lang);
+    // Model artık parametre almıyor, direkt tüm dilleri içeren objeyi dönüyor
+    const families = await getSpiritFamilies();
 
     res.status(200).json(families);
   } catch (error) {
@@ -86,19 +81,17 @@ router.get("/guide/step-1", async (req, res) => {
 /**
  * @route   POST /api/barmen/guide/step-2
  * @desc    Rehber Adım 2: Seçilen aileye uygun tamamlayıcıları getirir.
- * @body    { family: "whiskey", lang: "tr" }
- * @return  [{ ingredient_id: 55, name: "Kahve Likörü", category_id: 2 }, ...]
+ * @body    { family: "whiskey" } -> Lang kaldırıldı
  */
 router.post("/guide/step-2", async (req, res) => {
   try {
-    const { family, lang } = req.body;
+    const { family } = req.body;
 
-    // Aile seçimi (key) zorunludur (örn: 'whiskey')
     if (!family) {
       return res.status(400).json({ msg: "Bir içki grubu seçmelisiniz." });
     }
 
-    const options = await getGuideStep2Options(family, lang || "en");
+    const options = await getGuideStep2Options(family);
 
     res.status(200).json(options);
   } catch (error) {
@@ -109,23 +102,18 @@ router.post("/guide/step-2", async (req, res) => {
 
 /**
  * @route   POST /api/barmen/guide/step-3
- * @desc    Rehber Adım 3: Taze malzemeleri (Adım 2'ye göre önceliklendirerek) getirir.
+ * @desc    Rehber Adım 3: Taze malzemeleri getirir.
+ * @body    { family: "whiskey", step2Ids: [...] } -> Lang kaldırıldı
  */
 router.post("/guide/step-3", async (req, res) => {
   try {
-    // Frontend'den 'selectedIds' adıyla gönderirsen buraya step2Ids olarak alabiliriz
-    const { family, lang, step2Ids } = req.body;
+    const { family, step2Ids } = req.body;
 
     if (!family) {
       return res.status(400).json({ msg: "Ana içki grubu eksik." });
     }
 
-    // Modele 2. parametre olarak step2Ids'i (veya boş dizi) gönderiyoruz
-    const options = await getGuideStep3Options(
-      family,
-      step2Ids || [],
-      lang || "en"
-    );
+    const options = await getGuideStep3Options(family, step2Ids || []);
 
     res.status(200).json(options);
   } catch (error) {
@@ -136,19 +124,17 @@ router.post("/guide/step-3", async (req, res) => {
 
 /**
  * @route   POST /api/barmen/guide/results
- * @desc    Rehber SONUCU: Aile ismini ID'lere çevirip arama yapar.
+ * @desc    Rehber SONUCU
  * @body    { family: "whiskey", selectedIds: [12, 55] }
  */
 router.post("/guide/results", async (req, res) => {
   try {
     const { family, selectedIds } = req.body;
 
-    // Aile seçimi zorunlu
     if (!family) {
       return res.status(400).json({ msg: "Ana içki grubu eksik." });
     }
 
-    // Modeldeki yeni köprü fonksiyonu çağırıyoruz
     const results = await findWizardResults(family, selectedIds || []);
 
     res.status(200).json(results);

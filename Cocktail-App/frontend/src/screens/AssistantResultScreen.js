@@ -42,10 +42,16 @@ const AssistantResultScreen = () => {
     shadow: dark ? "#000" : colors.shadow,
   };
 
-  // --- HELPER: Dinamik İsim ---
+  // --- GÜNCELLEME: Dinamik İsim (Güvenli Helper) ---
   const getName = (item) => {
     if (!item || !item.name) return "";
-    return item.name[i18n.language] || item.name["en"] || "";
+
+    // GÜVENLİK: 'tr-TR' gelirse 'tr' kısmını alır.
+    const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
+
+    // 1. Seçili dil var mı?
+    // 2. Yoksa İngilizce (Fallback)
+    return item.name[langCode] || item.name["en"] || "";
   };
 
   // --- REDUX DATA ---

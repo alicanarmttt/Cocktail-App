@@ -104,6 +104,8 @@
     "empty_hint": "Prova a cambiare modalità di ricerca per vedere cocktail che contengono i tuoi ingredienti."
   },
   "profile": {
+    "pro_member": "MEMBRO PRO",
+  "free_member": "MEMBRO GRATUITO",
     "select_language": "Seleziona lingua",
     "account_actions": "Account",
     "my_favorites": "I Miei Preferiti",
@@ -116,17 +118,17 @@
     "unlock_all": "Sblocca tutto!"
   },
   "upgrade": {
-    "title": "Passa a PRO",
-    "subtitle": "Porta la tua esperienza cocktail al livello successivo.",
-    "feature_1": "Alternative Intelligenti (Gin invece di Vodka? Limone invece di Lime?)",
-    "feature_2": "Filtri avanzati nell'Assistente del Barman",
-    "feature_3": "Salva e condividi le tue ricette personalizzate (Prossimamente)",
-    "feature_4": "Esperienza senza pubblicità",
-    "buy_btn": "Acquista 1 Anno PRO (Test)",
-    "success_title": "Congratulazioni!",
-    "success_msg": "Passaggio all'abbonamento Pro riuscito.",
-    "error_msg": "Si è verificato un errore durante l'aggiornamento"
-  },
+  "title": "Passa a PRO",
+  "subtitle": "Porta la tua esperienza cocktail al livello successivo.",
+  "success_title": "Congratulazioni!",
+  "success_msg": "Ora sei un membro PRO.",
+  "error_msg": "Si è verificato un errore",
+  "feature_1": "Alternative intelligenti (Gin al posto della Vodka?)",
+  "feature_2": "Filtri avanzati nell'Assistente",
+  "feature_3": "Salva ricette personalizzate (Presto)",
+  "feature_4": "Esperienza senza pubblicità",
+  "buy_btn": "Acquista 1 anno PRO (Test)"
+},
   "roulette": {
     "menu_title": "Scegli Modalità Roulette",
     "menu_subtitle": "Scegli una modalità per iniziare la festa.",

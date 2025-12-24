@@ -91,48 +91,83 @@ const getMenuHints = async (baseSpiritIds) => {
 };
 
 // ============================================================
-//               YENİ REHBER (WIZARD) FONKSİYONLARI
+//              YENİ REHBER (WIZARD) FONKSİYONLARI
 // ============================================================
 
 /**
  * @desc    REHBER ADIM 1: Ana içki ailelerini getirir.
- * Resim yok, sadece Key (ID niyetine) ve Çevrilmiş İsim döner.
+ * GÜNCELLEME: Frontend 'getName' fonksiyonu için 'name' alanını OBJE olarak döner.
  */
-const getSpiritFamilies = async (lang = "en") => {
-  // 1. Veritabanındaki 'family' değerlerini (whiskey, rum vs.) çek
+const getSpiritFamilies = async () => {
+  // 1. Veritabanındaki 'family' değerlerini çek
   const families = await db("ingredients")
     .distinct("family")
     .where("category_id", 1) // Sadece Spirits
     .whereNotNull("family");
 
-  // 2. Çeviri Sözlüğü (Backend'de yönetilen tek yer)
-  // İleride İspanyolca gelirse sadece buraya 'es' eklenecek.
+  // 2. Çeviri Sözlüğü (JSON Yapısında)
+  // Step 1 veritabanında "ingredients" tablosunda bir satır olmadığı için (gruplama olduğu için)
+  // bu isimleri manuel olarak 6 dile çevirip yolluyoruz.
   const FAMILY_TRANSLATIONS = {
-    whiskey: { tr: "Viski", en: "Whiskey" },
-    rum: { tr: "Rom", en: "Rum" },
-    gin: { tr: "Cin", en: "Gin" },
-    vodka: { tr: "Votka", en: "Vodka" },
-    tequila: { tr: "Tekila", en: "Tequila" },
-    brandy: { tr: "Konyak & Brandy", en: "Brandy & Cognac" },
+    whiskey: {
+      en: "Whiskey",
+      tr: "Viski",
+      de: "Whisky",
+      es: "Whisky",
+      it: "Whisky",
+      pt: "Uísque",
+    },
+    rum: { en: "Rum", tr: "Rom", de: "Rum", es: "Ron", it: "Rum", pt: "Rum" },
+    gin: {
+      en: "Gin",
+      tr: "Cin",
+      de: "Gin",
+      es: "Ginebra",
+      it: "Gin",
+      pt: "Gim",
+    },
+    vodka: {
+      en: "Vodka",
+      tr: "Votka",
+      de: "Wodka",
+      es: "Vodka",
+      it: "Vodka",
+      pt: "Vodka",
+    },
+    tequila: {
+      en: "Tequila",
+      tr: "Tekila",
+      de: "Tequila",
+      es: "Tequila",
+      it: "Tequila",
+      pt: "Tequila",
+    },
+    brandy: {
+      en: "Brandy & Cognac",
+      tr: "Konyak & Brandy",
+      de: "Weinbrand",
+      es: "Brandy",
+      it: "Brandy",
+      pt: "Conhaque",
+    },
   };
 
   return families
     .map((f) => {
-      const trans = FAMILY_TRANSLATIONS[f.family];
-      if (!trans) return null;
+      const nameObject = FAMILY_TRANSLATIONS[f.family];
+      if (!nameObject) return null;
 
       return {
-        key: f.family, // Bu bizim ID'miz gibi çalışır (Frontend bunu geri yollayacak)
-        name: trans[lang] || trans["en"], // İstenen dil yoksa İngilizce dön
+        key: f.family,
+        name: nameObject, // <-- ARTIK OBJE DÖNÜYOR {en:..., tr:...}
       };
     })
-    .filter(Boolean); // Tanımsız olanları temizle
+    .filter(Boolean);
 };
-
 /**
  * @desc    REHBER ADIM 2: Şişeli Yancılar (Likör, Şurup, Vermut vb.)
  */
-const getGuideStep2Options = async (familyKey, lang = "en") => {
+const getGuideStep2Options = async (familyKey) => {
   if (!familyKey) return [];
 
   return await db("cocktail_requirements as cr")
@@ -153,11 +188,7 @@ const getGuideStep2Options = async (familyKey, lang = "en") => {
       builder.where("i.family", "!=", familyKey).orWhereNull("i.family");
     })
     .distinct("i.ingredient_id")
-    .select(
-      "i.ingredient_id",
-      db.raw("i.name->>? as name", [lang]),
-      "i.category_id"
-    )
+    .select("i.ingredient_id", "i.name", "i.category_id")
     .orderBy("name", "asc");
 };
 /**
@@ -165,7 +196,7 @@ const getGuideStep2Options = async (familyKey, lang = "en") => {
  * @param   {string} familyKey - Ana içki (örn: vodka)
  * @param   {Array} step2Ids - [YENİ] Adım 2'de seçilen şişelerin ID'leri
  */
-const getGuideStep3Options = async (familyKey, step2Ids = [], lang = "en") => {
+const getGuideStep3Options = async (familyKey, step2Ids = []) => {
   if (!familyKey) return [];
 
   let query = db("cocktail_requirements as cr")
@@ -197,24 +228,20 @@ const getGuideStep3Options = async (familyKey, step2Ids = [], lang = "en") => {
 
     query.select(
       "i.ingredient_id",
-      db.raw("MIN(i.name->>? ) as name", [lang]),
+      "i.name",
       "i.category_id",
       // Alaka Puanı: Bu malzeme, seçilen şişelerle kaç kokteylde beraber geçiyor?
       db.raw("COUNT(cr_match.ingredient_id) as relevance_score")
     );
 
-    query.groupBy("i.ingredient_id", "i.category_id");
+    query.groupBy("i.ingredient_id", "i.category_id", "i.name");
 
     // Önce en alakalı olanları göster (Puanı yüksek olanlar)
     query.orderBy("relevance_score", "desc");
   } else {
     // Adım 2 boşsa normal listele
-    query.select(
-      "i.ingredient_id",
-      db.raw("MIN(i.name->>? ) as name", [lang]),
-      "i.category_id"
-    );
-    query.groupBy("i.ingredient_id", "i.category_id");
+    query.select("i.ingredient_id", "i.name", "i.category_id");
+    query.groupBy("i.ingredient_id", "i.category_id", "i.name");
   }
 
   // İkinci kriter olarak her zaman isme göre sırala (A-Z)

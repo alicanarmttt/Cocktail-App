@@ -104,6 +104,8 @@
     "empty_hint": "Tente mudar o modo de busca para ver coquetéis que contenham seus ingredientes."
   },
   "profile": {
+    "pro_member": "MEMBRO PRO",
+  "free_member": "MEMBRO GRATUITO",
     "select_language": "Selecionar idioma",
     "account_actions": "Conta",
     "my_favorites": "Meus Favoritos",
@@ -116,17 +118,17 @@
     "unlock_all": "Desbloquear tudo!"
   },
   "upgrade": {
-    "title": "Upgrade para PRO",
-    "subtitle": "Leve sua experiência de coquetéis para o próximo nível.",
-    "feature_1": "Alternativas Inteligentes (Gin em vez de Vodka? Limão Siciliano em vez de Limão?)",
-    "feature_2": "Filtragem avançada no \"Assistente de Barman\"",
-    "feature_3": "Salve e compartilhe suas receitas personalizadas (Em Breve)",
-    "feature_4": "Experiência sem anúncios",
-    "buy_btn": "Comprar 1 Ano PRO (Teste)",
-    "success_title": "Parabéns!",
-    "success_msg": "Upgrade para assinatura Pro realizado com sucesso.",
-    "error_msg": "Ocorreu um erro durante o upgrade"
-  },
+  "title": "Mudar para PRO",
+  "subtitle": "Leve sua experiência de coquetéis para o próximo nível.",
+  "success_title": "Parabéns!",
+  "success_msg": "Agora você é um membro PRO.",
+  "error_msg": "Ocorreu um erro",
+  "feature_1": "Alternativas inteligentes (Gin em vez de Vodka?)",
+  "feature_2": "Filtros avançados no Assistente",
+  "feature_3": "Salvar receitas personalizadas (Em breve)",
+  "feature_4": "Experiência sem anúncios",
+  "buy_btn": "Comprar 1 ano PRO (Teste)"
+},
   "roulette": {
     "menu_title": "Escolha o Modo Roleta",
     "menu_subtitle": "Escolha um modo para começar a festa.",

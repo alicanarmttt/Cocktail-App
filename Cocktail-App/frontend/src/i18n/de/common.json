@@ -104,6 +104,8 @@
     "empty_hint": "Versuche den Suchmodus zu ändern, um Cocktails zu sehen, die deine Zutaten enthalten."
   },
   "profile": {
+    "pro_member": "PRO-MITGLIED",
+  "free_member": "GRATIS-MITGLIED",
     "select_language": "Sprache auswählen",
     "account_actions": "Konto",
     "my_favorites": "Meine Favoriten",
@@ -116,17 +118,17 @@
     "unlock_all": "Alles freischalten!"
   },
   "upgrade": {
-    "title": "Upgrade auf PRO",
-    "subtitle": "Bring dein Cocktail-Erlebnis auf das nächste Level.",
-    "feature_1": "Smarte Alternativen (Gin statt Wodka? Zitrone statt Limette?)",
-    "feature_2": "Erweiterte Filter im \"Barkeeper-Assistent\"",
-    "feature_3": "Speichere und teile eigene Rezepte (Bald verfügbar)",
-    "feature_4": "Werbefreies Erlebnis",
-    "buy_btn": "1 Jahr PRO kaufen (Test)",
-    "success_title": "Glückwunsch!",
-    "success_msg": "Erfolgreich auf Pro-Mitgliedschaft hochgestuft.",
-    "error_msg": "Ein Fehler ist beim Upgrade aufgetreten"
-  },
+  "title": "Auf PRO upgraden",
+  "subtitle": "Bring dein Cocktail-Erlebnis auf das nächste Level.",
+  "success_title": "Herzlichen Glückwunsch!",
+  "success_msg": "Du bist jetzt PRO-Mitglied.",
+  "error_msg": "Fehler beim Upgrade",
+  "feature_1": "Smarte Alternativen (Gin statt Wodka?)",
+  "feature_2": "Erweiterte Filter im Assistenten",
+  "feature_3": "Eigene Rezepte speichern (Bald)",
+  "feature_4": "Werbefreies Erlebnis",
+  "buy_btn": "1 Jahr PRO kaufen (Test)"
+},
   "roulette": {
     "menu_title": "Wähle Roulette-Modus",
     "menu_subtitle": "Wähle einen Modus, um die Party zu starten.",

@@ -104,6 +104,8 @@
     "empty_hint": "Intenta cambiar el modo de búsqueda para ver cócteles que contengan tus ingredientes."
   },
   "profile": {
+    "pro_member": "MIEMBRO PRO",
+  "free_member": "MIEMBRO GRATUITO",
     "select_language": "Seleccionar idioma",
     "account_actions": "Cuenta",
     "my_favorites": "Mis Favoritos",
@@ -116,17 +118,17 @@
     "unlock_all": "¡Desbloquea todo!"
   },
   "upgrade": {
-    "title": "Mejorar a PRO",
-    "subtitle": "Lleva tu experiencia de cócteles al siguiente nivel.",
-    "feature_1": "Alternativas Inteligentes (¿Ginebra en vez de Vodka? ¿Limón en vez de Lima?)",
-    "feature_2": "Filtrado avanzado en el \"Asistente de Barman\"",
-    "feature_3": "Guarda y comparte tus propias recetas (Próximamente)",
-    "feature_4": "Experiencia sin anuncios",
-    "buy_btn": "Comprar 1 Año PRO (Prueba)",
-    "success_title": "¡Felicidades!",
-    "success_msg": "Mejora a membresía Pro exitosa.",
-    "error_msg": "Ocurrió un error durante la mejora"
-  },
+  "title": "Actualizar a PRO",
+  "subtitle": "Lleva tu experiencia de cócteles al siguiente nivel.",
+  "success_title": "¡Felicidades!",
+  "success_msg": "Ahora eres miembro PRO.",
+  "error_msg": "Ocurrió un error",
+  "feature_1": "Alternativas inteligentes (¿Ginebra por Vodka?)",
+  "feature_2": "Filtros avanzados en el Asistente",
+  "feature_3": "Guardar recetas propias (Pronto)",
+  "feature_4": "Sin anuncios",
+  "buy_btn": "Comprar 1 año PRO (Prueba)"
+},
   "roulette": {
     "menu_title": "Elige Modo Ruleta",
     "menu_subtitle": "Elige un modo para empezar la fiesta.",

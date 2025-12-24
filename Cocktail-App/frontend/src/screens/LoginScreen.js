@@ -33,10 +33,10 @@ import {
 import { loginOrRegisterUser, getLoginStatus } from "../features/userSlice";
 
 // Native Google Sign-In Imports
-import {
-  GoogleSignin,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
+// import {
+//   GoogleSignin,
+//   statusCodes,
+// } from "@react-native-google-signin/google-signin";
 
 import { useTranslation } from "react-i18next";
 import PremiumButton from "../ui/PremiumButton";
@@ -80,69 +80,69 @@ const LoginScreen = () => {
   // Ortam değişkenlerini al
   const webClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 
-  // --- Google Sign-In Konfigürasyonu ---
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: webClientId, // DEĞİŞİKLİK: Hardcoded ID yerine tekrar değişkene bağladık (Temiz kod)
-      offlineAccess: true,
-      scopes: ["profile", "email"],
-    });
-  }, [webClientId]);
+  // // --- Google Sign-In Konfigürasyonu ---
+  // useEffect(() => {
+  //   GoogleSignin.configure({
+  //     webClientId: webClientId, // DEĞİŞİKLİK: Hardcoded ID yerine tekrar değişkene bağladık (Temiz kod)
+  //     offlineAccess: true,
+  //     scopes: ["profile", "email"],
+  //   });
+  // }, [webClientId]);
 
   // --- Native Google Login İşlemi ---
-  const onGoogleButtonPress = async () => {
-    // Zaten işlem yapılıyorsa durdur
-    if (googleLoading || isFirebaseLoading || loginStatus === "loading") return;
+  // const onGoogleButtonPress = async () => {
+  //   // Zaten işlem yapılıyorsa durdur
+  //   if (googleLoading || isFirebaseLoading || loginStatus === "loading") return;
 
-    setGoogleLoading(true);
-    try {
-      // 1. Google Play Services kontrolü
-      await GoogleSignin.hasPlayServices({
-        showPlayServicesUpdateDialog: true,
-      });
+  //   setGoogleLoading(true);
+  //   try {
+  //     // 1. Google Play Services kontrolü
+  //     await GoogleSignin.hasPlayServices({
+  //       showPlayServicesUpdateDialog: true,
+  //     });
 
-      // 2. Kullanıcı seçimi ve Token alma
-      const userInfo = await GoogleSignin.signIn();
+  //     // 2. Kullanıcı seçimi ve Token alma
+  //     const userInfo = await GoogleSignin.signIn();
 
-      // Versiyon uyumluluğu için kontrol
-      const idToken = userInfo.data?.idToken || userInfo.idToken;
+  //     // Versiyon uyumluluğu için kontrol
+  //     const idToken = userInfo.data?.idToken || userInfo.idToken;
 
-      if (!idToken) {
-        throw new Error("Google ID Token alınamadı.");
-      }
+  //     if (!idToken) {
+  //       throw new Error("Google ID Token alınamadı.");
+  //     }
 
-      // 3. Firebase Credential oluştur
-      const googleCredential = GoogleAuthProvider.credential(idToken);
+  //     // 3. Firebase Credential oluştur
+  //     const googleCredential = GoogleAuthProvider.credential(idToken);
 
-      // DEĞİŞİKLİK: Firebase'e dili bildir (Google ile girse bile dili bilsin)
-      auth.languageCode = i18n.language;
+  //     // DEĞİŞİKLİK: Firebase'e dili bildir (Google ile girse bile dili bilsin)
+  //     auth.languageCode = i18n.language;
 
-      // 4. Firebase'e giriş yap
-      const userCredential = await signInWithCredential(auth, googleCredential);
-      const user = userCredential.user;
+  //     // 4. Firebase'e giriş yap
+  //     const userCredential = await signInWithCredential(auth, googleCredential);
+  //     const user = userCredential.user;
 
-      // 5. Redux'a haber ver (Backend senkronizasyonu)
-      await dispatch(
-        loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
-      ).unwrap();
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log("Kullanıcı girişi iptal etti.");
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log("İşlem zaten devam ediyor.");
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert("Hata", "Google Play Hizmetleri güncel değil veya eksik.");
-      } else {
-        console.error("Google Sign-In Hatası:", error);
-        Alert.alert(
-          "Giriş Başarısız",
-          "Google ile giriş yapılırken bir sorun oluştu."
-        );
-      }
-    } finally {
-      setGoogleLoading(false);
-    }
-  };
+  //     // 5. Redux'a haber ver (Backend senkronizasyonu)
+  //     await dispatch(
+  //       loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
+  //     ).unwrap();
+  //   } catch (error) {
+  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+  //       console.log("Kullanıcı girişi iptal etti.");
+  //     } else if (error.code === statusCodes.IN_PROGRESS) {
+  //       console.log("İşlem zaten devam ediyor.");
+  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+  //       Alert.alert("Hata", "Google Play Hizmetleri güncel değil veya eksik.");
+  //     } else {
+  //       console.error("Google Sign-In Hatası:", error);
+  //       Alert.alert(
+  //         "Giriş Başarısız",
+  //         "Google ile giriş yapılırken bir sorun oluştu."
+  //       );
+  //     }
+  //   } finally {
+  //     setGoogleLoading(false);
+  //   }
+  // };
 
   // --- Klasik Email/Şifre Kayıt İşlemleri ---
   const handleRegister = async () => {
@@ -357,7 +357,7 @@ const LoginScreen = () => {
               <View style={styles.divider} />
             </View>
 
-            {/* --- GOOGLE BUTONU --- */}
+            {/* --- GOOGLE BUTONU ---
             <Pressable
               style={[
                 styles.googleButton,
@@ -386,7 +386,7 @@ const LoginScreen = () => {
                   </Text>
                 </>
               )}
-            </Pressable>
+            </Pressable> */}
 
             <View style={{ marginTop: 30, paddingHorizontal: 10 }}>
               <Text

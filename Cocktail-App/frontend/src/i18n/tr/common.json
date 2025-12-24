@@ -106,6 +106,8 @@
     "empty_hint": "Elinizdeki malzemeyi içeren kokteylleri görmek için geri dönüp arama modunu değiştirebilirsiniz."
   },
   "profile": {
+    "pro_member": "PRO ÜYE",
+  "free_member": "ÜCRETSİZ ÜYE",
     "select_language": "Dil Seçin",
   "account_actions": "HESABIM",
   "my_favorites": "Favorilerim",
@@ -118,17 +120,17 @@
   "unlock_all": "Tüm tariflerin ve özelliklerin kilidini aç!"
 }
   ,"upgrade": {
-    "title": "PRO Üyeliğe Geçin",
-    "subtitle": "Kokteyl deneyiminizi bir üst seviyeye taşıyın.",
-    "feature_1": "Akıllı Alternatifler (Votka yerine Cin? Lime yerine Limon?)",
-    "feature_2": "\"Barmen Asistanı\"nda gelişmiş filtreleme",
-    "feature_3": "Özel tariflerinizi kaydetme ve paylaşma (Çok Yakında)",
-    "feature_4": "Reklamsız Deneyim",
-    "buy_btn": "1 Yıllık PRO Satın Al (Test)",
-    "success_title": "Tebrikler!",
-    "success_msg": "Başarıyla Pro üyeliğe yükseltildiniz.",
-    "error_msg": "Yükseltme sırasında bir hata oluştu"
-  },
+  "title": "PRO Üyeliğe Geçin",
+  "subtitle": "Kokteyl deneyiminizi bir üst seviyeye taşıyın.",
+  "success_title": "Tebrikler!",
+  "success_msg": "Başarıyla Pro üyeliğe yükseltildiniz.",
+  "error_msg": "Yükseltme sırasında bir hata oluştu",
+  "feature_1": "Akıllı Alternatifler (Votka yerine Cin?)",
+  "feature_2": "Asistan'da gelişmiş filtreleme",
+  "feature_3": "Özel tarif kaydetme (Yakında)",
+  "feature_4": "Reklamsız Deneyim",
+  "buy_btn": "1 Yıllık PRO Satın Al (Test)"
+},
   "roulette": {
     "menu_title": "Rulet Modunu Seç",
     "menu_subtitle": "Partiyi başlatmak için bir mod seç.",

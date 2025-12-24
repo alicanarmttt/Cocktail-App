@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation, useTheme } from "@react-navigation/native";
-import { useTranslation } from "react-i18next"; // i18n hook
+import { useTranslation } from "react-i18next";
 
 // --- COMPONENTS ---
 import CocktailCard from "../components/common/CocktailCard";
@@ -27,21 +27,22 @@ const FavoritesScreen = () => {
   const navigation = useNavigation();
   const { colors } = useTheme();
 
-  // 1. Dil Kancasını (Hook) Başlat
+  // 1. Dil Kancasını Başlat
   const { t, i18n } = useTranslation();
 
-  // --- HELPER: Dinamik İsim Seçici ---
-  // Backend'den name: {"tr": "Mojito", "en": "Mojito"} gibi gelirse patlamamak için.
+  // --- HELPER: Dinamik İsim Seçici (GÜVENLİ VERSİYON) ---
   const getName = (item) => {
     if (!item || !item.name) return "";
 
-    // Eğer name zaten düz bir string geliyorsa (veritabanı sorgusunda halledildiyse) direkt döndür
+    // Eğer name zaten düz bir string geliyorsa direkt döndür
     if (typeof item.name === "string") return item.name;
 
-    // Obje geliyorsa dile göre seç
-    // 1. Öncelik: Seçili dil (örn: item.name['tr'])
+    // GÜVENLİK: 'tr-TR' gelirse 'tr' kısmını alır.
+    const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
+
+    // 1. Öncelik: Seçili dil
     // 2. Öncelik: İngilizce (Fallback)
-    return item.name[i18n.language] || item.name["en"] || "";
+    return item.name[langCode] || item.name["en"] || "";
   };
 
   // Redux Selectors
@@ -116,8 +117,6 @@ const FavoritesScreen = () => {
         contentContainerStyle={{ padding: 10 }}
         renderItem={({ item }) => {
           // İSMİ BURADA ÇÖZÜMLÜYORUZ
-          // item.name'i o anki dile çevirip, yeni bir obje gibi karta gönderiyoruz.
-          // Böylece CocktailCard içinde ekstra mantık kurmaya gerek kalmıyor.
           const localizedItem = {
             ...item,
             name: getName(item),
@@ -125,9 +124,13 @@ const FavoritesScreen = () => {
 
           return (
             <CocktailCard
-              item={localizedItem} // Çevrilmiş ismi gönderiyoruz
+              item={localizedItem}
               onPress={() =>
-                navigation.navigate("CocktailDetail", { id: item.cocktail_id })
+                // DÜZELTME: 'id' değil 'cocktailId' olmalı.
+                // CocktailDetailScreen bu parametreyi bekliyor.
+                navigation.navigate("CocktailDetail", {
+                  cocktailId: item.cocktail_id,
+                })
               }
             />
           );

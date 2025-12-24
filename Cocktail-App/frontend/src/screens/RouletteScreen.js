@@ -239,7 +239,11 @@ const RouletteScreen = () => {
 
   const getCocktailName = (item) => {
     if (!item || !item.name) return "";
-    return item.name[i18n.language] || item.name["en"] || "";
+
+    // GÜVENLİK: i18n.language 'tr-TR' gelebilir, biz 'tr' istiyoruz.
+    const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
+
+    return item.name[langCode] || item.name["en"] || "";
   };
   // --- RENDER ---
 

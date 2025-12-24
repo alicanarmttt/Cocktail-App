@@ -1,6 +1,6 @@
 const db = require("../knex");
 
-// Sabit Popüler Listesi (İsimler İngilizce olarak eşleşmeli)
+// Sabit Popüler Listesi (İsimler İngilizce olarak eşleşmeli - Referansımız 'en')
 const POPULAR_NAMES = [
   "Margarita",
   "Mojito",
@@ -25,50 +25,34 @@ const POPULAR_NAMES = [
 ];
 
 /**
- * @desc    Rulet için belirtilen moda göre kokteyl havuzunu getirir.
- * @param   {string} mode - 'random', 'driver', 'popular', 'taste', 'spirit', 'custom'
- * @param   {any} filter - Moduna göre filtre değeri (tag, ingredientId vb.)
+ * @desc    Rulet havuzunu getirir. Filtreleme 'en' anahtarı üzerinden yapılarak stabilite sağlanır.
  */
 const getRoulettePool = async (mode, filter = null) => {
-  // Temel Sorgu: JSONB yapısını (name) çekiyoruz
   let query = db("cocktails").select(
     "cocktail_id",
-    "name", // { en: "...", tr: "..." }
+    "name", // Frontend getName() ile 6 dilden birini seçecek
     "image_url",
     "is_alcoholic"
   );
 
   switch (mode) {
-    // 1. MOD: SÜRÜCÜ (Alkolsüzler)
     case "driver":
       query = query.where("is_alcoholic", false);
       break;
 
-    // 2. MOD: ŞÖHRETLER KARMASI (Popülerler)
-    // İngilizce isme göre filtreliyoruz (JSON içinde 'en' anahtarı)
     case "popular":
+      // İngilizce isme göre filtrelemek 6 dil gelse de en güvenli yoldur.
       query = query.whereRaw("name->>'en' = ANY(?)", [POPULAR_NAMES]);
-      // Alternatif (Daha basit): whereIn kullanamayız çünkü sütun JSON.
-      // O yüzden whereRaw en garantisi.
       break;
 
-    // 3. MOD: DAMAK TADI (Tag Filtreleme)
-    // Tags alanı da JSONB olduğu için arama şekli değişiyor.
-    // filter örn: "Sweet"
     case "taste":
       if (filter) {
-        // Tagler veritabanında JSON array olarak duruyor olabilir veya string.
-        // Güvenli yöntem: JSONB içindeki metinlerde ara.
-        query = query.where(function () {
-          this.whereRaw("tags->>'en' ILIKE ?", [`%${filter}%`]).orWhereRaw(
-            "tags->>'tr' ILIKE ?",
-            [`%${filter}%`]
-          );
-        });
+        // GÜNCELLEME: Filtreleme her zaman 'en' sütunu üzerinden yapılır.
+        // Çünkü frontend'den gelen filter değerleri (Sweet, Sour vb.) İngilizce sabitlerdir.
+        query = query.whereRaw("tags->>'en' ILIKE ?", [`%${filter}%`]);
       }
       break;
 
-    // 4. MOD: ZEHRİNİ SEÇ (Ana Alkol)
     case "spirit":
       if (filter) {
         query = query.whereExists(function () {
@@ -86,17 +70,15 @@ const getRoulettePool = async (mode, filter = null) => {
             .andWhere(function () {
               // --- ÖZEL VİSKİ MANTIĞI ---
               if (filter === "WhiskeyFamily") {
+                // İngilizce anahtar kelimeler tüm viski türlerini kapsar.
                 this.whereRaw("ingredients.name->>'en' ILIKE ?", [`%Whisk%`])
                   .orWhereRaw("ingredients.name->>'en' ILIKE ?", [`%Bourbon%`])
-                  .orWhereRaw("ingredients.name->>'en' ILIKE ?", [`%Scotch%`])
-                  .orWhereRaw("ingredients.name->>'tr' ILIKE ?", [`%Viski%`])
-                  .orWhereRaw("ingredients.name->>'tr' ILIKE ?", [`%Burbon%`]);
+                  .orWhereRaw("ingredients.name->>'en' ILIKE ?", [`%Scotch%`]);
               }
               // --- DİĞERLERİ (Votka, Cin, Rom vb.) ---
               else {
+                // Frontend'den gelen 'Vodka', 'Gin' gibi değerleri 'en' içinde arıyoruz.
                 this.whereRaw("ingredients.name->>'en' ILIKE ?", [
-                  `%${filter}%`,
-                ]).orWhereRaw("ingredients.name->>'tr' ILIKE ?", [
                   `%${filter}%`,
                 ]);
               }
@@ -105,21 +87,20 @@ const getRoulettePool = async (mode, filter = null) => {
       }
       break;
 
-    // YENİ MOD: CUSTOM (Kullanıcının Seçtikleri)
     case "custom":
       if (Array.isArray(filter) && filter.length > 0) {
         query = query.whereIn("cocktail_id", filter);
       }
       break;
 
-    // 5. MOD: BARMEN'İN SÜRPRİZİ (Hepsi / Random)
     case "random":
     default:
-      // Filtre yok, hepsi gelir
       break;
   }
 
-  return await query;
+  // Frontend tarafında diller arası alfabetik sıralama yapıldığı için
+  // burada standart İngilizce sıralama dönmek API tutarlılığı sağlar.
+  return await query.orderByRaw("name->>'en' ASC");
 };
 
 module.exports = {

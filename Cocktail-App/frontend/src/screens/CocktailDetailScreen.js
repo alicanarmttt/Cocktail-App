@@ -43,13 +43,17 @@ const CocktailDetailScreen = ({ route }) => {
   // useTranslation hook'u dil değişimini dinler ve bileşeni yeniden render eder.
   const { t, i18n } = useTranslation();
 
-  // Helper: Dile Göre Metin Seçici
-  // YENİ HALİ):
+  // --- GÜNCELLEME: Dile Göre Metin Seçici (Güvenli Versiyon) ---
   const getLocaleText = (obj) => {
     if (!obj) return "";
-    return obj[i18n.language] || obj["en"] || "";
-  };
 
+    // GÜVENLİK: i18n.language 'tr-TR' gelebilir, biz 'tr' istiyoruz.
+    const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
+
+    // 1. Seçili dil var mı? (es, it, de, tr...)
+    // 2. Yoksa İngilizce (Fallback)
+    return obj[langCode] || obj["en"] || "";
+  };
   const { cocktailId } = route.params;
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -189,7 +193,7 @@ const CocktailDetailScreen = ({ route }) => {
             <Text
               style={[styles.text, fonts.styles.body, { color: colors.text }]}
             >
-              {getLocaleText(cocktail.instructions, cocktail.instructions)}
+              {getLocaleText(cocktail.instructions)}
             </Text>
           </View>
 
@@ -209,7 +213,7 @@ const CocktailDetailScreen = ({ route }) => {
             <Text
               style={[styles.text, fonts.styles.body, { color: colors.text }]}
             >
-              {getLocaleText(cocktail.history_notes, cocktail.history_notes)}
+              {getLocaleText(cocktail.history_notes)}
             </Text>
           </View>
         </ScrollView>
@@ -410,7 +414,6 @@ const CocktailDetailScreen = ({ route }) => {
                         {/* 1. Önce malzemenin adını değişkene alıyoruz */}
                         {(() => {
                           const ingredientName = getLocaleText(
-                            selectedAlternative.name,
                             selectedAlternative.name
                           );
 
@@ -459,12 +462,9 @@ const CocktailDetailScreen = ({ route }) => {
                                         color: colors.primary,
                                       }}
                                     >
-                                      {getLocaleText(
-                                        alt.amount,
-                                        alt.amount
-                                      )}{" "}
+                                      {getLocaleText(alt.amount)}{" "}
                                     </Text>
-                                    {getLocaleText(alt.name, alt.name)}
+                                    {getLocaleText(alt.name)}
                                   </Text>
                                 </View>
                               )

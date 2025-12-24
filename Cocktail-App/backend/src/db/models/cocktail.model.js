@@ -1,20 +1,25 @@
 const db = require("../knex");
+
 /**
  * @desc    Tüm kokteylleri çeker.
  * @returns {Promise<Array>} JSONB yapısında kokteyl listesi
  */
 const getAllCocktails = () => {
-  // SORGUMUZ ARTIK TERTEMİZ:
-  // Veritabanındaki JSONB sütunlarını (name, instructions vb.) olduğu gibi istiyoruz.
-  return db("cocktails").select(
-    "cocktail_id",
-    "api_id",
-    "name", // { en: "...", tr: "..." } olarak gelecek
-    "instructions", // { en: "...", tr: "..." } olarak gelecek
-    "glass_type",
-    "tags",
-    "is_alcoholic",
-    "image_url"
+  return (
+    db("cocktails")
+      .select(
+        "cocktail_id",
+        "api_id",
+        "name", // { en: "...", tr: "...", es: "..." }
+        "instructions",
+        "glass_type",
+        "tags",
+        "is_alcoholic",
+        "image_url"
+      )
+      // EKLEME: Listeyi her zaman İngilizce isme göre A-Z sırala.
+      // Bu, arayüzde listenin düzgün durmasını sağlar.
+      .orderByRaw("name->>'en' ASC")
   );
 };
 
@@ -56,20 +61,22 @@ const getCocktailById = async (id) => {
       "req.requirement_id",
       "ing.ingredient_id",
 
-      // ARTIK _tr, _en YOK. Direkt sütun ismini alıyoruz:
-      "ing.name", // { en: "Gin", tr: "Cin" }
-      "req.amount", // { en: "4 cl", tr: "4 cl" }
-      "lvl.level_name", // { en: "Required", tr: "Gerekli" }
+      // JSONB Objeleri olduğu gibi seçiliyor:
+      "ing.name",
+      "req.amount",
+      "lvl.level_name",
       "lvl.color_code",
 
       // Alternatifler
-      "alt.alternative_amount", // { en:..., tr:... }
+      "alt.alternative_amount",
       "alt_ing.ingredient_id as alt_id",
-      "alt_ing.name as alternative_name" // { en:..., tr:... }
+      "alt_ing.name as alternative_name"
     )
     .where("req.cocktail_id", id);
 
   // 3. GRUPLAMA (Mapping)
+  // Buradaki mantık zaten gelen objeyi (name: {...}) olduğu gibi
+  // alt objelere taşıdığı için KUSURSUZ çalışır. Dokunmaya gerek yok.
   const ingredientsMap = new Map();
 
   rawIngredients.forEach((row) => {
@@ -77,9 +84,9 @@ const getCocktailById = async (id) => {
       ingredientsMap.set(row.ingredient_id, {
         requirement_id: row.requirement_id,
         ingredient_id: row.ingredient_id,
-        name: row.name, // DİKKAT: Artık obje
-        amount: row.amount, // DİKKAT: Artık obje
-        level_name: row.level_name, // DİKKAT: Artık obje
+        name: row.name, // Obje
+        amount: row.amount, // Obje
+        level_name: row.level_name, // Obje
         color_code: row.color_code,
         has_alternative: false,
         alternatives: [],
@@ -91,8 +98,8 @@ const getCocktailById = async (id) => {
       ingredient.has_alternative = true;
       ingredient.alternatives.push({
         ingredient_id: row.alt_id,
-        name: row.alternative_name, // DİKKAT: Artık obje
-        amount: row.alternative_amount, // DİKKAT: Artık obje
+        name: row.alternative_name, // Obje
+        amount: row.alternative_amount, // Obje
       });
     }
   });

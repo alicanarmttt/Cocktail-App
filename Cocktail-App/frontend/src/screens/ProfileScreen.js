@@ -274,7 +274,7 @@ const ProfileScreen = () => {
                 { color: isPro ? "#000" : colors.textSecondary },
               ]}
             >
-              {isPro ? "PRO MEMBER" : "FREE MEMBER"}
+              {isPro ? t("profile.pro_member") : t("profile.free_member")}
             </Text>
           </View>
         </View>

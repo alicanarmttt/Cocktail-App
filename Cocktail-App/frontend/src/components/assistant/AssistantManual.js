@@ -53,16 +53,20 @@ const AssistantManual = ({ onBackToMode }) => {
   const ingredientsError = useSelector(getIngredientsError);
   const searchStatus = useSelector(getSearchStatus);
 
-  // --- HELPER: Çeviri ---
-  const getName = (item) => {
-    if (!item || !item.name) return "";
-    return item.name[i18n.language] || item.name["en"] || "";
+  // --- HELPER: Çeviri (GÜVENLİ VERSİYON) ---
+  const getLocaleValue = (val) => {
+    if (!val) return "";
+    // Zaten string gelirse (eski veri kalmışsa) direkt dön
+    if (typeof val === "string") return val;
+
+    // Güvenlik önlemi (tr-TR -> tr)
+    const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
+    return val[langCode] || val["en"] || "";
   };
 
-  const getCategoryName = (item) => {
-    if (!item || !item.category_name) return "";
-    return item.category_name[i18n.language] || item.category_name["en"] || "";
-  };
+  // İsim ve Kategori için bu tek helper'ı kullanabiliriz
+  const getName = (item) => getLocaleValue(item.name);
+  const getCategoryName = (item) => getLocaleValue(item.category_name);
 
   // --- 1. VERİ YÜKLEME ---
   useEffect(() => {
@@ -88,21 +92,27 @@ const AssistantManual = ({ onBackToMode }) => {
   // --- 3. FİLTRELEME VE SIRALAMA ---
   const filteredList = useMemo(() => {
     if (!allIngredients) return [];
-    const filtered = allIngredients.filter((item) => {
-      const itemCat = getCategoryName(item);
-      const catMatch = activeCategory === "ALL" || itemCat === activeCategory;
-      const itemName = getName(item).toLowerCase();
+
+    // Önce o anki dile göre isimleri hazırlayalım (Performans için)
+    const mappedList = allIngredients.map((item) => ({
+      ...item,
+      localeName: getName(item),
+      localeCat: getCategoryName(item),
+    }));
+
+    const filtered = mappedList.filter((item) => {
+      const catMatch =
+        activeCategory === "ALL" || item.localeCat === activeCategory;
+      const itemName = item.localeName.toLowerCase();
       const searchMatch =
         !searchText || itemName.includes(searchText.toLowerCase());
       return catMatch && searchMatch;
     });
 
     return filtered.sort((a, b) => {
-      const catA = getCategoryName(a);
-      const catB = getCategoryName(b);
-      const catCompare = catA.localeCompare(catB, i18n.language);
+      const catCompare = a.localeCat.localeCompare(b.localeCat, i18n.language);
       if (catCompare !== 0) return catCompare;
-      return getName(a).localeCompare(getName(b), i18n.language);
+      return a.localeName.localeCompare(b.localeName, i18n.language);
     });
   }, [allIngredients, activeCategory, searchText, i18n.language]);
 
@@ -172,7 +182,7 @@ const AssistantManual = ({ onBackToMode }) => {
             { backgroundColor: colors.background, shadowColor: colors.shadow },
           ]}
         >
-          {/* YENİ: Mod Seçimine Dönen Geri Butonu */}
+          {/* Mod Seçimine Dönen Geri Butonu */}
           <Pressable onPress={onBackToMode} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={colors.text} />
           </Pressable>
@@ -248,7 +258,7 @@ const AssistantManual = ({ onBackToMode }) => {
                 );
               }}
             />
-            {/* KAYDIRMA İKONU (Eski halindeki gibi eklendi) */}
+            {/* KAYDIRMA İKONU */}
             <View
               pointerEvents="none"
               style={{
@@ -310,12 +320,13 @@ const AssistantManual = ({ onBackToMode }) => {
                       },
                     ]}
                   >
-                    {getName(item)}
+                    {/* Filtreleme içinde hesapladığımız ismi kullan */}
+                    {item.localeName}
                   </Text>
                   <Text
                     style={[styles.rowSubText, { color: colors.textSecondary }]}
                   >
-                    {getCategoryName(item)}
+                    {item.localeCat}
                   </Text>
                 </View>
                 <Ionicons
@@ -335,7 +346,7 @@ const AssistantManual = ({ onBackToMode }) => {
           }
         />
 
-        {/* FOOTER (Çöp Kutusu Geri Döndü) */}
+        {/* FOOTER */}
         {selectedIds.length > 0 && (
           <View style={styles.footerContainer}>
             <PremiumButton
@@ -401,7 +412,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
-  // Yeni eklenen backButton stili
   backButton: {
     position: "absolute",
     top: 15,
@@ -410,17 +420,17 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   title: {
-    fontSize: 24, // Biraz küçülttük ki geri butonuyla sıkışmasın
+    fontSize: 24,
     fontWeight: "bold",
     paddingHorizontal: 20,
     marginBottom: 4,
-    textAlign: "center", // Ortala
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 14,
     paddingHorizontal: 20,
     marginBottom: 20,
-    textAlign: "center", // Ortala
+    textAlign: "center",
   },
   searchContainer: {
     flexDirection: "row",

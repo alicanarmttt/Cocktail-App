@@ -40,6 +40,23 @@ const AssistantWizard = ({ onCancel }) => {
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
 
+  // --- YENİ: İsim Getirme Helper'ı (Hem String hem Obje destekler) ---
+  const getName = (item) => {
+    if (!item || !item.name) return "";
+
+    // Eğer Backend zaten string (çevrilmiş) yolluyorsa direkt onu göster
+    // (Bazen Redux cache'inde eski veri kalmış olabilir, önlem amaçlı)
+    if (typeof item.name === "string") return item.name;
+
+    // Yoksa JSONB objesi içinden dili bul
+    // GÜVENLİK: 'tr-TR' gelirse 'tr' kısmını alır.
+    const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
+
+    // 1. Seçili dil var mı?
+    // 2. Yoksa İngilizce (Fallback)
+    return item.name[langCode] || item.name["en"] || "";
+  };
+
   // --- STATE ---
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedFamilyKey, setSelectedFamilyKey] = useState(null);
@@ -55,11 +72,12 @@ const AssistantWizard = ({ onCancel }) => {
 
   // --- INIT ---
   useEffect(() => {
-    dispatch(fetchGuideStep1(i18n.language));
+    // Backend artık lang parametresine ihtiyaç duymuyor, sildik.
+    dispatch(fetchGuideStep1());
     return () => {
       dispatch(clearGuideData());
     };
-  }, [dispatch, i18n.language]);
+  }, [dispatch]); // i18n.language dependency'den çıkarıldı çünkü veri değişmiyor, sunum değişiyor.
 
   // --- HELPER: Titreşim ---
   const triggerHaptic = () => {
@@ -70,17 +88,18 @@ const AssistantWizard = ({ onCancel }) => {
   const handleSelectFamily = async (familyKey) => {
     triggerHaptic();
     setSelectedFamilyKey(familyKey);
-    await dispatch(fetchGuideStep2({ family: familyKey, lang: i18n.language }));
+    // lang parametresi silindi
+    await dispatch(fetchGuideStep2({ family: familyKey }));
     setCurrentStep(2);
   };
 
   const handleNextToStep3 = async () => {
     triggerHaptic();
+    // lang parametresi silindi
     await dispatch(
       fetchGuideStep3({
         family: selectedFamilyKey,
         step2Ids: step2Selection,
-        lang: i18n.language,
       })
     );
     setCurrentStep(3);
@@ -162,7 +181,7 @@ const AssistantWizard = ({ onCancel }) => {
 
   // --- RENDERERS ---
 
-  // ADIM 1: Ana İçkiler (Hero Cards - İKONSUZ & KOMPAKT)
+  // ADIM 1: Ana İçkiler
   const renderFamilyItem = ({ item }) => {
     const isSelected = selectedFamilyKey === item.key;
 
@@ -191,7 +210,8 @@ const AssistantWizard = ({ onCancel }) => {
             },
           ]}
         >
-          {item.name}
+          {/* DEĞİŞİKLİK: item.name -> getName(item) */}
+          {getName(item)}
         </Text>
 
         {isSelected && (
@@ -243,7 +263,8 @@ const AssistantWizard = ({ onCancel }) => {
             ]}
             numberOfLines={2}
           >
-            {item.name}
+            {/* DEĞİŞİKLİK: item.name -> getName(item) */}
+            {getName(item)}
           </Text>
 
           <Ionicons
@@ -355,7 +376,6 @@ const AssistantWizard = ({ onCancel }) => {
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </Pressable>
 
-        {/* --- YENİ EKLENEN KISIM: ADIM 1 İÇİN İPUCU NOTU --- */}
         {currentStep === 1 && (
           <View style={styles.step1HintContainer}>
             <Text
@@ -373,7 +393,6 @@ const AssistantWizard = ({ onCancel }) => {
             disabled={status === "loading"}
             style={{ flex: 1, marginLeft: 15 }}
           >
-            {/* GÜNCELLEME: Rengi colors.primary yaptık */}
             <Text
               style={{
                 fontWeight: "bold",
@@ -384,7 +403,6 @@ const AssistantWizard = ({ onCancel }) => {
               {t("assistant.wizard.btn_next", "Devam Et")} (
               {step2Selection.length})
             </Text>
-            {/* İkon rengini de uyumlu yaptık */}
             <Ionicons
               name="arrow-forward"
               size={20}

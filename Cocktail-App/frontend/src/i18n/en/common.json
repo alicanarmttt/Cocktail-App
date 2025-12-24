@@ -107,6 +107,8 @@
     "empty_hint": "Try changing the search mode to see cocktails containing your ingredients."
   },
   "profile": {
+    "pro_member": "PRO MEMBER",
+  "free_member": "FREE MEMBER",
     "select_language": "Select Language",
     "account_actions": "Account",
   "my_favorites": "My Favorites",
@@ -119,17 +121,17 @@
   "unlock_all": "Unlock all features & recipes!"
   },
   "upgrade": {
-    "title": "Upgrade to PRO",
-    "subtitle": "Take your cocktail experience to the next level.",
-    "feature_1": "Smart Alternatives (Gin instead of Vodka? Lemon instead of Lime?)",
-    "feature_2": "Advanced filtering in \"Barman's Assistant\"",
-    "feature_3": "Save and share your custom recipes (Coming Soon)",
-    "feature_4": "Ad-free Experience",
-    "buy_btn": "Buy 1 Year PRO (Test)",
-    "success_title": "Congratulations!",
-    "success_msg": "Successfully upgraded to Pro membership.",
-    "error_msg": "An error occurred during upgrade"
-  },
+  "title": "Upgrade to PRO",
+  "subtitle": "Take your cocktail experience to the next level.",
+  "success_title": "Congratulations!",
+  "success_msg": "You have been upgraded to Pro membership.",
+  "error_msg": "An error occurred during upgrade",
+  "feature_1": "Smart Alternatives (Gin instead of Vodka?)",
+  "feature_2": "Advanced filtering in Assistant",
+  "feature_3": "Save custom recipes (Coming Soon)",
+  "feature_4": "Ad-free Experience",
+  "buy_btn": "Buy 1 Year PRO (Test)"
+},
   "roulette": {
     "menu_title": "Choose Roulette Mode",
     "menu_subtitle": "Pick a mode to start the party.",
