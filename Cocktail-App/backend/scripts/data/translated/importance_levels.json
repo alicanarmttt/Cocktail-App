@@ -1,0 +1,39 @@
+[
+    {
+        "json_agg": [
+            {
+                "level_id": 1,
+                "level_name": {
+                    "en": "Required",
+                    "tr": "Gerekli",
+                    "de": "Erforderlich",
+                    "it": "Obbligatorio",
+                    "es": "Obligatorio",
+                    "pt": "Obrigatório"
+                }
+            },
+            {
+                "level_id": 2,
+                "level_name": {
+                    "en": "Optional",
+                    "tr": "İsteğe Bağlı",
+                    "de": "Optional",
+                    "it": "Opzionale",
+                    "es": "Opcional",
+                    "pt": "Opcional"
+                }
+            },
+            {
+                "level_id": 3,
+                "level_name": {
+                    "en": "Garnish",
+                    "tr": "Süsleme",
+                    "de": "Garnierung",
+                    "it": "Guarnizione",
+                    "es": "Guarnición",
+                    "pt": "Guarnição"
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,2335 @@
+[
+  {
+    "json_agg": [
+      {
+        "cocktail_id": 1,
+        "name": {
+          "en": "Aviation",
+          "tr": "Aviation"
+        },
+        "instructions": {
+          "en": "Add all ingredients into cocktail shaker filled with ice. Shake well and strain into cocktail glass. Garnish with a cherry.",
+          "tr": "Tüm malzemeleri buzla dolu shaker'a ekleyin. İyice çalkalayın ve kokteyl bardağına süzün. Kirazla süsleyin."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Floral",
+            "Classic",
+            "IBA",
+            "Gin"
+          ],
+          "tr": [
+            "Ekşi",
+            "Çiçeksi",
+            "Klasik",
+            "IBA",
+            "Cin"
+          ]
+        },
+        "history_notes": {
+          "en": "A pre-Prohibition classic created by Hugo Ensslin in 1916. It is famous for its sky-blue color, derived from the obscure Crème de Violette Liqueur.",
+          "tr": "1916'da Hugo Ensslin tarafından yaratılan Yasak öncesi bir klasik. Gökyüzü mavisi rengini, nadir bulunan Crème de Violette liköründen almasıyla ünlüdür."
+        }
+      },
+      {
+        "cocktail_id": 2,
+        "name": {
+          "en": "Americano",
+          "tr": "Americano"
+        },
+        "instructions": {
+          "en": "Pour the Campari and vermouth over ice into glass, add a splash of soda water and garnish with half orange slice.",
+          "tr": "Campari ve vermutu buzun üzerine bardağa dökün, bir miktar soda ekleyin ve yarım portakal dilimiyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Bitter,Refreshing,IBA,Classic,Aperitif",
+          "tr": "Acı,Ferahlatıcı,IBA,Klasik,Aperitif"
+        },
+        "tags": {
+          "en": [
+            "IBA",
+            "Classic"
+          ],
+          "tr": [
+            "IBA",
+            "Klasik"
+          ]
+        },
+        "history_notes": {
+          "en": "Created in the 1860s at Caffè Campari. Originally known as the 'Milano-Torino', it was renamed because of its popularity among American tourists escaping Prohibition.",
+          "tr": "1860'larda Caffè Campari'de yaratıldı. Orijinal adı 'Milano-Torino' idi, ancak Yasak döneminden kaçan Amerikalı turistler arasında popüler olduğu için yeniden adlandırıldı."
+        }
+      },
+      {
+        "cocktail_id": 3,
+        "name": {
+          "en": "Bellini",
+          "tr": "Bellini"
+        },
+        "instructions": {
+          "en": "Pour peach purée into chilled flute, add sparkling wine. Stir gently.",
+          "tr": "Şeftali püresini soğutulmuş flütün içine dökün, köpüklü şarap ekleyin. Yavaşça karıştırın."
+        },
+        "glass_type": {
+          "en": "Champagne Flute",
+          "tr": "Şampanya Bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Sparkling",
+            "Brunch",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Köpüklü",
+            "Brunch",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Invented by Giuseppe Cipriani at Harry's Bar in Venice around 1945. Named because its unique pink color reminded him of the toga of a saint in a painting by Giovanni Bellini.",
+          "tr": "1945 civarında Venedik'teki Harry's Bar'da Giuseppe Cipriani tarafından icat edildi. Eşsiz pembe rengi ona Giovanni Bellini'nin bir tablosundaki azizin cübbesini hatırlattığı için bu adı aldı."
+        }
+      },
+      {
+        "cocktail_id": 4,
+        "name": {
+          "en": "Bramble",
+          "tr": "Bramble"
+        },
+        "instructions": {
+          "en": "Fill glass with crushed ice. Build gin, lemon juice and simple syrup over. Stir, and then pour blackberry liqueur over in a circular fashion to create marbling effect. Garnish with two blackberries and lemon slice.",
+          "tr": "Bardağı kırılmış buzla doldurun. Üzerine cin, limon suyu ve basit şurup ekleyin. Karıştırın ve ebru efekti yaratmak için böğürtlen likörünü dairesel bir şekilde üzerine dökün. İki böğürtlen ve limon dilimiyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Old-Fashioned glass",
+          "tr": "Old-fashioned bardaği"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sour",
+            "Fruity",
+            "IBA",
+            "ModernClassic"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ekşi",
+            "Meyveli",
+            "IBA",
+            "ModernKlasik"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Dick Bradsell in London in the 1980s. Inspired by his childhood memories of picking blackberries on the Isle of Wight.",
+          "tr": "1980'lerde Londra'da Dick Bradsell tarafından yaratıldı. Isle of Wight'ta böğürtlen topladığı çocukluk anılarından esinlenmiştir."
+        }
+      },
+      {
+        "cocktail_id": 5,
+        "name": {
+          "en": "Casino",
+          "tr": "Casino"
+        },
+        "instructions": {
+          "en": "Pour all ingredients into shaker with ice cubes. Shake well. Strain into chilled cocktail glass. Garnish with a lemon twist and a maraschino cherry. Serve without a straw.",
+          "tr": "Tüm malzemeleri buz küpleriyle birlikte shaker'a dökün. İyice çalkalayın. Soğutulmuş kokteyl bardağına süzün. Limon bükümü ve kiraz likörü kirazıyla süsleyin. Pipetsiz servis yapın."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "IBA"
+          ],
+          "tr": [
+            "FARKLI"
+          ]
+        },
+        "history_notes": {
+          "en": "An IBA official classic that appeared in Hugo Ensslin's 1916 book. It is essentially an Aviation cocktail but uses orange bitters instead of Crème de Violette.",
+          "tr": "Hugo Ensslin'in 1916 tarihli kitabında yer alan resmi bir IBA klasiği. Temelde bir Aviation kokteylidir ancak Menekşe likörü yerine portakal bitteri kullanılır."
+        }
+      },
+      {
+        "cocktail_id": 6,
+        "name": {
+          "en": "Caipirinha",
+          "tr": "Caipirinha"
+        },
+        "instructions": {
+          "en": "Place lime and sugar into old fashioned glass and muddle (mash the two ingredients together using a muddler or a wooden spoon). Fill the glass with ice and add the Cachaça.",
+          "tr": "Misket Limonu ve şekeri Old-Fashioned bardağa koyun ve karıştırın (iki malzemeyi bir karıştırıcı veya tahta kaşık kullanarak birlikte ezin). Bardağı buzla doldurun ve Cachaça'yı ekleyin."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Old-Fashioned bardaği"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Strong",
+            "Refreshing",
+            "Summer",
+            "IBA"
+          ],
+          "tr": [
+            "Ekşi",
+            "Sert",
+            "Ferahlatıcı",
+            "Yaz",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Brazil's national cocktail. Originally consumed as a remedy for the Spanish Flu, containing garlic and honey, before evolving into today's refreshing mix.",
+          "tr": "Brezilya'nın milli kokteyli. Bugünkü ferahlatıcı karışımına evrilmeden önce, aslında İspanyol Gribi için sarımsak ve bal içeren bir ilaç olarak tüketilirdi."
+        }
+      },
+      {
+        "cocktail_id": 7,
+        "name": {
+          "en": "Cuba Libre",
+          "tr": "Cuba Libre"
+        },
+        "instructions": {
+          "en": "Build all ingredients in a Collins glass filled with ice. Garnish with lime wedge.",
+          "tr": "Tüm malzemeleri buzla dolu bir Collins bardağına koyun. Misket Limonu dilimi ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Refreshing",
+            "Party",
+            "IBA",
+            "Rum"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ferahlatıcı",
+            "Parti",
+            "IBA",
+            "Rom"
+          ]
+        },
+        "history_notes": {
+          "en": "Originated in Havana around 1900, following the Spanish-American War. The name means 'Free Cuba', celebrating the arrival of Coca-Cola and American soldiers.",
+          "tr": "İspanyol-Amerikan Savaşı'nın ardından 1900 civarında Havana'da ortaya çıktı. Adı 'Özgür Küba' anlamına gelir ve Coca-Cola ile Amerikan askerlerinin gelişini kutlar."
+        }
+      },
+      {
+        "cocktail_id": 8,
+        "name": {
+          "en": "Clover Club",
+          "tr": "Clover Club"
+        },
+        "instructions": {
+          "en": "Dry shake ingredients to emulsify, add ice, shake and served straight up.",
+          "tr": "Dağılması için malzemeleri karıştırın, buz ekleyin, çalkalayın ve düz bir şekilde servis yapın."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sour",
+            "Fruity",
+            "Classic",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ekşi",
+            "Meyveli",
+            "Klasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "A pre-Prohibition classic named after a men's club in Philadelphia. Known for its silky texture thanks to the egg white and raspberry syrup.",
+          "tr": "Adını Philadelphia'daki bir erkek kulübünden alan Yasak öncesi klasik. Yumurta akı ve ahududu şurubu sayesinde sahip olduğu ipeksi dokusuyla bilinir."
+        }
+      },
+      {
+        "cocktail_id": 9,
+        "name": {
+          "en": "Cosmopolitan",
+          "tr": "Cosmopolitan"
+        },
+        "instructions": {
+          "en": "Add all ingredients into cocktail shaker filled with ice. Shake well and double strain into large cocktail glass. Garnish with lime wheel.",
+          "tr": "Tüm malzemeleri buzla dolu shaker'a ekleyin. İyice çalkalayın ve büyük kokteyl bardağına iki kez süzün. Misket Limonu ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sour",
+            "Fruity",
+            "Party",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ekşi",
+            "Meyveli",
+            "Parti",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Though disputed, Toby Cecchini is often credited with the modern recipe in NYC. It became a global icon in the 90s thanks to the TV show 'Sex and the City'.",
+          "tr": "Tartışmalı olsa da, modern tarif genellikle NYC'deki Toby Cecchini'ye atfedilir. 90'larda 'Sex and the City' dizisi sayesinde küresel bir ikon haline geldi."
+        }
+      },
+      {
+        "cocktail_id": 10,
+        "name": {
+          "en": "Corpse Reviver",
+          "tr": "Ölü Canlandırıcı"
+        },
+        "instructions": {
+          "en": "Shake, strain, straight up, cocktail glass rinsed with absinthe\r\n",
+          "tr": "Kokteyl bardağını absinthe ile aromalandırın. Malzemeleri shake'leyin ve süzün."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Strong",
+            "Classic",
+            "Hangover",
+            "IBA"
+          ],
+          "tr": [
+            "Ekşi",
+            "Sert",
+            "Klasik",
+            "AkşamdanKalma",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Specifically the 'No. 2', this drink comes from the Savoy Cocktail Book (1930). Intended as a 'hair of the dog' hangover cure to wake up the dead.",
+          "tr": "Özellikle 'No. 2' versiyonu, Savoy Kokteyl Kitabı'ndan (1930) gelir. Ölüleri uyandırmak için tasarlanmış bir 'çivi çiviyi söker' (akşamdan kalma) ilacıdır."
+        }
+      },
+      {
+        "cocktail_id": 11,
+        "name": {
+          "en": "Daiquiri",
+          "tr": "Daiquiri"
+        },
+        "instructions": {
+          "en": "Pour all ingredients into shaker with ice cubes. Shake well. Strain in chilled cocktail glass.",
+          "tr": "Tüm malzemeleri buz küpleriyle birlikte shaker'a dökün. İyice çalkalayın. Soğutulmuş kokteyl bardağına süzün."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Strong",
+            "Classic",
+            "IBA",
+            "Rum"
+          ],
+          "tr": [
+            "Ekşi",
+            "Sert",
+            "Klasik",
+            "IBA",
+            "Rom"
+          ]
+        },
+        "history_notes": {
+          "en": "Invented by American mining engineer Jennings Cox in Cuba. Named after the beach and iron mine near Santiago de Cuba where he worked.",
+          "tr": "Küba'daki Amerikalı maden mühendisi Jennings Cox tarafından icat edildi. Adını Santiago de Cuba yakınlarında çalıştığı plaj ve demir madeninden almıştır."
+        }
+      },
+      {
+        "cocktail_id": 12,
+        "name": {
+          "en": "Dry Martini",
+          "tr": "Dry Martini"
+        },
+        "instructions": {
+          "en": "Straight: Pour all ingredients into mixing glass with ice cubes. Stir well. Strain in chilled martini cocktail glass. Squeeze oil from lemon peel onto the drink, or garnish with olive.",
+          "tr": "Düz: Tüm malzemeleri buz küpleriyle dolu karıştırma bardağına dökün. İyice karıştırın. Soğutulmuş martini kokteyl bardağına süzün. Limon kabuğunun yağını içeceğin üzerine sıkın veya zeytinle süsleyin."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Strong",
+            "Dry",
+            "Classic",
+            "IBA",
+            "Gin"
+          ],
+          "tr": [
+            "Sert",
+            "Sek",
+            "Klasik",
+            "IBA",
+            "Cin"
+          ]
+        },
+        "history_notes": {
+          "en": "The King of Cocktails. Its origins are muddy, likely evolving from the sweeter 'Martinez'. It became drier over the decades, famously preferred by Churchill and Bond.",
+          "tr": "Kokteyllerin Kralı. Kökenleri belirsizdir, muhtemelen daha tatlı olan 'Martinez'den evrilmiştir. On yıllar içinde daha sek hale geldi, Churchill ve Bond tarafından tercih edilmesiyle ünlendi."
+        }
+      },
+      {
+        "cocktail_id": 13,
+        "name": {
+          "en": "Dark and Stormy",
+          "tr": "Karanlık ve Fırtınalı"
+        },
+        "instructions": {
+          "en": "In a highball glass filled with ice add 6cl dark rum and top with ginger beer. Garnish with lime wedge.",
+          "tr": "Buzla doldurulmuş bir highball bardağa 6 cl koyu rom ekleyin ve üstüne zencefil gazozu ekleyin. Misket Limonu kaması ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Spicy",
+            "Highball",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Baharatlı",
+            "Highball",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "The national drink of Bermuda. The name is said to have originated when a sailor observed that the drink's color looked like storm clouds.",
+          "tr": "Bermuda'nın milli içeceği. Adının, bir denizcinin içeceğin renginin fırtına bulutlarına benzediğini söylemesiyle ortaya çıktığı söylenir."
+        }
+      },
+      {
+        "cocktail_id": 14,
+        "name": {
+          "en": "Espresso Martini",
+          "tr": "Espresso Martini"
+        },
+        "instructions": {
+          "en": "Pour ingredients into shaker filled with ice, shake vigorously, and strain into chilled martini glass",
+          "tr": "Malzemeleri buzla dolu shaker'a dökün, kuvvetlice çalkalayın ve soğutulmuş martini bardağına süzün."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Strong",
+            "Coffee",
+            "AfterDinner",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Sert",
+            "Kahveli",
+            "YemekSonrası",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Dick Bradsell in London in 1983. Legend says a famous model asked for a drink that would 'wake me up and f**k me up'.",
+          "tr": "1983 yılında Londra'da Dick Bradsell tarafından yaratıldı. Efsaneye göre ünlü bir model 'beni uyandıracak ve mahvedecek' bir içecek istemiştir."
+        }
+      },
+      {
+        "cocktail_id": 15,
+        "name": {
+          "en": "French 75",
+          "tr": "French 75"
+        },
+        "instructions": {
+          "en": "Combine gin, sugar, and lemon juice in a cocktail shaker filled with ice. Shake vigorously and strain into a chilled champagne glass. Top up with Champagne. Stir gently.",
+          "tr": "Buzla dolu bir shaker'a cin, şeker ve limon suyunu birleştirin. Kuvvetlice çalkalayın ve soğutulmuş bir şampanya bardağına süzün. Şampanya doldurun. Yavaşça karıştırın."
+        },
+        "glass_type": {
+          "en": "Collins glass",
+          "tr": "Collins bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Sparkling",
+            "Classic",
+            "IBA",
+            "Gin"
+          ],
+          "tr": [
+            "Ekşi",
+            "Köpüklü",
+            "Klasik",
+            "IBA",
+            "Cin"
+          ]
+        },
+        "history_notes": {
+          "en": "Named after the rapid-firing 75mm field gun used by the French in WWI. It was said to have a kick comparable to being shelled.",
+          "tr": "Adını Fransızların 1. Dünya Savaşı'nda kullandığı hızlı ateş eden 75 mm'lik sahra topundan almıştır. Bir top mermisi yemekle kıyaslanabilir bir vuruşu olduğu söylenirdi."
+        }
+      },
+      {
+        "cocktail_id": 16,
+        "name": {
+          "en": "French Martini",
+          "tr": "French Martini"
+        },
+        "instructions": {
+          "en": "Pour all ingredients into shaker with ice cubes. Shake well and strain into a chilled cocktail glass. Squeeze oil from lemon peel onto the drink.",
+          "tr": "Tüm malzemeleri buz küpleriyle birlikte shaker'a dökün. İyice çalkalayın ve soğutulmuş bir kokteyl bardağına süzün. Limon kabuğunun yağını içeceğin üzerine sıkın."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "ModernClassic",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "ModernKlasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Not truly French, but invented in NYC in the 80s. It sparked the fruity martini craze and is named for its use of Chambord, a French black raspberry liqueur.",
+          "tr": "Aslında Fransız değildir, 80'lerde NYC'de icat edilmiştir. Meyveli martini çılgınlığını başlattı ve adını Fransız ahududu likörü Chambord kullanımından aldı."
+        }
+      },
+      {
+        "cocktail_id": 17,
+        "name": {
+          "en": "Gimlet",
+          "tr": "Gimlet"
+        },
+        "instructions": {
+          "en": "Add all the ingredients to a shaker and fill with ice.\r\n\r\nShake, and strain into a chilled cocktail glass or an Old Fashioned glass filled with fresh ice.\r\n\r\nGarnish with a lime wheel.",
+          "tr": "Tüm malzemeleri shaker'a ekleyin ve buzla doldurun. \r\n\r\nÇalkalayın ve soğutulmuş bir kokteyl bardağına veya taze buzla doldurulmuş viski bardağına süzün. \r\n\r\nLime dilimi ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Martini Glass",
+          "tr": "Martini Bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Strong",
+            "Classic",
+            "Gin"
+          ],
+          "tr": [
+            "Ekşi",
+            "Sert",
+            "Klasik",
+            "Cin"
+          ]
+        },
+        "history_notes": {
+          "en": "Originally a medicine for British sailors to prevent scurvy. They mixed their daily ration of lime juice (preserved with sugar) with gin to make it palatable.",
+          "tr": "Aslen İngiliz denizcileri iskorbütten korumak için bir ilaçtı. Günlük limon suyu (şekerle korunmuş) istihkaklarını içilebilir hale getirmek için cinle karıştırırlardı."
+        }
+      },
+      {
+        "cocktail_id": 18,
+        "name": {
+          "en": "Godfather",
+          "tr": "Godfather"
+        },
+        "instructions": {
+          "en": "Pour all ingredients directly into old fashioned glass filled with ice cubes. Stir gently.",
+          "tr": "Tüm malzemeleri doğrudan buz küpleriyle doldurulmuş Old-Fashioned bardağa dökün. Yavaşça karıştırın."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Old-Fashioned bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Strong",
+            "Sipper",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Sert",
+            "Yudumlamalık",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Popular in the 1970s, it was named after the famous film starring Marlon Brando. It's a simple but bold mix of Scotch and Amaretto.",
+          "tr": "1970'lerde popüler olan bu içecek, adını Marlon Brando'nun oynadığı ünlü filmden almıştır. Scotch ve Amaretto'nun basit ama cesur bir karışımıdır."
+        }
+      },
+      {
+        "cocktail_id": 19,
+        "name": {
+          "en": "Gin Tonic",
+          "tr": "Cin Tonik"
+        },
+        "instructions": {
+          "en": "Fill a highball glass with ice, pour the gin, top with tonic water and squeeze a lemon wedge and garnish with a lemon wedge.",
+          "tr": "Bir highball bardağını buzla doldurun, cini dökün, üzerine tonik ekleyin, bir dilim limon sıkın ve limon dilimiyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bitter",
+            "Refreshing",
+            "Highball",
+            "Classic"
+          ],
+          "tr": [
+            "Acı",
+            "Ferahlatıcı",
+            "Highball",
+            "Klasik"
+          ]
+        },
+        "history_notes": {
+          "en": "Born in British colonial India. Soldiers mixed quinine (anti-malarial) with water, sugar, and lime to mask the bitter taste, adding gin to make a soothing drink.",
+          "tr": "İngiliz sömürgesi Hindistan'da doğdu. Askerler kinini (sıtma ilacı) acı tadı maskelemek için su, şeker ve limonla karıştırır, rahatlatıcı bir içecek yapmak için cin eklerlerdi."
+        }
+      },
+      {
+        "cocktail_id": 20,
+        "name": {
+          "en": "Hemingway Special",
+          "tr": "Hemingway Special"
+        },
+        "instructions": {
+          "en": "Pour all ingredients into a shaker with ice. Shake.",
+          "tr": "Tüm malzemeleri buzlu bir shaker'a dökün. Sallayın."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Strong",
+            "Classic",
+            "IBA",
+            "Rum"
+          ],
+          "tr": [
+            "Ekşi",
+            "Sert",
+            "Klasik",
+            "IBA",
+            "Rom"
+          ]
+        },
+        "history_notes": {
+          "en": "Also known as the 'Papa Doble'. Created for Ernest Hemingway at El Floridita in Havana. He was diabetic, so he requested double the rum and no sugar.",
+          "tr": "'Papa Doble' olarak da bilinir. Havana'daki El Floridita'da Ernest Hemingway için yaratıldı. Şeker hastası olduğu için şekersiz ve iki kat romlu isterdi."
+        }
+      },
+      {
+        "cocktail_id": 21,
+        "name": {
+          "en": "Irish Coffee",
+          "tr": "Irish Coffee"
+        },
+        "instructions": {
+          "en": "Heat the coffee, whiskey and sugar; do not boil. Pour into glass and top with cream; serve hot.",
+          "tr": "Kahveyi, viskiyi ve şekeri ısıtın; kaynatmayın. Bardağa dökün ve üzerine krema dökün; sıcak servis yapın."
+        },
+        "glass_type": {
+          "en": "Irish coffee cup",
+          "tr": "İrlanda kahvesi fincanı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Hot",
+            "Coffee",
+            "Winter",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Sıcak",
+            "Kahveli",
+            "Kış",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Invented by Joe Sheridan at Foynes Airport to warm up passengers. When asked if it was Brazilian coffee, he replied, 'No, that's Irish Coffee'.",
+          "tr": "Foynes Havalimanı'nda Joe Sheridan tarafından yolcuları ısıtmak için icat edildi. Brezilya kahvesi olup olmadığı sorulduğunda, 'Hayır, bu İrlanda Kahvesi' yanıtını verdi."
+        }
+      },
+      {
+        "cocktail_id": 22,
+        "name": {
+          "en": "Kir Royale",
+          "tr": "Kir Royale"
+        },
+        "instructions": {
+          "en": "Pour Creme de cassis in glass, gently pour champagne on top",
+          "tr": "Creme de cassis'i bardağa dökün, üzerine şampanyayı yavaşça dökün"
+        },
+        "glass_type": {
+          "en": "Champagne Flute",
+          "tr": "Şampanya Flütü"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sparkling",
+            "Classic",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Köpüklü",
+            "Klasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "A variation of the 'Kir', named after Canon Félix Kir, a hero of the French Resistance. He popularized the drink to promote local Burgundy products.",
+          "tr": "Fransız Direnişi kahramanı Canon Félix Kir'in adını taşıyan 'Kir'in bir varyasyonudur. Yerel Burgonya ürünlerini tanıtmak için bu içeceği popülerleştirdi."
+        }
+      },
+      {
+        "cocktail_id": 23,
+        "name": {
+          "en": "Long Island Iced Tea",
+          "tr": "Long Island Iced Tea"
+        },
+        "instructions": {
+          "en": "Mix all contents in a highball glass and sitr gently. Add dash of Coca-Cola for the coloring and garnish with lemon or lime twist.",
+          "tr": "Tüm içeriği bir highball bardağında karıştırın ve yavaşça oturun. Renklendirmek için bir miktar Coca-Cola ekleyin ve limon veya misket limonu ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Strong",
+            "Party",
+            "IBA",
+            "Highball"
+          ],
+          "tr": [
+            "Tatlı",
+            "Sert",
+            "Parti",
+            "IBA",
+            "Highball"
+          ]
+        },
+        "history_notes": {
+          "en": "Typically attributed to Robert 'Rosebud' Butt in the 1970s. Despite tasting like iced tea, it contains no tea, but four different spirits.",
+          "tr": "Genellikle 1970'lerde Robert 'Rosebud' Butt'a atfedilir. Tadı buzlu çaya benzemesine rağmen içinde çay yoktur, ancak dört farklı alkol içerir."
+        }
+      },
+      {
+        "cocktail_id": 24,
+        "name": {
+          "en": "Mojito",
+          "tr": "Mojito"
+        },
+        "instructions": {
+          "en": "Muddle mint leaves with sugar and lime juice. Add a splash of soda water and fill the glass with cracked ice. Pour the rum and top with soda water. Garnish and serve with straw.",
+          "tr": "Nane yapraklarını şeker ve limon suyuyla karıştırın. Bir miktar soda ekleyin ve bardağı kırık buzla doldurun. Romu dökün ve üzerine soda ekleyin. Samanla süsleyip servis yapın."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "IBA",
+            "ContemporaryClassic",
+            "Alcoholic",
+            "USA",
+            "Asia",
+            "Vegan",
+            "Citrus",
+            "Brunch",
+            "Hangover",
+            "Mild"
+          ],
+          "tr": [
+            "IBA",
+            "ÇağdaşKlasik",
+            "Alkollü",
+            "ABD",
+            "Asya",
+            "Vegan",
+            "Narenciye",
+            "Brunch",
+            "Akşamdan Kalma",
+            "Hafif"
+          ]
+        },
+        "history_notes": {
+          "en": "Origins trace back to 16th-century Cuba and Sir Francis Drake. It became globally famous as one of Ernest Hemingway's favorite drinks.",
+          "tr": "Kökenleri 16. yüzyıl Küba'sına ve Sir Francis Drake'e kadar uzanır. Ernest Hemingway'in favori içeceklerinden biri olarak dünyaca ünlenmiştir."
+        }
+      },
+      {
+        "cocktail_id": 25,
+        "name": {
+          "en": "Mimosa",
+          "tr": "Mimoza"
+        },
+        "instructions": {
+          "en": "Ensure both ingredients are well chilled, then mix into the glass. Serve cold.",
+          "tr": "Her iki malzemenin de iyice soğutulduğundan emin olun ve ardından bardağa karıştırın. Soğuk servis yapın."
+        },
+        "glass_type": {
+          "en": "Champagne flute",
+          "tr": "Şampanya Bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Sparkling",
+            "Brunch",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Köpüklü",
+            "Brunch",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Frank Meier at the Ritz Hotel in Paris around 1925. Named after the yellow mimosa plant, it became the ultimate brunch cocktail.",
+          "tr": "1925 civarında Paris'teki Ritz Otel'de Frank Meier tarafından yaratıldı. Adını sarı mimoza çiçeğinden alır ve nihai brunch kokteyli haline gelmiştir."
+        }
+      },
+      {
+        "cocktail_id": 26,
+        "name": {
+          "en": "Mai Tai",
+          "tr": "Mai Tai"
+        },
+        "instructions": {
+          "en": "Shake all ingredients with ice. Strain into glass. Garnish and serve with straw.",
+          "tr": "Tüm malzemeleri buzla çalkalayın. Bardağa süzün. Samanla süsleyip servis yapın."
+        },
+        "glass_type": {
+          "en": "Collins glass",
+          "tr": "Collins bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sour",
+            "Strong",
+            "Tiki",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ekşi",
+            "Sert",
+            "Tiki",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Invented by Trader Vic in 1944. Upon tasting it, a Tahitian friend exclaimed 'Maita'i roa ae!', meaning 'Out of this world!'.",
+          "tr": "1944'te Trader Vic tarafından icat edildi. Tadına bakan Tahitili bir arkadaşı 'Maita'i roa ae!' diye haykırdı, bu 'Dünya dışı!' anlamına gelir."
+        }
+      },
+      {
+        "cocktail_id": 27,
+        "name": {
+          "en": "Manhattan",
+          "tr": "Manhattan"
+        },
+        "instructions": {
+          "en": "Stirred over ice, strained into a chilled glass, garnished, and served up.",
+          "tr": "Buz üzerinde karıştırılır, soğutulmuş bir bardağa süzülür, süslenir ve servis edilir."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bitter",
+            "Strong",
+            "Classic",
+            "IBA",
+            "Whiskey"
+          ],
+          "tr": [
+            "Acı",
+            "Sert",
+            "Klasik",
+            "IBA",
+            "Viski"
+          ]
+        },
+        "history_notes": {
+          "en": "One of the oldest cocktails, dating back to the 1870s. Legend links it to Lady Randolph Churchill at the Manhattan Club, though this is likely a myth.",
+          "tr": "1870'lere dayanan en eski kokteyllerden biridir. Efsaneler onu Manhattan Club'daki Lady Randolph Churchill ile ilişkilendirir, ancak bu muhtemelen bir mittir."
+        }
+      },
+      {
+        "cocktail_id": 28,
+        "name": {
+          "en": "Margarita",
+          "tr": "Margarita"
+        },
+        "instructions": {
+          "en": "Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the outer rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass.",
+          "tr": "Tuzun bardağın üzerine yapışmasını sağlamak için bardağın kenarını limon dilimiyle ovalayın. Sadece dış kenarını ıslatmaya ve üzerine tuz serpmeye dikkat edin. Tuz, içen kişinin dudaklarına kadar gelmeli ve asla kokteyle karışmamalıdır. Diğer malzemeleri buzla çalkalayın ve ardından dikkatlice bardağa dökün."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Salty",
+            "Classic",
+            "Party",
+            "IBA"
+          ],
+          "tr": [
+            "Ekşi",
+            "Tuzlu",
+            "Klasik",
+            "Parti",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Its origin is murky, but it likely evolved from the 'Daisy' cocktail category (Margarita means Daisy in Spanish), substituting brandy with tequila.",
+          "tr": "Kökeni belirsizdir, ancak muhtemelen brendinin tekila ile değiştirilmesiyle 'Daisy' (İspanyolca Margarita) kokteyl kategorisinden evrilmiştir."
+        }
+      },
+      {
+        "cocktail_id": 29,
+        "name": {
+          "en": "Mint Julep",
+          "tr": "Mint Julep"
+        },
+        "instructions": {
+          "en": "In a highball glass gently muddle the mint, sugar and water. Fill the glass with cracked ice, add Bourbon and stir well until the glass is well frosted. Garnish with a mint sprig.",
+          "tr": "Bir highball bardağında nane, şeker ve suyu yavaşça karıştırın. Bardağı kırık buzla doldurun, Bourbon'u ekleyin ve bardak iyice donuncaya kadar iyice karıştırın. Bir nane dalı ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Collins glass",
+          "tr": "Collins bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Strong",
+            "Refreshing",
+            "Classic",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Sert",
+            "Ferahlatıcı",
+            "Klasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "A southern US classic associated with the Kentucky Derby since 1938. Traditionally served in a silver or pewter cup to keep it frostily cold.",
+          "tr": "1938'den beri Kentucky Derbisi ile özdeşleşmiş bir ABD güney klasiği. Buz gibi soğuk kalması için geleneksel olarak gümüş veya kalaylı kupada servis edilir."
+        }
+      },
+      {
+        "cocktail_id": 30,
+        "name": {
+          "en": "Moscow Mule",
+          "tr": "Moscow Mule"
+        },
+        "instructions": {
+          "en": "Combine vodka and ginger beer in a highball glass filled with ice. Add lime juice. Stir gently. Garnish.",
+          "tr": "Votka ve zencefil birasını buzla dolu bir highball bardağında birleştirin. Limon suyu ekleyin. Yavaşça karıştırın. Garnitür."
+        },
+        "glass_type": {
+          "en": "Copper Mug",
+          "tr": "Bakır Kupa"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Spicy",
+            "Refreshing",
+            "IBA",
+            "Vodka"
+          ],
+          "tr": [
+            "Tatlı",
+            "Baharatlı",
+            "Ferahlatıcı",
+            "IBA",
+            "Votka"
+          ]
+        },
+        "history_notes": {
+          "en": "Created in 1941 as a marketing stunt to sell excess Smirnoff vodka and ginger beer. The copper mugs were used simply because they were available.",
+          "tr": "1941'de fazla Smirnoff votkasını ve zencefil birasını satmak için bir pazarlama hilesi olarak yaratıldı. Bakır kupalar sadece elde mevcut oldukları için kullanıldı."
+        }
+      },
+      {
+        "cocktail_id": 31,
+        "name": {
+          "en": "Negroni",
+          "tr": "Negroni"
+        },
+        "instructions": {
+          "en": "Stir into glass over ice, garnish and serve.",
+          "tr": "Buzlu bardağa karıştırın, süsleyin ve servis yapın."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "IBA",
+            "Classic"
+          ],
+          "tr": [
+            "IBA",
+            "Klasik"
+          ]
+        },
+        "history_notes": {
+          "en": "Invented in Florence in 1919 when Count Camillo Negroni asked the bartender to strengthen his Americano by replacing soda water with gin.",
+          "tr": "1919'da Floransa'da, Kont Camillo Negroni'nin barmenden Americano'sunu soda yerine cin koyarak güçlendirmesini istemesiyle icat edildi."
+        }
+      },
+      {
+        "cocktail_id": 32,
+        "name": {
+          "en": "Orgasm",
+          "tr": "Orgazm"
+        },
+        "instructions": {
+          "en": "Shake all ingredients with ice, strain into a chilled cocktail glass, and serve.",
+          "tr": "Tüm malzemeleri buzla çalkalayın, soğutulmuş kokteyl bardağına süzün ve servis yapın."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Creamy",
+            "Dessert",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Kremalı",
+            "TatlıNiyetine",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "A popular creamy shooter from the 1970s and 80s. It belongs to a category of drinks with provocative names that were popular in that era.",
+          "tr": "1970'ler ve 80'lerin popüler kremalı shot'ı. O dönemde popüler olan kışkırtıcı isimli içecekler kategorisine aittir."
+        }
+      },
+      {
+        "cocktail_id": 33,
+        "name": {
+          "en": "Old Cuban",
+          "tr": "Old Cuban"
+        },
+        "instructions": {
+          "en": "Shake a handful of mint, 2oz white rum, 1oz of sugar syrup, 1oz lime juice and 2 dashes angostura bitters with ice. Double strain into a glass and top with 2oz of prosecco.",
+          "tr": "Bir avuç nane, 6 cl beyaz rom, 3 cl şeker şurubu, 3cl limon suyu ve 2 dilim angostura bitterini buzla çalkalayın. Bir bardağa iki kez süzün ve üzerine 6 cl prosecco ekleyin."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sour",
+            "Minty",
+            "Sparkling",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ekşi",
+            "Naneli",
+            "Köpüklü",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Audrey Saunders in 2001. It is essentially a sophisticated cross between a Mojito and a French 75, using aged rum and champagne.",
+          "tr": "2001 yılında Audrey Saunders tarafından yaratıldı. Temelde yıllanmış rom ve şampanya kullanan, Mojito ve French 75'in sofistike bir karışımıdır."
+        }
+      },
+      {
+        "cocktail_id": 34,
+        "name": {
+          "en": "Old Fashioned",
+          "tr": "Old Fashioned"
+        },
+        "instructions": {
+          "en": "Place sugar cube in old fashioned glass and saturate with bitters, add a dash of plain water. Muddle until dissolved.\r\nFill the glass with ice cubes and add whiskey.\r\n\r\nGarnish with orange twist, and a cocktail cherry.",
+          "tr": "Küp şekeri Viski bardağa koyun ve bitterlerle doyurun, bir miktar sade su ekleyin. Çözünene kadar karıştırın. \r\nBardağı buz küpleriyle doldurun ve viski ekleyin. \r\n\r\nTuruncu büküm ve kokteyl kirazıyla süsleyin."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bitter",
+            "Strong",
+            "Classic",
+            "IBA",
+            "Whiskey"
+          ],
+          "tr": [
+            "Acı",
+            "Sert",
+            "Klasik",
+            "IBA",
+            "Viski"
+          ]
+        },
+        "history_notes": {
+          "en": "The definition of the word 'cocktail' (spirits, sugar, water, bitters). It is the grandfather of all drinks, dating back to the early 19th century.",
+          "tr": "'Kokteyl' kelimesinin tanımı (alkol, şeker, su, bitter). 19. yüzyılın başlarına kadar uzanan tüm içeceklerin büyük babasıdır."
+        }
+      },
+      {
+        "cocktail_id": 35,
+        "name": {
+          "en": "Paloma",
+          "tr": "Paloma"
+        },
+        "instructions": {
+          "en": "Stir together and serve over ice.",
+          "tr": "Birlikte karıştırın ve buz üzerinde servis yapın."
+        },
+        "glass_type": {
+          "en": "Collins glass",
+          "tr": "Collins bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sour",
+            "Refreshing",
+            "IBA",
+            "Tequila"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ekşi",
+            "Ferahlatıcı",
+            "IBA",
+            "Tekila"
+          ]
+        },
+        "history_notes": {
+          "en": "Often considered Mexico's actual most beloved cocktail, surpassing the Margarita. Created by Don Javier Delgado Corona at La Capilla bar.",
+          "tr": "Margarita'yı geride bırakarak Meksika'nın asıl en sevilen kokteyli kabul edilir. La Capilla barda Don Javier Delgado Corona tarafından yaratılmıştır."
+        }
+      },
+      {
+        "cocktail_id": 36,
+        "name": {
+          "en": "Penicillin",
+          "tr": "Penisilin"
+        },
+        "instructions": {
+          "en": "Shake blended Scotch, lemon juice, honey syrup and ginger syrup with ice. Strain over large ice in chilled rocks glass. Float smoky Scotch on top (be sure to use a smoky Scotch such as an Islay single malt). Garnish with candied ginger.",
+          "tr": "Harmanlanmış Scotch, limon suyu, bal şurubu ve zencefil şurubunu buzla çalkalayın. Soğutulmuş kayalar camındaki büyük buzun üzerinde süzün. Dumanlı Scotch'u üstüne dökün (Islay single malt gibi dumanlı bir Scotch kullandığınızdan emin olun). Şekerlenmiş zencefil ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Old-fashioned bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Spicy",
+            "Smoky",
+            "ModernClassic"
+          ],
+          "tr": [
+            "Ekşi",
+            "Baharatlı",
+            "Dumanlı",
+            "ModernKlasik"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Sam Ross in 2005. It revolutionized scotch cocktails by combining blended scotch with fresh lemon, ginger, honey, and a smoky Islay float.",
+          "tr": "2005'te Sam Ross tarafından yaratıldı. Harman viskiyi taze limon, zencefil, bal ve dumanlı Islay viskisiyle birleştirerek viski kokteyllerinde devrim yarattı."
+        }
+      },
+      {
+        "cocktail_id": 37,
+        "name": {
+          "en": "Pisco Sour",
+          "tr": "Pisco Sour"
+        },
+        "instructions": {
+          "en": "Vigorously shake and strain contents in a cocktail shaker with ice cubes, then pour into glass and garnish with bitters.\n",
+          "tr": "İçeriği buz küpleriyle birlikte bir shaker'da iyice çalkalayın ve süzün, ardından bardağa dökün ve bitterlerle süsleyin."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Strong",
+            "Classic",
+            "IBA"
+          ],
+          "tr": [
+            "Ekşi",
+            "Sert",
+            "Klasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Invented by Victor Morris in Lima, Peru, in the 1920s. Both Peru and Chile claim it as their national drink, sparking a long-standing debate.",
+          "tr": "1920'lerde Lima, Peru'da Victor Morris tarafından icat edildi. Hem Peru hem de Şili'nin milli içecekleri olduğunu iddia etmesi uzun süreli bir tartışmaya yol açtı."
+        }
+      },
+      {
+        "cocktail_id": 38,
+        "name": {
+          "en": "Pina Colada",
+          "tr": "Pina Colada"
+        },
+        "instructions": {
+          "en": "Mix with crushed ice in blender until smooth. Pour into chilled glass, garnish and serve.",
+          "tr": "Kırılmış buzla birlikte blenderde pürüzsüz hale gelinceye kadar karıştırın. Soğutulmuş bardağa dökün, süsleyin ve servis yapın."
+        },
+        "glass_type": {
+          "en": "Collins glass",
+          "tr": "Collins bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Creamy",
+            "Tropical",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Kremalı",
+            "Tropikal",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Born in Puerto Rico in 1954, credited to Ramon 'Monchito' Marrero. It became the official drink of Puerto Rico in 1978.",
+          "tr": "1954'te Porto Riko'da doğdu, Ramon 'Monchito' Marrero'ya atfedilir. 1978'de Porto Riko'nun resmi içeceği oldu."
+        }
+      },
+      {
+        "cocktail_id": 39,
+        "name": {
+          "en": "Pornstar Martini",
+          "tr": "Pornstar Martini"
+        },
+        "instructions": {
+          "en": "Straight: Pour all ingredients into mixing glass with ice cubes. Shake well. Strain in chilled martini cocktail glass. Cut passion fruit in half and use as garnish. Pour prosecco into a chilled shot glass and serve alongside the martini.",
+          "tr": "Tüm malzemeleri buz küpleriyle dolu karıştırma bardağına dökün. İyice çalkalayın. Soğutulmuş martini kokteyl bardağına süzün. Çarkıfelek meyvesini ikiye bölün ve garnitür olarak kullanın. Prosecco'yu soğutulmuş bir shot bardağına dökün ve martini ile birlikte servis yapın."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Vanilla",
+            "ModernClassic"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Vanilyalı",
+            "ModernKlasik"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Douglas Ankrah in London in 2002. Originally called the 'Maverick Martini', renamed for its provocative and indulgent nature.",
+          "tr": "2002'de Londra'da Douglas Ankrah tarafından yaratıldı. Orijinal adı 'Maverick Martini' iken, kışkırtıcı ve keyif verici doğası nedeniyle yeniden adlandırıldı."
+        }
+      },
+      {
+        "cocktail_id": 40,
+        "name": {
+          "en": "Rum Sour",
+          "tr": "Rum Sour"
+        },
+        "instructions": {
+          "en": "In a shaker half-filled with ice cubes, combine the rum, lemon juice, and sugar. Shake well. Strain into a sour glass and garnish with the orange slice and the cherry.",
+          "tr": "Yarısı buz küpleriyle doldurulmuş bir çalkalayıcıda rom, limon suyu ve şekeri birleştirin. İyice çalkalayın. Viski-sour bardağına süzün ve portakal dilimi ve kirazla süsleyin."
+        },
+        "glass_type": {
+          "en": "Whiskey sour glass",
+          "tr": "Viski-sour bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Classic",
+            "IBA",
+            "Whiskey"
+          ],
+          "tr": [
+            "Ekşi",
+            "Klasik",
+            "IBA",
+            "Viski"
+          ]
+        },
+        "history_notes": {
+          "en": "A foundational Caribbean drink. Before the Daiquiri had a name, sailors and locals were already mixing rum, lime, and sugar in this 'sour' format.",
+          "tr": "Temel bir Karayip içeceği. Daiquiri'nin bir adı olmadan önce bile, denizciler ve yerliler rom, limon ve şekeri bu 'sour' formatında karıştırıyorlardı."
+        }
+      },
+      {
+        "cocktail_id": 41,
+        "name": {
+          "en": "Ramos Gin Fizz",
+          "tr": "Ramos Cin Fizz"
+        },
+        "instructions": {
+          "en": "Prepare all the ingredients on the counter to be able to work well and quickly, especially the cream and egg white.\r\n\r\nPour all the ingredients into a shaker.\r\n\r\nShake vigorously for 1 minute: cream and egg white must be mixed perfectly, so don't rush.\r\n\r\nNow open the shaker and put some ice and shake for 1-2 minutes. It depends on how long you can resist!\r\n\r\nPour into a highball glass, add a splash of soda and garnish to taste.\r\n\r\nRamos Gin Fizz was once drunk as an invigorating drink or even as a breakfast, try it as an aperitif and after dinner and you will discover a little gem now lost.",
+          "tr": "Krema ve yumurta akı başta olmak üzere tüm malzemeleri iyi ve hızlı bir şekilde çalışabilmek için tezgahta hazırlayın. \r\n\r\nTüm malzemeleri bir shaker'a dökün. \r\n\r\n1 dakika kuvvetlice çalkalayın: Krema ve yumurta akı mükemmel şekilde karıştırılmalıdır, bu yüzden acele etmeyin. \r\n\r\nŞimdi çalkalayıcıyı açın ve biraz buz koyun ve 1-2 dakika çalkalayın. Ne kadar direnebileceğine bağlı! \r\n\r\nBir highball bardağa dökün, bir miktar soda ekleyin ve tadına göre süsleyin. \r\n\r\nRamos Gin Fizz bir zamanlar canlandırıcı bir içecek olarak veya hatta kahvaltıda içilirdi, bunu bir aperatif olarak deneyin ve akşam yemeğinden sonra artık kaybolan küçük bir cevheri keşfedeceksiniz."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Creamy",
+            "Classic",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Kremalı",
+            "Klasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Invented by Henry C. Ramos in New Orleans in 1888. Famous for requiring 12 minutes of shaking; bars used to employ 'shaker boys' just for this drink.",
+          "tr": "1888'de New Orleans'ta Henry C. Ramos tarafından icat edildi. 12 dakika çalkalanmasıyla ünlüdür; barlar sadece bu içecek için 'çalkalayıcı çocuklar' çalıştırırdı."
+        }
+      },
+      {
+        "cocktail_id": 42,
+        "name": {
+          "en": "Spritz",
+          "tr": "Spritz"
+        },
+        "instructions": {
+          "en": "Build into glass over ice, garnish and serve.",
+          "tr": "Buzun üzerine bardağa koyun, süsleyin ve servis yapın."
+        },
+        "glass_type": {
+          "en": "Old-Fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bittersweet",
+            "Sparkling",
+            "Aperitif",
+            "IBA"
+          ],
+          "tr": [
+            "Acıtatlı",
+            "Köpüklü",
+            "Aperitif",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "A general category of Venetian aperitifs. 'Spritzen' is German for 'splash', referring to adding sparkling water to wine.",
+          "tr": "Venedik aperitiflerinin genel kategorisi. 'Spritzen' Almanca 'sıçratmak' anlamına gelir ve şaraba soda eklemeyi ifade eder."
+        }
+      },
+      {
+        "cocktail_id": 43,
+        "name": {
+          "en": "Sazerac",
+          "tr": "Sazerac"
+        },
+        "instructions": {
+          "en": "Rinse a chilled old-fashioned glass with the absinthe, add crushed ice, and set it aside. Stir the remaining ingredients over ice and set it aside. Discard the ice and any excess absinthe from the prepared glass, and strain the drink into the glass. Add the lemon peel for garnish.",
+          "tr": "Soğutulmuş Viski bir bardağı absinthe ile durulayın, kırılmış buz ekleyin ve bir kenara koyun. Kalan malzemeleri buz üzerinde karıştırın ve bir kenara koyun. Hazırlanan bardaktaki buzu ve fazla absintiyi atın ve içeceği bardağa süzün. Süslemek için limon kabuğunu ekleyin."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "Strong",
+            "Classic",
+            "NewOrleans",
+            "IBA"
+          ],
+          "tr": [
+            "Sert",
+            "Klasik",
+            "NewOrleans",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "New Orleans' official cocktail. Originally made with Cognac, it switched to Rye Whiskey due to the phylloxera epidemic in France.",
+          "tr": "New Orleans'ın resmi kokteyli. Başlangıçta Konyak ile yapılırken, Fransa'daki filoksera (bağ biti) salgını nedeniyle Çavdar Viskisine geçiş yapmıştır."
+        }
+      },
+      {
+        "cocktail_id": 44,
+        "name": {
+          "en": "Sidecar",
+          "tr": "Sidecar"
+        },
+        "instructions": {
+          "en": "Pour all ingredients into cocktail shaker filled with ice. Shake well and strain into cocktail glass.",
+          "tr": "Tüm malzemeleri buzla dolu shaker'a dökün. İyice çalkalayın ve kokteyl bardağına süzün."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Strong",
+            "Classic",
+            "IBA",
+            "Cognac"
+          ],
+          "tr": [
+            "Ekşi",
+            "Sert",
+            "Klasik",
+            "IBA",
+            "Konyak"
+          ]
+        },
+        "history_notes": {
+          "en": "Named after the motorcycle sidecar, popular in Paris and London after WWI. It is the definitive cognac sour cocktail.",
+          "tr": "Adını motosiklet sepetinden alan bu içecek, 1. Dünya Savaşı'ndan sonra Paris ve Londra'da popüler oldu. Nihai konyak sour kokteylidir."
+        }
+      },
+      {
+        "cocktail_id": 45,
+        "name": {
+          "en": "San Francisco",
+          "tr": "San Francisco"
+        },
+        "instructions": {
+          "en": "Take a tall glass and put in a few ice cubes, fill the vodka over it and fill with juice then the \"creme\", to end fill in the grenadine but very carefully at the side of the glass so it will lay down in the bottom. garnish with orange and strawberry.",
+          "tr": "Uzun bir bardak alın ve birkaç buz küpü koyun, üzerine votkayı doldurun ve meyve suyuyla, ardından \"krema\" ile doldurun, son olarak nar şurubu doldurun, ancak bardağın dibine kadar uzanacak şekilde çok dikkatli bir şekilde doldurun. portakal ve çilekle süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "NonAlcoholic",
+            "Mocktail"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Alkolsüz",
+            "Mocktail"
+          ]
+        },
+        "history_notes": {
+          "en": "A popular non-alcoholic mocktail classic. It mimics the complexity of a cocktail using juices and grenadine, evolving from the disco era.",
+          "tr": "Popüler bir alkolsüz mocktail klasiği. Meyve suları ve nar şurubu kullanarak bir kokteylin karmaşıklığını taklit eder, disko döneminden evrilmiştir."
+        }
+      },
+      {
+        "cocktail_id": 46,
+        "name": {
+          "en": "Tom Collins",
+          "tr": "Tom Collins"
+        },
+        "instructions": {
+          "en": "In a shaker half-filled with ice cubes, combine the gin, lemon juice, and sugar. Shake well. Strain into a collins glass alomst filled with ice cubes. Add the club soda. Stir and garnish with the cherry and the orange slice.",
+          "tr": "Yarısı buz küpleriyle doldurulmuş bir çalkalayıcıda cin, limon suyu ve şekeri birleştirin. İyice çalkalayın. Tamamı buz küpleriyle doldurulmuş bir collins bardağa süzün. Kulüp sodasını ekleyin. Karıştırın ve kiraz ve portakal dilimiyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Collins glass",
+          "tr": "Collins bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Refreshing",
+            "Classic",
+            "IBA"
+          ],
+          "tr": [
+            "Ekşi",
+            "Ferahlatıcı",
+            "Klasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Linked to the 'Great Tom Collins Hoax' of 1874. People would ask 'Have you seen Tom Collins?', sending victims on a wild goose chase to find a non-existent man.",
+          "tr": "1874'teki 'Büyük Tom Collins Şakası' ile bağlantılıdır. İnsanlar 'Tom Collins'i gördün mü?' diye sorarak kurbanları olmayan bir adamı bulmaları için boş bir kovalamacaya gönderirlerdi."
+        }
+      },
+      {
+        "cocktail_id": 47,
+        "name": {
+          "en": "The Last Word",
+          "tr": "Son Söz"
+        },
+        "instructions": {
+          "en": "Shake with ice and strain into a cocktail glass.",
+          "tr": "Buzla çalkalayıp kokteyl bardağına süzün."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Herbal",
+            "Strong",
+            "Classic"
+          ],
+          "tr": [
+            "Ekşi",
+            "Bitkisel",
+            "Sert",
+            "Klasik"
+          ]
+        },
+        "history_notes": {
+          "en": "A Prohibition-era classic from the Detroit Athletic Club (1915). Forgotten for decades, it was revived in Seattle in 2004, sparking a cocktail renaissance.",
+          "tr": "Detroit Athletic Club'dan (1915) bir Yasak dönemi klasiği. On yıllarca unutulduktan sonra 2004'te Seattle'da yeniden canlandırıldı ve bir kokteyl rönesansı başlattı."
+        }
+      },
+      {
+        "cocktail_id": 48,
+        "name": {
+          "en": "Tequila Sunrise",
+          "tr": "Tequila Sunrise"
+        },
+        "instructions": {
+          "en": "Pour the tequila and orange juice into glass over ice. Add the grenadine, which will sink to the bottom. Stir gently to create the sunrise effect. Garnish and serve.",
+          "tr": "Tekila ve portakal suyunu buzun üzerindeki bardağa dökün. Dibe çökecek olan nar şurubu ekleyin. Gün doğumu efekti yaratmak için yavaşça karıştırın. Süsleyip servis yapın."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Classic",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Klasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "The modern version was created in Sausalito in the 70s. It became famous after The Rolling Stones dubbed their 1972 tour the 'Cocaine and Tequila Sunrise Tour'.",
+          "tr": "Modern versiyonu 70'lerde Sausalito'da yaratıldı. The Rolling Stones'un 1972 turnesine 'Kokain ve Tequila Sunrise Turnesi' adını vermesiyle ünlendi."
+        }
+      },
+      {
+        "cocktail_id": 49,
+        "name": {
+          "en": "Vesper",
+          "tr": "Vesper"
+        },
+        "instructions": {
+          "en": "Shake over ice until well chilled, then strain into a deep goblet and garnish with a thin slice of lemon peel.",
+          "tr": "İyice soğuyuncaya kadar buz üzerinde çalkalayın, ardından derin bir bardağa süzün ve ince bir dilim limon kabuğuyla süsleyin."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Strong",
+            "Dry",
+            "Classic",
+            "Bond",
+            "IBA"
+          ],
+          "tr": [
+            "Sert",
+            "Sek",
+            "Klasik",
+            "Bond",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Invented by Ian Fleming for James Bond in 'Casino Royale' (1953). Named after Bond's love interest, Vesper Lynd.",
+          "tr": "Ian Fleming tarafından 'Casino Royale' (1953) kitabında James Bond için icat edildi. Adını Bond'un aşkı Vesper Lynd'den alır."
+        }
+      },
+      {
+        "cocktail_id": 50,
+        "name": {
+          "en": "White Lady",
+          "tr": "White Lady"
+        },
+        "instructions": {
+          "en": "Add all ingredients into cocktail shaker filled with ice. Shake well and strain into large cocktail glass.",
+          "tr": "Tüm malzemeleri buzla dolu shaker'a ekleyin. İyice çalkalayın ve büyük kokteyl bardağına süzün."
+        },
+        "glass_type": {
+          "en": "Cocktail glass",
+          "tr": "Kokteyl bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Classic",
+            "IBA",
+            "Gin"
+          ],
+          "tr": [
+            "Ekşi",
+            "Klasik",
+            "IBA",
+            "Cin"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Harry MacElhone in 1919. It started with mint liqueur but evolved into the gin and Cointreau classic we know today at Harry's New York Bar.",
+          "tr": "1919'da Harry MacElhone tarafından yaratıldı. Nane likörü ile başladı ancak Harry's New York Bar'da bugün bildiğimiz cin ve Cointreau klasiğine evrildi."
+        }
+      },
+      {
+        "cocktail_id": 51,
+        "name": {
+          "en": "Whiskey Sour",
+          "tr": "Viski Sour"
+        },
+        "instructions": {
+          "en": "Shake with ice. Strain into chilled glass, garnish and serve. If served 'On the rocks', strain ingredients into old-fashioned glass filled with ice.",
+          "tr": "Buzla çalkalayın. Soğutulmuş bardağa süzün, süsleyin ve servis yapın. 'Kayaların üzerinde' servis edilirse, malzemeleri buzla dolu Viski bardağa süzün."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "IBA",
+            "Classic",
+            "Alcoholic",
+            "ContemporaryClassic"
+          ],
+          "tr": [
+            "IBA",
+            "Klasik",
+            "Alkollü",
+            "ÇağdaşKlasik"
+          ]
+        },
+        "history_notes": {
+          "en": "First written down in 1862 by Jerry Thomas. It was originally a way for sailors to combat scurvy and preserve their spirits during long voyages.",
+          "tr": "İlk kez 1862'de Jerry Thomas tarafından yazıldı. Başlangıçta denizcilerin iskorbütle savaşmak ve uzun yolculuklarda içkilerini korumak için kullandıkları bir yöntemdi."
+        }
+      },
+      {
+        "cocktail_id": 52,
+        "name": {
+          "en": "White Russian",
+          "tr": "White Russian"
+        },
+        "instructions": {
+          "en": "Pour vodka and coffee liqueur over ice cubes in an old-fashioned glass. Fill with light cream and serve.",
+          "tr": "Viski bir bardaktaki buz küplerinin üzerine votka ve kahve likörünü dökün. Hafif kremayla doldurup servis yapın."
+        },
+        "glass_type": {
+          "en": "Sweet,Creamy,Dessert,Classic",
+          "tr": "Tatlı,Kremalı,TatlıNiyetine,Klasik"
+        },
+        "tags": {
+          "en": [],
+          "tr": []
+        },
+        "history_notes": {
+          "en": "A 1960s variation of the Black Russian. It achieved cult status in the late 90s as the signature drink of 'The Dude' in 'The Big Lebowski'.",
+          "tr": "Black Russian'ın 1960'lardaki bir varyasyonu. 90'ların sonunda 'The Big Lebowski' filmindeki 'The Dude' karakterinin imza içeceği olarak kült statüsüne ulaştı."
+        }
+      },
+      {
+        "cocktail_id": 53,
+        "name": {
+          "en": "Zombie",
+          "tr": "Zombi"
+        },
+        "instructions": {
+          "en": "Blend at high speed for no more than 5 seconds.\n\nPour into a glass, add ice cubes to fill, then add the garnish.\n\n*Donn’s mix: Bring 3 crushed cinnamon sticks, 1 cup of sugar and 1 cup of water to a boil, stirring until the sugar is dissolved.\n\nSimmer for 2 minutes, then remove from the heat and let sit for at least 2 hours before straining into a clean glass bottle.\n\nThen add 1 part of the syrup and 2 parts of fresh grapefruit juice together.",
+          "tr": "En fazla 5 saniye boyunca yüksek hızda karıştırın. \n\nBir bardağa dökün, dolduracak kadar buz küpleri ekleyin, ardından garnitürü ekleyin. \n\n*Donn karışımı: 3 adet ezilmiş tarçın çubuğu, 1 su bardağı şeker ve 1 su bardağı suyu şeker eriyene kadar karıştırarak kaynatın. \n\n2 dakika kaynatın, ardından ocaktan alın ve en az 2 saat bekletin ve temiz bir bardağ şişeye süzün. \n\nDaha sonra 1 ölçü şurubu ve 2 ölçü taze greyfurt suyunu birlikte ekleyin."
+        },
+        "glass_type": {
+          "en": "Hurricane glass",
+          "tr": "Kasırga bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Strong",
+            "Tiki",
+            "Tropical",
+            "Rum"
+          ],
+          "tr": [
+            "Tatlı",
+            "Sert",
+            "Tiki",
+            "Tropikal",
+            "Rom"
+          ]
+        },
+        "history_notes": {
+          "en": "A Tiki legend by Donn Beach (1934). It was so strong (mostly rum) that customers were strictly limited to two per person because it turned them into zombies.",
+          "tr": "Donn Beach (1934) tarafından yaratılan bir Tiki efsanesi. O kadar güçlüydü ki (çoğunlukla rom), insanları zombiye çevirdiği için müşteri başına kesinlikle iki adetle sınırlandırılmıştı."
+        }
+      },
+      {
+        "cocktail_id": 54,
+        "name": {
+          "en": "Gin Basil Smash",
+          "tr": "Gin Basil Smash"
+        },
+        "instructions": {
+          "en": "Muddle basil leaves with sugar syrup in a shaker. Add gin and lemon juice. Fill with ice and shake vigorously. Double strain into an ice-filled glass. Garnish with basil.",
+          "tr": "Fesleğen yapraklarını şeker şurubuyla çalkalayıcıda karıştırın. Cin ve limon suyunu ekleyin. Buzla doldurun ve kuvvetlice çalkalayın. Buz dolu bir bardağa iki kez süzün. Fesleğen ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sour",
+            "Herbal",
+            "Refreshing",
+            "ModernClassic"
+          ],
+          "tr": [
+            "Ekşi",
+            "Bitkisel",
+            "Ferahlatıcı",
+            "ModernKlasik"
+          ]
+        },
+        "history_notes": {
+          "en": "Created in 2008 by Jörg Meyer in Hamburg. Originally called the 'Gin Pesto', it quickly became a modern classic worldwide for its fresh herbal taste.",
+          "tr": "2008 yılında Hamburg'da Jörg Meyer tarafından yaratıldı. Orijinal adı 'Gin Pesto' olan içecek, taze bitkisel tadıyla dünya çapında hızla modern bir klasik haline geldi."
+        }
+      },
+      {
+        "cocktail_id": 55,
+        "name": {
+          "en": "Paper Plane",
+          "tr": "Paper Plane"
+        },
+        "instructions": {
+          "en": "Pour all ingredients into cocktail shaker filled with ice. Shake well. Strain into a chilled cocktail glass.",
+          "tr": "Tüm malzemeleri buzla dolu shaker'a dökün. İyice çalkalayın. Soğutulmuş bir kokteyl bardağına süzün."
+        },
+        "glass_type": {
+          "en": "Coupe glass",
+          "tr": "Kupa bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bittersweet",
+            "Sour",
+            "ModernClassic",
+            "IBA"
+          ],
+          "tr": [
+            "Acıtatlı",
+            "Ekşi",
+            "ModernKlasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Sam Ross in 2008. Named after the M.I.A. song 'Paper Planes', it is a perfectly balanced modern classic using equal parts.",
+          "tr": "2008'de Sam Ross tarafından yaratıldı. Adını M.I.A.'nın 'Paper Planes' şarkısından alan bu içecek, eşit ölçüler kullanan mükemmel dengeli modern bir klasiktir."
+        }
+      },
+      {
+        "cocktail_id": 56,
+        "name": {
+          "en": "Amaretto Sour",
+          "tr": "Amaretto Sour"
+        },
+        "instructions": {
+          "en": "Shake all ingredients with ice. Strain back into the shaker and dry shake (without ice) to emulsify the egg white. Pour over fresh ice.",
+          "tr": "Tüm malzemeleri buzla çalkalayın. Yumurta beyazını emülsifiye etmek için tekrar shaker'a süzün ve kuru sallayın (buzsuz). Taze buzun üzerine dökün."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sour",
+            "Classic",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ekşi",
+            "Klasik",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Often dismissed as a 70s disco drink, it was revived by Jeffrey Morgenthaler, who added egg white and cask-strength bourbon to balance the sweetness.",
+          "tr": "Genellikle 70'lerin disko içeceği olarak küçümsenirken, tatlılığı dengelemek için yumurta akı ve yüksek alkollü burbon ekleyen Jeffrey Morgenthaler tarafından yeniden canlandırılmıştır."
+        }
+      },
+      {
+        "cocktail_id": 57,
+        "name": {
+          "en": "Naked and Famous",
+          "tr": "Naked and Famous"
+        },
+        "instructions": {
+          "en": "Shake all ingredients with ice and strain into a chilled coupe glass.",
+          "tr": "Tüm malzemeleri buzla çalkalayın ve soğutulmuş bir kupa bardağa süzün."
+        },
+        "glass_type": {
+          "en": "Coupe glass",
+          "tr": "Kupa bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bittersweet",
+            "Smoky",
+            "Sour",
+            "ModernClassic"
+          ],
+          "tr": [
+            "Acıtatlı",
+            "Dumanlı",
+            "Ekşi",
+            "ModernKlasik"
+          ]
+        },
+        "history_notes": {
+          "en": "A modern classic by Joaquin Simo at Death & Co in 2011. It is a smoky, herbal riff on the Paper Plane and Last Word cocktails.",
+          "tr": "2011'de Death & Co'da Joaquin Simo tarafından yaratılan modern bir klasik. Paper Plane ve Last Word kokteyllerinin dumanlı ve bitkisel bir uyarlamasıdır."
+        }
+      },
+      {
+        "cocktail_id": 58,
+        "name": {
+          "en": "Jungle Bird",
+          "tr": "Jungle Bird"
+        },
+        "instructions": {
+          "en": "Shake all ingredients with ice and strain into a glass filled with crushed ice.",
+          "tr": "Tüm malzemeleri buzla çalkalayın ve kırılmış buzla dolu bir bardağa süzün."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bittersweet",
+            "Tiki",
+            "Tropical",
+            "Fruity"
+          ],
+          "tr": [
+            "Acıtatlı",
+            "Tiki",
+            "Tropikal",
+            "Meyveli"
+          ]
+        },
+        "history_notes": {
+          "en": "Created in 1973 at the Kuala Lumpur Hilton's Aviary Bar. It is one of the few Tiki cocktails to use Campari, giving it a unique bittersweet profile.",
+          "tr": "1973 yılında Kuala Lumpur Hilton'un Aviary Bar'ında yaratıldı. Campari kullanan ve ona eşsiz bir acı-tatlı profil kazandıran az sayıdaki Tiki kokteylinden biridir."
+        }
+      },
+      {
+        "cocktail_id": 59,
+        "name": {
+          "en": "Bloody Mary",
+          "tr": "Bloody Mary"
+        },
+        "instructions": {
+          "en": "Stir gently, pour over ice cubes in a highball glass. Garnish with celery stalk and lemon wedge.",
+          "tr": "Yavaşça karıştırın, bir highball bardağındaki buz küplerinin üzerine dökün. Kereviz sapı ve limon dilimiyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Savory",
+            "Spicy",
+            "Brunch",
+            "Hangover",
+            "IBA"
+          ],
+          "tr": [
+            "Tuzlu",
+            "Acı",
+            "Brunch",
+            "AkşamdanKalma",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Often attributed to Fernand Petiot at Harry's New York Bar in Paris in the 1920s. It became the world's most famous hangover cure.",
+          "tr": "Genellikle 1920'lerde Paris'teki Harry's New York Bar'da Fernand Petiot'a atfedilir. Dünyanın en ünlü akşamdan kalma ilacı haline gelmiştir."
+        }
+      },
+      {
+        "cocktail_id": 60,
+        "name": {
+          "en": "Boulevardier",
+          "tr": "Boulevardier"
+        },
+        "instructions": {
+          "en": "Stir with ice, strain, garnish with an orange twist.",
+          "tr": "Buzla karıştırın, süzün, portakal dilimiyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bitter",
+            "Strong",
+            "Classic",
+            "Aperitif",
+            "IBA"
+          ],
+          "tr": [
+            "Acı",
+            "Sert",
+            "Klasik",
+            "Aperitif",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Erskine Gwynne in Paris in 1927. Essentially a Negroni made with whiskey instead of gin, created for American expats in Paris.",
+          "tr": "1927'de Paris'te Erskine Gwynne tarafından yaratıldı. Temelde cin yerine viski ile yapılan bir Negroni'dir ve Paris'teki Amerikalı gurbetçiler için tasarlanmıştır."
+        }
+      },
+      {
+        "cocktail_id": 61,
+        "name": {
+          "en": "Aperol Spritz",
+          "tr": "Aperol Spritz"
+        },
+        "instructions": {
+          "en": "Build into glass over ice. Garnish with an orange slice.",
+          "tr": "Bardağın içinde buz üzerine dökün. Portakal dilimiyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Wine Glass",
+          "tr": "Şarap Kadehi"
+        },
+        "tags": {
+          "en": [
+            "Bittersweet",
+            "Refreshing",
+            "Summer",
+            "IBA",
+            "Sparkling"
+          ],
+          "tr": [
+            "Acıtatlı",
+            "Ferahlatıcı",
+            "Yaz",
+            "IBA",
+            "Köpüklü"
+          ]
+        },
+        "history_notes": {
+          "en": "While the concept of a 'Spritz' dates back to Austrian soldiers in Venice diluting wine, the Aperol version became a global phenomenon in the 2000s as the ultimate Italian apéritif.",
+          "tr": "'Spritz' kavramı Venedik'teki Avusturyalı askerlerin şarabı sulandırmasına dayansa da, Aperol versiyonu 2000'lerde nihai İtalyan aperitifi olarak küresel bir fenomen haline geldi."
+        }
+      },
+      {
+        "cocktail_id": 62,
+        "name": {
+          "en": "Vieux Carré",
+          "tr": "Vieux Carré"
+        },
+        "instructions": {
+          "en": "Stir with ice. Strain into an ice-filled old-fashioned glass. Garnish with a lemon twist.",
+          "tr": "Buzla karıştırın. Buzla doldurulmuş bir bardağa süzün. Limon bükümüyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Old-fashioned glass",
+          "tr": "Viski bardağı"
+        },
+        "tags": {
+          "en": [
+            "Bitter",
+            "Strong",
+            "Classic",
+            "NewOrleans"
+          ],
+          "tr": [
+            "Acı",
+            "Sert",
+            "Klasik",
+            "NewOrleans"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Walter Bergeron at Hotel Monteleone in 1938. It is named after the French term for the French Quarter in New Orleans.",
+          "tr": "1938'de Hotel Monteleone'de Walter Bergeron tarafından yaratıldı. Adını New Orleans'taki Fransız Mahallesi'nin Fransızca teriminden alır."
+        }
+      },
+      {
+        "cocktail_id": 63,
+        "name": {
+          "en": "Sex on the Beach",
+          "tr": "Sex on the Beach"
+        },
+        "instructions": {
+          "en": "Build all ingredients in a highball glass filled with ice. Garnish with orange slice.",
+          "tr": "Tüm malzemeleri buzla dolu bir highball bardağa koyun. Portakal dilimiyle süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Party",
+            "Summer",
+            "IBA"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Parti",
+            "Yaz",
+            "IBA"
+          ]
+        },
+        "history_notes": {
+          "en": "Created by Ted Pizio in Florida in 1987. It was a marketing move to sell Peach Schnapps during spring break, named after tourists' two main goals.",
+          "tr": "1987'de Florida'da Ted Pizio tarafından yaratıldı. Bahar tatilinde Şeftali Likörü satmak için yapılan bir pazarlama hamlesiydi, adını turistlerin iki ana hedefinden aldı."
+        }
+      },
+      {
+        "cocktail_id": 64,
+        "name": {
+          "en": "Virgin Mojito",
+          "tr": "Alkolsüz Mojito"
+        },
+        "instructions": {
+          "en": "Muddle mint leaves with sugar and lime juice in a glass. Add a splash of soda water and fill the glass with cracked ice. Top with more soda water and stir. Garnish with a mint sprig.",
+          "tr": "Nane yapraklarını şeker ve misket limonu suyuyla bardağın içinde ezin. Bir miktar soda ekleyin ve bardağı kırık buzla doldurun. Üzerini sodayla tamamlayın ve karıştırın. Nane dalı ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Minty",
+            "Refreshing",
+            "Mocktail"
+          ],
+          "tr": [
+            "Tatlı",
+            "Naneli",
+            "Ferahlatıcı",
+            "Alkolsüz"
+          ]
+        },
+        "history_notes": {
+          "en": "The non-alcoholic, refreshing version of the classic Mojito. It offers the minty and citrusy freshness of the Cuban original without the alcohol.",
+          "tr": "Klasik Mojito'nun alkolsüz, ferahlatıcı versiyonu. Küba kökenli orijinal tarifin nane ve narenciye ferahlığını alkolsüz olarak sunar."
+        }
+      },
+      {
+        "cocktail_id": 65,
+        "name": {
+          "en": "Shirley Temple",
+          "tr": "Shirley Temple"
+        },
+        "instructions": {
+          "en": "Combine ginger ale and a splash of grenadine in a glass filled with ice cubes. Stir gently. Garnish with a maraschino cherry and a slice of lemon.",
+          "tr": "Zencefilli gazoz ve bir miktar nar şurubunu buz küpleriyle dolu bir bardağa koyun. Yavaşça karıştırın. Maraschino kirazı ve bir dilim limon ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Collins glass",
+          "tr": "Collins bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Classic",
+            "Mocktail"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Klasik",
+            "Alkolsüz"
+          ]
+        },
+        "history_notes": {
+          "en": "Said to be invented in Hollywood in the 1930s for child star Shirley Temple, it remains the world's most famous mocktail.",
+          "tr": "1930'larda Hollywood'da çocuk yıldız Shirley Temple için yaratıldığı söylenen dünyanın en ünlü alkolsüz kokteyli."
+        }
+      },
+      {
+        "cocktail_id": 66,
+        "name": {
+          "en": "Arnold Palmer",
+          "tr": "Arnold Palmer"
+        },
+        "instructions": {
+          "en": "Fill a highball glass with ice. Pour equal parts iced tea and lemonade over the ice. Stir well and garnish with a lemon slice.",
+          "tr": "Bir highball bardağını buzla doldurun. Buzun üzerine eşit miktarda buzlu çay ve limonata dökün. İyice karıştırın ve limon dilimi ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Sour",
+            "Refreshing",
+            "Mocktail"
+          ],
+          "tr": [
+            "Tatlı",
+            "Ekşi",
+            "Ferahlatıcı",
+            "Alkolsüz"
+          ]
+        },
+        "history_notes": {
+          "en": "Named after American golf legend Arnold Palmer, this drink is a summer classic offering the perfect balance of iced tea and lemonade.",
+          "tr": "Amerikalı golf efsanesi Arnold Palmer'ın adını taşıyan bu içecek, buzlu çay ve limonatanın mükemmel dengesini sunan bir yaz klasiğidir."
+        }
+      },
+      {
+        "cocktail_id": 67,
+        "name": {
+          "en": "Virgin Pina Colada",
+          "tr": "Alkolsüz Pina Colada"
+        },
+        "instructions": {
+          "en": "Blend pineapple juice, coconut cream, and crushed ice until smooth. Pour into a chilled glass. Garnish with a pineapple wedge and cherry.",
+          "tr": "Ananas suyu, hindistan cevizi kreması ve kırık buzu pürüzsüz olana kadar blenderdan geçirin. Soğutulmuş bardağa dökün. Ananas dilimi ve kiraz ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Hurricane glass",
+          "tr": "Kasırga bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Creamy",
+            "Mocktail"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Kremalı",
+            "Alkolsüz"
+          ]
+        },
+        "history_notes": {
+          "en": "The rum-free version of the Caribbean favorite Pina Colada. Ideal for those who want to experience tropical vacation vibes without alcohol.",
+          "tr": "Karayiplerin favorisi Pina Colada'nın romsuz versiyonu. Tropikal tatil havasını alkol olmadan yaşamak isteyenler için idealdir."
+        }
+      },
+      {
+        "cocktail_id": 68,
+        "name": {
+          "en": "Cinderella",
+          "tr": "Cinderella"
+        },
+        "instructions": {
+          "en": "Pour orange juice, pineapple juice, and lemon juice into a shaker with ice. Shake well. Strain into a chilled glass filled with ice. Add a splash of grenadine and soda water.",
+          "tr": "Portakal suyu, ananas suyu ve limon suyunu buzlu bir shaker'a dökün. İyice çalkalayın. Buzla dolu soğutulmuş bir bardağa süzün. Biraz nar şurubu ve soda ekleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Sweet",
+            "Fruity",
+            "Citrus",
+            "Mocktail"
+          ],
+          "tr": [
+            "Tatlı",
+            "Meyveli",
+            "Narenciye",
+            "Alkolsüz"
+          ]
+        },
+        "history_notes": {
+          "en": "A classic fruit juice cocktail named after the fairytale princess. Offers a vibrant and energetic taste, especially for citrus lovers.",
+          "tr": "Adını masal prensesinden alan, tamamen meyve sularından oluşan klasik bir kokteyl. Özellikle narenciye sevenler için canlı ve enerjik bir tat sunar."
+        }
+      },
+      {
+        "cocktail_id": 69,
+        "name": {
+          "en": "Virgin Mary",
+          "tr": "Virgin Mary"
+        },
+        "instructions": {
+          "en": "Pour tomato juice and lemon juice into a glass with ice. Add Worcestershire sauce, Tabasco, salt, and pepper. Stir well. Garnish with a celery stalk.",
+          "tr": "Domates suyu ve limon suyunu buzlu bir bardağa dökün. Worcestershire sosu, Tabasco, tuz ve karabiber ekleyin. İyice karıştırın. Kereviz sapı ile süsleyin."
+        },
+        "glass_type": {
+          "en": "Highball glass",
+          "tr": "Yüksek top bardağı"
+        },
+        "tags": {
+          "en": [
+            "Savory",
+            "Spicy",
+            "Brunch",
+            "Mocktail"
+          ],
+          "tr": [
+            "Tuzlu",
+            "Acı",
+            "Brunch",
+            "Alkolsüz"
+          ]
+        },
+        "history_notes": {
+          "en": "The non-alcoholic version of the famous 'Bloody Mary'. Essential for breakfasts or brunches with its spicy and savory taste.",
+          "tr": "Ünlü 'Bloody Mary' kokteylinin alkolsüz versiyonudur. Baharatlı ve tuzlu tadıyla sabah kahvaltılarının veya brunch'ların vazgeçilmezidir."
+        }
+      }
+    ]
+  }
+]

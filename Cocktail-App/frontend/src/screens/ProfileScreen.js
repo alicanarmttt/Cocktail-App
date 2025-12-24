@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // <-- useState eklendi
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,8 +9,8 @@ import {
   Switch,
   Linking,
   Image,
-  Modal, // <-- Modal eklendi
-  TouchableOpacity, // <-- Modal içi seçim için
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -43,7 +43,8 @@ import apiClient from "../api/apiClient";
 // --- COMPONENTS ---
 import PremiumButton from "../ui/PremiumButton";
 
-// --- AVATAR SEÇENEKLERİ (BUNLARI KENDİ RESİMLERİNLE DEĞİŞTİR) ---
+// --- SABİTLER ---
+// Avatar Seçenekleri
 const AVATAR_OPTIONS = [
   { id: 1, source: require("../../assets/avatars/mascot_1_optimized.png") },
   { id: 2, source: require("../../assets/avatars/mascot_2_optimized.png") },
@@ -51,10 +52,18 @@ const AVATAR_OPTIONS = [
   { id: 4, source: require("../../assets/avatars/mascot_4_optimized.png") },
   { id: 5, source: require("../../assets/avatars/mascot_5_optimized.png") },
   { id: 6, source: require("../../assets/avatars/mascot_6_optimized.png") },
-  // { id: 3, source: require("../../assets/avatars/cool_barman.png") },
 ];
-// Varsayılan avatar ID'si (Kullanıcı henüz seçim yapmadıysa)
 const DEFAULT_AVATAR_ID = 1;
+
+// YENİ: Dil Seçenekleri (Bayraklar veya Sadece İsimler)
+const LANGUAGE_OPTIONS = [
+  { code: "en", label: "English", icon: "🇬🇧" },
+  { code: "tr", label: "Türkçe", icon: "🇹🇷" },
+  { code: "de", label: "Deutsch", icon: "🇩🇪" },
+  { code: "es", label: "Español", icon: "🇪🇸" },
+  { code: "it", label: "Italiano", icon: "🇮🇹" },
+  { code: "pt", label: "Português", icon: "🇵🇹" },
+];
 
 const ProfileScreen = () => {
   const { colors, fonts } = useTheme();
@@ -63,7 +72,8 @@ const ProfileScreen = () => {
   const { t, i18n } = useTranslation();
 
   // --- LOCAL STATE ---
-  const [modalVisible, setModalVisible] = useState(false); // Avatar modalı için
+  const [modalVisible, setModalVisible] = useState(false); // Avatar modalı
+  const [languageModalVisible, setLanguageModalVisible] = useState(false); // YENİ: Dil modalı
 
   // --- SELECTORS ---
   const currentUser = useSelector(selectCurrentUser);
@@ -71,41 +81,50 @@ const ProfileScreen = () => {
   const currentLang = useSelector(selectLanguage);
   const currentTheme = useSelector(selectThemeMode);
 
-  // Kullanıcının şu anki avatarını belirle (Backend bağlanana kadar DEFAULT kullanır)
+  // Avatar Logic
   const currentAvatarId = currentUser?.avatar_id || DEFAULT_AVATAR_ID;
   const currentAvatarSource =
     AVATAR_OPTIONS.find((a) => a.id === currentAvatarId)?.source ||
     AVATAR_OPTIONS[0].source;
 
+  // YENİ: Şu anki dilin etiketini bul (örn: "tr" -> "Türkçe")
+  const currentLangLabel =
+    LANGUAGE_OPTIONS.find((l) => l.code === currentLang)?.label || "English";
+
   // --- ACTIONS ---
 
-  // Avatar Seçilince Tetiklenecek Fonksiyon
   const handleAvatarSelect = async (avatarId) => {
-    // Eğer zaten seçili olan resimse işlem yapma
     if (avatarId === currentAvatarId) {
       setModalVisible(false);
       return;
     }
     try {
       await dispatch(updateUserAvatar(avatarId)).unwrap();
-
-      setModalVisible(false); // Modalı kapat
+      setModalVisible(false);
     } catch (errorMsg) {
       console.error("Avatar update error:", errorMsg);
-      Alert.alert(
-        t("general.error") || "Hata",
-        errorMsg || "Avatar güncellenemedi."
-      );
+      Alert.alert(t("general.error"), errorMsg || "Avatar güncellenemedi.");
     }
   };
 
-  const handleLanguageToggle = async () => {
-    const newLang = currentLang === "tr" ? "en" : "tr";
-    dispatch(setLanguage(newLang));
-    await i18n.changeLanguage(newLang);
+  // YENİ: Dil Seçim Fonksiyonu
+  const handleLanguageSelect = async (langCode) => {
+    if (langCode === currentLang) {
+      setLanguageModalVisible(false);
+      return;
+    }
+
+    // 1. Redux güncelle
+    dispatch(setLanguage(langCode));
+    // 2. i18n güncelle
+    await i18n.changeLanguage(langCode);
+
+    // 3. Verileri temizle ve yeni dilde çek (Ingredients gibi)
     dispatch(clearSearchResults());
     dispatch(clearDetail());
-    dispatch(fetchIngredients());
+    dispatch(fetchIngredients()); // Yeni dilde malzemeleri çek
+
+    setLanguageModalVisible(false);
   };
 
   const handleThemeToggle = (val) => {
@@ -160,7 +179,6 @@ const ProfileScreen = () => {
   };
 
   // --- UI COMPONENTS ---
-
   const SettingRow = ({ icon, title, rightElement, onPress, isLast }) => (
     <Pressable
       onPress={onPress}
@@ -199,9 +217,8 @@ const ProfileScreen = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* --- 1. HEADER (Avatar Tıklanabilir Oldu) --- */}
+        {/* --- 1. HEADER --- */}
         <View style={styles.header}>
-          {/* Pressable ile sarmaladık */}
           <Pressable
             onPress={() => setModalVisible(true)}
             style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
@@ -212,13 +229,11 @@ const ProfileScreen = () => {
                 { borderColor: isPro ? colors.gold : colors.border },
               ]}
             >
-              {/* Seçili Avatarı Göster */}
               <Image
                 source={currentAvatarSource}
                 style={styles.avatarImage}
                 resizeMode="cover"
               />
-              {/* Düzenleme İkonu (Küçük Kalem) */}
               <View
                 style={[
                   styles.editIconBadge,
@@ -295,7 +310,6 @@ const ProfileScreen = () => {
             {t("profile.account_actions")}
           </Text>
         </View>
-
         <View
           style={[
             styles.card,
@@ -322,29 +336,29 @@ const ProfileScreen = () => {
             {t("profile.app_settings")}
           </Text>
         </View>
-
         <View
           style={[
             styles.card,
             { backgroundColor: colors.subCard || "#1A1A1A" },
           ]}
         >
+          {/* DEĞİŞİKLİK: Dil Seçimi Artık Modalı Açıyor */}
           <SettingRow
             icon="language-outline"
             title={t("profile.language")}
             rightElement={
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={{ color: colors.textSecondary, marginRight: 5 }}>
-                  {currentLang === "tr" ? "Türkçe" : "English"}
+                  {currentLangLabel} {/* Artık dinamik: Türkçe, English vs. */}
                 </Text>
                 <Ionicons
-                  name="chevron-forward"
+                  name="chevron-forward" // Açılır menü hissi için
                   size={16}
                   color={colors.textSecondary}
                 />
               </View>
             }
-            onPress={handleLanguageToggle}
+            onPress={() => setLanguageModalVisible(true)} // Toggle yerine modal
           />
 
           <SettingRow
@@ -368,7 +382,6 @@ const ProfileScreen = () => {
             {t("profile.info")}
           </Text>
         </View>
-
         <View
           style={[
             styles.card,
@@ -448,7 +461,7 @@ const ProfileScreen = () => {
         </View>
       </ScrollView>
 
-      {/* --- AVATAR SEÇİM MODALI --- */}
+      {/* --- MODAL 1: AVATAR SEÇİM --- */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -469,7 +482,6 @@ const ProfileScreen = () => {
                 />
               </TouchableOpacity>
             </View>
-
             <View style={styles.avatarGrid}>
               {AVATAR_OPTIONS.map((avatar) => (
                 <TouchableOpacity
@@ -505,6 +517,77 @@ const ProfileScreen = () => {
           </View>
         </View>
       </Modal>
+
+      {/* --- MODAL 2: DİL SEÇİM (YENİ) --- */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={languageModalVisible}
+        onRequestClose={() => setLanguageModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.modalContent,
+              { backgroundColor: colors.card, minHeight: 400 },
+            ]}
+          >
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>
+                {t("profile.select_language")} {/* Yeni dil anahtarı */}
+              </Text>
+              <TouchableOpacity onPress={() => setLanguageModalVisible(false)}>
+                <Ionicons
+                  name="close-circle"
+                  size={24}
+                  color={colors.textSecondary}
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* Dil Listesi */}
+            <View style={{ marginTop: 10 }}>
+              {LANGUAGE_OPTIONS.map((lang, index) => (
+                <TouchableOpacity
+                  key={lang.code}
+                  onPress={() => handleLanguageSelect(lang.code)}
+                  style={[
+                    styles.languageOptionRow, // Aşağıya stil ekledim
+                    {
+                      borderBottomColor: colors.border,
+                      borderBottomWidth:
+                        index === LANGUAGE_OPTIONS.length - 1 ? 0 : 0.5,
+                    },
+                  ]}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text style={{ fontSize: 24, marginRight: 15 }}>
+                      {lang.icon}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: colors.text,
+                        fontWeight:
+                          currentLang === lang.code ? "bold" : "normal",
+                      }}
+                    >
+                      {lang.label}
+                    </Text>
+                  </View>
+                  {currentLang === lang.code && (
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={20}
+                      color={colors.primary}
+                    />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -522,14 +605,14 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   avatarContainer: {
-    width: 90, // Biraz büyüttüm
+    width: 90,
     height: 90,
     borderRadius: 45,
     borderWidth: 3,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 15,
-    overflow: "visible", // Badge taşsın diye visible yaptım
+    overflow: "visible",
     backgroundColor: "rgba(255,255,255,0.05)",
     position: "relative",
   },
@@ -548,7 +631,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#fff", // veya arka plan rengi
+    borderColor: "#fff",
   },
   emailText: {
     fontSize: 18,
@@ -695,6 +778,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 2,
     borderColor: "#fff",
+  },
+  // YENİ: Dil Seçim Satırı Stili
+  languageOptionRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 15,
+    paddingHorizontal: 5,
   },
 });
 

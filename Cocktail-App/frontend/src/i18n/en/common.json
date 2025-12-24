@@ -107,6 +107,7 @@
     "empty_hint": "Try changing the search mode to see cocktails containing your ingredients."
   },
   "profile": {
+    "select_language": "Select Language",
     "account_actions": "Account",
   "my_favorites": "My Favorites",
   "app_settings": "App Settings",

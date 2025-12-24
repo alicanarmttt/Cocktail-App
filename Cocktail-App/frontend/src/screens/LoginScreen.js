@@ -32,7 +32,7 @@ import {
 // Redux
 import { loginOrRegisterUser, getLoginStatus } from "../features/userSlice";
 
-// Native Google Sign-In Imports (YENİ)
+// Native Google Sign-In Imports
 import {
   GoogleSignin,
   statusCodes,
@@ -80,17 +80,16 @@ const LoginScreen = () => {
   // Ortam değişkenlerini al
   const webClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 
-  // --- YENİ: Google Sign-In Konfigürasyonu ---
+  // --- Google Sign-In Konfigürasyonu ---
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId:
-        "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com", // Firebase Console'daki Web Client ID
+      webClientId: webClientId, // DEĞİŞİKLİK: Hardcoded ID yerine tekrar değişkene bağladık (Temiz kod)
       offlineAccess: true,
       scopes: ["profile", "email"],
     });
   }, [webClientId]);
 
-  // --- YENİ: Native Google Login İşlemi ---
+  // --- Native Google Login İşlemi ---
   const onGoogleButtonPress = async () => {
     // Zaten işlem yapılıyorsa durdur
     if (googleLoading || isFirebaseLoading || loginStatus === "loading") return;
@@ -105,7 +104,7 @@ const LoginScreen = () => {
       // 2. Kullanıcı seçimi ve Token alma
       const userInfo = await GoogleSignin.signIn();
 
-      // Versiyon uyumluluğu için kontrol (idToken bazen data içinde, bazen direkt gelir)
+      // Versiyon uyumluluğu için kontrol
       const idToken = userInfo.data?.idToken || userInfo.idToken;
 
       if (!idToken) {
@@ -114,6 +113,9 @@ const LoginScreen = () => {
 
       // 3. Firebase Credential oluştur
       const googleCredential = GoogleAuthProvider.credential(idToken);
+
+      // DEĞİŞİKLİK: Firebase'e dili bildir (Google ile girse bile dili bilsin)
+      auth.languageCode = i18n.language;
 
       // 4. Firebase'e giriş yap
       const userCredential = await signInWithCredential(auth, googleCredential);
@@ -142,7 +144,7 @@ const LoginScreen = () => {
     }
   };
 
-  // --- Klasik Email/Şifre Kayıt İşlemleri (Dokunulmadı) ---
+  // --- Klasik Email/Şifre Kayıt İşlemleri ---
   const handleRegister = async () => {
     if (email === "" || password === "") {
       Alert.alert(t("general.error"), t("auth.errors.empty_fields"));
@@ -152,7 +154,9 @@ const LoginScreen = () => {
     setIsFirebaseLoading(true);
 
     try {
+      // Burası zaten doğruydu, korundu:
       auth.languageCode = i18n.language;
+
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -220,6 +224,8 @@ const LoginScreen = () => {
       return;
     }
     try {
+      // Şifre sıfırlama maili de seçili dilde gider
+      auth.languageCode = i18n.language;
       await sendPasswordResetEmail(auth, email);
       Alert.alert(
         "Başarılı",
@@ -351,7 +357,7 @@ const LoginScreen = () => {
               <View style={styles.divider} />
             </View>
 
-            {/* --- GÜNCELLENEN GOOGLE BUTONU --- */}
+            {/* --- GOOGLE BUTONU --- */}
             <Pressable
               style={[
                 styles.googleButton,
@@ -363,7 +369,7 @@ const LoginScreen = () => {
               disabled={
                 loginStatus === "loading" || isFirebaseLoading || googleLoading
               }
-              onPress={onGoogleButtonPress} // Yeni fonksiyona bağlandı
+              onPress={onGoogleButtonPress}
             >
               {googleLoading ? (
                 <ActivityIndicator color="#fff" />

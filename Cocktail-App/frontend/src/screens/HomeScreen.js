@@ -84,15 +84,19 @@ const HomeScreen = ({ navigation }) => {
 
   // 1. Dil Kancasını (Hook) Başlat
   const { t, i18n } = useTranslation();
-  // Helper: Dinamik İsim Seçici
+
+  // --- GÜNCELLEME: ÇOKLU DİL İÇİN HELPER ---
   const getName = (item) => {
     if (!item || !item.name) return "";
 
-    // 1. Öncelik: Seçili dil (örn: item.name['tr'])
-    // 2. Öncelik: İngilizce (Fallback) (örn: item.name['en'])
-    return item.name[i18n.language] || item.name["en"] || "";
-  };
+    // GÜVENLİK ÖNLEMİ: i18n.language bazen 'tr-TR', 'en-US' dönebilir.
+    // Bizim veritabanı anahtarlarımız 'tr', 'en', 'de' olduğu için ilk 2 harfi alıyoruz.
+    const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
 
+    // 1. İstenen dil var mı? (örn: item.name['es'])
+    // 2. Yoksa İngilizce (Fallback)
+    return item.name[langCode] || item.name["en"] || "";
+  };
   // 1. ADIM: Tüm kokteylleri Redux'tan çek (4 kokteylimiz)
   const allCocktails = useSelector(selectAllCocktails);
   const status = useSelector(getCocktailsListStatus);
@@ -131,8 +135,8 @@ const HomeScreen = ({ navigation }) => {
     const others = [];
 
     allCocktails.forEach((cocktail) => {
-      // İngilizce ismine göre popüler mi diye bakıyoruz (Data tutarlılığı için)
-      if (POPULAR_COCKTAILS.includes(cocktail.name.en)) {
+      // Popülerlik kontrolü her zaman 'en' ismine göre yapılır (Veri tutarlılığı için)
+      if (cocktail.name && POPULAR_COCKTAILS.includes(cocktail.name.en)) {
         populars.push(cocktail);
       } else {
         others.push(cocktail);

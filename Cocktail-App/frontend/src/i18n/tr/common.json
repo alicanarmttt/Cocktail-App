@@ -106,6 +106,7 @@
     "empty_hint": "Elinizdeki malzemeyi içeren kokteylleri görmek için geri dönüp arama modunu değiştirebilirsiniz."
   },
   "profile": {
+    "select_language": "Dil Seçin",
   "account_actions": "HESABIM",
   "my_favorites": "Favorilerim",
   "app_settings": "UYGULAMA AYARLARI",
