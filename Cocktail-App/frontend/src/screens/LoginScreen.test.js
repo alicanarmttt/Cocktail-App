@@ -25,7 +25,8 @@ jest.mock("../api/firebaseConfig", () => ({
 
 // --- 2. REDUX MOCK ---
 // Ekran, dispatch ve useSelector kullanıyor.
-const mockDispatch = jest.fn();
+// Yeni hali (unwrap fonksiyonu olan bir obje döndürsün):
+const mockDispatch = jest.fn(() => ({ unwrap: jest.fn() }));
 
 jest.mock("react-redux", () => ({
   useDispatch: () => mockDispatch,
