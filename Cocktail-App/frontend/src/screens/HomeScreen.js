@@ -1,24 +1,19 @@
-// ... (Importlar ve mantık aynı kalıyor) ...
-// GÜNCELLEME: 'useState' (seçili kokteyli tutmak için) eklendi
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import {
   StyleSheet,
   Text,
   View,
-  ActivityIndicator,
   Image,
-  Pressable,
-  Modal,
   FlatList,
   TouchableOpacity,
-  Platform, // GÜNCELLEME: Platform kontrolü için eklendi
+  Platform,
+  Dimensions,
+  Animated,
 } from "react-native";
-// GÜNCELLEME: 'SafeAreaView' (çentik/kenar boşlukları için)
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-// GÜNCELLEME: Yeni kurduğumuz 'Picker' (Rulet) kütüphanesini import ediyoruz
 import { Picker } from "@react-native-picker/picker";
 import { useTheme } from "@react-navigation/native";
 import PremiumButton from "../ui/PremiumButton.js";
@@ -28,8 +23,6 @@ import {
   selectAllCocktails,
   getCocktailsListError,
   getCocktailsListStatus,
-  // GÜNCELLEME: Redux Store'dan ID'ye göre kokteyl bulmak için
-  // 'selectCocktailById' selector'ünü (bulucu) slice'ımızdan import ediyoruz.
   selectCocktailById,
 } from "../features/cocktails/cocktailSlice.js";
 import VINTAGE_FRAME_URL from "../../assets/gold_frame.png";
@@ -38,14 +31,18 @@ import SkeletonCard from "../components/common/SkeletonCard";
 import ErrorView from "../components/common/ErrorView";
 import { fetchFavorites } from "../features/favoritesSlice";
 import { selectCurrentUser } from "../features/userSlice.js";
-// ... (Component mantığı ve state'ler aynen korunuyor) ...
-/**
- * @desc    Uygulamanın ana ekranı. Üstte bir gösterge, altta bir "Rulet" (Picker) gösterir.
- * @param {object} navigation - React Navigation tarafından sağlanır.
- */
+
+const { width, height } = Dimensions.get("window");
+
+// --- ANDROID AYARLARI ---
+const CARD_WIDTH = width * 0.78;
+const SPACING = 10;
+
 const HomeScreen = ({ navigation }) => {
   const { colors, fonts } = useTheme();
+  const scrollX = useRef(new Animated.Value(0)).current;
 
+  // --- DATA ---
   const POPULAR_COCKTAILS = [
     "Margarita",
     "Mojito",
@@ -70,116 +67,75 @@ const HomeScreen = ({ navigation }) => {
   ];
 
   const dispatch = useDispatch();
-
   const currentUser = useSelector(selectCurrentUser);
   const userId = currentUser?.user_id || currentUser?.id;
-  // 3. userId varsa favorileri güncelle
-  // Bu sayede kalp ikonları Home sayfasında veya Detay'a girince doğru gözükür.
+
   useEffect(() => {
-    if (userId) {
-      // console.log("Home açıldı, favoriler güncelleniyor...", userId);
-      dispatch(fetchFavorites(userId));
-    }
+    if (userId) dispatch(fetchFavorites(userId));
   }, [dispatch, userId]);
 
-  // 1. Dil Kancasını (Hook) Başlat
   const { t, i18n } = useTranslation();
 
-  // --- GÜNCELLEME: ÇOKLU DİL İÇİN HELPER ---
   const getName = (item) => {
     if (!item || !item.name) return "";
-
-    // GÜVENLİK ÖNLEMİ: i18n.language bazen 'tr-TR', 'en-US' dönebilir.
-    // Bizim veritabanı anahtarlarımız 'tr', 'en', 'de' olduğu için ilk 2 harfi alıyoruz.
     const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
-
-    // 1. İstenen dil var mı? (örn: item.name['es'])
-    // 2. Yoksa İngilizce (Fallback)
     return item.name[langCode] || item.name["en"] || "";
   };
-  // 1. ADIM: Tüm kokteylleri Redux'tan çek (4 kokteylimiz)
+
   const allCocktails = useSelector(selectAllCocktails);
   const status = useSelector(getCocktailsListStatus);
-
   const error = useSelector(getCocktailsListError);
-
-  // 2. ADIM: Rulette 'o an' hangisinin seçili olduğunu tutmak için lokal 'state'
-  // GÜNCELLEME: Başlangıç değeri 'null' (Boş) olarak ayarlandı.
   const [selectedCocktailId, setSelectedCocktailId] = useState(null);
-
-  // Arama modalı için stateler
   const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
+  ("");
 
-  // YENİ: Android Özel Picker Modalı için State
-  const [isAndroidPickerVisible, setIsAndroidPickerVisible] = useState(false);
-
-  // 3. ADIM: API'den veriyi çek (Bu kod aynı kaldı)
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchCocktails());
-    }
+    if (status === "idle") dispatch(fetchCocktails());
   }, [status, dispatch]);
 
-  // 4. ADIM: 'Gösterge' alanı için seçili kokteylin tüm verisini bul
-  // GÜNCELLEME: 'useSelector'u, 'selectedCocktailId' değiştiğinde
-  // Store'dan doğru kokteyli bulmak için kullanıyoruz.
   const selectedCocktail = useSelector((state) =>
     selectCocktailById(state, selectedCocktailId)
   );
 
-  // --- AKILLI SIRALAMA (POPÜLERLER EN BAŞA) ---
   const sortedCocktails = useMemo(() => {
     if (!allCocktails || allCocktails.length === 0) return [];
-
     const populars = [];
     const others = [];
-
     allCocktails.forEach((cocktail) => {
-      // Popülerlik kontrolü her zaman 'en' ismine göre yapılır (Veri tutarlılığı için)
       if (cocktail.name && POPULAR_COCKTAILS.includes(cocktail.name.en)) {
         populars.push(cocktail);
       } else {
         others.push(cocktail);
       }
     });
-
-    // Popülerleri kendi içinde sırala (Opsiyonel, dizi sırasına göre de kalabilir)
-    // populars.sort((a, b) => getName(a).localeCompare(getName(b)));
-
-    // Diğerlerini alfabetik sırala
     others.sort((a, b) => getName(a).localeCompare(getName(b)));
-
     return [...populars, ...others];
   }, [allCocktails, i18n.language]);
 
-  // Otomatik açılış ekranında cosmopolitanı getir.
+  const flatListRef = useRef(null);
+
   useEffect(() => {
     if (sortedCocktails.length > 0 && selectedCocktailId === null) {
-      const targetCocktail = sortedCocktails.find(
-        (c) => c.name && c.name.en === "Cosmopolitan"
-      );
-
-      if (targetCocktail) {
-        setSelectedCocktailId(targetCocktail.cocktail_id);
-      }
+      const target = sortedCocktails.find((c) => c.name?.en === "Cosmopolitan");
+      if (target) setSelectedCocktailId(target.cocktail_id);
     }
   }, [sortedCocktails, selectedCocktailId]);
 
-  // --- YENİ: ARAMADAN SEÇİM YAPMA ---
   const handleSelectFromSearch = (id) => {
-    setSelectedCocktailId(id); // Ruleti güncelle
-    setIsSearchModalVisible(false); // Modalı kapat
-  };
-
-  // --- YENİ: ANDROID MODALDAN SEÇİM YAPMA ---
-  const handleSelectFromAndroidPicker = (id) => {
     setSelectedCocktailId(id);
-    setIsAndroidPickerVisible(false);
+    setIsSearchModalVisible(false);
   };
 
-  // 5. ADIM: Duruma göre içeriği çiz
+  const onViewableItemsChanged = useRef(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      const centerItem = viewableItems[0];
+      if (centerItem && centerItem.item.cocktail_id !== selectedCocktailId) {
+        setSelectedCocktailId(centerItem.item.cocktail_id);
+      }
+    }
+  }).current;
 
-  // Yükleniyor durumu (Sadece ilk yüklemede)
+  // --- RENDER ---
   if (status === "loading" && allCocktails.length === 0) {
     return (
       <View
@@ -188,56 +144,202 @@ const HomeScreen = ({ navigation }) => {
           { backgroundColor: colors.background },
         ]}
       >
-        {/* Spinner yerine İskelet Kartı */}
-        {/* Kullanıcıya içeriğin yapısı hakkında ipucu verir */}
         <SkeletonCard />
-
-        {/* Altına isteğe bağlı küçük bir yazı */}
-        <Text style={{ marginTop: 20, color: colors.textSecondary }}>
-          {t("general.loading", "Kokteyller Hazırlanıyor...")}
-        </Text>
       </View>
     );
   }
 
-  // Hata durumu
   if (status === "failed") {
+    return <ErrorView onRetry={() => dispatch(fetchCocktails())} />;
+  }
+
+  // 🔥 ANDROID DESIGN (Center Quote + Visible Search Pill)
+  if (Platform.OS === "android") {
     return (
-      <ErrorView
-        // Başlık ve mesajı dil desteğiyle (veya varsayılanla) veriyoruz
-        title={t("home.error_title", "Bağlantı Kurulamadı")}
-        message={
-          error || t("general.error", "Veriler yüklenirken bir sorun oluştu.")
-        }
-        // "Tekrar Dene" butonuna basınca API isteğini yeniden tetikler
-        onRetry={() => dispatch(fetchCocktails())}
-      />
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
+        {/* 1. HEADER ALANI */}
+        <View style={styles.androidHeaderContainer}>
+          {/* SÖZ (Tam Ortada) */}
+          <Text style={[styles.headerQuote, { color: colors.textSecondary }]}>
+            {t("home.quote")}
+          </Text>
+
+          {/* ARAMA BUTONU (Hemen Altında - Çok Belirgin) */}
+          <TouchableOpacity
+            style={[
+              styles.searchPill,
+              { backgroundColor: colors.card, borderColor: colors.primary },
+            ]}
+            onPress={() => setIsSearchModalVisible(true)}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name="search"
+              size={18}
+              color={colors.primary}
+              style={{ marginRight: 8 }}
+            />
+            <Text
+              style={{
+                color: colors.textSecondary,
+                fontSize: 14,
+                letterSpacing: 0.5,
+              }}
+            >
+              {t("home.search_btn", "KOKTEYL ARA...")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* 2. GALLERY */}
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Animated.FlatList
+            ref={flatListRef}
+            data={sortedCocktails}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.cocktail_id.toString()}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+              { useNativeDriver: true }
+            )}
+            snapToInterval={CARD_WIDTH}
+            decelerationRate={0.8}
+            bounces={false}
+            contentContainerStyle={{
+              paddingHorizontal: (width - CARD_WIDTH) / 2,
+              paddingVertical: 10,
+            }}
+            onViewableItemsChanged={onViewableItemsChanged}
+            viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
+            renderItem={({ item, index }) => {
+              const inputRange = [
+                (index - 1) * CARD_WIDTH,
+                index * CARD_WIDTH,
+                (index + 1) * CARD_WIDTH,
+              ];
+              const scale = scrollX.interpolate({
+                inputRange,
+                outputRange: [0.9, 1, 0.9],
+                extrapolate: "clamp",
+              });
+              const opacity = scrollX.interpolate({
+                inputRange,
+                outputRange: [0.6, 1, 0.6],
+                extrapolate: "clamp",
+              });
+
+              return (
+                <Animated.View
+                  style={{ width: CARD_WIDTH, transform: [{ scale }], opacity }}
+                >
+                  <TouchableOpacity
+                    activeOpacity={0.95}
+                    onPress={() => setSelectedCocktailId(item.cocktail_id)}
+                    style={[
+                      styles.androidPremiumCard,
+                      { backgroundColor: colors.card, shadowColor: "#000" },
+                    ]}
+                  >
+                    <View style={styles.premiumImageWrapper}>
+                      <CocktailImage
+                        uri={item.image_url}
+                        style={styles.premiumImage}
+                      />
+                      <Image
+                        source={VINTAGE_FRAME_URL}
+                        style={styles.frameOverlay}
+                        resizeMode="stretch"
+                      />
+                    </View>
+                    <View style={styles.premiumTextContainer}>
+                      <Text
+                        style={[styles.premiumTitle, { color: colors.text }]}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
+                      >
+                        {getName(item).toUpperCase()}
+                      </Text>
+                      {POPULAR_COCKTAILS.includes(item.name.en) ? (
+                        <View
+                          style={[
+                            styles.badge,
+                            { borderColor: colors.primary },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              color: colors.primary,
+                              fontSize: 10,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            ★ SIGNATURE ★
+                          </Text>
+                        </View>
+                      ) : (
+                        <View
+                          style={{
+                            width: 30,
+                            height: 1,
+                            backgroundColor: colors.border,
+                            marginTop: 8,
+                          }}
+                        />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                </Animated.View>
+              );
+            }}
+          />
+        </View>
+
+        {/* 3. FOOTER */}
+        <View style={styles.androidFooter}>
+          <PremiumButton
+            variant="gold"
+            title={t("home.prepare_btn")}
+            style={{ width: "75%", height: 50 }}
+            onPress={() =>
+              navigation.navigate("CocktailDetail", {
+                cocktailId: selectedCocktailId,
+              })
+            }
+          />
+        </View>
+
+        <CocktailSelectorModal
+          visible={isSearchModalVisible}
+          onClose={() => setIsSearchModalVisible(false)}
+          onSelect={handleSelectFromSearch}
+          multiSelect={false}
+        />
+      </SafeAreaView>
     );
   }
 
-  // Başarılı (succeeded) durumu
+  // --- IOS RETURN (AYNI) ---
   return (
     <SafeAreaView
       edges={["top", "left", "right"]}
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      {/* GÖSTERGE ALANI (Ekranın Üstü) */}
       <View style={styles.displayArea}>
-        {/* "Afilli Cümle" Eklendi */}
         <Text style={[styles.headerQuote, { color: colors.textSecondary }]}>
           {t("home.quote")}
         </Text>
-
-        {/* --- YENİ ÇERÇEVE ALANI (Image Frame) --- */}
         <View style={[styles.imageWrapper, { shadowColor: "#000" }]}>
-          {/* KATMAN 1 (En Alt): KOKTEYL RESMİ */}
           {selectedCocktail ? (
             <CocktailImage
               uri={selectedCocktail.image_url}
               style={styles.cocktailImage}
-            ></CocktailImage>
+            />
           ) : (
-            // Resim yoksa gösterilecek Placeholder kutusu
             <View
               style={[
                 styles.cocktailImage,
@@ -256,44 +358,31 @@ const HomeScreen = ({ navigation }) => {
               </Text>
             </View>
           )}
-
-          {/* KATMAN 2 (En Üst): ÇERÇEVE RESMİ */}
-          {/* pointerEvents="none" sayesinde tıklamalar çerçeveye takılmaz, arkaya geçer */}
           <Image
             source={VINTAGE_FRAME_URL}
             style={styles.frameOverlay}
-            resizeMode="stretch" // Çerçeveyi kutuya tam yayar
+            resizeMode="stretch"
             pointerEvents="none"
           />
         </View>
-
-        {/* BUTON */}
         <PremiumButton
           variant="gold"
-          title={t("home.prepare_btn")} // İçindeki yazı
-          disabled={!selectedCocktail} // Seçim yoksa pasif olsun
-          style={styles.prepareButton} // Konumlandırma stillerin (margin vb.) korunsun
-          onPress={() => {
+          title={t("home.prepare_btn")}
+          disabled={!selectedCocktail}
+          style={styles.prepareButton}
+          onPress={() =>
             navigation.navigate("CocktailDetail", {
               cocktailId: selectedCocktail.cocktail_id,
-            });
-          }}
+            })
+          }
         />
       </View>
-
-      {/* RULET / SEÇİM ALANI (Ekranın Altı) */}
       <View
         style={[
           styles.pickerArea,
-          {
-            backgroundColor: colors.subCard,
-            shadowColor: colors.shadow,
-            // DÜZELTME: "Sıkışmış komponent" hissi veren border (beyaz çizgi) kaldırıldı.
-            // Artık sadece shadow ve elevation ile derinlik veriliyor.
-          },
+          { backgroundColor: colors.subCard, shadowColor: colors.shadow },
         ]}
       >
-        {/* Üstteki Arama Butonu (Tüm platformlarda aynı) */}
         <PremiumButton
           variant="silver"
           onPress={() => setIsSearchModalVisible(true)}
@@ -311,197 +400,55 @@ const HomeScreen = ({ navigation }) => {
             size={18}
             style={{ marginRight: 8, opacity: 0.6 }}
           />
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: "500",
-            }}
-          >
+          <Text style={{ fontSize: 14, fontWeight: "500" }}>
             {t("home.search_btn", "Kokteyl ara...")}
           </Text>
         </PremiumButton>
-
         <View style={styles.pickerContainer}>
-          {/* --- AKILLI AYRIM (PLATFORM CONTROL) --- */}
-          {Platform.OS === "ios" ? (
-            // === IOS İÇİN: STANDART WHEEL PICKER ===
-            <Picker
-              selectedValue={selectedCocktailId}
-              onValueChange={(itemValue) => setSelectedCocktailId(itemValue)}
-              style={styles.pickerStyle}
-              dropdownIconColor={colors.text}
-              itemStyle={[styles.pickerItemStyle, { color: colors.text }]}
-            >
+          <Picker
+            selectedValue={selectedCocktailId}
+            onValueChange={(itemValue) => setSelectedCocktailId(itemValue)}
+            style={styles.pickerStyle}
+            itemStyle={[styles.pickerItemStyle, { color: colors.text }]}
+          >
+            <Picker.Item
+              label={t("home.pick_cocktail") + "..."}
+              value={null}
+              color={colors.text}
+            />
+            {sortedCocktails.map((c) => (
               <Picker.Item
-                label={t("home.pick_cocktail") + "..."}
-                value={null}
+                key={c.cocktail_id}
+                label={
+                  (POPULAR_COCKTAILS.includes(c.name.en) ? "⭐ " : "") +
+                  getName(c)
+                }
+                value={c.cocktail_id}
                 color={colors.text}
               />
-              {sortedCocktails.map((cocktail) => {
-                const isPopular = POPULAR_COCKTAILS.includes(cocktail.name.en);
-                const labelPrefix = isPopular ? "⭐ " : "";
-                return (
-                  <Picker.Item
-                    key={cocktail.cocktail_id}
-                    label={labelPrefix + getName(cocktail)}
-                    value={cocktail.cocktail_id}
-                    color={colors.text}
-                  />
-                );
-              })}
-            </Picker>
-          ) : (
-            // === ANDROID İÇİN: KOMPAKT VE ORTALI YERLEŞİM ===
-            <View style={styles.androidPickerWrapper}>
-              {/* Aradaki etiket (Veya Seçim Yapın) */}
-              <Text
-                style={[styles.androidLabel, { color: colors.textSecondary }]}
-              >
-                {t("home.pick_cocktail_label", "Veya Listeden Seç:")}
-              </Text>
-
-              {/* BUTON GÖRÜNÜMLÜ SEÇİCİ (Modal Açan) */}
-              <TouchableOpacity
-                style={[
-                  styles.androidPickerButton,
-                  {
-                    backgroundColor: colors.card,
-                    borderColor: colors.border, // Butonun kendi çerçevesi kalabilir, şık durur.
-                  },
-                ]}
-                onPress={() => setIsAndroidPickerVisible(true)}
-              >
-                <Text
-                  style={[styles.androidPickerText, { color: colors.text }]}
-                  numberOfLines={1}
-                >
-                  {selectedCocktail
-                    ? getName(selectedCocktail)
-                    : t("home.pick_cocktail") + "..."}
-                </Text>
-                <Ionicons
-                  name="chevron-down"
-                  size={20}
-                  color={colors.textSecondary}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
+            ))}
+          </Picker>
         </View>
       </View>
-
-      {/* --- YENİ KULLANIM: ORTAK ARAMA MODALI --- */}
       <CocktailSelectorModal
         visible={isSearchModalVisible}
         onClose={() => setIsSearchModalVisible(false)}
         onSelect={handleSelectFromSearch}
-        multiSelect={false} // Home ekranı tekli seçim yapar
+        multiSelect={false}
       />
-
-      {/* --- ANDROID İÇİN SEÇİM MODALI --- */}
-      {Platform.OS === "android" && (
-        <Modal
-          visible={isAndroidPickerVisible}
-          animationType="slide"
-          presentationStyle="pageSheet"
-          transparent={false}
-          onRequestClose={() => setIsAndroidPickerVisible(false)}
-        >
-          <View
-            style={[
-              styles.modalContainer,
-              { backgroundColor: colors.background },
-            ]}
-          >
-            <View
-              style={[styles.modalHeader, { borderBottomColor: colors.border }]}
-            >
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
-                {t("home.select_modal_title", "Bir Kokteyl Seç")}
-              </Text>
-              <Pressable onPress={() => setIsAndroidPickerVisible(false)}>
-                <Ionicons
-                  name="close-circle"
-                  size={30}
-                  color={colors.textSecondary}
-                />
-              </Pressable>
-            </View>
-
-            <FlatList
-              data={sortedCocktails}
-              keyExtractor={(item) => item.cocktail_id.toString()}
-              contentContainerStyle={{ paddingBottom: 20 }}
-              renderItem={({ item }) => {
-                const isSelected = selectedCocktailId === item.cocktail_id;
-                const isPopular = POPULAR_COCKTAILS.includes(item.name.en);
-
-                return (
-                  <TouchableOpacity
-                    style={[
-                      styles.searchItem,
-                      {
-                        borderBottomColor: colors.border,
-                        backgroundColor: isSelected
-                          ? colors.card
-                          : "transparent",
-                      },
-                    ]}
-                    onPress={() =>
-                      handleSelectFromAndroidPicker(item.cocktail_id)
-                    }
-                  >
-                    <Image
-                      source={{ uri: item.image_url }}
-                      style={[
-                        styles.searchItemImage,
-                        { backgroundColor: colors.subCard },
-                      ]}
-                    />
-                    <View style={{ flex: 1 }}>
-                      <Text
-                        style={[
-                          styles.searchItemText,
-                          {
-                            color: isSelected ? colors.primary : colors.text,
-                            fontWeight: isSelected ? "bold" : "normal",
-                          },
-                        ]}
-                      >
-                        {isPopular ? "⭐ " : ""}
-                        {getName(item)}
-                      </Text>
-                    </View>
-
-                    {isSelected && (
-                      <Ionicons
-                        name="checkmark"
-                        size={24}
-                        color={colors.primary}
-                      />
-                    )}
-                  </TouchableOpacity>
-                );
-              }}
-            />
-          </View>
-        </Modal>
-      )}
     </SafeAreaView>
   );
 };
 
-// === Stiller ===
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   centeredContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  // --- ÜST KISIM ---
+
+  // --- IOS STİLLERİ ---
   displayArea: {
     flex: 1.5,
     justifyContent: "center",
@@ -515,30 +462,16 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-  // --- YENİ ÇERÇEVE SİSTEMİ ---
   imageWrapper: {
     width: 300,
     height: 300,
     justifyContent: "center",
     alignItems: "center",
-    position: "relative",
-    // 3D Gölge Efekti
-    ...Platform.select({
-      ios: {
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.5,
-        shadowRadius: 15,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 15,
   },
-  cocktailImage: {
-    width: 265,
-    height: 265,
-    borderRadius: 5,
-  },
+  cocktailImage: { width: 265, height: 265, borderRadius: 5 },
   frameOverlay: {
     position: "absolute",
     top: 0,
@@ -552,151 +485,104 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 110,
   },
-  placeholderText: {
-    textAlign: "center",
-  },
-  prepareButton: {
-    marginTop: 5,
-  },
-  prepareButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-
-  // --- ALT KISIM (PICKER & SEARCH) ---
+  placeholderText: { textAlign: "center" },
+  prepareButton: { marginTop: 5 },
   pickerArea: {
     width: "100%",
-    justifyContent: Platform.OS === "android" ? "center" : "flex-start",
-    borderRadius: 30,
+    flex: 1,
+    justifyContent: "center",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     marginTop: 20,
-    paddingTop: 20,
+    paddingTop: 15,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 10,
-    // GÜNCELLEME: Platforma göre esneklik (flex) yönetimi
-    ...Platform.select({
-      ios: {
-        flex: 1, // iOS'ta tekerlek için tüm alanı kaplasın
-      },
-      android: {
-        flex: 0, // Android'de sadece içerik kadar (Sıkışma önlemi)
-        paddingBottom: 40, // Altına yeterli nefes payı
-        marginBottom: 10,
-      },
-    }),
   },
   compactSearchBtn: {
-    width: "85%",
+    width: "90%",
     height: 40,
-    marginBottom: Platform.OS === "android" ? 0 : 0,
     alignSelf: "center",
-    borderRadius: 10,
+    borderRadius: 12,
   },
-
   pickerContainer: {
-    // DÜZELTME: Android'de 'flex: 1' OLMAZ!
-    // Parent (pickerArea) flex: 0 (auto height) olduğu için,
-    // çocuk flex: 1 olamaz. Çocuk da auto height olmalı.
-    flex: Platform.OS === "android" ? 0 : 1,
+    flex: 1,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
-  pickerStyle: {
+  pickerStyle: { width: "100%", height: "90%" },
+  pickerItemStyle: { fontSize: 21, fontWeight: "500" },
+
+  // --- ANDROID DÜZENLEMELERİ ---
+  androidHeaderContainer: {
+    paddingTop: 15,
+    paddingHorizontal: 20,
+    alignItems: "center", // Her şeyi ortala
     width: "100%",
-    height: "100%",
-  },
-  pickerItemStyle: {
-    fontSize: 21,
-    fontWeight: "500",
+    marginBottom: 5,
   },
 
-  // YENİ: Android Picker Wrapper (Hizalama Kutusu)
-  androidPickerWrapper: {
-    width: "100%",
-    alignItems: "center",
-    marginTop: 15, // Üstteki arama butonuyla arasına mesafe (GAP)
-  },
-
-  // YENİ: Android Picker Etiketi
-  androidLabel: {
-    fontSize: 12,
-    marginBottom: 8, // Buton ile yazı arası boşluk
-    alignSelf: "center",
-    opacity: 0.8, // Biraz daha silik
-  },
-
-  // YENİ: Android Picker Buton Stili (Button Like)
-  androidPickerButton: {
+  // YENİ SEARCH PILL (Geniş ve Şık)
+  searchPill: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between", // Yazı solda, ikon sağda
-    paddingHorizontal: 15,
-    width: "85%", // Search butonuyla aynı genişlik
-    height: 45, // Search butonuna yakın yükseklik
-    borderRadius: 10,
+    justifyContent: "center",
+    width: "60%", // Ekranın %60'ı kadar genişlik (Yeterince belirgin)
+    height: 36,
+    borderRadius: 20, // Tam oval
     borderWidth: 1,
-    // GÜNCELLEME: Buton hissi için gölge eklendi
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  androidPickerText: {
-    fontSize: 16,
-    fontWeight: "500",
-    flex: 1,
+    marginTop: 10, // Quote ile arası
+    elevation: 2, // Hafif gölge
   },
 
-  // --- MODAL STİLLERİ ---
-  modalContainer: {
+  // KARTLAR
+  androidPremiumCard: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? 0 : 20,
-  },
-  modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-
-  modalInput: {
-    flex: 1,
-    height: 50,
-    fontSize: 16,
-  },
-  searchItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-  },
-  searchItemImage: {
-    width: 40,
-    height: 40,
+    marginVertical: 10,
     borderRadius: 20,
-    marginRight: 15,
+    padding: 10,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.05)",
+    height: height * 0.58, // Hafif kıstık ki sığsın
   },
-  searchItemText: {
-    fontSize: 16,
-    flex: 1,
+  premiumImageWrapper: {
+    width: "100%",
+    aspectRatio: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 5,
   },
-  noResultText: {
+  premiumImage: { width: "92%", height: "92%", borderRadius: 5 },
+  premiumTextContainer: {
+    marginTop: 10,
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 10,
+  },
+  premiumTitle: {
+    fontSize: 26,
+    fontWeight: "bold",
+    fontFamily: "serif",
     textAlign: "center",
-    marginTop: 30,
-    fontSize: 16,
+    letterSpacing: 1.2,
+    marginBottom: 5,
   },
-  errorText: {
-    fontSize: 16,
+  badge: {
+    marginTop: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  androidFooter: {
+    paddingBottom: 25,
+    paddingTop: 5,
+    alignItems: "center",
+    width: "100%",
   },
 });
 
