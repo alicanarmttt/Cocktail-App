@@ -25,6 +25,7 @@ import {
   selectIsPro,
   clearUser,
   updateUserAvatar,
+  selectIsGuest, // DEĞİŞİKLİK 1: isGuest import edildi
 } from "../features/userSlice";
 import { auth } from "../api/firebaseConfig";
 import { signOut } from "firebase/auth";
@@ -44,7 +45,6 @@ import apiClient from "../api/apiClient";
 import PremiumButton from "../ui/PremiumButton";
 
 // --- SABİTLER ---
-// Avatar Seçenekleri
 const AVATAR_OPTIONS = [
   { id: 1, source: require("../../assets/avatars/mascot_1_optimized.png") },
   { id: 2, source: require("../../assets/avatars/mascot_2_optimized.png") },
@@ -55,7 +55,6 @@ const AVATAR_OPTIONS = [
 ];
 const DEFAULT_AVATAR_ID = 1;
 
-// YENİ: Dil Seçenekleri (Bayraklar veya Sadece İsimler)
 const LANGUAGE_OPTIONS = [
   { code: "en", label: "English", icon: "🇬🇧" },
   { code: "tr", label: "Türkçe", icon: "🇹🇷" },
@@ -71,29 +70,30 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
 
-  // --- LOCAL STATE ---
-  const [modalVisible, setModalVisible] = useState(false); // Avatar modalı
-  const [languageModalVisible, setLanguageModalVisible] = useState(false); // YENİ: Dil modalı
+  const [modalVisible, setModalVisible] = useState(false);
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
 
-  // --- SELECTORS ---
   const currentUser = useSelector(selectCurrentUser);
+  // DEĞİŞİKLİK 2: Misafir durumu
+  const isGuest = useSelector(selectIsGuest);
   const isPro = useSelector(selectIsPro);
   const currentLang = useSelector(selectLanguage);
   const currentTheme = useSelector(selectThemeMode);
 
-  // Avatar Logic
   const currentAvatarId = currentUser?.avatar_id || DEFAULT_AVATAR_ID;
   const currentAvatarSource =
     AVATAR_OPTIONS.find((a) => a.id === currentAvatarId)?.source ||
     AVATAR_OPTIONS[0].source;
 
-  // YENİ: Şu anki dilin etiketini bul (örn: "tr" -> "Türkçe")
   const currentLangLabel =
     LANGUAGE_OPTIONS.find((l) => l.code === currentLang)?.label || "English";
 
   // --- ACTIONS ---
 
   const handleAvatarSelect = async (avatarId) => {
+    // Misafir kontrolü (Avatar değiştiremez)
+    if (isGuest) return;
+
     if (avatarId === currentAvatarId) {
       setModalVisible(false);
       return;
@@ -107,22 +107,17 @@ const ProfileScreen = () => {
     }
   };
 
-  // YENİ: Dil Seçim Fonksiyonu
   const handleLanguageSelect = async (langCode) => {
     if (langCode === currentLang) {
       setLanguageModalVisible(false);
       return;
     }
-
-    // 1. Redux güncelle
     dispatch(setLanguage(langCode));
-    // 2. i18n güncelle
     await i18n.changeLanguage(langCode);
 
-    // 3. Verileri temizle ve yeni dilde çek (Ingredients gibi)
     dispatch(clearSearchResults());
     dispatch(clearDetail());
-    dispatch(fetchIngredients()); // Yeni dilde malzemeleri çek
+    dispatch(fetchIngredients());
 
     setLanguageModalVisible(false);
   };
@@ -132,7 +127,15 @@ const ProfileScreen = () => {
     dispatch(setThemeMode(newMode));
   };
 
-  const handleLogout = async () => {
+  const handleAuthAction = async () => {
+    // DEĞİŞİKLİK 3: Çıkış / Giriş Butonu Mantığı
+    if (isGuest) {
+      // Misafir ise direkt çıkış yap (Login ekranına atar)
+      dispatch(clearUser());
+      return;
+    }
+
+    // Normal kullanıcı ise onay iste
     Alert.alert(t("auth.logout_confirm_title"), t("auth.logout_confirm_msg"), [
       { text: t("general.cancel"), style: "cancel" },
       {
@@ -178,7 +181,28 @@ const ProfileScreen = () => {
     );
   };
 
-  // --- UI COMPONENTS ---
+  // DEĞİŞİKLİK 4: Favorilere Gitme (Misafir Koruması)
+  const handleNavigateFavorites = () => {
+    if (isGuest) {
+      Alert.alert(
+        t("general.attention", "Dikkat"),
+        t(
+          "favorites.guest_warning",
+          "Favorileri görmek için giriş yapmalısınız."
+        ),
+        [
+          { text: t("general.cancel", "İptal"), style: "cancel" },
+          {
+            text: t("auth.login_button", "Giriş Yap"),
+            onPress: () => dispatch(clearUser()),
+          },
+        ]
+      );
+    } else {
+      navigation.navigate("Favorites");
+    }
+  };
+
   const SettingRow = ({ icon, title, rightElement, onPress, isLast }) => (
     <Pressable
       onPress={onPress}
@@ -220,7 +244,7 @@ const ProfileScreen = () => {
         {/* --- 1. HEADER --- */}
         <View style={styles.header}>
           <Pressable
-            onPress={() => setModalVisible(true)}
+            onPress={() => !isGuest && setModalVisible(true)} // Misafir açamaz
             style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
           >
             <View
@@ -234,14 +258,17 @@ const ProfileScreen = () => {
                 style={styles.avatarImage}
                 resizeMode="cover"
               />
-              <View
-                style={[
-                  styles.editIconBadge,
-                  { backgroundColor: colors.primary },
-                ]}
-              >
-                <Ionicons name="pencil" size={12} color="#fff" />
-              </View>
+              {/* Misafirde kalem ikonunu gizle */}
+              {!isGuest && (
+                <View
+                  style={[
+                    styles.editIconBadge,
+                    { backgroundColor: colors.primary },
+                  ]}
+                >
+                  <Ionicons name="pencil" size={12} color="#fff" />
+                </View>
+              )}
             </View>
           </Pressable>
 
@@ -251,7 +278,10 @@ const ProfileScreen = () => {
               { color: colors.text, fontFamily: fonts.families.serif },
             ]}
           >
-            {currentUser?.email}
+            {/* Misafir ise özel başlık */}
+            {isGuest
+              ? t("profile.guest_title", "Misafir Şef")
+              : currentUser?.email}
           </Text>
 
           <View
@@ -264,7 +294,9 @@ const ProfileScreen = () => {
             ]}
           >
             <Ionicons
-              name={isPro ? "star" : "cube-outline"}
+              name={
+                isPro ? "star" : isGuest ? "person-outline" : "cube-outline"
+              }
               size={14}
               color={isPro ? "#000" : colors.textSecondary}
             />
@@ -274,34 +306,71 @@ const ProfileScreen = () => {
                 { color: isPro ? "#000" : colors.textSecondary },
               ]}
             >
-              {isPro ? t("profile.pro_member") : t("profile.free_member")}
+              {isGuest
+                ? t("profile.guest_badge", "Ziyaretçi")
+                : isPro
+                  ? t("profile.pro_member")
+                  : t("profile.free_member")}
             </Text>
           </View>
         </View>
 
-        {/* --- 2. UPSELL BANNER --- */}
-        {!isPro && (
+        {/* --- 2. BANNER ALANI (UPSELL VEYA LOGIN) --- */}
+        {/* Misafir ise: Giriş Yap Bannerı */}
+        {isGuest ? (
           <Pressable
             style={styles.upsellContainer}
-            onPress={() => navigation.navigate("UpgradeToPro")}
+            onPress={() => dispatch(clearUser())} // Login'e atar
           >
             <LinearGradient
-              colors={["#FFD700", "#B8860B"]}
+              colors={[colors.primary, "#800020"]} // Merlot kırmızısı
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.upsellGradient}
             >
               <View>
-                <Text style={styles.upsellTitle}>
-                  {t("navigation.upgrade_pro")}
+                <Text style={[styles.upsellTitle, { color: "#fff" }]}>
+                  {t("profile.sign_in_banner_title", "Kulübe Katıl")}
                 </Text>
-                <Text style={styles.upsellSubtitle}>
-                  {t("profile.unlock_all")}
+                <Text style={[styles.upsellSubtitle, { color: "#eee" }]}>
+                  {t(
+                    "profile.sign_in_banner_subtitle",
+                    "Favorileri kaydet & Pro özellikleri aç"
+                  )}
                 </Text>
               </View>
-              <Ionicons name="arrow-forward-circle" size={32} color="#2A050A" />
+              <Ionicons name="log-in-outline" size={32} color="#fff" />
             </LinearGradient>
           </Pressable>
+        ) : (
+          !isPro && (
+            // Üye ama Pro değilse: Pro Bannerı
+            <Pressable
+              style={styles.upsellContainer}
+              onPress={() => navigation.navigate("UpgradeToPro")}
+            >
+              <LinearGradient
+                colors={["#FFD700", "#B8860B"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.upsellGradient}
+              >
+                <View>
+                  <Text style={styles.upsellTitle}>
+                    {t("navigation.upgrade_pro")}
+                  </Text>
+                  <Text style={styles.upsellSubtitle}>
+                    {t("profile.unlock_all")}
+                  </Text>
+                </View>
+                <Ionicons
+                  name="arrow-forward-circle"
+                  size={32}
+                  color="#2A050A"
+                />
+              </LinearGradient>
+            </Pressable>
+          )
         )}
 
         {/* --- 3. ACCOUNT ACTIONS --- */}
@@ -319,7 +388,7 @@ const ProfileScreen = () => {
           <SettingRow
             icon="heart"
             title={t("profile.my_favorites")}
-            onPress={() => navigation.navigate("Favorites")}
+            onPress={handleNavigateFavorites} // Güncellendi
             rightElement={
               <Ionicons
                 name="chevron-forward"
@@ -342,23 +411,22 @@ const ProfileScreen = () => {
             { backgroundColor: colors.subCard || "#1A1A1A" },
           ]}
         >
-          {/* DEĞİŞİKLİK: Dil Seçimi Artık Modalı Açıyor */}
           <SettingRow
             icon="language-outline"
             title={t("profile.language")}
             rightElement={
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={{ color: colors.textSecondary, marginRight: 5 }}>
-                  {currentLangLabel} {/* Artık dinamik: Türkçe, English vs. */}
+                  {currentLangLabel}
                 </Text>
                 <Ionicons
-                  name="chevron-forward" // Açılır menü hissi için
+                  name="chevron-forward"
                   size={16}
                   color={colors.textSecondary}
                 />
               </View>
             }
-            onPress={() => setLanguageModalVisible(true)} // Toggle yerine modal
+            onPress={() => setLanguageModalVisible(true)}
           />
 
           <SettingRow
@@ -412,53 +480,65 @@ const ProfileScreen = () => {
           />
         </View>
 
-        {/* --- 6. LOGOUT --- */}
+        {/* --- 6. LOGOUT / LOGIN BUTTON --- */}
         <View style={styles.actionContainer}>
           <PremiumButton
-            title={t("auth.logout")}
-            onPress={handleLogout}
-            variant="gold"
+            title={
+              isGuest ? t("auth.login_button", "Giriş Yap") : t("auth.logout")
+            }
+            onPress={handleAuthAction}
+            variant={isGuest ? "gold" : "primary"} // Misafire Gold (Teşvik), Üyeye Normal
             style={{ width: "100%" }}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Ionicons
-                name="log-out-outline"
+                name={isGuest ? "log-in-outline" : "log-out-outline"}
                 size={20}
-                color="#000"
+                color={isGuest ? "#000" : "#fff"}
                 style={{ marginRight: 8 }}
               />
-              <Text style={{ fontWeight: "bold", color: "#000" }}>
-                {t("auth.logout")}
+              <Text
+                style={{ fontWeight: "bold", color: isGuest ? "#000" : "#fff" }}
+              >
+                {isGuest
+                  ? t("auth.login_button", "Giriş Yap")
+                  : t("auth.logout")}
               </Text>
             </View>
           </PremiumButton>
         </View>
 
-        {/* --- 7. DANGER ZONE --- */}
-        <View style={styles.dangerZone}>
-          <Pressable
-            onPress={handleDeleteAccount}
-            style={({ pressed }) => [
-              { opacity: pressed ? 0.5 : 1, padding: 10 },
-            ]}
-          >
+        {/* --- 7. DANGER ZONE (Sadece Üyeler İçin) --- */}
+        {!isGuest && (
+          <View style={styles.dangerZone}>
+            <Pressable
+              onPress={handleDeleteAccount}
+              style={({ pressed }) => [
+                { opacity: pressed ? 0.5 : 1, padding: 10 },
+              ]}
+            >
+              <Text
+                style={{
+                  color: colors.notification,
+                  fontSize: 13,
+                  textDecorationLine: "underline",
+                  textAlign: "center",
+                }}
+              >
+                {t("general.delete_my_account")}
+              </Text>
+            </Pressable>
             <Text
               style={{
-                color: colors.notification,
-                fontSize: 13,
-                textDecorationLine: "underline",
-                textAlign: "center",
+                color: colors.textSecondary,
+                fontSize: 10,
+                marginTop: 5,
               }}
             >
-              {t("general.delete_my_account")}
+              ID: {currentUser?.firebase_uid?.substring(0, 8)}...
             </Text>
-          </Pressable>
-          <Text
-            style={{ color: colors.textSecondary, fontSize: 10, marginTop: 5 }}
-          >
-            ID: {currentUser?.firebase_uid?.substring(0, 8)}...
-          </Text>
-        </View>
+          </View>
+        )}
       </ScrollView>
 
       {/* --- MODAL 1: AVATAR SEÇİM --- */}
@@ -518,7 +598,7 @@ const ProfileScreen = () => {
         </View>
       </Modal>
 
-      {/* --- MODAL 2: DİL SEÇİM (YENİ) --- */}
+      {/* --- MODAL 2: DİL SEÇİM --- */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -534,7 +614,7 @@ const ProfileScreen = () => {
           >
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: colors.text }]}>
-                {t("profile.select_language")} {/* Yeni dil anahtarı */}
+                {t("profile.select_language")}
               </Text>
               <TouchableOpacity onPress={() => setLanguageModalVisible(false)}>
                 <Ionicons
@@ -545,14 +625,13 @@ const ProfileScreen = () => {
               </TouchableOpacity>
             </View>
 
-            {/* Dil Listesi */}
             <View style={{ marginTop: 10 }}>
               {LANGUAGE_OPTIONS.map((lang, index) => (
                 <TouchableOpacity
                   key={lang.code}
                   onPress={() => handleLanguageSelect(lang.code)}
                   style={[
-                    styles.languageOptionRow, // Aşağıya stil ekledim
+                    styles.languageOptionRow,
                     {
                       borderBottomColor: colors.border,
                       borderBottomWidth:
@@ -724,8 +803,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
-
-  // --- MODAL STYLES ---
   modalOverlay: {
     flex: 1,
     justifyContent: "flex-end",
@@ -779,7 +856,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#fff",
   },
-  // YENİ: Dil Seçim Satırı Stili
   languageOptionRow: {
     flexDirection: "row",
     justifyContent: "space-between",

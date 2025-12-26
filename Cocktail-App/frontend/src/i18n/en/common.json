@@ -11,7 +11,9 @@
     "delete_my_account": "Delete My Account Permanently",
     "delete_account_confirm": "Are you sure you want to delete your account and all data? This action cannot be undone.",
     "delete": "Delete",
-    "success":"Okay"
+    "success":"Okay",
+    "attention": "Attention",
+    "alternative": "Alt."
 
   },
   "navigation": {
@@ -29,6 +31,7 @@
 "auth": {
   "login": "Log In",
   "logout": "Log Out",
+  "continue_as_guest": "Continue as Guest",
   "register": "Sign Up",
   "welcome_chef": "Welcome Chef",
   "join_us": "Join the Club",
@@ -71,7 +74,10 @@
     "pro_can_use": "you can use.",
     "pro_feature": "PRO Feature",
     "pro_lock_msg": "Upgrade to Pro to see alternative recipes and use the 'Barman Assistant' to its full potential!",
-    "get_pro_btn": "Upgrade to PRO"
+    "get_pro_btn": "Upgrade to PRO",
+    "members_only_title": "Members Only",
+    "login_required_msg": "Please log in to see alternative ingredients."
+   
   },
 "assistant": {
     "landing_title": "Bartender's Corner",
@@ -127,7 +133,11 @@
   "info": "Info",
   "privacy_policy": "Privacy Policy",
   "version": "Version",
-  "unlock_all": "Unlock all features & recipes!"
+  "unlock_all": "Unlock all features & recipes!",
+  "guest_title": "Guest Chef",
+    "guest_badge": "Visitor",
+    "sign_in_banner_title": "Join the Club",
+    "sign_in_banner_subtitle": "Save favorites & unlock all features"
   },
   "upgrade": {
   "title": "Upgrade to PRO",
@@ -179,7 +189,8 @@
   "noFavorites": "You have no favorite cocktails yet.",
   "errorTitle": "Something went wrong",
   "loadError": "An error occurred while loading favorites.",
-  "retry": "Try Again"
+  "retry": "Try Again",
+  "guest_warning": "You must log in to add to favorites."
 },"wizard": {
   "step1_msg": "Let's start with the base. What spirits do you have?",
   "step2_msg": "Great choice. Now, do you have any mixers, juices or sodas?",

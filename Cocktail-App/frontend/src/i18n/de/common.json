@@ -11,7 +11,9 @@
     "delete_my_account": "Mein Konto dauerhaft löschen",
     "delete_account_confirm": "Bist du sicher, dass du dein Konto und alle Daten löschen möchtest? Dies kann nicht rückgängig gemacht werden.",
     "delete": "Löschen",
-    "success": "Alles klar"
+    "success": "Alles klar",
+    "attention": "Achtung",
+    "alternative": "Alt."
   },
   "navigation": {
     "cocktails": "Cocktails",
@@ -28,6 +30,7 @@
   "auth": {
     "login": "Anmelden",
     "logout": "Abmelden",
+    "continue_as_guest": "Als Gast fortfahren",
     "register": "Registrieren",
     "welcome_chef": "Willkommen Chef",
     "join_us": "Tritt dem Club bei",
@@ -71,7 +74,10 @@
     "pro_can_use": "kannst du verwenden.",
     "pro_feature": "PRO Funktion",
     "pro_lock_msg": "Upgrade auf Pro, um alternative Rezepte zu sehen und den 'Barkeeper-Assistenten' voll nutzen zu können!",
-    "get_pro_btn": "Upgrade auf PRO"
+    "get_pro_btn": "Upgrade auf PRO",
+    "members_only_title": "Nur für Mitglieder",
+    "login_required_msg": "Bitte melden Sie sich an, um alternative Zutaten zu sehen."
+
   },
   "assistant": {
     "landing_title": "Barkeepers Ecke",
@@ -124,7 +130,11 @@
     "info": "Info",
     "privacy_policy": "Datenschutzerklärung",
     "version": "Version",
-    "unlock_all": "Alles freischalten!"
+    "unlock_all": "Alles freischalten!",
+    "guest_title": "Gastkoch",
+    "guest_badge": "Besucher",
+    "sign_in_banner_title": "Tritt dem Club bei",
+    "sign_in_banner_subtitle": "Favoriten speichern & Funktionen freischalten"
   },
   "upgrade": {
   "title": "Auf PRO upgraden",
@@ -175,7 +185,8 @@
     "noFavorites": "Du hast noch keine Lieblings-Cocktails.",
     "errorTitle": "Etwas ist schiefgelaufen",
     "loadError": "Fehler beim Laden der Favoriten.",
-    "retry": "Erneut versuchen"
+    "retry": "Erneut versuchen",
+    "guest_warning": "Sie müssen sich anmelden, um Favoriten hinzuzufügen."
   },
   "wizard": {
     "step1_msg": "Fangen wir mit der Basis an. Welche Spirituosen hast du?",

@@ -11,7 +11,9 @@
     "delete_my_account": "Hesabımı Kalıcı Olarak Sil",
     "delete_account_confirm": "Hesabınızı ve tüm verilerinizi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
    "delete": "Sil",
-   "success":"Başarılı"
+   "success":"Başarılı",
+   "attention": "Dikkat",
+    "alternative": "Alt."
   },
   "navigation": {
     "cocktails": "Kokteyller",
@@ -27,6 +29,7 @@
   },
   "auth": {
   "login": "Giriş Yap",
+  "continue_as_guest": "Giriş Yapmadan Devam Et",
   "logout": "Çıkış Yap",
   "register": "Kayıt Ol",
   "welcome_chef": "Hoş Geldiniz",
@@ -70,7 +73,9 @@
     "pro_can_use": "kullanabilirsiniz.",
     "pro_feature": "PRO Özellik",
     "pro_lock_msg": "Bu kokteylin alternatif tariflerini görmek ve 'Barmen Asistanı' özelliğini tam kapasite kullanmak için Pro üyeliğe geçin!",
-    "get_pro_btn": "PRO'ya Geç"
+    "get_pro_btn": "PRO'ya Geç",
+    "members_only_title": "Sadece Üyeler İçin",
+    "login_required_msg": "Alternatif malzemeleri görmek için lütfen giriş yapın."
   },
   "assistant": {
     "landing_title": "Barmen'in Köşesi",
@@ -126,7 +131,11 @@
   "info": "BİLGİ",
   "privacy_policy": "Gizlilik Politikası",
   "version": "Sürüm",
-  "unlock_all": "Tüm tariflerin ve özelliklerin kilidini aç!"
+  "unlock_all": "Tüm tariflerin ve özelliklerin kilidini aç!",
+  "guest_title": "Misafir Şef",
+    "guest_badge": "Ziyaretçi",
+    "sign_in_banner_title": "Kulübe Katıl",
+    "sign_in_banner_subtitle": "Favorileri kaydet & özellikleri aç"
 }
   ,"upgrade": {
   "title": "PRO Üyeliğe Geçin",
@@ -177,7 +186,8 @@
     "noFavorites": "Henüz hiç favori kokteyliniz yok.",
     "errorTitle": "Bir şeyler ters gitti",
     "loadError": "Favoriler yüklenirken bir hata oluştu.",
-    "retry": "Tekrar Dene"
+    "retry": "Tekrar Dene",
+    "guest_warning": "Favorilere eklemek için giriş yapmalısınız."
   },"wizard": {
   "step1_msg": "Önce temeli atalım. Elinde hangi ana içkiler (Cin, Votka, Viski vb.) var?",
   "step2_msg": "Harika seçim. Peki bunları neyle karıştırabiliriz? Meyve suyu veya gazlı içecek var mı?",

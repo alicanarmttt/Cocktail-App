@@ -1,9 +1,5 @@
 import { React, useEffect } from "react";
-import {
-  NavigationContainer,
-  useTheme,
-  dark, // YENİ: Tema renklerini alt bileşenlerde kullanmak için
-} from "@react-navigation/native";
+import { NavigationContainer, useTheme, dark } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,7 +10,6 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-// YENİ EKLENDİ: Dil desteği için import
 import { useTranslation } from "react-i18next";
 
 import HomeScreen from "../screens/HomeScreen";
@@ -27,29 +22,26 @@ import UpgradeToProScreen from "../screens/UpgradeToProScreen";
 import RouletteScreen from "../screens/RouletteScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
 
-// YENİ EKLENDİ: 'userSlice'taki 'selector' (veri okuyucu)
 import { useSelector, useDispatch } from "react-redux";
 
-// YENİ EKLENDİ (EKSİK 9): Firebase Auth Servisi ve "Auth Durum Dinleyicisi"
 import { auth } from "../api/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 
-// YENİ EKLENDİ (EKSİK 9): 'userSlice' (sağdaki) dosyasından GEREKLİ eylem ve selector'ler
 import {
   selectCurrentUser,
-  getIsAuthLoading, // Yüklenme durumunu oku
-  loginOrRegisterUser, // Backend (is_pro) ile yeniden senkronize et
-  clearUser, // Auth 'null' ise Redux'u temizle
+  getIsAuthLoading,
+  loginOrRegisterUser,
+  clearUser,
+  // YENİ EKLENDİ: Hem kullanıcı hem misafir kontrolü için selector
+  selectIsAuthenticatedOrGuest,
 } from "../features/userSlice";
 
-// 2. YENİ TEMA DOSYAMIZI IMPORT ET
 import { CustomDarkTheme, CustomLightTheme } from "../../constants/theme";
 import { selectThemeMode } from "../features/uiSlice";
 import { LinearGradient } from "expo-linear-gradient";
 
 import MerlotHeader from "../ui/MerlotHeader";
 
-// "Stack" (Yığın) tipinde bir navigasyon oluşturucu başlatıyoruz
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -57,21 +49,18 @@ const ProfileStack = createNativeStackNavigator();
 const RouletteStack = createNativeStackNavigator();
 
 /**
- * @desc    GÜNCELLENDİ: Ana Navigasyon Yönlendiricisi
- * Artık 'userSlice' (Redux) durumuna bakar ve
- * kullanıcıyı 'Auth' (Giriş) veya 'MainApp' (Ana Uygulama) ekranlarına yönlendirir.
+ * @desc    Ana Navigasyon Yönlendiricisi
  */
 function AppNavigator() {
-  // Redux store'dan (userSlice) mevcut kullanıcıyı ve Auth yüklenme durumunu seç
-  const currentUser = useSelector(selectCurrentUser);
-  const isAuthLoading = useSelector(getIsAuthLoading); // (userSlice'tan)
+  // YENİ: Sadece currentUser'a değil, misafir durumuna da bakıyoruz
+  const isAuthenticatedOrGuest = useSelector(selectIsAuthenticatedOrGuest);
+
+  const isAuthLoading = useSelector(getIsAuthLoading);
   const dispatch = useDispatch();
 
-  // 3. Tema Mantığı
-  const themeMode = useSelector(selectThemeMode); // Redux'tan gelen tercih ('system', 'light', 'dark')
-  const systemScheme = useColorScheme(); // Telefonun ayarı ('light' veya 'dark')
+  const themeMode = useSelector(selectThemeMode);
+  const systemScheme = useColorScheme();
 
-  // Hangi tema objesini kullanacağız?
   const currentTheme =
     themeMode === "system"
       ? systemScheme === "dark"
@@ -81,18 +70,10 @@ function AppNavigator() {
         ? CustomDarkTheme
         : CustomLightTheme;
 
-  //  (EKSİK 9): "Kalıcı Giriş" (Persistence) Köprüsü
-  // Uygulama başlar başlamaz (bir kereliğine) çalışır
   useEffect(() => {
-    // Firebase'e (AsyncStorage kullanarak) "Giriş yapmış birini hatırlıyor musun?"
-    // diye sorar ve dinlemeye başlar.
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // CEVAP 1: "Evet, hatırlıyorum."
-        // Firebase (Frontend) kullanıcısını (uid, email) buldu.
-        // Şimdi bu kullanıcıyı bizim Backend'imiz (is_pro) ile senkronize etmeliyiz.
-        // 'loginOrRegisterUser' thunk'ı (sağdaki userSlice'ta)
-        // hem API'yi çağırır hem de 'isAuthLoading: false' yapar.
+        // Kullanıcı daha önce giriş yapmışsa, onu Redux'a kaydet (Misafir modunu ezer)
         dispatch(
           loginOrRegisterUser({
             firebase_uid: firebaseUser.uid,
@@ -100,25 +81,16 @@ function AppNavigator() {
           })
         );
       } else {
-        // CEVAP 2: "Hayır, kimse giriş yapmamış."
-        // 'clearUser' reducer'ı (sağdaki userSlice'ta)
-        // 'currentUser: null' ve 'isAuthLoading: false' yapar.
+        // Kimse yoksa temizle (ama misafir butonu ile girilirse isGuest true kalır)
         dispatch(clearUser());
       }
     });
 
-    // Bu 'effect' (dinleyici) kapandığında abonelikten çık (hafıza sızıntısını önle)
     return () => unsubscribe();
-  }, [dispatch]); // (Sadece bir kez çalışır)
+  }, [dispatch]);
 
-  // YENİ EKLENDİ (EKSİK 9): "Göz Kırpma" (Flicker) Engelleme
-  // 'onAuthStateChanged' (yukarıdaki) kontrolünü bitirene kadar
-  // 'isAuthLoading' (sağdaki userSlice'ta) 'true' olacaktır.
-  // Bu sırada, 'Login' veya 'Main' ekranını göstermek yerine
-  // (ekranın "göz kırpmasını" engellemek için) bir "Yükleniyor" (Loading) ekranı gösteririz.
   if (isAuthLoading) {
     return (
-      // GÜNCELLEME: Yüklenme ekranı arka planı ve spinner rengi dinamikleştirildi
       <View
         style={[
           styles.loadingContainer,
@@ -132,71 +104,55 @@ function AppNavigator() {
 
   return (
     <NavigationContainer theme={currentTheme}>
-      {/* Eğer 'currentUser' null değilse (Giriş yapmışsa) Ana Uygulamayı (Sekmeleri) göster.
-        Eğer 'currentUser' null ise (Giriş yapmamışsa) Giriş (Auth) yığınını göster.
+      {/* GÜNCELLEME: Eğer kullanıcı giriş yapmışsa VEYA misafir modundaysa 
+         Ana Uygulamayı göster. Aksi halde Giriş Ekranını göster.
       */}
-      {currentUser ? <MainAppNavigator /> : <AuthNavigator />}
+      {isAuthenticatedOrGuest ? <MainAppNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 }
 
 /**
- * @desc    YENİ EKLENDİ: "Giriş" (Auth) yığınını yönetir.
- * (Şimdilik sadece LoginScreen içerir, ileride RegisterScreen de eklenebilir)
+ * @desc    Giriş (Auth) yığınını yönetir.
  */
 function AuthNavigator() {
   return (
     <AuthStack.Navigator
       screenOptions={{
-        headerShown: false, // Giriş ekranında başlık (header) olmasın
+        headerShown: false,
       }}
     >
       <AuthStack.Screen name="Login" component={LoginScreen} />
-      {/* <AuthStack.Screen name="Register" component={RegisterScreen} /> */}
     </AuthStack.Navigator>
   );
 }
 
 /**
- * @desc MainAppNavigator
- * Giriş yapıldığında gösterilecek Ana Uygulamayı (Sekmeler) yönetir.
+ * @desc MainAppNavigator - Ana Uygulama (Sekmeler)
  */
 function MainAppNavigator() {
-  // YENİ: Renkleri hook ile alıyoruz
   const { colors } = useTheme();
-  const { t } = useTranslation(); // Çeviri kancası
+  const { t } = useTranslation();
 
   return (
     <Tab.Navigator
       initialRouteName="CocktailList"
       screenOptions={({ route }) => ({
-        headerShown: false, // Her sayfanın kendi header'ı var
-
-        // #8. PROBLEM ÇÖZÜMÜ: Navigasyon Karışıklığını Önleme
+        headerShown: false,
         unmountOnBlur: true,
-
-        // --- İKON RENGİ BAĞLANTISI ---
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSecondary,
-
-        // --- TEXT STİLİ ---
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "600",
           marginBottom: Platform.OS === "ios" ? 0 : 3,
         },
-
-        // --- TAB BAR STİLİ (PREMIUM DOKUNUŞ) ---
         tabBarStyle: {
           backgroundColor: colors.card,
           borderTopWidth: 0,
-
-          // Yükseklik ayarı
           height: Platform.OS === "ios" ? 90 : 70,
           paddingBottom: Platform.OS === "ios" ? 30 : 12,
           paddingTop: 10,
-
-          // Gölge (Shadow)
           ...Platform.select({
             ios: {
               shadowColor: "#000",
@@ -209,8 +165,6 @@ function MainAppNavigator() {
             },
           }),
         },
-
-        // İkon Ayarları
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === "Home") {
@@ -237,18 +191,13 @@ function MainAppNavigator() {
         },
       })}
     >
-      {/* SEKME 1: Kokteyl Listesi */}
       <Tab.Screen
         name="CocktailList"
         component={HomeStackNavigator}
         options={{ title: t("navigation.cocktails") }}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            // 1. Varsayılan eylemi durdur (hafızadaki ekranı getirmesin)
             e.preventDefault();
-
-            // 2. Bu stack'in en başına ('Home' ekranına) git
-            // Not: 'CocktailList' tabın adı, 'Home' ise o stack'in içindeki ilk ekranın adı
             navigation.navigate("CocktailList", { screen: "Home" });
           },
         })}
@@ -258,7 +207,6 @@ function MainAppNavigator() {
         component={RouletteStackNavigator}
         options={{ title: t("navigation.roulette") }}
       />
-      {/* SEKME 2: Barmen Asistanı */}
       <Tab.Screen
         name="Assistant"
         component={AssistantStackNavigator}
@@ -277,20 +225,15 @@ function MainAppNavigator() {
   );
 }
 
-/**
- * @desc    Manages the application's navigation structure (the "map").
- */
 function HomeStackNavigator() {
-  const { colors, fonts } = useTheme();
+  const { colors } = useTheme();
   const { t } = useTranslation();
 
   return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
-        // #5. PROBLEM ÇÖZÜMÜ: Başlıkları Ortala
         headerTitleAlign: "center",
-        // GÜNCELLEME: Header renkleri dinamik
         headerStyle: { backgroundColor: "transparent" },
         headerTintColor: "#fff",
         headerTitleStyle: { fontWeight: "bold" },
@@ -316,9 +259,6 @@ function HomeStackNavigator() {
   );
 }
 
-/**
- * @desc   Rulet sekmesi için navigasyon yığını.
- */
 function RouletteStackNavigator() {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -359,9 +299,6 @@ function RouletteStackNavigator() {
   );
 }
 
-/**
- * @desc    YENİ EKLENDİ: "Asistan" sekmesinin (Assistant, Results) iç yığınını yönetir.
- */
 function AssistantStackNavigator() {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -395,9 +332,6 @@ function AssistantStackNavigator() {
   );
 }
 
-/**
- * @desc    "Profil" sekmesinin (Profile, UpgradeToPro) iç yığınını yönetir.
- */
 function ProfileStackNavigator() {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -431,7 +365,6 @@ function ProfileStackNavigator() {
   );
 }
 
-// YENİ EKLENDİ (EKSİK 9): Yüklenme (Loading) ekranı stili
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,

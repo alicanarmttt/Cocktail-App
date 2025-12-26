@@ -12,25 +12,20 @@ export const loginOrRegisterUser = createAsyncThunk(
   "user/loginOrRegisterUser",
   async (payload) => {
     const response = await apiClient.post(`/users/loginOrRegister`, payload);
-
     return response.data;
   }
 );
 
-//Yeni Avatar Güncelleme Thunk'ı
+// Avatar Güncelleme Thunk'ı
 export const updateUserAvatar = createAsyncThunk(
   "user/updateUserAvatar",
   async (avatarId, { rejectWithValue }) => {
     try {
-      // Backend'e istek at
       const response = await apiClient.put("/users/me/avatar", {
         avatar_id: avatarId,
       });
-      // Backend'den dönen veriyi (response.data) reducer'a gönder
-      // Backend şuna benzer bir şey dönüyor: { msg: "...", user: { ...avatar_id: 2... } }
       return response.data.user;
     } catch (error) {
-      // Hata olursa yakala
       return rejectWithValue(
         error.response?.data?.msg || "Avatar güncellenemedi."
       );
@@ -38,54 +33,65 @@ export const updateUserAvatar = createAsyncThunk(
   }
 );
 
-/**
- * @desc    Backend'deki 'Pro'ya Yükselt' API'sine POST isteği gönderir.
- * @name    user/upgradeToPro
- * @param   {object} thunkAPI
- */
+/* // --- GELECEKTE KULLANILACAK: PRO ÜYELİK THUNK'I ---
+// Mağaza onayı ve ödeme sistemi entegrasyonu sonrası açılacak.
 export const upgradeToPro = createAsyncThunk("/user/upgradeToPro", async () => {
   const response = await apiClient.post(`/users/upgrade-to-pro`, {});
   return response.data;
 });
+*/
 
 const initialState = {
-  // GÜNCELLEME: 'mockProUser' yerine 'null'
-  // Uygulama artık "Giriş Yapılmamış" (Logged Out) olarak başlıyor
+  // Kullanıcı verisi (Giriş yaparsa dolar, misafirken null kalır)
   currentUser: null,
 
-  // YENİ EKLENDİ: API isteğinin durumunu (state) yönet
-  loginStatus: "idle", // 'idle', 'loading', 'succeeded', 'failed'
+  // YENİ: Misafir Modu Bayrağı
+  isGuest: false,
+
+  // API isteğinin durumunu yönet
+  loginStatus: "idle",
   loginError: null,
 
-  upgradeStatus: "idle", // 'idle', 'loading', 'succeeded', 'failed'
+  /*
+  // GELECEKTE AÇILACAK:
+  upgradeStatus: "idle", 
   upgradeError: null,
+  */
 
-  // Uygulama ilk açıldığında Firebase/AsyncStorage'ı
-  // kontrol ederken 'true' olacak.
+  // Uygulama ilk açıldığında kontrol sürerken true olur
   isAuthLoading: true,
 };
 
 export const userSlice = createSlice({
-  name: "user", // Redux state'indeki adı (state.user)
+  name: "user",
   initialState,
   reducers: {
-    // (setUser ve clearUser'ı 'logout' (çıkış) için saklayalım)
     setUser: (state, action) => {
       state.currentUser = action.payload;
+      state.isGuest = false; // Gerçek kullanıcı set edilirse misafir değildir
     },
+
+    // YENİ: Misafir Girişi Reducer'ı
+    loginAsGuest: (state) => {
+      state.isGuest = true;
+      state.currentUser = null; // Misafirin backend verisi yoktur
+      state.isAuthLoading = false; // Yükleme bitti, içeri al
+    },
+
     // Çıkış Yap (Logout) reducer'ı
     clearUser: (state) => {
       state.currentUser = null;
+      state.isGuest = false; // Misafir modundan da çık
       state.loginStatus = "idle";
       state.loginError = null;
-      state.upgradeStatus = "idle";
-      state.upgradeError = null;
+      // state.upgradeStatus = "idle"; // GELECEKTE AÇILACAK
+      // state.upgradeError = null;    // GELECEKTE AÇILACAK
       state.isAuthLoading = false;
     },
   },
-  // YENİ EKLENDİ: 'loginOrRegisterUser' (API isteği) thunk'ını dinle
   extraReducers: (builder) => {
     builder
+      // --- LOGIN / REGISTER DURUMLARI ---
       .addCase(loginOrRegisterUser.pending, (state) => {
         state.loginStatus = "loading";
         state.loginError = null;
@@ -93,38 +99,27 @@ export const userSlice = createSlice({
       })
       .addCase(loginOrRegisterUser.fulfilled, (state, action) => {
         state.loginStatus = "succeeded";
-        // API'den dönen (is_pro bayrağını içeren) GERÇEK kullanıcı verisini
-        // 'currentUser' state'ine kaydet
         state.currentUser = action.payload;
+        state.isGuest = false; // Giriş başarılıysa misafir değildir
         state.isAuthLoading = false;
       })
       .addCase(loginOrRegisterUser.rejected, (state, action) => {
         state.loginStatus = "failed";
         state.loginError = action.error.message;
-        state.currentUser = null; // Hata olursa kullanıcıyı 'null' yap
+        state.currentUser = null;
         state.isAuthLoading = false;
       });
 
     // --- AVATAR GÜNCELLEME DURUMLARI ---
-    builder
-      .addCase(updateUserAvatar.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
-      .addCase(updateUserAvatar.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        // Backend'den gelen güncel user objesini state'e yaz
-        // VEYA sadece avatar_id'yi güncelle:
-        if (state.currentUser) {
-          state.currentUser.avatar_id = action.payload.avatar_id;
-        }
-      })
-      .addCase(updateUserAvatar.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload; // Hata mesajını kaydet
-      })
+    builder.addCase(updateUserAvatar.fulfilled, (state, action) => {
+      if (state.currentUser) {
+        state.currentUser.avatar_id = action.payload.avatar_id;
+      }
+    });
 
-      // --- PRO DURUMLARI ---
+    /*
+    // --- GELECEKTE KULLANILACAK: PRO DURUMLARI ---
+    builder
       .addCase(upgradeToPro.pending, (state) => {
         state.upgradeStatus = "loading";
         state.upgradeError = null;
@@ -139,27 +134,32 @@ export const userSlice = createSlice({
         state.upgradeStatus = "failed";
         state.upgradeError = action.error.message;
       });
+    */
   },
 });
 
-// === Selector'ler (Bu 'slice'ın verilerini okumak için) ===
+export const { setUser, clearUser, loginAsGuest } = userSlice.actions;
 
-export const { setUser, clearUser } = userSlice.actions;
+// === Selector'ler ===
 
-/**
- * @desc  Mevcut giriş yapmış kullanıcıyı seçer
- */
 export const selectCurrentUser = (state) => state.user.currentUser;
 
-/**
- * @desc  Mevcut kullanıcının 'Pro' olup olmadığını (true/false) seçer
- */
-export const selectIsPro = (state) => state.user.currentUser?.is_pro || false;
-export const getLoginStatus = (state) => state.user.loginStatus;
-export const getUpgradeStatus = (state) => state.user.upgradeStatus;
-export const getUpgradeError = (state) => state.user.upgradeError;
+// YENİ: Misafir mi?
+export const selectIsGuest = (state) => state.user.isGuest;
 
-// (EKSİK 9)
+// YENİ: Kullanıcı İÇERİDE Mİ? (Giriş yapmış VEYA Misafir ise true döner)
+// Bu selector'ı Navigasyon'da kullanacağız.
+export const selectIsAuthenticatedOrGuest = (state) =>
+  !!state.user.currentUser || state.user.isGuest;
+
+// Pro kontrolü (Sadece gerçek kullanıcı ve is_pro true ise)
+// Not: Bu selector kalabilir, false döneceği için sorun yaratmaz.
+export const selectIsPro = (state) => state.user.currentUser?.is_pro || false;
+
+export const getLoginStatus = (state) => state.user.loginStatus;
 export const getIsAuthLoading = (state) => state.user.isAuthLoading;
+
+// export const getUpgradeStatus = (state) => state.user.upgradeStatus; // GELECEKTE AÇILACAK
+// export const getUpgradeError = (state) => state.user.upgradeError;   // GELECEKTE AÇILACAK
 
 export default userSlice.reducer;

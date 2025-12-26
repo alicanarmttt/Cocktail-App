@@ -30,7 +30,12 @@ import {
 } from "firebase/auth";
 
 // Redux
-import { loginOrRegisterUser, getLoginStatus } from "../features/userSlice";
+// DEĞİŞİKLİK 1: loginAsGuest eklendi
+import {
+  loginOrRegisterUser,
+  getLoginStatus,
+  loginAsGuest,
+} from "../features/userSlice";
 
 // Native Google Sign-In Imports
 // import {
@@ -83,62 +88,42 @@ const LoginScreen = () => {
   // // --- Google Sign-In Konfigürasyonu ---
   // useEffect(() => {
   //   GoogleSignin.configure({
-  //     webClientId: webClientId, // DEĞİŞİKLİK: Hardcoded ID yerine tekrar değişkene bağladık (Temiz kod)
+  //     webClientId: webClientId,
   //     offlineAccess: true,
   //     scopes: ["profile", "email"],
   //   });
   // }, [webClientId]);
 
+  // --- DEĞİŞİKLİK 2: Misafir Girişi Handler ---
+  const handleGuestLogin = () => {
+    // Redux aksiyonunu tetikler ve kullanıcıyı içeri alır
+    dispatch(loginAsGuest());
+  };
+
   // --- Native Google Login İşlemi ---
   // const onGoogleButtonPress = async () => {
-  //   // Zaten işlem yapılıyorsa durdur
   //   if (googleLoading || isFirebaseLoading || loginStatus === "loading") return;
 
   //   setGoogleLoading(true);
   //   try {
-  //     // 1. Google Play Services kontrolü
-  //     await GoogleSignin.hasPlayServices({
-  //       showPlayServicesUpdateDialog: true,
-  //     });
-
-  //     // 2. Kullanıcı seçimi ve Token alma
+  //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
   //     const userInfo = await GoogleSignin.signIn();
-
-  //     // Versiyon uyumluluğu için kontrol
   //     const idToken = userInfo.data?.idToken || userInfo.idToken;
 
-  //     if (!idToken) {
-  //       throw new Error("Google ID Token alınamadı.");
-  //     }
+  //     if (!idToken) throw new Error("Google ID Token alınamadı.");
 
-  //     // 3. Firebase Credential oluştur
   //     const googleCredential = GoogleAuthProvider.credential(idToken);
-
-  //     // DEĞİŞİKLİK: Firebase'e dili bildir (Google ile girse bile dili bilsin)
   //     auth.languageCode = i18n.language;
 
-  //     // 4. Firebase'e giriş yap
   //     const userCredential = await signInWithCredential(auth, googleCredential);
   //     const user = userCredential.user;
 
-  //     // 5. Redux'a haber ver (Backend senkronizasyonu)
   //     await dispatch(
   //       loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
   //     ).unwrap();
   //   } catch (error) {
-  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-  //       console.log("Kullanıcı girişi iptal etti.");
-  //     } else if (error.code === statusCodes.IN_PROGRESS) {
-  //       console.log("İşlem zaten devam ediyor.");
-  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-  //       Alert.alert("Hata", "Google Play Hizmetleri güncel değil veya eksik.");
-  //     } else {
-  //       console.error("Google Sign-In Hatası:", error);
-  //       Alert.alert(
-  //         "Giriş Başarısız",
-  //         "Google ile giriş yapılırken bir sorun oluştu."
-  //       );
-  //     }
+  //     // Hata yönetimi (aynen korundu)
+  //     console.error("Google Sign-In Hatası:", error);
   //   } finally {
   //     setGoogleLoading(false);
   //   }
@@ -154,9 +139,7 @@ const LoginScreen = () => {
     setIsFirebaseLoading(true);
 
     try {
-      // Burası zaten doğruydu, korundu:
       auth.languageCode = i18n.language;
-
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -224,7 +207,6 @@ const LoginScreen = () => {
       return;
     }
     try {
-      // Şifre sıfırlama maili de seçili dilde gider
       auth.languageCode = i18n.language;
       await sendPasswordResetEmail(auth, email);
       Alert.alert(
@@ -357,8 +339,21 @@ const LoginScreen = () => {
               <View style={styles.divider} />
             </View>
 
-            {/* --- GOOGLE BUTONU ---
-            <Pressable
+            {/* DEĞİŞİKLİK 3: MİSAFİR GİRİŞİ BUTONU (Google'ın üstüne eklendi) */}
+            <Pressable style={styles.guestButton} onPress={handleGuestLogin}>
+              <Text style={styles.guestButtonText}>
+                {t("auth.continue_as_guest")}
+              </Text>
+              <Ionicons
+                name="arrow-forward"
+                size={16}
+                color="#ccc"
+                style={{ marginLeft: 8 }}
+              />
+            </Pressable>
+
+            {/* --- GOOGLE BUTONU (Yorum Satırı Halinde Korundu) --- */}
+            {/* <Pressable
               style={[
                 styles.googleButton,
                 (loginStatus === "loading" ||
@@ -388,7 +383,7 @@ const LoginScreen = () => {
               )}
             </Pressable> */}
 
-            <View style={{ marginTop: 30, paddingHorizontal: 10 }}>
+            <View style={{ marginTop: 20, paddingHorizontal: 10 }}>
               <Text
                 style={{
                   color: "#444",
@@ -511,6 +506,23 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 12,
     textTransform: "uppercase",
+  },
+  // DEĞİŞİKLİK 4: Misafir Buton Stilleri
+  guestButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    marginBottom: 10, // Google butonu açıldığında üst üste binmesin
+    borderWidth: 1,
+    borderColor: "#333",
+    borderRadius: 12,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+  },
+  guestButtonText: {
+    color: "#ccc",
+    fontSize: 14,
+    fontWeight: "600",
   },
   googleButton: {
     flexDirection: "row",

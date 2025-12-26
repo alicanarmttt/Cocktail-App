@@ -12,6 +12,7 @@ import {
   Pressable,
   Platform,
   TouchableOpacity,
+  Alert, // Alert eklendi
 } from "react-native";
 import {
   fetchCocktailById,
@@ -20,7 +21,13 @@ import {
   getDetailedCocktailError,
   clearDetail,
 } from "../features/cocktails/cocktailSlice";
-import { selectIsPro, selectCurrentUser } from "../features/userSlice";
+// DEĞİŞİKLİK 1: selectIsGuest import edildi
+import {
+  selectIsPro,
+  selectCurrentUser,
+  selectIsGuest,
+  clearUser,
+} from "../features/userSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import PremiumButton from "../ui/PremiumButton";
@@ -34,26 +41,17 @@ import {
   removeFavorite,
   selectIsFavorite,
 } from "../features/favoritesSlice";
-/**
- * @desc    Tek bir kokteylin detaylarını gösterir.
- * @param   {object} route - React Navigation tarafından sağlanan prop.
- */
+
 const CocktailDetailScreen = ({ route }) => {
   const { colors, fonts } = useTheme();
-  // useTranslation hook'u dil değişimini dinler ve bileşeni yeniden render eder.
   const { t, i18n } = useTranslation();
 
-  // --- GÜNCELLEME: Dile Göre Metin Seçici (Güvenli Versiyon) ---
   const getLocaleText = (obj) => {
     if (!obj) return "";
-
-    // GÜVENLİK: i18n.language 'tr-TR' gelebilir, biz 'tr' istiyoruz.
     const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
-
-    // 1. Seçili dil var mı? (es, it, de, tr...)
-    // 2. Yoksa İngilizce (Fallback)
     return obj[langCode] || obj["en"] || "";
   };
+
   const { cocktailId } = route.params;
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -62,10 +60,12 @@ const CocktailDetailScreen = ({ route }) => {
   const [selectedAlternative, setSelectedAlternative] = useState(null);
 
   const currentUser = useSelector(selectCurrentUser);
+  // DEĞİŞİKLİK 2: Misafir durumu çekildi
+  const isGuest = useSelector(selectIsGuest);
   const cocktail = useSelector(selectDetailedCocktail);
   const status = useSelector(getDetailedCocktailStatus);
   const error = useSelector(getDetailedCocktailError);
-  const isPro = useSelector(selectIsPro);
+  // const isPro = useSelector(selectIsPro); // Artık Pro kontrolüne gerek yok
 
   useEffect(() => {
     if (cocktailId !== undefined && cocktailId !== null) {
@@ -76,27 +76,41 @@ const CocktailDetailScreen = ({ route }) => {
     };
   }, [cocktailId, dispatch]);
 
-  // 1. Bu kokteyl favori mi? (Redux Store'dan kontrol et)
   const isFavorite = useSelector((state) =>
     selectIsFavorite(state, cocktailId)
   );
-  // 2. Kalp butonuna basılınca çalışacak fonksiyon
+
+  // DEĞİŞİKLİK 3: Favori Butonu Logic Güncellemesi
   const handleToggleFavorite = () => {
-    // A. Kullanıcı giriş yapmamışsa uyar
-    if (!currentUser) {
-      alert(t("favorites.loginRequired")); // "Giriş yapmalısınız"
-      // İstersen burada navigation.navigate('Login') yapabilirsin
+    // A. Misafir Kontrolü
+    if (isGuest) {
+      Alert.alert(
+        t("general.attention", "Dikkat"),
+        t(
+          "favorites.guest_warning",
+          "Favorilere eklemek için giriş yapmalısınız."
+        ),
+        [
+          { text: t("general.cancel", "İptal"), style: "cancel" },
+          {
+            text: t("auth.login_button", "Giriş Yap"),
+            onPress: () => {
+              // Misafir modunu kapatınca AppNavigator otomatik Login ekranına atar
+              dispatch(clearUser());
+            },
+          },
+        ]
+      );
       return;
     }
 
+    if (!currentUser) return; // Ek güvenlik
+
     const userId = currentUser.user_id || currentUser.id;
 
-    // B. Favori durumuna göre Ekle veya Çıkar
     if (isFavorite) {
-      // Zaten favoriyse sil
       dispatch(removeFavorite({ userId, cocktailId }));
     } else {
-      // Değilse ekle
       dispatch(addFavorite({ userId, cocktail: cocktail }));
     }
   };
@@ -117,7 +131,6 @@ const CocktailDetailScreen = ({ route }) => {
         style={[styles.listContainer, { backgroundColor: colors.background }]}
       >
         <ScrollView contentContainerStyle={styles.scrollContentContainer}>
-          {/* RESİM VE FAVORİ BUTONU (YENİ HALİ) */}
           <View style={{ position: "relative" }}>
             <CocktailImage uri={cocktail.image_url} style={styles.image} />
 
@@ -128,7 +141,7 @@ const CocktailDetailScreen = ({ route }) => {
               <MaterialIcons
                 name={isFavorite ? "favorite" : "favorite-border"}
                 size={28}
-                color="white" // Resim üzerinde beyaz ikon her zaman nettir
+                color="white"
               />
             </TouchableOpacity>
           </View>
@@ -218,7 +231,7 @@ const CocktailDetailScreen = ({ route }) => {
           </View>
         </ScrollView>
 
-        {/* --- MODAL 1: EKSİK MALZEME SEÇİMİ (Ana Modal) --- */}
+        {/* --- MODAL 1: EKSİK MALZEME SEÇİMİ (Herkese Açık) --- */}
         <Modal
           visible={isModalVisible}
           transparent={true}
@@ -242,6 +255,7 @@ const CocktailDetailScreen = ({ route }) => {
                 {t("detail.modal_title")}
               </Text>
 
+              {/* LEJANT (Renk Açıklamaları) */}
               <View
                 style={[
                   styles.legendContainer,
@@ -257,7 +271,8 @@ const CocktailDetailScreen = ({ route }) => {
                 >
                   {t("detail.legend_title")}
                 </Text>
-
+                {/* ... Lejant itemleri aynı ... */}
+                {/* Sadece Pro yazan yerleri 'Alternatif' olarak düşünebiliriz ama metinler kalabilir */}
                 <View style={styles.legendItem}>
                   <View
                     style={[
@@ -275,10 +290,9 @@ const CocktailDetailScreen = ({ route }) => {
                       { color: colors.text },
                     ]}
                   >
-                    {t("detail.legend_required")} (No Alt)
+                    {t("detail.legend_required")}
                   </Text>
                 </View>
-
                 <View style={styles.legendItem}>
                   <View
                     style={[
@@ -296,49 +310,8 @@ const CocktailDetailScreen = ({ route }) => {
                       { color: colors.text },
                     ]}
                   >
-                    {t("detail.legend_required")} (Pro)
-                  </Text>
-                </View>
-
-                <View style={styles.legendItem}>
-                  <View
-                    style={[
-                      styles.legendBox,
-                      {
-                        borderColor: colors.success,
-                        backgroundColor: colors.card,
-                      },
-                    ]}
-                  />
-                  <Text
-                    style={[
-                      styles.legendText,
-                      fonts.styles.caption,
-                      { color: colors.text },
-                    ]}
-                  >
-                    {t("detail.legend_garnish")}
-                  </Text>
-                </View>
-
-                <View style={styles.legendItem}>
-                  <View
-                    style={[
-                      styles.legendBox,
-                      {
-                        borderColor: colors.success,
-                        backgroundColor: colors.proCardBg,
-                      },
-                    ]}
-                  />
-                  <Text
-                    style={[
-                      styles.legendText,
-                      fonts.styles.caption,
-                      { color: colors.text },
-                    ]}
-                  >
-                    {t("detail.legend_garnish")} (Pro)
+                    {t("detail.legend_required")} (
+                    {t("general.alternative") || "Alt."})
                   </Text>
                 </View>
               </View>
@@ -377,7 +350,7 @@ const CocktailDetailScreen = ({ route }) => {
                 ))}
               </View>
 
-              {/* --- MODAL 2: ALTERNATİF DETAYI --- */}
+              {/* --- MODAL 2: ALTERNATİF DETAYI (KORUMALI ALAN) --- */}
               <Modal
                 visible={!!selectedAlternative}
                 transparent={true}
@@ -394,7 +367,9 @@ const CocktailDetailScreen = ({ route }) => {
                       { backgroundColor: colors.background },
                     ]}
                   >
-                    {isPro && selectedAlternative ? (
+                    {/* DEĞİŞİKLİK 4: isPro yerine currentUser kontrolü */}
+                    {/* Giriş yapmışsa göster, Misafirse kilitle */}
+                    {currentUser && selectedAlternative ? (
                       <>
                         <Ionicons
                           name="star"
@@ -411,12 +386,10 @@ const CocktailDetailScreen = ({ route }) => {
                         >
                           {t("detail.pro_alt_title")}
                         </Text>
-                        {/* 1. Önce malzemenin adını değişkene alıyoruz */}
                         {(() => {
                           const ingredientName = getLocaleText(
                             selectedAlternative.name
                           );
-
                           return (
                             <Text
                               style={[
@@ -425,8 +398,6 @@ const CocktailDetailScreen = ({ route }) => {
                                 { color: colors.textSecondary },
                               ]}
                             >
-                              {/* 2. 't' fonksiyonuna bu ismi 'ingredient' parametresi olarak gönderiyoruz */}
-                              {/* JSON'da: "use this instead of: {{ingredient}}" olduğu için otomatik yerleşecek */}
                               {t("detail.pro_use_instead", {
                                 ingredient: ingredientName,
                               })}
@@ -472,6 +443,7 @@ const CocktailDetailScreen = ({ route }) => {
                         </ScrollView>
                       </>
                     ) : (
+                      // --- GİRİŞ YAPMAMIŞ KULLANICI EKRANI ---
                       <View style={styles.proLockContainer}>
                         <Ionicons
                           name="lock-closed"
@@ -486,7 +458,8 @@ const CocktailDetailScreen = ({ route }) => {
                             { color: colors.text },
                           ]}
                         >
-                          {t("detail.pro_feature")}
+                          {/* Başlık: Sadece Üyeler İçin */}
+                          {t("detail.members_only_title", "Sadece Üyeler İçin")}
                         </Text>
                         <Text
                           style={[
@@ -495,37 +468,43 @@ const CocktailDetailScreen = ({ route }) => {
                             { color: colors.textSecondary },
                           ]}
                         >
-                          {t("detail.pro_lock_msg")}
+                          {/* Açıklama: Alternatifleri görmek için giriş yap */}
+                          {t(
+                            "detail.login_required_msg",
+                            "Alternatif malzemeleri görmek için lütfen giriş yapın."
+                          )}
                         </Text>
+
+                        {/* Giriş Yap Butonu */}
                         <Pressable
                           style={[
                             styles.proButton,
-                            { backgroundColor: colors.gold },
+                            { backgroundColor: colors.primary }, // Gold yerine Primary renk
                           ]}
                           onPress={() => {
                             setSelectedAlternative(null);
                             setIsModalVisible(false);
-                            navigation.navigate("UpgradeToPro");
+                            // Misafir modunu kapat -> Login'e atar
+                            dispatch(clearUser());
                           }}
                         >
                           <Text
                             style={[
                               styles.proButtonText,
                               fonts.styles.button,
-                              { color: colors.buttonText },
+                              { color: "#fff" },
                             ]}
                           >
-                            {t("detail.get_pro_btn")}
+                            {t("auth.login_button", "Giriş Yap")}
                           </Text>
                         </Pressable>
                       </View>
                     )}
 
-                    {/* DÜZELTME: 'general.close' kullanarak JSON yapısına uyum sağladık */}
                     <Pressable
                       style={({ pressed }) => [
                         styles.modalCloseButton,
-                        { backgroundColor: colors.primary },
+                        { backgroundColor: colors.textSecondary }, // Gri buton
                         pressed && { opacity: 0.8 },
                       ]}
                       onPress={() => setSelectedAlternative(null)}
@@ -538,7 +517,6 @@ const CocktailDetailScreen = ({ route }) => {
                 </Pressable>
               </Modal>
 
-              {/* DÜZELTME: 'general.close' kullanımı */}
               <Pressable
                 style={({ pressed }) => [
                   styles.modalCloseButton,
@@ -569,7 +547,7 @@ const CocktailDetailScreen = ({ route }) => {
   );
 };
 
-// === Stil Dosyaları ===
+// ... Styles (Aynen Kalabilir, değişen bir şey yok) ...
 const styles = StyleSheet.create({
   centeredContainer: {
     flex: 1,
@@ -587,15 +565,14 @@ const styles = StyleSheet.create({
     height: 300,
     resizeMode: "cover",
   },
-  // styles objesinin içine ekle:
   favoriteOverlay: {
     position: "absolute",
-    top: 15, // Yukarıdan boşluk
-    right: 15, // Sağdan boşluk
-    zIndex: 10, // Resmin önünde durması için
-    backgroundColor: "rgba(0,0,0,0.3)", // Yarı saydam siyah arka plan (Okunurluk için)
-    borderRadius: 20, // Yuvarlak olması için
-    padding: 8, // İkon etrafındaki boşluk
+    top: 15,
+    right: 15,
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    borderRadius: 20,
+    padding: 8,
   },
   title: {
     margin: 15,
@@ -619,8 +596,6 @@ const styles = StyleSheet.create({
   ingredientText: {
     flexShrink: 1,
   },
-  text: {},
-  errorText: {},
   prepareButton: {
     marginBottom: 15,
     alignSelf: "center",
@@ -665,7 +640,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     borderWidth: 2,
   },
-  legendText: {},
   modalButtonsContainer: {
     width: "100%",
     flexDirection: "row",

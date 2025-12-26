@@ -11,7 +11,9 @@
     "delete_my_account": "Elimina definitivamente il mio account",
     "delete_account_confirm": "Sei sicuro di voler eliminare il tuo account e tutti i dati? Questa azione non può essere annullata.",
     "delete": "Elimina",
-    "success": "Va bene"
+    "success": "Va bene",
+    "attention": "Attenzione",
+    "alternative": "Alt."
   },
   "navigation": {
     "cocktails": "Cocktail",
@@ -28,6 +30,7 @@
   "auth": {
     "login": "Accedi",
     "logout": "Disconnetti",
+    "continue_as_guest": "Continua come ospite",
     "register": "Registrati",
     "welcome_chef": "Benvenuto Chef",
     "join_us": "Unisciti al Club",
@@ -71,7 +74,9 @@
     "pro_can_use": "puoi usare.",
     "pro_feature": "Funzione PRO",
     "pro_lock_msg": "Passa a Pro per vedere ricette alternative e utilizzare l'Assistente del Barman al massimo!",
-    "get_pro_btn": "Passa a PRO"
+    "get_pro_btn": "Passa a PRO",
+    "members_only_title": "Solo per membri",
+    "login_required_msg": "Accedi per vedere gli ingredienti alternativi."
   },
   "assistant": {
     "landing_title": "L'Angolo del Barman",
@@ -124,7 +129,11 @@
     "info": "Info",
     "privacy_policy": "Informativa sulla Privacy",
     "version": "Versione",
-    "unlock_all": "Sblocca tutto!"
+    "unlock_all": "Sblocca tutto!",
+    "guest_title": "Chef Ospite",
+    "guest_badge": "Visitatore",
+    "sign_in_banner_title": "Unisciti al Club",
+    "sign_in_banner_subtitle": "Salva i preferiti e sblocca tutto"
   },
   "upgrade": {
   "title": "Passa a PRO",
@@ -175,7 +184,8 @@
     "noFavorites": "Non hai ancora cocktail preferiti.",
     "errorTitle": "Qualcosa è andato storto",
     "loadError": "Si è verificato un errore durante il caricamento dei preferiti.",
-    "retry": "Riprova"
+    "retry": "Riprova",
+    "guest_warning": "Devi accedere per aggiungere ai preferiti."
   },
   "wizard": {
     "step1_msg": "Iniziamo dalla base. Quali distillati hai?",

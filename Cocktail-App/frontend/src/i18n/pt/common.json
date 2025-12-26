@@ -11,7 +11,9 @@
     "delete_my_account": "Excluir minha conta permanentemente",
     "delete_account_confirm": "Tem certeza de que deseja excluir sua conta e todos os dados? Esta ação não pode ser desfeita.",
     "delete": "Excluir",
-    "success": "Entendido"
+    "success": "Entendido",
+    "attention": "Atenção",
+    "alternative": "Alt."
   },
   "navigation": {
     "cocktails": "Coquetéis",
@@ -28,6 +30,7 @@
   "auth": {
     "login": "Entrar",
     "logout": "Sair",
+    "continue_as_guest": "Continuar como convidado",
     "register": "Cadastrar",
     "welcome_chef": "Bem-vindo Chef",
     "join_us": "Junte-se ao Clube",
@@ -71,7 +74,9 @@
     "pro_can_use": "você pode usar.",
     "pro_feature": "Recurso PRO",
     "pro_lock_msg": "Faça o upgrade para Pro para ver receitas alternativas e usar o 'Assistente de Barman' ao máximo!",
-    "get_pro_btn": "Upgrade para PRO"
+    "get_pro_btn": "Upgrade para PRO",
+    "members_only_title": "Apenas para membros",
+    "login_required_msg": "Faça login para ver ingredientes alternativos."
   },
   "assistant": {
     "landing_title": "Canto do Barman",
@@ -124,7 +129,11 @@
     "info": "Info",
     "privacy_policy": "Política de Privacidade",
     "version": "Versão",
-    "unlock_all": "Desbloquear tudo!"
+    "unlock_all": "Desbloquear tudo!",
+    "guest_title": "Chef Convidado",
+    "guest_badge": "Visitante",
+    "sign_in_banner_title": "Junte-se ao Clube",
+    "sign_in_banner_subtitle": "Salve favoritos e desbloqueie recursos"
   },
   "upgrade": {
   "title": "Mudar para PRO",
@@ -175,7 +184,8 @@
     "noFavorites": "Você ainda não tem coquetéis favoritos.",
     "errorTitle": "Algo deu errado",
     "loadError": "Ocorreu um erro ao carregar os favoritos.",
-    "retry": "Tentar Novamente"
+    "retry": "Tentar Novamente",
+    "guest_warning": "Você deve fazer login para adicionar aos favoritos."
   },
   "wizard": {
     "step1_msg": "Vamos começar pela base. Quais destilados você tem?",
