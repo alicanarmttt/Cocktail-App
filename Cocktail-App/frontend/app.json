@@ -6,25 +6,24 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#4A0E15"
     },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alican.barmenroulette",
       "infoPlist": {
-        "NSAppTransportSecurity": {
-          "NSExceptionDomains": {
-            "192.168.1.191": {
-              "NSExceptionAllowsInsecureHTTPLoads": true,
-              "NSIncludesSubdomains": true
-            }
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.SENIN-IOS-REVERSE-CLIENT-ID-BURAYA"
+            ]
           }
-        }
+        ]
       }
     },
     "android": {
@@ -32,9 +31,13 @@
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#4A0E15"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "splash": {
+        "resizeMode": "contain",
+        "backgroundColor": "#4A0E15"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,9 +45,7 @@
     "plugins": [
       "expo-localization",
       "expo-web-browser",
-      [
-        "@react-native-google-signin/google-signin"
-      ]
+      "@react-native-google-signin/google-signin"
     ],
     "extra": {
       "eas": {
