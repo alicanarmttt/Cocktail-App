@@ -1,6 +1,0 @@
-# env & secrets
-.env
-.env_local
-
-# node_modules
-node_modules/
