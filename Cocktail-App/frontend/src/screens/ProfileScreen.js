@@ -459,7 +459,11 @@ const ProfileScreen = () => {
           <SettingRow
             icon="shield-checkmark-outline"
             title={t("profile.privacy_policy")}
-            onPress={() => Linking.openURL("https://github.com/privacy...")}
+            onPress={() =>
+              Linking.openURL(
+                "https://gist.github.com/alicanarmttt/90cca882230f8bfd23b101b1f63682e1"
+              )
+            }
             rightElement={
               <Ionicons
                 name="open-outline"

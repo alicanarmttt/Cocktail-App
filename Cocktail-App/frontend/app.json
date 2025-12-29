@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Barmen Roulette",
-    "slug": "barmen-roulette",
-    "scheme": "barmenroulette",
+    "name": "Cocktail Roulette",
+    "slug": "cocktail-roulette",
+    "scheme": "cocktailroulette",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

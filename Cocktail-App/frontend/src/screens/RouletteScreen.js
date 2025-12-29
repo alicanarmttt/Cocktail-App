@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -34,49 +34,49 @@ import {
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
-// --- GÜNCEL MOD LİSTESİ (Sıralama ve Yeni Mod) ---
+// --- GÜNCEL MOD LİSTESİ ---
 const MODES = [
   {
-    id: "custom", // YENİ MOD
+    id: "custom",
     icon: "create",
-    labelKey: "roulette.mode_custom", // "Çarkını Oluştur"
-    color: "#E6C200", // Gold
-    gradient: ["#FFD700", "#B8860B"], // Altın Gradyan
+    labelKey: "roulette.mode_custom",
+    color: "#E6C200",
+    gradient: ["#FFD700", "#B8860B"],
   },
   {
     id: "popular",
     icon: "star",
     labelKey: "roulette.mode_popular",
     color: "#FFD700",
-    gradient: ["#FFD700", "#FF8C00"], // Sarı-Turuncu
+    gradient: ["#FFD700", "#FF8C00"],
   },
   {
     id: "spirit",
     icon: "wine",
     labelKey: "roulette.mode_spirit",
     color: "#2196F3",
-    gradient: ["#42A5F5", "#1976D2"], // Mavi Tonları
+    gradient: ["#42A5F5", "#1976D2"],
   },
   {
     id: "taste",
     icon: "restaurant",
     labelKey: "roulette.mode_taste",
     color: "#FF9800",
-    gradient: ["#FFA726", "#F57C00"], // Turuncu Tonları
+    gradient: ["#FFA726", "#F57C00"],
   },
   {
     id: "driver",
     icon: "car-sport",
     labelKey: "roulette.mode_driver",
     color: "#4CAF50",
-    gradient: ["#66BB6A", "#388E3C"], // Yeşil Tonları
+    gradient: ["#66BB6A", "#388E3C"],
   },
   {
     id: "random",
     icon: "dice",
     labelKey: "roulette.mode_random",
     color: "#9C27B0",
-    gradient: ["#AB47BC", "#7B1FA2"], // Mor Tonları
+    gradient: ["#AB47BC", "#7B1FA2"],
   },
 ];
 
@@ -96,7 +96,7 @@ const TASTES = [
 ];
 
 const RouletteScreen = () => {
-  const { colors, fonts } = useTheme();
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
@@ -106,30 +106,27 @@ const RouletteScreen = () => {
   const [selectedMode, setSelectedMode] = useState(null);
   const [filterType, setFilterType] = useState(null);
 
-  // YENİ: Custom Mod İçin State'ler
+  // Custom Mod İçin State'ler
   const [isCustomModalVisible, setIsCustomModalVisible] = useState(false);
-  const [customPool, setCustomPool] = useState([]); // Kullanıcının seçtikleri
+  const [customPool, setCustomPool] = useState([]);
 
   // Redux Data
   const reduxPool = useSelector(selectRoulettePool);
   const status = useSelector(getRouletteStatus);
-  const allCocktails = useSelector(selectAllCocktails); // Custom mod için tüm liste lazım
+  const allCocktails = useSelector(selectAllCocktails);
 
-  // AKTİF HAVUZ: Eğer mod 'custom' ise yerel state'i, değilse Redux'u kullan
+  // AKTİF HAVUZ
   const activePool = selectedMode === "custom" ? customPool : reduxPool;
 
   // Animasyon
   const spinValue = useRef(new Animated.Value(0)).current;
   const [winner, setWinner] = useState(null);
 
-  // Titreşim Referansı (Zamanlayıcıyı tutmak için)
-  const vibrationTimer = useRef(null);
-
   // Temizlik
   useEffect(() => {
     if (step === "menu") {
       dispatch(clearRoulette());
-      setCustomPool([]); // Custom havuzu temizle
+      setCustomPool([]);
       spinValue.setValue(0);
       setWinner(null);
     }
@@ -140,7 +137,6 @@ const RouletteScreen = () => {
     setSelectedMode(modeId);
 
     if (modeId === "custom") {
-      // YENİ: Custom Mod -> Modalı Aç
       setIsCustomModalVisible(true);
     } else if (modeId === "spirit") {
       setFilterType("spirit");
@@ -153,7 +149,7 @@ const RouletteScreen = () => {
     }
   };
 
-  // YENİ: Custom Modaldan Gelen Seçimler
+  // Custom Seçim
   const handleCustomSelection = (selectedIds) => {
     if (!selectedIds || selectedIds.length < 2) {
       Alert.alert(
@@ -163,13 +159,12 @@ const RouletteScreen = () => {
       return;
     }
 
-    // ID'leri Kokteyl Objelerine Çevir
     const selectedObjects = allCocktails.filter((c) =>
       selectedIds.includes(c.cocktail_id)
     );
 
     setCustomPool(selectedObjects);
-    setStep("wheel"); // Direkt çarka git
+    setStep("wheel");
   };
 
   // Filtre Seçimi
@@ -177,7 +172,7 @@ const RouletteScreen = () => {
     startFetching(selectedMode, filterValue);
   };
 
-  // Veri Çekme (Redux)
+  // Veri Çekme
   const startFetching = async (mode, filter) => {
     setStep("wheel");
     const result = await dispatch(fetchRoulettePool({ mode, filter }));
@@ -196,37 +191,31 @@ const RouletteScreen = () => {
     setWinner(activePool[randomIndex]);
 
     spinValue.setValue(0);
-
-    // Titreşim Döngüsünü Başlat
     let tickCount = 0;
-    const maxTicks = 20; // Yaklaşık titreşim sayısı
 
-    // Haptics.impactAsync kullanarak 'tık tık' sesi efekti
     const triggerHaptic = () => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     };
 
     const listenerId = spinValue.addListener(({ value }) => {
-      const currentTick = Math.floor(value * 8); // 8 dilim varsayalım
+      // Çarkın dilim sayısına göre hesaplama (8 dilim)
+      const currentTick = Math.floor(value * 8);
+
       if (currentTick > tickCount) {
-        triggerHaptic();
+        triggerHaptic(); // Sadece titreşim
         tickCount = currentTick;
       }
     });
 
     Animated.timing(spinValue, {
-      toValue: 5 + Math.random() * 3, // 5-8 tur
+      toValue: 5 + Math.random() * 3,
       duration: 4000,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
     }).start(({ finished }) => {
       if (finished) {
-        // Bitiş Titreşimi (Daha güçlü)
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-        // Listener'ı temizle
         spinValue.removeListener(listenerId);
-
         setTimeout(() => setStep("result"), 500);
       }
     });
@@ -239,15 +228,13 @@ const RouletteScreen = () => {
 
   const getCocktailName = (item) => {
     if (!item || !item.name) return "";
-
-    // GÜVENLİK: i18n.language 'tr-TR' gelebilir, biz 'tr' istiyoruz.
     const langCode = i18n.language ? i18n.language.substring(0, 2) : "en";
-
     return item.name[langCode] || item.name["en"] || "";
   };
+
   // --- RENDER ---
 
-  // 1. MENÜ (YENİLENMİŞ PREMIUM TASARIM)
+  // 1. MENÜ
   const renderMenu = () => (
     <View style={styles.menuContainer}>
       <Text style={[styles.headerTitle, { color: colors.text }]}>
@@ -264,28 +251,22 @@ const RouletteScreen = () => {
             style={({ pressed }) => [
               styles.modeCard,
               {
-                // Gölge rengi kartın kendi rengiyle uyumlu olsun
                 shadowColor: item.color,
-                // Basınca küçülme efekti
                 transform: [{ scale: pressed ? 0.96 : 1 }],
               },
             ]}
             onPress={() => handleModeSelect(item.id)}
           >
-            {/* LinearGradient tüm kartı kaplasın */}
             <LinearGradient
               colors={item.gradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.cardGradient}
             >
-              {/* Üst Kısım: Glass İkon ve Gizli Arkaplan İkonu */}
               <View style={styles.cardHeaderRow}>
                 <View style={styles.glassIconContainer}>
                   <Ionicons name={item.icon} size={24} color="#FFF" />
                 </View>
-
-                {/* Sağ üstte dekoratif büyük silik ikon */}
                 <Ionicons
                   name={item.icon}
                   size={80}
@@ -294,10 +275,8 @@ const RouletteScreen = () => {
                 />
               </View>
 
-              {/* Alt Kısım: Başlık ve İndikatör */}
               <View>
                 <Text style={styles.modeText}>{t(item.labelKey)}</Text>
-                {/* Altına minik bir çizgi (Premium hissi için) */}
                 <View style={styles.indicatorCapsule} />
               </View>
             </LinearGradient>
@@ -365,7 +344,6 @@ const RouletteScreen = () => {
 
     return (
       <View style={styles.wheelContainer}>
-        {/* HEADER & GERİ BUTONU */}
         <View style={styles.wheelHeader}>
           <Pressable
             style={({ pressed }) => [
@@ -488,12 +466,11 @@ const RouletteScreen = () => {
       {step === "wheel" && renderWheel()}
       {step === "result" && renderResult()}
 
-      {/* YENİ: Çark Oluşturma Modalı */}
       <CocktailSelectorModal
         visible={isCustomModalVisible}
         onClose={() => setIsCustomModalVisible(false)}
         onSelect={handleCustomSelection}
-        multiSelect={true} // ÇOKLU SEÇİM AKTİF
+        multiSelect={true}
       />
     </SafeAreaView>
   );
@@ -520,13 +497,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  // --- YENİ KART STİLLERİ ---
   modeCard: {
-    width: "48%", // İki sütun
-    height: 150, // Biraz daha yüksek ve gösterişli
+    width: "48%",
+    height: 150,
     borderRadius: 24,
     marginBottom: 20,
-    // Güçlü ve renkli gölgeler (Glow efekti)
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -537,7 +512,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 16,
     justifyContent: "space-between",
-    overflow: "hidden", // Taşan dekoratif ikonları kesmek için
+    overflow: "hidden",
   },
   cardHeaderRow: {
     flexDirection: "row",
@@ -548,7 +523,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 14,
-    backgroundColor: "rgba(255, 255, 255, 0.25)", // Buzlu cam efekti
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
@@ -558,7 +533,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: -20,
     top: -20,
-    transform: [{ rotate: "-15deg" }], // Hafif eğik duruş
+    transform: [{ rotate: "-15deg" }],
   },
   modeText: {
     fontSize: 18,
@@ -576,8 +551,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: 2,
   },
-  // -------------------------
-
   filterContainer: { flex: 1, padding: 20 },
   backButton: {
     width: 45,
@@ -633,7 +606,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 20,
   },
-
   resultContainer: {
     flex: 1,
     alignItems: "center",
@@ -671,7 +643,6 @@ const styles = StyleSheet.create({
   resultBtn: {
     width: "80%",
   },
-
   backLink: { marginTop: 10 },
 });
 
