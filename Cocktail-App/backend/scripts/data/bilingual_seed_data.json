@@ -1,0 +1,4507 @@
+[
+  {
+    "api_id": "17180",
+    "name_en": "Aviation",
+    "name_tr": "Aviation",
+    "instructions_en": "Add all ingredients into cocktail shaker filled with ice. Shake well and strain into cocktail glass. Garnish with a cherry.",
+    "instructions_tr": "Tüm malzemeleri buzla dolu shaker'a ekleyin. İyice çalkalayın ve kokteyl bardağına süzün. Kirazla süsleyin.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Floral,Classic,IBA,Gin",
+    "tags_tr": "Ekşi,Çiçeksi,Klasik,IBA,Cin",
+    "history_notes_tr": "1916'da Hugo Ensslin tarafından yaratılan Yasak öncesi bir klasik. Gökyüzü mavisi rengini, nadir bulunan Crème de Violette liköründen almasıyla ünlüdür.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/trbplb1606855233.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "4.5 cl",
+        "amount_tr": "4,5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1.5 cl",
+        "amount_tr": "1,5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1.5 cl",
+            "amount_tr": "1,5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Maraschino Liqueur",
+        "name_tr": "Maraschino Likörü",
+        "amount_en": "1.5 cl",
+        "amount_tr": "1,5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A pre-Prohibition classic created by Hugo Ensslin in 1916. It is famous for its sky-blue color, derived from the obscure Crème de Violette Liqueur."
+  },
+  {
+    "api_id": "15941",
+    "name_en": "Americano",
+    "name_tr": "Americano",
+    "instructions_en": "Pour the Campari and vermouth over ice into glass, add a splash of soda water and garnish with half orange slice.",
+    "instructions_tr": "Campari ve vermutu buzun üzerine bardağa dökün, bir miktar soda ekleyin ve yarım portakal dilimiyle süsleyin.",
+    "glass_type_en": "Bitter,Refreshing,IBA,Classic,Aperitif",
+    "glass_type_tr": "Acı,Ferahlatıcı,IBA,Klasik,Aperitif",
+    "tags_en": "IBA,Classic",
+    "tags_tr": "IBA,Klasik",
+    "history_notes_tr": "1860'larda Caffè Campari'de yaratıldı. Orijinal adı 'Milano-Torino' idi, ancak Yasak döneminden kaçan Amerikalı turistler arasında popüler olduğu için yeniden adlandırıldı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/709s6m1613655124.jpg",
+    "ingredients": [
+      {
+        "name_en": "Campari",
+        "name_tr": "Campari",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Aperol",
+            "name_tr": "Aperol",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Sweet Vermouth",
+        "name_tr": "Tatlı Vermut",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon peel",
+        "name_tr": "Limon kabuğu",
+        "amount_en": "Twist of",
+        "amount_tr": "Büküm",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      },
+      {
+        "name_en": "Orange peel",
+        "name_tr": "Portakal kabuğu",
+        "amount_en": "Twist of",
+        "amount_tr": "Büküm",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Created in the 1860s at Caffè Campari. Originally known as the 'Milano-Torino', it was renamed because of its popularity among American tourists escaping Prohibition."
+  },
+  {
+    "api_id": "17195",
+    "name_en": "Bellini",
+    "name_tr": "Bellini",
+    "instructions_en": "Pour peach purée into chilled flute, add sparkling wine. Stir gently.",
+    "instructions_tr": "Şeftali püresini soğutulmuş flütün içine dökün, köpüklü şarap ekleyin. Yavaşça karıştırın.",
+    "glass_type_en": "Champagne Flute",
+    "glass_type_tr": "Şampanya Bardağı",
+    "tags_en": "Sweet,Fruity,Sparkling,Brunch,IBA",
+    "tags_tr": "Tatlı,Meyveli,Köpüklü,Brunch,IBA",
+    "history_notes_tr": "1945 civarında Venedik'teki Harry's Bar'da Giuseppe Cipriani tarafından icat edildi. Eşsiz pembe rengi ona Giovanni Bellini'nin bir tablosundaki azizin cübbesini hatırlattığı için bu adı aldı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/eaag491504367543.jpg",
+    "ingredients": [
+      {
+        "name_en": "Champagne",
+        "name_tr": "Şampanya",
+        "amount_en": "6 oz",
+        "amount_tr": "18 cl",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Prosecco",
+            "name_tr": "Prosecco",
+            "amount_en": "6 oz",
+            "amount_tr": "18 cl",
+            "category": "Wines"
+          }
+        ]
+      },
+      {
+        "name_en": "Peach schnapps",
+        "name_tr": "Şeftali likörü",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Invented by Giuseppe Cipriani at Harry's Bar in Venice around 1945. Named because its unique pink color reminded him of the toga of a saint in a painting by Giovanni Bellini."
+  },
+  {
+    "api_id": "17210",
+    "name_en": "Bramble",
+    "name_tr": "Bramble",
+    "instructions_en": "Fill glass with crushed ice. Build gin, lemon juice and simple syrup over. Stir, and then pour blackberry liqueur over in a circular fashion to create marbling effect. Garnish with two blackberries and lemon slice.",
+    "instructions_tr": "Bardağı kırılmış buzla doldurun. Üzerine cin, limon suyu ve basit şurup ekleyin. Karıştırın ve ebru efekti yaratmak için böğürtlen likörünü dairesel bir şekilde üzerine dökün. İki böğürtlen ve limon dilimiyle süsleyin.",
+    "glass_type_en": "Old-Fashioned glass",
+    "glass_type_tr": "Old-fashioned bardaği",
+    "tags_en": "Sweet,Sour,Fruity,IBA,ModernClassic",
+    "tags_tr": "Tatlı,Ekşi,Meyveli,IBA,ModernKlasik",
+    "history_notes_tr": "1980'lerde Londra'da Dick Bradsell tarafından yaratıldı. Isle of Wight'ta böğürtlen topladığı çocukluk anılarından esinlenmiştir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/twtbh51630406392.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "4 cl",
+        "amount_tr": "4 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1.5 cl",
+        "amount_tr": "1,5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1.5 cl",
+            "amount_tr": "1,5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar Syrup",
+        "name_tr": "Şeker Şurubu",
+        "amount_en": "1 cl",
+        "amount_tr": "1 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Creme de Mure",
+        "name_tr": "Böğürtlen kreması",
+        "amount_en": "1.5 cl",
+        "amount_tr": "1,5 cl",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Created by Dick Bradsell in London in the 1980s. Inspired by his childhood memories of picking blackberries on the Isle of Wight."
+  },
+  {
+    "api_id": "17185",
+    "name_en": "Casino",
+    "name_tr": "Casino",
+    "instructions_en": "Pour all ingredients into shaker with ice cubes. Shake well. Strain into chilled cocktail glass. Garnish with a lemon twist and a maraschino cherry. Serve without a straw.",
+    "instructions_tr": "Tüm malzemeleri buz küpleriyle birlikte shaker'a dökün. İyice çalkalayın. Soğutulmuş kokteyl bardağına süzün. Limon bükümü ve kiraz likörü kirazıyla süsleyin. Pipetsiz servis yapın.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "IBA",
+    "tags_tr": "FARKLI",
+    "history_notes_tr": "Hugo Ensslin'in 1916 tarihli kitabında yer alan resmi bir IBA klasiği. Temelde bir Aviation kokteylidir ancak Menekşe likörü yerine portakal bitteri kullanılır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/1mvjxg1504348579.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Maraschino Liqueur",
+        "name_tr": "Maraschino Likörü",
+        "amount_en": "1/4 tsp",
+        "amount_tr": "1/4 çay kaşığı",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1/4 tsp",
+        "amount_tr": "1/4 çay kaşığı",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1/4 tsp",
+            "amount_tr": "1/4 çay kaşığı",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Orange bitters",
+        "name_tr": "Portakallı bitterler",
+        "amount_en": "2 dashes",
+        "amount_tr": "2 çizgi",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Cherry",
+        "name_tr": "Kiraz",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "An IBA official classic that appeared in Hugo Ensslin's 1916 book. It is essentially an Aviation cocktail but uses orange bitters instead of Crème de Violette."
+  },
+  {
+    "api_id": "11202",
+    "name_en": "Caipirinha",
+    "name_tr": "Caipirinha",
+    "instructions_en": "Place lime and sugar into old fashioned glass and muddle (mash the two ingredients together using a muddler or a wooden spoon). Fill the glass with ice and add the Cachaça.",
+    "instructions_tr": "Misket Limonu ve şekeri Old-Fashioned bardağa koyun ve karıştırın (iki malzemeyi bir karıştırıcı veya tahta kaşık kullanarak birlikte ezin). Bardağı buzla doldurun ve Cachaça'yı ekleyin.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Old-Fashioned bardaği",
+    "tags_en": "Sour,Strong,Refreshing,Summer,IBA",
+    "tags_tr": "Ekşi,Sert,Ferahlatıcı,Yaz,IBA",
+    "history_notes_tr": "Brezilya'nın milli kokteyli. Bugünkü ferahlatıcı karışımına evrilmeden önce, aslında İspanyol Gribi için sarımsak ve bal içeren bir ilaç olarak tüketilirdi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/jgvn7p1582484435.jpg",
+    "ingredients": [
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "2 tsp",
+        "amount_tr": "2 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime",
+        "name_tr": "Misket Limonu",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon",
+            "name_tr": "Limon",
+            "amount_en": "1",
+            "amount_tr": "1",
+            "category": "Fruits"
+          }
+        ]
+      },
+      {
+        "name_en": "Cachaca",
+        "name_tr": "Cachaça",
+        "amount_en": "2 1/2 oz",
+        "amount_tr": "7.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Vodka",
+            "name_tr": "Votka",
+            "amount_en": "2 1/2 oz",
+            "amount_tr": "7.5 cl",
+            "category": "Spirits"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Brazil's national cocktail. Originally consumed as a remedy for the Spanish Flu, containing garlic and honey, before evolving into today's refreshing mix."
+  },
+  {
+    "api_id": "11288",
+    "name_en": "Cuba Libre",
+    "name_tr": "Cuba Libre",
+    "instructions_en": "Build all ingredients in a Collins glass filled with ice. Garnish with lime wedge.",
+    "instructions_tr": "Tüm malzemeleri buzla dolu bir Collins bardağına koyun. Misket Limonu dilimi ile süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Refreshing,Party,IBA,Rum",
+    "tags_tr": "Tatlı,Ferahlatıcı,Parti,IBA,Rom",
+    "history_notes_tr": "İspanyol-Amerikan Savaşı'nın ardından 1900 civarında Havana'da ortaya çıktı. Adı 'Özgür Küba' anlamına gelir ve Coca-Cola ile Amerikan askerlerinin gelişini kutlar.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/wmkbfj1606853905.jpg",
+    "ingredients": [
+      {
+        "name_en": "Light rum",
+        "name_tr": "Beyaz Rom",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Coca-Cola",
+        "name_tr": "Coca-cola",
+        "amount_en": "Enough",
+        "amount_tr": "Kararınca",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Originated in Havana around 1900, following the Spanish-American War. The name means 'Free Cuba', celebrating the arrival of Coca-Cola and American soldiers."
+  },
+  {
+    "api_id": "17186",
+    "name_en": "Clover Club",
+    "name_tr": "Clover Club",
+    "instructions_en": "Dry shake ingredients to emulsify, add ice, shake and served straight up.",
+    "instructions_tr": "Dağılması için malzemeleri karıştırın, buz ekleyin, çalkalayın ve düz bir şekilde servis yapın.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sweet,Sour,Fruity,Classic,IBA",
+    "tags_tr": "Tatlı,Ekşi,Meyveli,Klasik,IBA",
+    "history_notes_tr": "Adını Philadelphia'daki bir erkek kulübünden alan Yasak öncesi klasik. Yumurta akı ve ahududu şurubu sayesinde sahip olduğu ipeksi dokusuyla bilinir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/t0aja61504348715.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Grenadine",
+        "name_tr": "Grenadin",
+        "amount_en": "2 tsp",
+        "amount_tr": "2 çay kaşığı",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          },{
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "4cl",
+        "category": "Fruits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Egg white",
+        "name_tr": "Yumurta Beyazı",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": [
+          {
+            "name_en": "Aquafaba",
+            "name_tr": "Nohut Suyu",
+            "amount_en": "Enough",
+            "amount_tr": "Kararınca",
+            "category": "Pantry"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "A pre-Prohibition classic named after a men's club in Philadelphia. Known for its silky texture thanks to the egg white and raspberry syrup."
+  },
+  {
+    "api_id": "17196",
+    "name_en": "Cosmopolitan",
+    "name_tr": "Cosmopolitan",
+    "instructions_en": "Add all ingredients into cocktail shaker filled with ice. Shake well and double strain into large cocktail glass. Garnish with lime wheel.",
+    "instructions_tr": "Tüm malzemeleri buzla dolu shaker'a ekleyin. İyice çalkalayın ve büyük kokteyl bardağına iki kez süzün. Misket Limonu ile süsleyin.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sweet,Sour,Fruity,Party,IBA",
+    "tags_tr": "Tatlı,Ekşi,Meyveli,Parti,IBA",
+    "history_notes_tr": "Tartışmalı olsa da, modern tarif genellikle NYC'deki Toby Cecchini'ye atfedilir. 90'larda 'Sex and the City' dizisi sayesinde küresel bir ikon haline geldi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/kpsajh1504368362.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "1 1/4 oz",
+        "amount_tr": "4 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1/4 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1/4 oz",
+            "amount_tr": "1,5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Cointreau",
+        "name_tr": "Cointreau",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Triple Sec",
+            "name_tr": "Triple Sec",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Cranberry Juice",
+        "name_tr": "Kızılcık Suyu",
+        "amount_en": "1/4 cup",
+        "amount_tr": "1/4 bardak",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+           {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1/4 cup",
+            "amount_tr": "1/4 bardak",
+            "category": "Juices"
+          },
+           {
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1/4 cup",
+            "amount_tr": "1/4 bardak",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Though disputed, Toby Cecchini is often credited with the modern recipe in NYC. It became a global icon in the 90s thanks to the TV show 'Sex and the City'."
+  },
+  {
+    "api_id": "17250",
+    "name_en": "Corpse Reviver",
+    "name_tr": "Ölü Canlandırıcı",
+    "instructions_en": "Shake, strain, straight up, cocktail glass rinsed with absinthe\r\n",
+    "instructions_tr": "Kokteyl bardağını absinthe ile aromalandırın. Malzemeleri shake'leyin ve süzün.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Strong,Classic,Hangover,IBA",
+    "tags_tr": "Ekşi,Sert,Klasik,AkşamdanKalma,IBA",
+    "history_notes_tr": "Özellikle 'No. 2' versiyonu, Savoy Kokteyl Kitabı'ndan (1930) gelir. Ölüleri uyandırmak için tasarlanmış bir 'çivi çiviyi söker' (akşamdan kalma) ilacıdır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/gifgao1513704334.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "3/4 oz",
+        "amount_tr": "3 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Triple Sec",
+        "name_tr": "Triple Sec",
+        "amount_en": "3/4 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Cointreau",
+            "name_tr": "Cointreau",
+            "amount_en": "3/4 oz",
+            "amount_tr": "3 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Lillet Blanc",
+        "name_tr": "Lillet Blanc",
+        "amount_en": "3/4 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "3/4 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "3/4 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Absinthe",
+        "name_tr": "Absinthe",
+        "amount_en": "1 dash",
+        "amount_tr": "1-2 damla",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Specifically the 'No. 2', this drink comes from the Savoy Cocktail Book (1930). Intended as a 'hair of the dog' hangover cure to wake up the dead."
+  },
+  {
+    "api_id": "11006",
+    "name_en": "Daiquiri",
+    "name_tr": "Daiquiri",
+    "instructions_en": "Pour all ingredients into shaker with ice cubes. Shake well. Strain in chilled cocktail glass.",
+    "instructions_tr": "Tüm malzemeleri buz küpleriyle birlikte shaker'a dökün. İyice çalkalayın. Soğutulmuş kokteyl bardağına süzün.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Strong,Classic,IBA,Rum",
+    "tags_tr": "Ekşi,Sert,Klasik,IBA,Rom",
+    "history_notes_tr": "Küba'daki Amerikalı maden mühendisi Jennings Cox tarafından icat edildi. Adını Santiago de Cuba yakınlarında çalıştığı plaj ve demir madeninden almıştır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/mrz9091589574515.jpg",
+    "ingredients": [
+      {
+        "name_en": "Light rum",
+        "name_tr": "Beyaz Rom",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1/4 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1/4 oz",
+            "amount_tr": "1,5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Powdered sugar",
+        "name_tr": "Pudra şekeri",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Invented by American mining engineer Jennings Cox in Cuba. Named after the beach and iron mine near Santiago de Cuba where he worked."
+  },
+  {
+    "api_id": "11005",
+    "name_en": "Dry Martini",
+    "name_tr": "Dry Martini",
+    "instructions_en": "Straight: Pour all ingredients into mixing glass with ice cubes. Stir well. Strain in chilled martini cocktail glass. Squeeze oil from lemon peel onto the drink, or garnish with olive.",
+    "instructions_tr": "Düz: Tüm malzemeleri buz küpleriyle dolu karıştırma bardağına dökün. İyice karıştırın. Soğutulmuş martini kokteyl bardağına süzün. Limon kabuğunun yağını içeceğin üzerine sıkın veya zeytinle süsleyin.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Strong,Dry,Classic,IBA,Gin",
+    "tags_tr": "Sert,Sek,Klasik,IBA,Cin",
+    "history_notes_tr": "Kokteyllerin Kralı. Kökenleri belirsizdir, muhtemelen daha tatlı olan 'Martinez'den evrilmiştir. On yıllar içinde daha sek hale geldi, Churchill ve Bond tarafından tercih edilmesiyle ünlendi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/6ck9yi1589574317.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "1 2/3 oz",
+        "amount_tr": "5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Vodka",
+            "name_tr": "Votka",
+            "amount_en": "1 2/3 oz",
+            "amount_tr": "5 cl",
+            "category": "Spirits"
+          }
+        ]
+      },
+      {
+        "name_en": "Dry Vermouth",
+        "name_tr": "Dry Vermut",
+        "amount_en": "1/3 oz",
+        "amount_tr": "1 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Olive",
+        "name_tr": "Zeytin",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "The King of Cocktails. Its origins are muddy, likely evolving from the sweeter 'Martinez'. It became drier over the decades, famously preferred by Churchill and Bond."
+  },
+  {
+    "api_id": "17211",
+    "name_en": "Dark and Stormy",
+    "name_tr": "Karanlık ve Fırtınalı",
+    "instructions_en": "In a highball glass filled with ice add 6cl dark rum and top with ginger beer. Garnish with lime wedge.",
+    "instructions_tr": "Buzla doldurulmuş bir highball bardağa 6 cl koyu rom ekleyin ve üstüne zencefil gazozu ekleyin. Misket Limonu kaması ile süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Spicy,Highball,IBA",
+    "tags_tr": "Tatlı,Baharatlı,Highball,IBA",
+    "history_notes_tr": "Bermuda'nın milli içeceği. Adının, bir denizcinin içeceğin renginin fırtına bulutlarına benzediğini söylemesiyle ortaya çıktığı söylenir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/t1tn0s1504374905.jpg",
+    "ingredients": [
+      {
+        "name_en": "Dark Rum",
+        "name_tr": "Dark Rom",
+        "amount_en": "5 cl",
+        "amount_tr": "5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Ginger Beer",
+        "name_tr": "Zencefil Birası",
+        "amount_en": "3 oz",
+        "amount_tr": "10 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Ginger Ale",
+            "name_tr": "Zencefilli Gazoz",
+            "amount_en": "3 oz",
+            "amount_tr": "10 cl",
+            "category": "Mixers"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "The national drink of Bermuda. The name is said to have originated when a sailor observed that the drink's color looked like storm clouds."
+  },
+  {
+    "api_id": "17212",
+    "name_en": "Espresso Martini",
+    "name_tr": "Espresso Martini",
+    "instructions_en": "Pour ingredients into shaker filled with ice, shake vigorously, and strain into chilled martini glass",
+    "instructions_tr": "Malzemeleri buzla dolu shaker'a dökün, kuvvetlice çalkalayın ve soğutulmuş martini bardağına süzün.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sweet,Strong,Coffee,AfterDinner,IBA",
+    "tags_tr": "Tatlı,Sert,Kahveli,YemekSonrası,IBA",
+    "history_notes_tr": "1983 yılında Londra'da Dick Bradsell tarafından yaratıldı. Efsaneye göre ünlü bir model 'beni uyandıracak ve mahvedecek' bir içecek istemiştir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/n0sx531504372951.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "5 cl",
+        "amount_tr": "5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Kahlua",
+        "name_tr": "Kahlua",
+        "amount_en": "1 cl",
+        "amount_tr": "1 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Sugar Syrup",
+        "name_tr": "Şeker Şurubu",
+        "amount_en": "1 dash",
+        "amount_tr": "1 çizgi",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Created by Dick Bradsell in London in 1983. Legend says a famous model asked for a drink that would 'wake me up and f**k me up'."
+  },
+  {
+    "api_id": "17197",
+    "name_en": "French 75",
+    "name_tr": "French 75",
+    "instructions_en": "Combine gin, sugar, and lemon juice in a cocktail shaker filled with ice. Shake vigorously and strain into a chilled champagne glass. Top up with Champagne. Stir gently.",
+    "instructions_tr": "Buzla dolu bir shaker'a cin, şeker ve limon suyunu birleştirin. Kuvvetlice çalkalayın ve soğutulmuş bir şampanya bardağına süzün. Şampanya doldurun. Yavaşça karıştırın.",
+    "glass_type_en": "Collins glass",
+    "glass_type_tr": "Collins bardağı",
+    "tags_en": "Sour,Sparkling,Classic,IBA,Gin",
+    "tags_tr": "Ekşi,Köpüklü,Klasik,IBA,Cin",
+    "history_notes_tr": "Adını Fransızların 1. Dünya Savaşı'nda kullandığı hızlı ateş eden 75 mm'lik sahra topundan almıştır. Bir top mermisi yemekle kıyaslanabilir bir vuruşu olduğu söylenirdi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/hrxfbl1606773109.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "2 tsp",
+        "amount_tr": "2 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1/4 tsp",
+            "amount_tr": "1/4 çay kaşığı",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Champagne",
+        "name_tr": "Şampanya",
+        "amount_en": "4 oz",
+        "amount_tr": "12 cl",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Prosecco",
+            "name_tr": "Prosecco",
+            "amount_en": "4 oz",
+            "amount_tr": "12 cl",
+            "category": "Wines"
+          }
+        ]
+      },
+      {
+        "name_en": "Orange",
+        "name_tr": "Portakal",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      },
+      {
+        "name_en": "Maraschino Cherry",
+        "name_tr": "Marachino Kirazı",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Named after the rapid-firing 75mm field gun used by the French in WWI. It was said to have a kick comparable to being shelled."
+  },
+  {
+    "api_id": "17213",
+    "name_en": "French Martini",
+    "name_tr": "French Martini",
+    "instructions_en": "Pour all ingredients into shaker with ice cubes. Shake well and strain into a chilled cocktail glass. Squeeze oil from lemon peel onto the drink.",
+    "instructions_tr": "Tüm malzemeleri buz küpleriyle birlikte shaker'a dökün. İyice çalkalayın ve soğutulmuş bir kokteyl bardağına süzün. Limon kabuğunun yağını içeceğin üzerine sıkın.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sweet,Fruity,ModernClassic,IBA",
+    "tags_tr": "Tatlı,Meyveli,ModernKlasik,IBA",
+    "history_notes_tr": "Aslında Fransız değildir, 80'lerde NYC'de icat edilmiştir. Meyveli martini çılgınlığını başlattı ve adını Fransız ahududu likörü Chambord kullanımından aldı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/clth721504373134.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "4.5 cl",
+        "amount_tr": "4,5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Raspberry Liqueur",
+        "name_tr": "Ahududu Likörü",
+        "amount_en": "1.5 cl",
+        "amount_tr": "1,5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Pineapple Juice",
+        "name_tr": "Ananas Suyu",
+        "amount_en": "1.5 cl",
+        "amount_tr": "1,5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Not truly French, but invented in NYC in the 80s. It sparked the fruity martini craze and is named for its use of Chambord, a French black raspberry liqueur."
+  },
+  {
+    "api_id": "17255",
+    "name_en": "Gimlet",
+    "name_tr": "Gimlet",
+    "instructions_en": "Add all the ingredients to a shaker and fill with ice.\r\n\r\nShake, and strain into a chilled cocktail glass or an Old Fashioned glass filled with fresh ice.\r\n\r\nGarnish with a lime wheel.",
+    "instructions_tr": "Tüm malzemeleri shaker'a ekleyin ve buzla doldurun. \r\n\r\nÇalkalayın ve soğutulmuş bir kokteyl bardağına veya taze buzla doldurulmuş viski bardağına süzün. \r\n\r\nLime dilimi ile süsleyin.",
+    "glass_type_en": "Martini Glass",
+    "glass_type_tr": "Martini Bardağı",
+    "tags_en": "Sour,Strong,Classic,Gin",
+    "tags_tr": "Ekşi,Sert,Klasik,Cin",
+    "history_notes_tr": "Aslen İngiliz denizcileri iskorbütten korumak için bir ilaçtı. Günlük limon suyu (şekerle korunmuş) istihkaklarını içilebilir hale getirmek için cinle karıştırırlardı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/3xgldt1513707271.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "2 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1,5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar Syrup",
+        "name_tr": "Şeker Şurubu",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Honey Syrup",
+            "name_tr": "Bal Şurubu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1,5 cl",
+            "category": "Syrups"
+          },
+          {
+            "name_en": "Agave Syrup",
+            "name_tr": "Agave Şurubu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1,5 cl",
+            "category": "Syrups"
+          }
+        ]
+      },
+      {
+        "name_en": "Lime",
+        "name_tr": "Misket Limonu",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": [
+          {
+            "name_en": "Lemon",
+            "name_tr": "Limon",
+            "amount_en": "1",
+            "amount_tr": "1",
+            "category": "Fruits"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Originally a medicine for British sailors to prevent scurvy. They mixed their daily ration of lime juice (preserved with sugar) with gin to make it palatable."
+  },
+  {
+    "api_id": "11423",
+    "name_en": "Godfather",
+    "name_tr": "Godfather",
+    "instructions_en": "Pour all ingredients directly into old fashioned glass filled with ice cubes. Stir gently.",
+    "instructions_tr": "Tüm malzemeleri doğrudan buz küpleriyle doldurulmuş Old-Fashioned bardağa dökün. Yavaşça karıştırın.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Old-Fashioned bardağı",
+    "tags_en": "Sweet,Strong,Sipper,IBA",
+    "tags_tr": "Tatlı,Sert,Yudumlamalık,IBA",
+    "history_notes_tr": "1970'lerde popüler olan bu içecek, adını Marlon Brando'nun oynadığı ünlü filmden almıştır. Scotch ve Amaretto'nun basit ama cesur bir karışımıdır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/e5zgao1582582378.jpg",
+    "ingredients": [
+      {
+        "name_en": "Scotch",
+        "name_tr": "Scotch viski",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Amaretto",
+        "name_tr": "Amaretto",
+        "amount_en": "3/4 oz",
+        "amount_tr": "1 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Popular in the 1970s, it was named after the famous film starring Marlon Brando. It's a simple but bold mix of Scotch and Amaretto."
+  },
+  {
+    "api_id": "178365",
+    "name_en": "Gin Tonic",
+    "name_tr": "Cin Tonik",
+    "instructions_en": "Fill a highball glass with ice, pour the gin, top with tonic water and squeeze a lemon wedge and garnish with a lemon wedge.",
+    "instructions_tr": "Bir highball bardağını buzla doldurun, cini dökün, üzerine tonik ekleyin, bir dilim limon sıkın ve limon dilimiyle süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Bitter,Refreshing,Highball,Classic",
+    "tags_tr": "Acı,Ferahlatıcı,Highball,Klasik",
+    "history_notes_tr": "İngiliz sömürgesi Hindistan'da doğdu. Askerler kinini (sıtma ilacı) acı tadı maskelemek için su, şeker ve limonla karıştırır, rahatlatıcı bir içecek yapmak için cin eklerlerdi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/qcgz0t1643821443.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "4 cl",
+        "amount_tr": "4 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Tonic Water",
+        "name_tr": "Tonik",
+        "amount_en": "10 cl",
+        "amount_tr": "10 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Peel",
+        "name_tr": "Limon kabuğu",
+        "amount_en": "1 Slice",
+        "amount_tr": "1 Dilim",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": [
+          {
+            "name_en": "Orange Peel",
+            "name_tr": "Portakal Kabuğu",
+            "amount_en": "3 parts",
+            "amount_tr": "3 parça",
+            "category": "Fruits"
+          }
+        ]
+      },
+      {
+        "name_en": "Ice",
+        "name_tr": "Buz",
+        "amount_en": "cubes",
+        "amount_tr": "küpler",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Born in British colonial India. Soldiers mixed quinine (anti-malarial) with water, sugar, and lime to mask the bitter taste, adding gin to make a soothing drink."
+  },
+  {
+    "api_id": "17201",
+    "name_en": "Hemingway Special",
+    "name_tr": "Hemingway Special",
+    "instructions_en": "Pour all ingredients into a shaker with ice. Shake.",
+    "instructions_tr": "Tüm malzemeleri buzlu bir shaker'a dökün. Sallayın.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Strong,Classic,IBA,Rum",
+    "tags_tr": "Ekşi,Sert,Klasik,IBA,Rom",
+    "history_notes_tr": "'Papa Doble' olarak da bilinir. Havana'daki El Floridita'da Ernest Hemingway için yaratıldı. Şeker hastası olduğu için şekersiz ve iki kat romlu isterdi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/jfcvps1504369888.jpg",
+    "ingredients": [
+      {
+        "name_en": "Rum",
+        "name_tr": "Rom",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Grapefruit Juice",
+        "name_tr": "Greyfurt Suyu",
+        "amount_en": "1 1/3 oz",
+        "amount_tr": "4 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Maraschino Liqueur",
+        "name_tr": "Maraschino Likörü",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Also known as the 'Papa Doble'. Created for Ernest Hemingway at El Floridita in Havana. He was diabetic, so he requested double the rum and no sugar."
+  },
+  {
+    "api_id": "13971",
+    "name_en": "Irish Coffee",
+    "name_tr": "Irish Coffee",
+    "instructions_en": "Heat the coffee, whiskey and sugar; do not boil. Pour into glass and top with cream; serve hot.",
+    "instructions_tr": "Kahveyi, viskiyi ve şekeri ısıtın; kaynatmayın. Bardağa dökün ve üzerine krema dökün; sıcak servis yapın.",
+    "glass_type_en": "Irish coffee cup",
+    "glass_type_tr": "İrlanda kahvesi fincanı",
+    "tags_en": "Sweet,Hot,Coffee,Winter,IBA",
+    "tags_tr": "Tatlı,Sıcak,Kahveli,Kış,IBA",
+    "history_notes_tr": "Foynes Havalimanı'nda Joe Sheridan tarafından yolcuları ısıtmak için icat edildi. Brezilya kahvesi olup olmadığı sorulduğunda, 'Hayır, bu İrlanda Kahvesi' yanıtını verdi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/sywsqw1439906999.jpg",
+    "ingredients": [
+      {
+        "name_en": "Irish whiskey",
+        "name_tr": "Irish viskisi",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Coffee",
+        "name_tr": "Kahve",
+        "amount_en": "8 oz",
+        "amount_tr": "8 oz",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Whipped cream",
+        "name_tr": "Krem Şanti",
+        "amount_en": "1 tblsp",
+        "amount_tr": "1 yemek kaşığı",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Invented by Joe Sheridan at Foynes Airport to warm up passengers. When asked if it was Brazilian coffee, he replied, 'No, that's Irish Coffee'."
+  },
+  {
+    "api_id": "13837",
+    "name_en": "Kir Royale",
+    "name_tr": "Kir Royale",
+    "instructions_en": "Pour Creme de cassis in glass, gently pour champagne on top",
+    "instructions_tr": "Creme de cassis'i bardağa dökün, üzerine şampanyayı yavaşça dökün",
+    "glass_type_en": "Champagne Flute",
+    "glass_type_tr": "Şampanya Flütü",
+    "tags_en": "Sweet,Sparkling,Classic,IBA",
+    "tags_tr": "Tatlı,Köpüklü,Klasik,IBA",
+    "history_notes_tr": "Fransız Direnişi kahramanı Canon Félix Kir'in adını taşıyan 'Kir'in bir varyasyonudur. Yerel Burgonya ürünlerini tanıtmak için bu içeceği popülerleştirdi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/yt9i7n1504370388.jpg",
+    "ingredients": [
+      {
+        "name_en": "Creme de Cassis",
+        "name_tr": "Creme de Cassis",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Grenadine",
+            "name_tr": "Nar Şurubu (Grenadin)",
+            "amount_en": "1 cl",
+            "amount_tr": "1 cl",
+            "category": "Syrups"
+          },
+          {
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Champagne",
+        "name_tr": "Şampanya",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "5 cl",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Prosecco",
+            "name_tr": "Prosecco",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "5 cl",
+            "category": "Wines"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "A variation of the 'Kir', named after Canon Félix Kir, a hero of the French Resistance. He popularized the drink to promote local Burgundy products."
+  },
+  {
+    "api_id": "17204",
+    "name_en": "Long Island Iced Tea",
+    "name_tr": "Long Island Iced Tea",
+    "instructions_en": "Mix all contents in a highball glass and sitr gently. Add dash of Coca-Cola for the coloring and garnish with lemon or lime twist.",
+    "instructions_tr": "Tüm içeriği bir highball bardağında karıştırın ve yavaşça oturun. Renklendirmek için bir miktar Coca-Cola ekleyin ve limon veya misket limonu ile süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Strong,Party,IBA,Highball",
+    "tags_tr": "Tatlı,Sert,Parti,IBA,Highball",
+    "history_notes_tr": "Genellikle 1970'lerde Robert 'Rosebud' Butt'a atfedilir. Tadı buzlu çaya benzemesine rağmen içinde çay yoktur, ancak dört farklı alkol içerir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/wx7hsg1504370510.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Tequila",
+        "name_tr": "Tekila",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Light rum",
+        "name_tr": "Light rum",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Coca-Cola",
+        "name_tr": "Coca-cola",
+        "amount_en": "1 dash",
+        "amount_tr": "1 çizgi",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon peel",
+        "name_tr": "Limon kabuğu",
+        "amount_en": "Twist of",
+        "amount_tr": "Büküm",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Typically attributed to Robert 'Rosebud' Butt in the 1970s. Despite tasting like iced tea, it contains no tea, but four different spirits."
+  },
+  {
+    "api_id": "11000",
+    "name_en": "Mojito",
+    "name_tr": "Mojito",
+    "instructions_en": "Muddle mint leaves with sugar and lime juice. Add a splash of soda water and fill the glass with cracked ice. Pour the rum and top with soda water. Garnish and serve with straw.",
+    "instructions_tr": "Nane yapraklarını şeker ve limon suyuyla karıştırın. Bir miktar soda ekleyin ve bardağı kırık buzla doldurun. Romu dökün ve üzerine soda ekleyin. Samanla süsleyip servis yapın.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "IBA,ContemporaryClassic,Alcoholic,USA,Asia,Vegan,Citrus,Brunch,Hangover,Mild",
+    "tags_tr": "IBA,ÇağdaşKlasik,Alkollü,ABD,Asya,Vegan,Narenciye,Brunch,Akşamdan Kalma,Hafif",
+    "history_notes_tr": "Kökenleri 16. yüzyıl Küba'sına ve Sir Francis Drake'e kadar uzanır. Ernest Hemingway'in favori içeceklerinden biri olarak dünyaca ünlenmiştir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/metwgh1606770327.jpg",
+    "ingredients": [
+      {
+        "name_en": "Light rum",
+        "name_tr": "Beyaz Rom",
+        "amount_en": "2-3 oz",
+        "amount_tr": "6-8 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Rum",
+            "name_tr": "Rom",
+            "amount_en": "2-3 oz",
+            "amount_tr": "6-8 cl",
+            "category": "Spirits"
+          }
+        ]
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "2 tsp",
+        "amount_tr": "2 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Brown Sugar",
+            "name_tr": "Esmer Şeker",
+            "amount_en": "2 tsp",
+            "amount_tr": "2 çay kaşığı",
+            "category": "Pantry"
+          }
+        ]
+      },
+      {
+        "name_en": "Mint",
+        "name_tr": "Nane",
+        "amount_en": "2-4",
+        "amount_tr": "2-4",
+        "category": "Fruits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Soda water",
+        "name_tr": "Soda",
+        "amount_en": "Top up",
+        "amount_tr": "Üstünü doldur",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Sprite",
+            "name_tr": "Gazoz",
+            "amount_en": "Top up",
+            "amount_tr": "Üstünü doldur",
+            "category": "Mixers"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Origins trace back to 16th-century Cuba and Sir Francis Drake. It became globally famous as one of Ernest Hemingway's favorite drinks."
+  },
+  {
+    "api_id": "17205",
+    "name_en": "Mimosa",
+    "name_tr": "Mimoza",
+    "instructions_en": "Ensure both ingredients are well chilled, then mix into the glass. Serve cold.",
+    "instructions_tr": "Her iki malzemenin de iyice soğutulduğundan emin olun ve ardından bardağa karıştırın. Soğuk servis yapın.",
+    "glass_type_en": "Champagne flute",
+    "glass_type_tr": "Şampanya Bardağı",
+    "tags_en": "Sweet,Fruity,Sparkling,Brunch,IBA",
+    "tags_tr": "Tatlı,Meyveli,Köpüklü,Brunch,IBA",
+    "history_notes_tr": "1925 civarında Paris'teki Ritz Otel'de Frank Meier tarafından yaratıldı. Adını sarı mimoza çiçeğinden alır ve nihai brunch kokteyli haline gelmiştir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/juhcuu1504370685.jpg",
+    "ingredients": [
+      {
+        "name_en": "Champagne",
+        "name_tr": "Şampanya",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Prosecco",
+            "name_tr": "Prosecco",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Wines"
+          }
+        ]
+      },
+      {
+        "name_en": "Orange Juice",
+        "name_tr": "Portakal Suyu",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Created by Frank Meier at the Ritz Hotel in Paris around 1925. Named after the yellow mimosa plant, it became the ultimate brunch cocktail."
+  },
+  {
+    "api_id": "11690",
+    "name_en": "Mai Tai",
+    "name_tr": "Mai Tai",
+    "instructions_en": "Shake all ingredients with ice. Strain into glass. Garnish and serve with straw.",
+    "instructions_tr": "Tüm malzemeleri buzla çalkalayın. Bardağa süzün. Samanla süsleyip servis yapın.",
+    "glass_type_en": "Collins glass",
+    "glass_type_tr": "Collins bardağı",
+    "tags_en": "Sweet,Sour,Strong,Tiki,IBA",
+    "tags_tr": "Tatlı,Ekşi,Sert,Tiki,IBA",
+    "history_notes_tr": "1944'te Trader Vic tarafından icat edildi. Tadına bakan Tahitili bir arkadaşı 'Maita'i roa ae!' diye haykırdı, bu 'Dünya dışı!' anlamına gelir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/twyrrp1439907470.jpg",
+    "ingredients": [
+      {
+        "name_en": "Light rum",
+        "name_tr": "Beyaz Rom",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Rum",
+            "name_tr": "Rom",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Spirits"
+          }
+        ]
+      },
+      {
+        "name_en": "Orgeat Syrup",
+        "name_tr": "Orgeat Şurubu",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Triple sec",
+        "name_tr": "Triple sec",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Cointreau",
+            "name_tr": "Cointreau",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Sweet and Sour",
+        "name_tr": "Tatlı ve Ekşi Sos",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Cherry",
+        "name_tr": "Kiraz",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Invented by Trader Vic in 1944. Upon tasting it, a Tahitian friend exclaimed 'Maita'i roa ae!', meaning 'Out of this world!'."
+  },
+  {
+    "api_id": "11008",
+    "name_en": "Manhattan",
+    "name_tr": "Manhattan",
+    "instructions_en": "Stirred over ice, strained into a chilled glass, garnished, and served up.",
+    "instructions_tr": "Buz üzerinde karıştırılır, soğutulmuş bir bardağa süzülür, süslenir ve servis edilir.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Bitter,Strong,Classic,IBA,Whiskey",
+    "tags_tr": "Acı,Sert,Klasik,IBA,Viski",
+    "history_notes_tr": "1870'lere dayanan en eski kokteyllerden biridir. Efsaneler onu Manhattan Club'daki Lady Randolph Churchill ile ilişkilendirir, ancak bu muhtemelen bir mittir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/yk70e31606771240.jpg",
+    "ingredients": [
+      {
+        "name_en": "Sweet Vermouth",
+        "name_tr": "Tatlı Vermut",
+        "amount_en": "3/4 oz",
+        "amount_tr": "2 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Bourbon",
+        "name_tr": "Burbon",
+        "amount_en": "2 1/2 oz Blended",
+        "amount_tr": "5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Angostura bitters",
+        "name_tr": "Angostura bitters",
+        "amount_en": "dash",
+        "amount_tr": "1-2 damla",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Ice",
+        "name_tr": "Buz",
+        "amount_en": "2 or 3",
+        "amount_tr": "2 veya 3",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": []
+      },
+      {
+        "name_en": "Maraschino cherry",
+        "name_tr": "Maraschino kirazı",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      },
+      {
+        "name_en": "Orange peel",
+        "name_tr": "Portakal kabuğu",
+        "amount_en": "1 twist of",
+        "amount_tr": "1 bükülme",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "One of the oldest cocktails, dating back to the 1870s. Legend links it to Lady Randolph Churchill at the Manhattan Club, though this is likely a myth."
+  },
+  {
+    "api_id": "11007",
+    "name_en": "Margarita",
+    "name_tr": "Margarita",
+    "instructions_en": "Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the outer rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass.",
+    "instructions_tr": "Tuzun bardağın üzerine yapışmasını sağlamak için bardağın kenarını limon dilimiyle ovalayın. Sadece dış kenarını ıslatmaya ve üzerine tuz serpmeye dikkat edin. Tuz, içen kişinin dudaklarına kadar gelmeli ve asla kokteyle karışmamalıdır. Diğer malzemeleri buzla çalkalayın ve ardından dikkatlice bardağa dökün.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Salty,Classic,Party,IBA",
+    "tags_tr": "Ekşi,Tuzlu,Klasik,Parti,IBA",
+    "history_notes_tr": "Kökeni belirsizdir, ancak muhtemelen brendinin tekila ile değiştirilmesiyle 'Daisy' (İspanyolca Margarita) kokteyl kategorisinden evrilmiştir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg",
+    "ingredients": [
+      {
+        "name_en": "Tequila",
+        "name_tr": "Tekila",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Mezcal",
+            "name_tr": "Mezcal",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Spirits"
+          }
+        ]
+      },
+      {
+        "name_en": "Triple sec",
+        "name_tr": "Triple sec",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Cointreau",
+            "name_tr": "Cointreau",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Salt",
+        "name_tr": "Tuz",
+        "amount_en": "Enough",
+        "amount_tr": "Kararınca",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Sugar",
+            "name_tr": "Şeker",
+            "amount_en": "Enough",
+            "amount_tr": "Kararınca",
+            "category": "Pantry"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Its origin is murky, but it likely evolved from the 'Daisy' cocktail category (Margarita means Daisy in Spanish), substituting brandy with tequila."
+  },
+  {
+    "api_id": "17206",
+    "name_en": "Mint Julep",
+    "name_tr": "Mint Julep",
+    "instructions_en": "In a highball glass gently muddle the mint, sugar and water. Fill the glass with cracked ice, add Bourbon and stir well until the glass is well frosted. Garnish with a mint sprig.",
+    "instructions_tr": "Bir highball bardağında nane, şeker ve suyu yavaşça karıştırın. Bardağı kırık buzla doldurun, Bourbon'u ekleyin ve bardak iyice donuncaya kadar iyice karıştırın. Bir nane dalı ile süsleyin.",
+    "glass_type_en": "Collins glass",
+    "glass_type_tr": "Collins bardağı",
+    "tags_en": "Sweet,Strong,Refreshing,Classic,IBA",
+    "tags_tr": "Tatlı,Sert,Ferahlatıcı,Klasik,IBA",
+    "history_notes_tr": "1938'den beri Kentucky Derbisi ile özdeşleşmiş bir ABD güney klasiği. Buz gibi soğuk kalması için geleneksel olarak gümüş veya kalaylı kupada servis edilir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/squyyq1439907312.jpg",
+    "ingredients": [
+      {
+        "name_en": "Mint",
+        "name_tr": "Nane",
+        "amount_en": "4 fresh",
+        "amount_tr": "4 taze",
+        "category": "Fruits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Bourbon",
+        "name_tr": "Burbon",
+        "amount_en": "2 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Powdered Sugar",
+        "name_tr": "Pudra Şekeri",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Water",
+        "name_tr": "su",
+        "amount_en": "2 tsp",
+        "amount_tr": "2 çay kaşığı",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A southern US classic associated with the Kentucky Derby since 1938. Traditionally served in a silver or pewter cup to keep it frostily cold."
+  },
+  {
+    "api_id": "11009",
+    "name_en": "Moscow Mule",
+    "name_tr": "Moscow Mule",
+    "instructions_en": "Combine vodka and ginger beer in a highball glass filled with ice. Add lime juice. Stir gently. Garnish.",
+    "instructions_tr": "Votka ve zencefil birasını buzla dolu bir highball bardağında birleştirin. Limon suyu ekleyin. Yavaşça karıştırın. Garnitür.",
+    "glass_type_en": "Copper Mug",
+    "glass_type_tr": "Bakır Kupa",
+    "tags_en": "Sweet,Spicy,Refreshing,IBA,Vodka",
+    "tags_tr": "Tatlı,Baharatlı,Ferahlatıcı,IBA,Votka",
+    "history_notes_tr": "1941'de fazla Smirnoff votkasını ve zencefil birasını satmak için bir pazarlama hilesi olarak yaratıldı. Bakır kupalar sadece elde mevcut oldukları için kullanıldı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/3pylqc1504370988.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Ginger ale",
+        "name_tr": "Zencefilli gazoz",
+        "amount_en": "4 oz",
+        "amount_tr": "12 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Ginger Beer",
+            "name_tr": "Zencefil Birası",
+            "amount_en": "4 oz",
+            "amount_tr": "12 cl",
+            "category": "Mixers"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Created in 1941 as a marketing stunt to sell excess Smirnoff vodka and ginger beer. The copper mugs were used simply because they were available."
+  },
+  {
+    "api_id": "11003",
+    "name_en": "Negroni",
+    "name_tr": "Negroni",
+    "instructions_en": "Stir into glass over ice, garnish and serve.",
+    "instructions_tr": "Buzlu bardağa karıştırın, süsleyin ve servis yapın.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "IBA,Classic",
+    "tags_tr": "IBA,Klasik",
+    "history_notes_tr": "1919'da Floransa'da, Kont Camillo Negroni'nin barmenden Americano'sunu soda yerine cin koyarak güçlendirmesini istemesiyle icat edildi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/qgdu971561574065.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Campari",
+        "name_tr": "Campari",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Aperol",
+            "name_tr": "Aperol",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Sweet Vermouth",
+        "name_tr": "Tatlı Vermut",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Invented in Florence in 1919 when Count Camillo Negroni asked the bartender to strengthen his Americano by replacing soda water with gin."
+  },
+  {
+    "api_id": "11872",
+    "name_en": "Orgasm",
+    "name_tr": "Orgazm",
+    "instructions_en": "Shake all ingredients with ice, strain into a chilled cocktail glass, and serve.",
+    "instructions_tr": "Tüm malzemeleri buzla çalkalayın, soğutulmuş kokteyl bardağına süzün ve servis yapın.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sweet,Creamy,Dessert,IBA",
+    "tags_tr": "Tatlı,Kremalı,TatlıNiyetine,IBA",
+    "history_notes_tr": "1970'ler ve 80'lerin popüler kremalı shot'ı. O dönemde popüler olan kışkırtıcı isimli içecekler kategorisine aittir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/vr6kle1504886114.jpg",
+    "ingredients": [
+      {
+        "name_en": "Creme de Cacao",
+        "name_tr": "Creme de Kakao",
+        "amount_en": "1/2 oz white",
+        "amount_tr": "1.5 cl beyaz",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Amaretto",
+        "name_tr": "Amaretto",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Triple sec",
+        "name_tr": "Triple sec",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Cointreau",
+            "name_tr": "Cointreau",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Light cream",
+        "name_tr": "Süt kreması",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A popular creamy shooter from the 1970s and 80s. It belongs to a category of drinks with provocative names that were popular in that era."
+  },
+  {
+    "api_id": "178371",
+    "name_en": "Old Cuban",
+    "name_tr": "Old Cuban",
+    "instructions_en": "Shake a handful of mint, 2oz white rum, 1oz of sugar syrup, 1oz lime juice and 2 dashes angostura bitters with ice. Double strain into a glass and top with 2oz of prosecco.",
+    "instructions_tr": "Bir avuç nane, 6 cl beyaz rom, 3 cl şeker şurubu, 3cl limon suyu ve 2 dilim angostura bitterini buzla çalkalayın. Bir bardağa iki kez süzün ve üzerine 6 cl prosecco ekleyin.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sweet,Sour,Minty,Sparkling,IBA",
+    "tags_tr": "Tatlı,Ekşi,Naneli,Köpüklü,IBA",
+    "history_notes_tr": "2001 yılında Audrey Saunders tarafından yaratıldı. Temelde yıllanmış rom ve şampanya kullanan, Mojito ve French 75'in sofistike bir karışımıdır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/eo8gfx1699022995.jpg",
+    "ingredients": [
+      {
+        "name_en": "White Rum",
+        "name_tr": "Beyaz Rom",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Sugar Syrup",
+        "name_tr": "Şeker Şurubu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Honey Syrup",
+            "name_tr": "Bal Şurubu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Syrups"
+          },
+          {
+            "name_en": "Agave Syrup",
+            "name_tr": "Agave Şurubu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Syrups"
+          }
+        ]
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Angostura Bitters",
+        "name_tr": "Angostura Bitters",
+        "amount_en": "2 dashes",
+        "amount_tr": "2-3 damla",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Prosecco",
+        "name_tr": "Prosecco",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Champagne",
+            "name_tr": "Şampanya",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Wines"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Created by Audrey Saunders in 2001. It is essentially a sophisticated cross between a Mojito and a French 75, using aged rum and champagne."
+  },
+  {
+    "api_id": "11001",
+    "name_en": "Old Fashioned",
+    "name_tr": "Old Fashioned",
+    "instructions_en": "Place sugar cube in old fashioned glass and saturate with bitters, add a dash of plain water. Muddle until dissolved.\r\nFill the glass with ice cubes and add whiskey.\r\n\r\nGarnish with orange twist, and a cocktail cherry.",
+    "instructions_tr": "Küp şekeri Viski bardağa koyun ve bitterlerle doyurun, bir miktar sade su ekleyin. Çözünene kadar karıştırın. \r\nBardağı buz küpleriyle doldurun ve viski ekleyin. \r\n\r\nTuruncu büküm ve kokteyl kirazıyla süsleyin.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "Bitter,Strong,Classic,IBA,Whiskey",
+    "tags_tr": "Acı,Sert,Klasik,IBA,Viski",
+    "history_notes_tr": "'Kokteyl' kelimesinin tanımı (alkol, şeker, su, bitter). 19. yüzyılın başlarına kadar uzanan tüm içeceklerin büyük babasıdır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg",
+    "ingredients": [
+      {
+        "name_en": "Bourbon",
+        "name_tr": "Burbon",
+        "amount_en": "4.5 cL",
+        "amount_tr": "4,5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Angostura bitters",
+        "name_tr": "Angostura bitters",
+        "amount_en": "2 dashes",
+        "amount_tr": "2 çizgi",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "1 cube",
+        "amount_tr": "1 küp",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Water",
+        "name_tr": "su",
+        "amount_en": "dash",
+        "amount_tr": "kısa çizgi",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "The definition of the word 'cocktail' (spirits, sugar, water, bitters). It is the grandfather of all drinks, dating back to the early 19th century."
+  },
+  {
+    "api_id": "17253",
+    "name_en": "Paloma",
+    "name_tr": "Paloma",
+    "instructions_en": "Stir together and serve over ice.",
+    "instructions_tr": "Birlikte karıştırın ve buz üzerinde servis yapın.",
+    "glass_type_en": "Collins glass",
+    "glass_type_tr": "Collins bardağı",
+    "tags_en": "Sweet,Sour,Refreshing,IBA,Tequila",
+    "tags_tr": "Tatlı,Ekşi,Ferahlatıcı,IBA,Tekila",
+    "history_notes_tr": "Margarita'yı geride bırakarak Meksika'nın asıl en sevilen kokteyli kabul edilir. La Capilla barda Don Javier Delgado Corona tarafından yaratılmıştır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/samm5j1513706393.jpg",
+    "ingredients": [
+      {
+        "name_en": "Grape Soda",
+        "name_tr": "Üzüm Sodası",
+        "amount_en": "3 oz",
+        "amount_tr": "9 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Tequila",
+        "name_tr": "Tekila",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Mezcal",
+            "name_tr": "Mezcal",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Spirits"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Often considered Mexico's actual most beloved cocktail, surpassing the Margarita. Created by Don Javier Delgado Corona at La Capilla bar."
+  },
+  {
+    "api_id": "17829",
+    "name_en": "Penicillin",
+    "name_tr": "Penisilin",
+    "instructions_en": "Shake blended Scotch, lemon juice, honey syrup and ginger syrup with ice. Strain over large ice in chilled rocks glass. Float smoky Scotch on top (be sure to use a smoky Scotch such as an Islay single malt). Garnish with candied ginger.",
+    "instructions_tr": "Harmanlanmış Scotch, limon suyu, bal şurubu ve zencefil şurubunu buzla çalkalayın. Soğutulmuş kayalar camındaki büyük buzun üzerinde süzün. Dumanlı Scotch'u üstüne dökün (Islay single malt gibi dumanlı bir Scotch kullandığınızdan emin olun). Şekerlenmiş zencefil ile süsleyin.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Old-fashioned bardağı",
+    "tags_en": "Sour,Spicy,Smoky,ModernClassic",
+    "tags_tr": "Ekşi,Baharatlı,Dumanlı,ModernKlasik",
+    "history_notes_tr": "2005'te Sam Ross tarafından yaratıldı. Harman viskiyi taze limon, zencefil, bal ve dumanlı Islay viskisiyle birleştirerek viski kokteyllerinde devrim yarattı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/hc9b1a1521853096.jpg",
+    "ingredients": [
+      {
+        "name_en": "Blended Scotch",
+        "name_tr": "Blended Scotch",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "3/4 oz",
+        "amount_tr": "2-3cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "3/4 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Honey Syrup",
+        "name_tr": "Bal Şurubu",
+        "amount_en": "2 tsp",
+        "amount_tr": "2 çay kaşığı",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Ginger Syrup",
+        "name_tr": "Zencefil Şurubu",
+        "amount_en": "2 tsp",
+        "amount_tr": "2 çay kaşığı",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Islay single malt Scotch",
+        "name_tr": "Islay single malt Scotch",
+        "amount_en": "1/4 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Created by Sam Ross in 2005. It revolutionized scotch cocktails by combining blended scotch with fresh lemon, ginger, honey, and a smoky Islay float."
+  },
+  {
+    "api_id": "13214",
+    "name_en": "Pisco Sour",
+    "name_tr": "Pisco Sour",
+    "instructions_en": "Vigorously shake and strain contents in a cocktail shaker with ice cubes, then pour into glass and garnish with bitters.\n",
+    "instructions_tr": "İçeriği buz küpleriyle birlikte bir shaker'da iyice çalkalayın ve süzün, ardından bardağa dökün ve bitterlerle süsleyin.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Strong,Classic,IBA",
+    "tags_tr": "Ekşi,Sert,Klasik,IBA",
+    "history_notes_tr": "1920'lerde Lima, Peru'da Victor Morris tarafından icat edildi. Hem Peru hem de Şili'nin milli içecekleri olduğunu iddia etmesi uzun süreli bir tartışmaya yol açtı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/tsssur1439907622.jpg",
+    "ingredients": [
+      {
+        "name_en": "Pisco",
+        "name_tr": "Pisco",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "1-2 tblsp",
+        "amount_tr": "1-2 yemek kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Ice",
+        "name_tr": "Buz",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Egg White",
+        "name_tr": "Yumurta Beyazı",
+        "amount_en": "Enough",
+        "amount_tr": "Kararınca",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": [
+          {
+            "name_en": "Aquafaba",
+            "name_tr": "Nohut Suyu",
+            "amount_en": "Enough",
+            "amount_tr": "Kararınca",
+            "category": "Pantry"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Invented by Victor Morris in Lima, Peru, in the 1920s. Both Peru and Chile claim it as their national drink, sparking a long-standing debate."
+  },
+  {
+    "api_id": "17207",
+    "name_en": "Pina Colada",
+    "name_tr": "Pina Colada",
+    "instructions_en": "Mix with crushed ice in blender until smooth. Pour into chilled glass, garnish and serve.",
+    "instructions_tr": "Kırılmış buzla birlikte blenderde pürüzsüz hale gelinceye kadar karıştırın. Soğutulmuş bardağa dökün, süsleyin ve servis yapın.",
+    "glass_type_en": "Collins glass",
+    "glass_type_tr": "Collins bardağı",
+    "tags_en": "Sweet,Fruity,Creamy,Tropical,IBA",
+    "tags_tr": "Tatlı,Meyveli,Kremalı,Tropikal,IBA",
+    "history_notes_tr": "1954'te Porto Riko'da doğdu, Ramon 'Monchito' Marrero'ya atfedilir. 1978'de Porto Riko'nun resmi içeceği oldu.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/upgsue1668419912.jpg",
+    "ingredients": [
+      {
+        "name_en": "Light rum",
+        "name_tr": "Beyaz Rom",
+        "amount_en": "3 oz",
+        "amount_tr": "9 cl ",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Coconut milk",
+        "name_tr": "Hindistan cevizi sütü",
+        "amount_en": "3 tblsp",
+        "amount_tr": "3 yemek kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Pineapple",
+        "name_tr": "Ananas",
+        "amount_en": "3 tblsp",
+        "amount_tr": "3 yemek kaşığı",
+        "category": "Fruits",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Born in Puerto Rico in 1954, credited to Ramon 'Monchito' Marrero. It became the official drink of Puerto Rico in 1978."
+  },
+  {
+    "api_id": "178357",
+    "name_en": "Pornstar Martini",
+    "name_tr": "Pornstar Martini",
+    "instructions_en": "Straight: Pour all ingredients into mixing glass with ice cubes. Shake well. Strain in chilled martini cocktail glass. Cut passion fruit in half and use as garnish. Pour prosecco into a chilled shot glass and serve alongside the martini.",
+    "instructions_tr": "Tüm malzemeleri buz küpleriyle dolu karıştırma bardağına dökün. İyice çalkalayın. Soğutulmuş martini kokteyl bardağına süzün. Çarkıfelek meyvesini ikiye bölün ve garnitür olarak kullanın. Prosecco'yu soğutulmuş bir shot bardağına dökün ve martini ile birlikte servis yapın.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sweet,Fruity,Vanilla,ModernClassic",
+    "tags_tr": "Tatlı,Meyveli,Vanilyalı,ModernKlasik",
+    "history_notes_tr": "2002'de Londra'da Douglas Ankrah tarafından yaratıldı. Orijinal adı 'Maverick Martini' iken, kışkırtıcı ve keyif verici doğası nedeniyle yeniden adlandırıldı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/xjhjdf1630406071.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "3 cl",
+        "amount_tr": "3 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Passoa",
+        "name_tr": "Passoa",
+        "amount_en": "3 cl",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Passion fruit Juice",
+        "name_tr": "Tutku meyvesi Suyu",
+        "amount_en": "1 cl",
+        "amount_tr": "1 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1 cl",
+        "amount_tr": "1 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Prosecco",
+        "name_tr": "Prosecco",
+        "amount_en": "1 shot",
+        "amount_tr": "1 shot",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Champagne",
+            "name_tr": "Şampanya",
+            "amount_en": "1 shot",
+            "amount_tr": "1 shot",
+            "category": "Wines"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Created by Douglas Ankrah in London in 2002. Originally called the 'Maverick Martini', renamed for its provocative and indulgent nature."
+  },
+  {
+    "api_id": "12093",
+    "name_en": "Rum Sour",
+    "name_tr": "Rum Sour",
+    "instructions_en": "In a shaker half-filled with ice cubes, combine the rum, lemon juice, and sugar. Shake well. Strain into a sour glass and garnish with the orange slice and the cherry.",
+    "instructions_tr": "Yarısı buz küpleriyle doldurulmuş bir çalkalayıcıda rom, limon suyu ve şekeri birleştirin. İyice çalkalayın. Viski-sour bardağına süzün ve portakal dilimi ve kirazla süsleyin.",
+    "glass_type_en": "Whiskey sour glass",
+    "glass_type_tr": "Viski-sour bardağı",
+    "tags_en": "Sour,Classic,IBA,Whiskey",
+    "tags_tr": "Ekşi,Klasik,IBA,Viski",
+    "history_notes_tr": "Temel bir Karayip içeceği. Daiquiri'nin bir adı olmadan önce bile, denizciler ve yerliler rom, limon ve şekeri bu 'sour' formatında karıştırıyorlardı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/bylfi21504886323.jpg",
+    "ingredients": [
+      {
+        "name_en": "Light rum",
+        "name_tr": "Beyaz Rom",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "1/2 tsp superfine",
+        "amount_tr": "1/2 çay kaşığı ince",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Orange",
+        "name_tr": "Portakal",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      },
+      {
+        "name_en": "Maraschino cherry",
+        "name_tr": "Maraschino kirazı",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A foundational Caribbean drink. Before the Daiquiri had a name, sailors and locals were already mixing rum, lime, and sugar in this 'sour' format."
+  },
+  {
+    "api_id": "178367",
+    "name_en": "Ramos Gin Fizz",
+    "name_tr": "Ramos Cin Fizz",
+    "instructions_en": "Prepare all the ingredients on the counter to be able to work well and quickly, especially the cream and egg white.\r\n\r\nPour all the ingredients into a shaker.\r\n\r\nShake vigorously for 1 minute: cream and egg white must be mixed perfectly, so don't rush.\r\n\r\nNow open the shaker and put some ice and shake for 1-2 minutes. It depends on how long you can resist!\r\n\r\nPour into a highball glass, add a splash of soda and garnish to taste.\r\n\r\nRamos Gin Fizz was once drunk as an invigorating drink or even as a breakfast, try it as an aperitif and after dinner and you will discover a little gem now lost.",
+    "instructions_tr": "Krema ve yumurta akı başta olmak üzere tüm malzemeleri iyi ve hızlı bir şekilde çalışabilmek için tezgahta hazırlayın. \r\n\r\nTüm malzemeleri bir shaker'a dökün. \r\n\r\n1 dakika kuvvetlice çalkalayın: Krema ve yumurta akı mükemmel şekilde karıştırılmalıdır, bu yüzden acele etmeyin. \r\n\r\nŞimdi çalkalayıcıyı açın ve biraz buz koyun ve 1-2 dakika çalkalayın. Ne kadar direnebileceğine bağlı! \r\n\r\nBir highball bardağa dökün, bir miktar soda ekleyin ve tadına göre süsleyin. \r\n\r\nRamos Gin Fizz bir zamanlar canlandırıcı bir içecek olarak veya hatta kahvaltıda içilirdi, bunu bir aperatif olarak deneyin ve akşam yemeğinden sonra artık kaybolan küçük bir cevheri keşfedeceksiniz.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Creamy,Classic,IBA",
+    "tags_tr": "Tatlı,Kremalı,Klasik,IBA",
+    "history_notes_tr": "1888'de New Orleans'ta Henry C. Ramos tarafından icat edildi. 12 dakika çalkalanmasıyla ünlüdür; barlar sadece bu içecek için 'çalkalayıcı çocuklar' çalıştırırdı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/967t911643844053.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "4.5 cL",
+        "amount_tr": "4,5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar Syrup",
+        "name_tr": "Şeker Şurubu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Honey Syrup",
+            "name_tr": "Bal Şurubu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Syrups"
+          },
+          {
+            "name_en": "Agave Syrup",
+            "name_tr": "Agave Şurubu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Syrups"
+          }
+        ]
+      },
+      {
+        "name_en": "Cream",
+        "name_tr": "Krema",
+        "amount_en": "6 cl",
+        "amount_tr": "6 cl",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Egg White",
+        "name_tr": "Yumurta Beyazı",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": [
+          {
+            "name_en": "Aquafaba",
+            "name_tr": "Nohut Suyu",
+            "amount_en": "Enough",
+            "amount_tr": "Kararınca",
+            "category": "Pantry"
+          }
+        ]
+      },
+      {
+        "name_en": "Vanilla extract",
+        "name_tr": "Vanilya özü",
+        "amount_en": "2 drop",
+        "amount_tr": "2 damla",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Soda Water",
+        "name_tr": "Soda",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Invented by Henry C. Ramos in New Orleans in 1888. Famous for requiring 12 minutes of shaking; bars used to employ 'shaker boys' just for this drink."
+  },
+  {
+    "api_id": "17215",
+    "name_en": "Spritz",
+    "name_tr": "Spritz",
+    "instructions_en": "Build into glass over ice, garnish and serve.",
+    "instructions_tr": "Buzun üzerine bardağa koyun, süsleyin ve servis yapın.",
+    "glass_type_en": "Old-Fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "Bittersweet,Sparkling,Aperitif,IBA",
+    "tags_tr": "Acıtatlı,Köpüklü,Aperitif,IBA",
+    "history_notes_tr": "Venedik aperitiflerinin genel kategorisi. 'Spritzen' Almanca 'sıçratmak' anlamına gelir ve şaraba soda eklemeyi ifade eder.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/j9evx11504373665.jpg",
+    "ingredients": [
+      {
+        "name_en": "Prosecco",
+        "name_tr": "Prosecco",
+        "amount_en": "1 2/3 oz",
+        "amount_tr": "6 cl",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Champagne",
+            "name_tr": "Şampanya",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Wines"
+          }
+        ]
+      },
+      {
+        "name_en": "Campari",
+        "name_tr": "Campari",
+        "amount_en": "1 1/3 oz",
+        "amount_tr": "4 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Aperol",
+            "name_tr": "Aperol",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Soda Water",
+        "name_tr": "Soda",
+        "amount_en": "splash",
+        "amount_tr": "Az miktar",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A general category of Venetian aperitifs. 'Spritzen' is German for 'splash', referring to adding sparkling water to wine."
+  },
+  {
+    "api_id": "12127",
+    "name_en": "Sazerac",
+    "name_tr": "Sazerac",
+    "instructions_en": "Rinse a chilled old-fashioned glass with the absinthe, add crushed ice, and set it aside. Stir the remaining ingredients over ice and set it aside. Discard the ice and any excess absinthe from the prepared glass, and strain the drink into the glass. Add the lemon peel for garnish.",
+    "instructions_tr": "Soğutulmuş Viski bir bardağı absinthe ile durulayın, kırılmış buz ekleyin ve bir kenara koyun. Kalan malzemeleri buz üzerinde karıştırın ve bir kenara koyun. Hazırlanan bardaktaki buzu ve fazla absintiyi atın ve içeceği bardağa süzün. Süslemek için limon kabuğunu ekleyin.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "Strong,Classic,NewOrleans,IBA",
+    "tags_tr": "Sert,Klasik,NewOrleans,IBA",
+    "history_notes_tr": "New Orleans'ın resmi kokteyli. Başlangıçta Konyak ile yapılırken, Fransa'daki filoksera (bağ biti) salgını nedeniyle Çavdar Viskisine geçiş yapmıştır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/vvpxwy1439907208.jpg",
+    "ingredients": [
+      {
+        "name_en": "Ricard",
+        "name_tr": "Ricard",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "1/2 tsp superfine",
+        "amount_tr": "1/2 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Peychaud bitters",
+        "name_tr": "Peychaud bitters",
+        "amount_en": "2 dashes",
+        "amount_tr": "2 damla",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Water",
+        "name_tr": "Su",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Bourbon",
+        "name_tr": "Burbon",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon peel",
+        "name_tr": "Limon kabuğu",
+        "amount_en": "1 twist of",
+        "amount_tr": "1 büküm",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "New Orleans' official cocktail. Originally made with Cognac, it switched to Rye Whiskey due to the phylloxera epidemic in France."
+  },
+  {
+    "api_id": "12196",
+    "name_en": "Sidecar",
+    "name_tr": "Sidecar",
+    "instructions_en": "Pour all ingredients into cocktail shaker filled with ice. Shake well and strain into cocktail glass.",
+    "instructions_tr": "Tüm malzemeleri buzla dolu shaker'a dökün. İyice çalkalayın ve kokteyl bardağına süzün.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Strong,Classic,IBA,Cognac",
+    "tags_tr": "Ekşi,Sert,Klasik,IBA,Konyak",
+    "history_notes_tr": "Adını motosiklet sepetinden alan bu içecek, 1. Dünya Savaşı'ndan sonra Paris ve Londra'da popüler oldu. Nihai konyak sour kokteylidir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/x72sik1606854964.jpg",
+    "ingredients": [
+      {
+        "name_en": "Cognac",
+        "name_tr": "Konyak",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Brandy",
+            "name_tr": "Brendi",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Spirits"
+          },
+          {
+            "name_en": "Bourbon",
+            "name_tr": "Burbon",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Spirits"
+          }
+        ]
+      },
+      {
+        "name_en": "Cointreau",
+        "name_tr": "Cointreau",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Triple Sec",
+            "name_tr": "Triple Sec",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Named after the motorcycle sidecar, popular in Paris and London after WWI. It is the definitive cognac sour cocktail."
+  },
+  {
+    "api_id": "15184",
+    "name_en": "San Francisco",
+    "name_tr": "San Francisco",
+    "instructions_en": "Take a tall glass and put in a few ice cubes, fill the vodka over it and fill with juice then the \"creme\", to end fill in the grenadine but very carefully at the side of the glass so it will lay down in the bottom. garnish with orange and strawberry.",
+    "instructions_tr": "Uzun bir bardak alın ve birkaç buz küpü koyun, üzerine votkayı doldurun ve meyve suyuyla, ardından \"krema\" ile doldurun, son olarak nar şurubu doldurun, ancak bardağın dibine kadar uzanacak şekilde çok dikkatli bir şekilde doldurun. portakal ve çilekle süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Fruity,NonAlcoholic,Mocktail",
+    "tags_tr": "Tatlı,Meyveli,Alkolsüz,Mocktail",
+    "history_notes_tr": "Popüler bir alkolsüz mocktail klasiği. Meyve suları ve nar şurubu kullanarak bir kokteylin karmaşıklığını taklit eder, disko döneminden evrilmiştir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/szmj2d1504889961.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Creme de Banane",
+        "name_tr": "Creme de Banane",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Grenadine",
+        "name_tr": "Grenadin",
+        "amount_en": "Splash",
+        "amount_tr": "Kararınca",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          },
+          {
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Orange Juice",
+        "name_tr": "Portakal Suyu",
+        "amount_en": "Splash",
+        "amount_tr": "Kararınca",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A popular non-alcoholic mocktail classic. It mimics the complexity of a cocktail using juices and grenadine, evolving from the disco era."
+  },
+  {
+    "api_id": "12402",
+    "name_en": "Tom Collins",
+    "name_tr": "Tom Collins",
+    "instructions_en": "In a shaker half-filled with ice cubes, combine the gin, lemon juice, and sugar. Shake well. Strain into a collins glass alomst filled with ice cubes. Add the club soda. Stir and garnish with the cherry and the orange slice.",
+    "instructions_tr": "Yarısı buz küpleriyle doldurulmuş bir çalkalayıcıda cin, limon suyu ve şekeri birleştirin. İyice çalkalayın. Tamamı buz küpleriyle doldurulmuş bir collins bardağa süzün. Kulüp sodasını ekleyin. Karıştırın ve kiraz ve portakal dilimiyle süsleyin.",
+    "glass_type_en": "Collins glass",
+    "glass_type_tr": "Collins bardağı",
+    "tags_en": "Sour,Refreshing,Classic,IBA",
+    "tags_tr": "Ekşi,Ferahlatıcı,Klasik,IBA",
+    "history_notes_tr": "1874'teki 'Büyük Tom Collins Şakası' ile bağlantılıdır. İnsanlar 'Tom Collins'i gördün mü?' diye sorarak kurbanları olmayan bir adamı bulmaları için boş bir kovalamacaya gönderirlerdi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/7cll921606854636.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "1 tsp superfine",
+        "amount_tr": "1 çay kaşığı ince",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Club Soda",
+        "name_tr": "Kulüp Sodası",
+        "amount_en": "3 oz",
+        "amount_tr": "9 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Maraschino Cherry",
+        "name_tr": "Maraschino Kirazı",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      },
+      {
+        "name_en": "Orange",
+        "name_tr": "Portakal",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Linked to the 'Great Tom Collins Hoax' of 1874. People would ask 'Have you seen Tom Collins?', sending victims on a wild goose chase to find a non-existent man."
+  },
+  {
+    "api_id": "17247",
+    "name_en": "The Last Word",
+    "name_tr": "Son Söz",
+    "instructions_en": "Shake with ice and strain into a cocktail glass.",
+    "instructions_tr": "Buzla çalkalayıp kokteyl bardağına süzün.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Herbal,Strong,Classic",
+    "tags_tr": "Ekşi,Bitkisel,Sert,Klasik",
+    "history_notes_tr": "Detroit Athletic Club'dan (1915) bir Yasak dönemi klasiği. On yıllarca unutulduktan sonra 2004'te Seattle'da yeniden canlandırıldı ve bir kokteyl rönesansı başlattı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/91oule1513702624.jpg",
+    "ingredients": [
+      {
+        "name_en": "Green Chartreuse",
+        "name_tr": "Yeşil Chartreuse",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Maraschino Liqueur",
+        "name_tr": "Maraschino Likörü",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A Prohibition-era classic from the Detroit Athletic Club (1915). Forgotten for decades, it was revived in Seattle in 2004, sparking a cocktail renaissance."
+  },
+  {
+    "api_id": "13621",
+    "name_en": "Tequila Sunrise",
+    "name_tr": "Tequila Sunrise",
+    "instructions_en": "Pour the tequila and orange juice into glass over ice. Add the grenadine, which will sink to the bottom. Stir gently to create the sunrise effect. Garnish and serve.",
+    "instructions_tr": "Tekila ve portakal suyunu buzun üzerindeki bardağa dökün. Dibe çökecek olan nar şurubu ekleyin. Gün doğumu efekti yaratmak için yavaşça karıştırın. Süsleyip servis yapın.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Fruity,Classic,IBA",
+    "tags_tr": "Tatlı,Meyveli,Klasik,IBA",
+    "history_notes_tr": "Modern versiyonu 70'lerde Sausalito'da yaratıldı. The Rolling Stones'un 1972 turnesine 'Kokain ve Tequila Sunrise Turnesi' adını vermesiyle ünlendi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/quqyqp1480879103.jpg",
+    "ingredients": [
+      {
+        "name_en": "Tequila",
+        "name_tr": "Tekila",
+        "amount_en": "2 measures",
+        "amount_tr": "2 ölçü",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Orange Juice",
+        "name_tr": "Portakal Suyu",
+        "amount_en": "Splash",
+        "amount_tr": "Kararınca",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Grenadine",
+        "name_tr": "Grenadin",
+        "amount_en": "Splash",
+        "amount_tr": "Kararınca",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          },{
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "The modern version was created in Sausalito in the 70s. It became famous after The Rolling Stones dubbed their 1972 tour the 'Cocaine and Tequila Sunrise Tour'."
+  },
+  {
+    "api_id": "17218",
+    "name_en": "Vesper",
+    "name_tr": "Vesper",
+    "instructions_en": "Shake over ice until well chilled, then strain into a deep goblet and garnish with a thin slice of lemon peel.",
+    "instructions_tr": "İyice soğuyuncaya kadar buz üzerinde çalkalayın, ardından derin bir bardağa süzün ve ince bir dilim limon kabuğuyla süsleyin.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Strong,Dry,Classic,Bond,IBA",
+    "tags_tr": "Sert,Sek,Klasik,Bond,IBA",
+    "history_notes_tr": "Ian Fleming tarafından 'Casino Royale' (1953) kitabında James Bond için icat edildi. Adını Bond'un aşkı Vesper Lynd'den alır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/mtdxpa1504374514.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Vodka",
+            "name_tr": "Votka",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Spirits"
+          }
+        ]
+      },
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1,5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lillet Blanc",
+        "name_tr": "Küçük Beyaz",
+        "amount_en": "1 oz",
+        "amount_tr": "0,75 cl",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Invented by Ian Fleming for James Bond in 'Casino Royale' (1953). Named after Bond's love interest, Vesper Lynd."
+  },
+  {
+    "api_id": "17194",
+    "name_en": "White Lady",
+    "name_tr": "White Lady",
+    "instructions_en": "Add all ingredients into cocktail shaker filled with ice. Shake well and strain into large cocktail glass.",
+    "instructions_tr": "Tüm malzemeleri buzla dolu shaker'a ekleyin. İyice çalkalayın ve büyük kokteyl bardağına süzün.",
+    "glass_type_en": "Cocktail glass",
+    "glass_type_tr": "Kokteyl bardağı",
+    "tags_en": "Sour,Classic,IBA,Gin",
+    "tags_tr": "Ekşi,Klasik,IBA,Cin",
+    "history_notes_tr": "1919'da Harry MacElhone tarafından yaratıldı. Nane likörü ile başladı ancak Harry's New York Bar'da bugün bildiğimiz cin ve Cointreau klasiğine evrildi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/jofsaz1504352991.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "1 1/3 oz",
+        "amount_tr": "4cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Triple Sec",
+        "name_tr": "Triple Sec",
+        "amount_en": "1 oz",
+        "amount_tr": "3cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Cointreau",
+            "name_tr": "Cointreau",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "2/3 oz",
+            "amount_tr": "2 cl",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Created by Harry MacElhone in 1919. It started with mint liqueur but evolved into the gin and Cointreau classic we know today at Harry's New York Bar."
+  },
+  {
+    "api_id": "11004",
+    "name_en": "Whiskey Sour",
+    "name_tr": "Viski Sour",
+    "instructions_en": "Shake with ice. Strain into chilled glass, garnish and serve. If served 'On the rocks', strain ingredients into old-fashioned glass filled with ice.",
+    "instructions_tr": "Buzla çalkalayın. Soğutulmuş bardağa süzün, süsleyin ve servis yapın. 'Kayaların üzerinde' servis edilirse, malzemeleri buzla dolu Viski bardağa süzün.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "IBA,Classic,Alcoholic,ContemporaryClassic",
+    "tags_tr": "IBA,Klasik,Alkollü,ÇağdaşKlasik",
+    "history_notes_tr": "İlk kez 1862'de Jerry Thomas tarafından yazıldı. Başlangıçta denizcilerin iskorbütle savaşmak ve uzun yolculuklarda içkilerini korumak için kullandıkları bir yöntemdi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/hbkfsh1589574990.jpg",
+    "ingredients": [
+      {
+        "name_en": "Blended whiskey",
+        "name_tr": "Blended viski",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Powdered sugar",
+        "name_tr": "Pudra şekeri",
+        "amount_en": "1/2 tsp",
+        "amount_tr": "1/2 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Cherry",
+        "name_tr": "Kiraz",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon",
+        "name_tr": "Limon",
+        "amount_en": "1/2 slice",
+        "amount_tr": "1/2 dilim",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": [
+          {
+            "name_en": "Lime",
+            "name_tr": "Misket Limonu",
+            "amount_en": "1/2 slice",
+            "amount_tr": "1/2 dilim",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "First written down in 1862 by Jerry Thomas. It was originally a way for sailors to combat scurvy and preserve their spirits during long voyages."
+  },
+  {
+    "api_id": "12528",
+    "name_en": "White Russian",
+    "name_tr": "White Russian",
+    "instructions_en": "Pour vodka and coffee liqueur over ice cubes in an old-fashioned glass. Fill with light cream and serve.",
+    "instructions_tr": "Viski bir bardaktaki buz küplerinin üzerine votka ve kahve likörünü dökün. Hafif kremayla doldurup servis yapın.",
+    "glass_type_en": "Sweet,Creamy,Dessert,Classic",
+    "glass_type_tr": "Tatlı,Kremalı,TatlıNiyetine,Klasik",
+    "tags_en": null,
+    "tags_tr": "",
+    "history_notes_tr": "Black Russian'ın 1960'lardaki bir varyasyonu. 90'ların sonunda 'The Big Lebowski' filmindeki 'The Dude' karakterinin imza içeceği olarak kült statüsüne ulaştı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/vsrupw1472405732.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Coffee Liqueur",
+        "name_tr": "Kahve Likörü",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Light cream",
+        "name_tr": "Süt kreması",
+        "amount_en": "Splash",
+        "amount_tr": "Kararınca",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A 1960s variation of the Black Russian. It achieved cult status in the late 90s as the signature drink of 'The Dude' in 'The Big Lebowski'."
+  },
+  {
+    "api_id": "17241",
+    "name_en": "Zombie",
+    "name_tr": "Zombi",
+    "instructions_en": "Blend at high speed for no more than 5 seconds.\n\nPour into a glass, add ice cubes to fill, then add the garnish.\n\n*Donn’s mix: Bring 3 crushed cinnamon sticks, 1 cup of sugar and 1 cup of water to a boil, stirring until the sugar is dissolved.\n\nSimmer for 2 minutes, then remove from the heat and let sit for at least 2 hours before straining into a clean glass bottle.\n\nThen add 1 part of the syrup and 2 parts of fresh grapefruit juice together.",
+    "instructions_tr": "En fazla 5 saniye boyunca yüksek hızda karıştırın. \n\nBir bardağa dökün, dolduracak kadar buz küpleri ekleyin, ardından garnitürü ekleyin. \n\n*Donn karışımı: 3 adet ezilmiş tarçın çubuğu, 1 su bardağı şeker ve 1 su bardağı suyu şeker eriyene kadar karıştırarak kaynatın. \n\n2 dakika kaynatın, ardından ocaktan alın ve en az 2 saat bekletin ve temiz bir bardağ şişeye süzün. \n\nDaha sonra 1 ölçü şurubu ve 2 ölçü taze greyfurt suyunu birlikte ekleyin.",
+    "glass_type_en": "Hurricane glass",
+    "glass_type_tr": "Kasırga bardağı",
+    "tags_en": "Sweet,Strong,Tiki,Tropical,Rum",
+    "tags_tr": "Tatlı,Sert,Tiki,Tropikal,Rom",
+    "history_notes_tr": "Donn Beach (1934) tarafından yaratılan bir Tiki efsanesi. O kadar güçlüydü ki (çoğunlukla rom), insanları zombiye çevirdiği için müşteri başına kesinlikle iki adetle sınırlandırılmıştı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/2en3jk1509557725.jpg",
+    "ingredients": [
+      {
+        "name_en": "Rum",
+        "name_tr": "Rom",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Gold Rum",
+        "name_tr": "Gold Rom",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "151 proof rum",
+        "name_tr": "151 proof rum",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Pernod",
+        "name_tr": "Pernod",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Grenadine",
+        "name_tr": "Grenadin",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "4 cl",
+            "category": "Juices"
+          },{
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Angostura Bitters",
+        "name_tr": "Angostura Bitters",
+        "amount_en": "1 drop",
+        "amount_tr": "1 damla",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "A Tiki legend by Donn Beach (1934). It was so strong (mostly rum) that customers were strictly limited to two per person because it turned them into zombies."
+  },
+  {
+    "api_id": "extra_001",
+    "name_en": "Gin Basil Smash",
+    "name_tr": "Gin Basil Smash",
+    "instructions_en": "Muddle basil leaves with sugar syrup in a shaker. Add gin and lemon juice. Fill with ice and shake vigorously. Double strain into an ice-filled glass. Garnish with basil.",
+    "instructions_tr": "Fesleğen yapraklarını şeker şurubuyla çalkalayıcıda karıştırın. Cin ve limon suyunu ekleyin. Buzla doldurun ve kuvvetlice çalkalayın. Buz dolu bir bardağa iki kez süzün. Fesleğen ile süsleyin.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "Sour,Herbal,Refreshing,ModernClassic",
+    "tags_tr": "Ekşi,Bitkisel,Ferahlatıcı,ModernKlasik",
+    "history_notes_tr": "2008 yılında Hamburg'da Jörg Meyer tarafından yaratıldı. Orijinal adı 'Gin Pesto' olan içecek, taze bitkisel tadıyla dünya çapında hızla modern bir klasik haline geldi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.diffordsguide.com/cdn-cgi/image/w=1200,h=1200,c=fit,f=auto,q=85/thumbs/drunken-guide/recipes/2075/gin-basil-smash-new.jpg",
+    "ingredients": [
+      {
+        "name_en": "Gin",
+        "name_tr": "Cin",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Fresh Basil",
+        "name_tr": "Taze Fesleğen",
+        "amount_en": "12 leaves",
+        "amount_tr": "12 yaprak",
+        "category": "Fruits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "2/3 oz",
+            "amount_tr": "2 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar Syrup",
+        "name_tr": "Şeker Şurubu",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Honey Syrup",
+            "name_tr": "Bal Şurubu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Syrups"
+          },
+          {
+            "name_en": "Agave Syrup",
+            "name_tr": "Agave Şurubu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Syrups"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Created in 2008 by Jörg Meyer in Hamburg. Originally called the 'Gin Pesto', it quickly became a modern classic worldwide for its fresh herbal taste."
+  },
+  {
+    "api_id": "extra_002",
+    "name_en": "Paper Plane",
+    "name_tr": "Paper Plane",
+    "instructions_en": "Pour all ingredients into cocktail shaker filled with ice. Shake well. Strain into a chilled cocktail glass.",
+    "instructions_tr": "Tüm malzemeleri buzla dolu shaker'a dökün. İyice çalkalayın. Soğutulmuş bir kokteyl bardağına süzün.",
+    "glass_type_en": "Coupe glass",
+    "glass_type_tr": "Kupa bardağı",
+    "tags_en": "Bittersweet,Sour,ModernClassic,IBA",
+    "tags_tr": "Acıtatlı,Ekşi,ModernKlasik,IBA",
+    "history_notes_tr": "2008'de Sam Ross tarafından yaratıldı. Adını M.I.A.'nın 'Paper Planes' şarkısından alan bu içecek, eşit ölçüler kullanan mükemmel dengeli modern bir klasiktir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/94567t1617302337.jpg",
+    "ingredients": [
+      {
+        "name_en": "Bourbon",
+        "name_tr": "Burbon",
+        "amount_en": "2 oz",
+        "amount_tr": "2 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Aperol",
+        "name_tr": "Aperol",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Campari",
+            "name_tr": "Campari",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Amaro Nonino",
+        "name_tr": "Amaro Nonino",
+        "amount_en": "2 oz",
+        "amount_tr": "2 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "2 oz",
+        "amount_tr": "2 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "2/3 oz",
+            "amount_tr": "2 cl",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Created by Sam Ross in 2008. Named after the M.I.A. song 'Paper Planes', it is a perfectly balanced modern classic using equal parts."
+  },
+  {
+    "api_id": "extra_003",
+    "name_en": "Amaretto Sour",
+    "name_tr": "Amaretto Sour",
+    "instructions_en": "Shake all ingredients with ice. Strain back into the shaker and dry shake (without ice) to emulsify the egg white. Pour over fresh ice.",
+    "instructions_tr": "Tüm malzemeleri buzla çalkalayın. Yumurta beyazını emülsifiye etmek için tekrar shaker'a süzün ve kuru sallayın (buzsuz). Taze buzun üzerine dökün.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "Sweet,Sour,Classic,IBA",
+    "tags_tr": "Tatlı,Ekşi,Klasik,IBA",
+    "history_notes_tr": "Genellikle 70'lerin disko içeceği olarak küçümsenirken, tatlılığı dengelemek için yumurta akı ve yüksek alkollü burbon ekleyen Jeffrey Morgenthaler tarafından yeniden canlandırılmıştır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/x55n281503568447.jpg",
+    "ingredients": [
+      {
+        "name_en": "Amaretto",
+        "name_tr": "Amaretto",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Egg White",
+        "name_tr": "Yumurta Beyazı",
+        "amount_en": "1 dash",
+        "amount_tr": "1 çizgi",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": [
+          {
+            "name_en": "Aquafaba",
+            "name_tr": "Nohut Suyu",
+            "amount_en": "Enough",
+            "amount_tr": "Kararınca",
+            "category": "Pantry"
+          }
+        ]
+      },
+      {
+        "name_en": "Angostura Bitters",
+        "name_tr": "Angostura Bitters",
+        "amount_en": "Dash",
+        "amount_tr": "Çizgi",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Often dismissed as a 70s disco drink, it was revived by Jeffrey Morgenthaler, who added egg white and cask-strength bourbon to balance the sweetness."
+  },
+  {
+    "api_id": "extra_004",
+    "name_en": "Naked and Famous",
+    "name_tr": "Naked and Famous",
+    "instructions_en": "Shake all ingredients with ice and strain into a chilled coupe glass.",
+    "instructions_tr": "Tüm malzemeleri buzla çalkalayın ve soğutulmuş bir kupa bardağa süzün.",
+    "glass_type_en": "Coupe glass",
+    "glass_type_tr": "Kupa bardağı",
+    "tags_en": "Bittersweet,Smoky,Sour,ModernClassic",
+    "tags_tr": "Acıtatlı,Dumanlı,Ekşi,ModernKlasik",
+    "history_notes_tr": "2011'de Death & Co'da Joaquin Simo tarafından yaratılan modern bir klasik. Paper Plane ve Last Word kokteyllerinin dumanlı ve bitkisel bir uyarlamasıdır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.diffordsguide.com/cdn-cgi/image/w=1200,h=1200,c=fit,f=auto,q=85/thumbs/drunken-guide/recipes/2672/naked-and-famous-new.jpg",
+    "ingredients": [
+      {
+        "name_en": "Mezcal",
+        "name_tr": "Mezcal",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Yellow Chartreuse",
+        "name_tr": "Sarı Chartreuse",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Aperol",
+        "name_tr": "Aperol",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Campari",
+            "name_tr": "Campari",
+            "amount_en": "2/3 oz",
+            "amount_tr": "2 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "A modern classic by Joaquin Simo at Death & Co in 2011. It is a smoky, herbal riff on the Paper Plane and Last Word cocktails."
+  },
+  {
+    "api_id": "extra_005",
+    "name_en": "Jungle Bird",
+    "name_tr": "Jungle Bird",
+    "instructions_en": "Shake all ingredients with ice and strain into a glass filled with crushed ice.",
+    "instructions_tr": "Tüm malzemeleri buzla çalkalayın ve kırılmış buzla dolu bir bardağa süzün.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "Bittersweet,Tiki,Tropical,Fruity",
+    "tags_tr": "Acıtatlı,Tiki,Tropikal,Meyveli",
+    "history_notes_tr": "1973 yılında Kuala Lumpur Hilton'un Aviary Bar'ında yaratıldı. Campari kullanan ve ona eşsiz bir acı-tatlı profil kazandıran az sayıdaki Tiki kokteylinden biridir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/2hms5h1504889042.jpg",
+    "ingredients": [
+      {
+        "name_en": "Dark Rum",
+        "name_tr": "Dark Rom",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Campari",
+        "name_tr": "Campari",
+        "amount_en": "2/3 oz",
+        "amount_tr": "2 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Aperol",
+            "name_tr": "Aperol",
+            "amount_en": "2/3 oz",
+            "amount_tr": "2 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Pineapple Juice",
+        "name_tr": "Ananas Suyu",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar Syrup",
+        "name_tr": "Şeker Şurubu",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Honey Syrup",
+            "name_tr": "Bal Şurubu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Syrups"
+          },
+          {
+            "name_en": "Agave Syrup",
+            "name_tr": "Agave Şurubu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Syrups"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Created in 1973 at the Kuala Lumpur Hilton's Aviary Bar. It is one of the few Tiki cocktails to use Campari, giving it a unique bittersweet profile."
+  },
+  {
+    "api_id": "extra_006",
+    "name_en": "Bloody Mary",
+    "name_tr": "Bloody Mary",
+    "instructions_en": "Stir gently, pour over ice cubes in a highball glass. Garnish with celery stalk and lemon wedge.",
+    "instructions_tr": "Yavaşça karıştırın, bir highball bardağındaki buz küplerinin üzerine dökün. Kereviz sapı ve limon dilimiyle süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Savory,Spicy,Brunch,Hangover,IBA",
+    "tags_tr": "Tuzlu,Acı,Brunch,AkşamdanKalma,IBA",
+    "history_notes_tr": "Genellikle 1920'lerde Paris'teki Harry's New York Bar'da Fernand Petiot'a atfedilir. Dünyanın en ünlü akşamdan kalma ilacı haline gelmiştir.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/t6caa21678570086.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Tomato Juice",
+        "name_tr": "Domates Suyu",
+        "amount_en": "3 oz",
+        "amount_tr": "9 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "1/2 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Worcestershire Sauce",
+        "name_tr": "Worcestershire Sosu",
+        "amount_en": "2 dashes",
+        "amount_tr": "2 çizgi",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Tabasco Sauce",
+        "name_tr": "Tabasco Sos",
+        "amount_en": "2 dashes",
+        "amount_tr": "2 çizgi",
+        "category": "Pantry",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Often attributed to Fernand Petiot at Harry's New York Bar in Paris in the 1920s. It became the world's most famous hangover cure."
+  },
+  {
+    "api_id": "extra_007",
+    "name_en": "Boulevardier",
+    "name_tr": "Boulevardier",
+    "instructions_en": "Stir with ice, strain, garnish with an orange twist.",
+    "instructions_tr": "Buzla karıştırın, süzün, portakal dilimiyle süsleyin.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "Bitter,Strong,Classic,Aperitif,IBA",
+    "tags_tr": "Acı,Sert,Klasik,Aperitif,IBA",
+    "history_notes_tr": "1927'de Paris'te Erskine Gwynne tarafından yaratıldı. Temelde cin yerine viski ile yapılan bir Negroni'dir ve Paris'teki Amerikalı gurbetçiler için tasarlanmıştır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/km84qi1513705868.jpg",
+    "ingredients": [
+      {
+        "name_en": "Bourbon",
+        "name_tr": "Burbon",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Campari",
+        "name_tr": "Campari",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Aperol",
+            "name_tr": "Aperol",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Liqueurs"
+          }
+        ]
+      },
+      {
+        "name_en": "Sweet Vermouth",
+        "name_tr": "Tatlı Vermut",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Created by Erskine Gwynne in Paris in 1927. Essentially a Negroni made with whiskey instead of gin, created for American expats in Paris."
+  },
+  {
+    "api_id": "extra_008",
+    "name_en": "Aperol Spritz",
+    "name_tr": "Aperol Spritz",
+    "instructions_en": "Build into glass over ice. Garnish with an orange slice.",
+    "instructions_tr": "Bardağın içinde buz üzerine dökün. Portakal dilimiyle süsleyin.",
+    "glass_type_en": "Wine Glass",
+    "glass_type_tr": "Şarap Kadehi",
+    "tags_en": "Bittersweet,Refreshing,Summer,IBA,Sparkling",
+    "tags_tr": "Acıtatlı,Ferahlatıcı,Yaz,IBA,Köpüklü",
+    "history_notes_tr": "'Spritz' kavramı Venedik'teki Avusturyalı askerlerin şarabı sulandırmasına dayansa da, Aperol versiyonu 2000'lerde nihai İtalyan aperitifi olarak küresel bir fenomen haline geldi.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/iloasq1587661955.jpg",
+    "ingredients": [
+      {
+        "name_en": "Prosecco",
+        "name_tr": "Prosecco",
+        "amount_en": "3 oz",
+        "amount_tr": "9 cl",
+        "category": "Wines",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Champagne",
+            "name_tr": "Şampanya",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Wines"
+          }
+        ]
+      },
+      {
+        "name_en": "Aperol",
+        "name_tr": "Aperol",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Soda Water",
+        "name_tr": "Soda",
+        "amount_en": "Splash",
+        "amount_tr": "Az miktar",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "While the concept of a 'Spritz' dates back to Austrian soldiers in Venice diluting wine, the Aperol version became a global phenomenon in the 2000s as the ultimate Italian apéritif."
+  },
+  {
+    "api_id": "extra_009",
+    "name_en": "Vieux Carré",
+    "name_tr": "Vieux Carré",
+    "instructions_en": "Stir with ice. Strain into an ice-filled old-fashioned glass. Garnish with a lemon twist.",
+    "instructions_tr": "Buzla karıştırın. Buzla doldurulmuş bir bardağa süzün. Limon bükümüyle süsleyin.",
+    "glass_type_en": "Old-fashioned glass",
+    "glass_type_tr": "Viski bardağı",
+    "tags_en": "Bitter,Strong,Classic,NewOrleans",
+    "tags_tr": "Acı,Sert,Klasik,NewOrleans",
+    "history_notes_tr": "1938'de Hotel Monteleone'de Walter Bergeron tarafından yaratıldı. Adını New Orleans'taki Fransız Mahallesi'nin Fransızca teriminden alır.",
+    "is_alcoholic": true,
+    "image_url": "https://www.diffordsguide.com/cdn-cgi/image/w=1200,h=1200,c=fit,f=auto,q=85/thumbs/drunken-guide/recipes/2091/vieux-carre-cocktail-new.jpg",
+    "ingredients": [
+      {
+        "name_en": "Rye Whiskey",
+        "name_tr": "Çavdar Viskisi",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Cognac",
+        "name_tr": "Konyak",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Brandy",
+            "name_tr": "Brendi",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Spirits"
+          }
+        ]
+      },
+      {
+        "name_en": "Sweet Vermouth",
+        "name_tr": "Tatlı Vermut",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Benedictine",
+        "name_tr": "Benedictine",
+        "amount_en": "1 tsp",
+        "amount_tr": "1 çay kaşığı",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ],
+    "history_notes_en": "Created by Walter Bergeron at Hotel Monteleone in 1938. It is named after the French term for the French Quarter in New Orleans."
+  },
+  {
+    "api_id": "extra_010",
+    "name_en": "Sex on the Beach",
+    "name_tr": "Sex on the Beach",
+    "instructions_en": "Build all ingredients in a highball glass filled with ice. Garnish with orange slice.",
+    "instructions_tr": "Tüm malzemeleri buzla dolu bir highball bardağa koyun. Portakal dilimiyle süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Fruity,Party,Summer,IBA",
+    "tags_tr": "Tatlı,Meyveli,Parti,Yaz,IBA",
+    "history_notes_tr": "1987'de Florida'da Ted Pizio tarafından yaratıldı. Bahar tatilinde Şeftali Likörü satmak için yapılan bir pazarlama hamlesiydi, adını turistlerin iki ana hedefinden aldı.",
+    "is_alcoholic": true,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/lijtw51551455287.jpg",
+    "ingredients": [
+      {
+        "name_en": "Vodka",
+        "name_tr": "Votka",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Spirits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Peach Schnapps",
+        "name_tr": "Şeftali Schnapps",
+        "amount_en": "1/2 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Liqueurs",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Orange Juice",
+        "name_tr": "Portakal Suyu",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Cranberry Juice",
+        "name_tr": "Kızılcık Suyu",
+        "amount_en": "1 1/2 oz",
+        "amount_tr": "4.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Pomegranate Juice",
+            "name_tr": "Nar Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          },
+           {
+            "name_en": "Cherry Juice",
+            "name_tr": "Vişne Suyu",
+            "amount_en": "1 1/2 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Juices"
+          }
+        ]
+      }
+    ],
+    "history_notes_en": "Created by Ted Pizio in Florida in 1987. It was a marketing move to sell Peach Schnapps during spring break, named after tourists' two main goals."
+  },
+  
+  {
+    "api_id": "90001",
+    "name_en": "Virgin Mojito",
+    "name_tr": "Alkolsüz Mojito",
+    "instructions_en": "Muddle mint leaves with sugar and lime juice in a glass. Add a splash of soda water and fill the glass with cracked ice. Top with more soda water and stir. Garnish with a mint sprig.",
+    "instructions_tr": "Nane yapraklarını şeker ve misket limonu suyuyla bardağın içinde ezin. Bir miktar soda ekleyin ve bardağı kırık buzla doldurun. Üzerini sodayla tamamlayın ve karıştırın. Nane dalı ile süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Minty,Refreshing,Mocktail",
+    "tags_tr": "Tatlı,Naneli,Ferahlatıcı,Alkolsüz",
+    "history_notes_tr": "Klasik Mojito'nun alkolsüz, ferahlatıcı versiyonu. Küba kökenli orijinal tarifin nane ve narenciye ferahlığını alkolsüz olarak sunar.",
+    "history_notes_en": "The non-alcoholic, refreshing version of the classic Mojito. It offers the minty and citrusy freshness of the Cuban original without the alcohol.",
+    "is_alcoholic": false,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/metwgh1606770327.jpg",
+    "ingredients": [
+      {
+        "name_en": "Mint",
+        "name_tr": "Nane",
+        "amount_en": "10-12 leaves",
+        "amount_tr": "10-12 yaprak",
+        "category": "Fruits",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lime Juice",
+        "name_tr": "Misket Limonu Suyu",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon Juice",
+            "name_tr": "Limon Suyu",
+            "amount_en": "1 oz",
+            "amount_tr": "3 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Sugar",
+        "name_tr": "Şeker",
+        "amount_en": "2 tsp",
+        "amount_tr": "2 çay kaşığı",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Simple Syrup",
+            "name_tr": "Şeker Şurubu",
+            "amount_en": "0.5 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Syrups"
+          }
+        ]
+      },
+      {
+        "name_en": "Soda water",
+        "name_tr": "Soda",
+        "amount_en": "Top up",
+        "amount_tr": "Üstünü doldur",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Sprite",
+            "name_tr": "Gazoz",
+            "amount_en": "Top up",
+            "amount_tr": "Üstünü doldur",
+            "category": "Mixers"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "api_id": "90002",
+    "name_en": "Shirley Temple",
+    "name_tr": "Shirley Temple",
+    "instructions_en": "Combine ginger ale and a splash of grenadine in a glass filled with ice cubes. Stir gently. Garnish with a maraschino cherry and a slice of lemon.",
+    "instructions_tr": "Zencefilli gazoz ve bir miktar nar şurubunu buz küpleriyle dolu bir bardağa koyun. Yavaşça karıştırın. Maraschino kirazı ve bir dilim limon ile süsleyin.",
+    "glass_type_en": "Collins glass",
+    "glass_type_tr": "Collins bardağı",
+    "tags_en": "Sweet,Fruity,Classic,Mocktail",
+    "tags_tr": "Tatlı,Meyveli,Klasik,Alkolsüz",
+    "history_notes_tr": "1930'larda Hollywood'da çocuk yıldız Shirley Temple için yaratıldığı söylenen dünyanın en ünlü alkolsüz kokteyli.",
+    "history_notes_en": "Said to be invented in Hollywood in the 1930s for child star Shirley Temple, it remains the world's most famous mocktail.",
+    "is_alcoholic": false,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/te428f1606773329.jpg",
+    "ingredients": [
+      {
+        "name_en": "Ginger Ale",
+        "name_tr": "Zencefilli Gazoz",
+        "amount_en": "5 oz",
+        "amount_tr": "15 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lemon-Lime Soda",
+            "name_tr": "Limonlu Gazoz",
+            "amount_en": "5 oz",
+            "amount_tr": "15 cl",
+            "category": "Mixers"
+          }
+        ]
+      },
+      {
+        "name_en": "Grenadine",
+        "name_tr": "Nar Şurubu (Grenadin)",
+        "amount_en": "0.5 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Maraschino Cherry",
+        "name_tr": "Maraschino Kirazı",
+        "amount_en": "1",
+        "amount_tr": "1",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ]
+  },
+  {
+    "api_id": "90003",
+    "name_en": "Arnold Palmer",
+    "name_tr": "Arnold Palmer",
+    "instructions_en": "Fill a highball glass with ice. Pour equal parts iced tea and lemonade over the ice. Stir well and garnish with a lemon slice.",
+    "instructions_tr": "Bir highball bardağını buzla doldurun. Buzun üzerine eşit miktarda buzlu çay ve limonata dökün. İyice karıştırın ve limon dilimi ile süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Sour,Refreshing,Mocktail",
+    "tags_tr": "Tatlı,Ekşi,Ferahlatıcı,Alkolsüz",
+    "history_notes_tr": "Amerikalı golf efsanesi Arnold Palmer'ın adını taşıyan bu içecek, buzlu çay ve limonatanın mükemmel dengesini sunan bir yaz klasiğidir.",
+    "history_notes_en": "Named after American golf legend Arnold Palmer, this drink is a summer classic offering the perfect balance of iced tea and lemonade.",
+    "is_alcoholic": false,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/w9jhnl1582484437.jpg",
+    "ingredients": [
+      {
+        "name_en": "Iced Tea",
+        "name_tr": "Buzlu Çay",
+        "amount_en": "3 oz",
+        "amount_tr": "9 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemonade",
+        "name_tr": "Limonata",
+        "amount_en": "3 oz",
+        "amount_tr": "9 cl",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon",
+        "name_tr": "Limon",
+        "amount_en": "1 slice",
+        "amount_tr": "1 dilim",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": [
+          {
+            "name_en": "Mint",
+            "name_tr": "Nane",
+            "amount_en": "1 sprig",
+            "amount_tr": "1 dal",
+            "category": "Fruits"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "api_id": "90004",
+    "name_en": "Virgin Pina Colada",
+    "name_tr": "Alkolsüz Pina Colada",
+    "instructions_en": "Blend pineapple juice, coconut cream, and crushed ice until smooth. Pour into a chilled glass. Garnish with a pineapple wedge and cherry.",
+    "instructions_tr": "Ananas suyu, hindistan cevizi kreması ve kırık buzu pürüzsüz olana kadar blenderdan geçirin. Soğutulmuş bardağa dökün. Ananas dilimi ve kiraz ile süsleyin.",
+    "glass_type_en": "Hurricane glass",
+    "glass_type_tr": "Kasırga bardağı",
+    "tags_en": "Sweet,Fruity,Creamy,Mocktail",
+    "tags_tr": "Tatlı,Meyveli,Kremalı,Alkolsüz",
+    "history_notes_tr": "Karayiplerin favorisi Pina Colada'nın romsuz versiyonu. Tropikal tatil havasını alkol olmadan yaşamak isteyenler için idealdir.",
+    "history_notes_en": "The rum-free version of the Caribbean favorite Pina Colada. Ideal for those who want to experience tropical vacation vibes without alcohol.",
+    "is_alcoholic": false,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/upgsue1668419912.jpg",
+    "ingredients": [
+      {
+        "name_en": "Pineapple Juice",
+        "name_tr": "Ananas Suyu",
+        "amount_en": "3 oz",
+        "amount_tr": "9 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Coconut Cream",
+        "name_tr": "Hindistan Cevizi Kreması",
+        "amount_en": "1 oz",
+        "amount_tr": "3 cl",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Coconut Milk",
+            "name_tr": "Hindistan Cevizi Sütü",
+            "amount_en": "1.5 oz",
+            "amount_tr": "4.5 cl",
+            "category": "Pantry"
+          }
+        ]
+      },
+      {
+        "name_en": "Ice",
+        "name_tr": "Buz",
+        "amount_en": "1 cup",
+        "amount_tr": "1 bardak",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Pineapple",
+        "name_tr": "Ananas",
+        "amount_en": "1 wedge",
+        "amount_tr": "1 dilim",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ]
+  },
+  {
+    "api_id": "90005",
+    "name_en": "Cinderella",
+    "name_tr": "Cinderella",
+    "instructions_en": "Pour orange juice, pineapple juice, and lemon juice into a shaker with ice. Shake well. Strain into a chilled glass filled with ice. Add a splash of grenadine and soda water.",
+    "instructions_tr": "Portakal suyu, ananas suyu ve limon suyunu buzlu bir shaker'a dökün. İyice çalkalayın. Buzla dolu soğutulmuş bir bardağa süzün. Biraz nar şurubu ve soda ekleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Sweet,Fruity,Citrus,Mocktail",
+    "tags_tr": "Tatlı,Meyveli,Narenciye,Alkolsüz",
+    "history_notes_tr": "Adını masal prensesinden alan, tamamen meyve sularından oluşan klasik bir kokteyl. Özellikle narenciye sevenler için canlı ve enerjik bir tat sunar.",
+    "history_notes_en": "A classic fruit juice cocktail named after the fairytale princess. Offers a vibrant and energetic taste, especially for citrus lovers.",
+    "is_alcoholic": false,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/b3n0ge1503565473.jpg",
+    "ingredients": [
+      {
+        "name_en": "Orange Juice",
+        "name_tr": "Portakal Suyu",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Pineapple Juice",
+        "name_tr": "Ananas Suyu",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "2 oz",
+        "amount_tr": "6 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "2 oz",
+            "amount_tr": "6 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Grenadine",
+        "name_tr": "Nar Şurubu",
+        "amount_en": "Splash",
+        "amount_tr": "Az miktar",
+        "category": "Syrups",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Soda Water",
+        "name_tr": "Soda",
+        "amount_en": "Top up",
+        "amount_tr": "Üstünü doldur",
+        "category": "Mixers",
+        "importance": "Required",
+        "alternatives": []
+      }
+    ]
+  },
+  {
+    "api_id": "90006",
+    "name_en": "Virgin Mary",
+    "name_tr": "Virgin Mary",
+    "instructions_en": "Pour tomato juice and lemon juice into a glass with ice. Add Worcestershire sauce, Tabasco, salt, and pepper. Stir well. Garnish with a celery stalk.",
+    "instructions_tr": "Domates suyu ve limon suyunu buzlu bir bardağa dökün. Worcestershire sosu, Tabasco, tuz ve karabiber ekleyin. İyice karıştırın. Kereviz sapı ile süsleyin.",
+    "glass_type_en": "Highball glass",
+    "glass_type_tr": "Yüksek top bardağı",
+    "tags_en": "Savory,Spicy,Brunch,Mocktail",
+    "tags_tr": "Tuzlu,Acı,Brunch,Alkolsüz",
+    "history_notes_tr": "Ünlü 'Bloody Mary' kokteylinin alkolsüz versiyonudur. Baharatlı ve tuzlu tadıyla sabah kahvaltılarının veya brunch'ların vazgeçilmezidir.",
+    "history_notes_en": "The non-alcoholic version of the famous 'Bloody Mary'. Essential for breakfasts or brunches with its spicy and savory taste.",
+    "is_alcoholic": false,
+    "image_url": "https://www.thecocktaildb.com/images/media/drink/t6caa21678570086.jpg",
+    "ingredients": [
+      {
+        "name_en": "Tomato Juice",
+        "name_tr": "Domates Suyu",
+        "amount_en": "4 oz",
+        "amount_tr": "12 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Lemon Juice",
+        "name_tr": "Limon Suyu",
+        "amount_en": "0.5 oz",
+        "amount_tr": "1.5 cl",
+        "category": "Juices",
+        "importance": "Required",
+        "alternatives": [
+          {
+            "name_en": "Lime Juice",
+            "name_tr": "Misket Limonu Suyu",
+            "amount_en": "0.5 oz",
+            "amount_tr": "1.5 cl",
+            "category": "Juices"
+          }
+        ]
+      },
+      {
+        "name_en": "Worcestershire Sauce",
+        "name_tr": "Worcestershire Sosu",
+        "amount_en": "2 dashes",
+        "amount_tr": "2 damla",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Tabasco Sauce",
+        "name_tr": "Tabasco Sosu",
+        "amount_en": "2 dashes",
+        "amount_tr": "2 damla",
+        "category": "Pantry",
+        "importance": "Required",
+        "alternatives": []
+      },
+      {
+        "name_en": "Celery",
+        "name_tr": "Kereviz Sapı",
+        "amount_en": "1 stalk",
+        "amount_tr": "1 sap",
+        "category": "Fruits",
+        "importance": "Garnish",
+        "alternatives": []
+      }
+    ]
+  }
+]
