@@ -304,7 +304,7 @@ const HomeScreen = ({ navigation }) => {
           <PremiumButton
             variant="gold"
             title={t("home.prepare_btn")}
-            style={{ width: "75%", height: 50 }}
+            style={{ width: "75%", height: 55 }}
             onPress={() =>
               navigation.navigate("CocktailDetail", {
                 cocktailId: selectedCocktailId,

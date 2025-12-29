@@ -1,22 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-import i18n from "../i18n";
+// import i18n from "../i18n";  <-- Bunu kaldırıyoruz, gerek yok.
+import { getLocales } from "expo-localization"; // <-- Donanıma soran kütüphane
 
-// State'i tek bir yerde topladık (Doğrusu budur)
+// Telefonun dilini direkt çekiyoruz (Örn: 'en', 'tr')
+// Eğer bulamazsa 'en' olsun diyoruz.
+const deviceLanguage = getLocales()[0]?.languageCode || "en";
+
 const initialState = {
-  language: i18n.language || "tr", // i18n'den gelen dili al, yoksa tr
+  language: deviceLanguage, // Artık 'tr'ye veya i18n'e bağımlı değil
   themeMode: "light",
 };
 
 export const uiSlice = createSlice({
   name: "ui",
-  initialState, // Yukarıdaki tanımlı state'i kullanıyoruz
+  initialState,
   reducers: {
     setLanguage: (state, action) => {
-      // 'tr', 'en', 'de', 'es', 'it', 'pt' kodlarını alır
       state.language = action.payload;
     },
     setThemeMode: (state, action) => {
-      // 'light' veya 'dark' string değerini alır
       state.themeMode = action.payload;
     },
   },
