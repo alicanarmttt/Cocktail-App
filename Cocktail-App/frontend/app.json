@@ -47,11 +47,11 @@
       "expo-web-browser",
       "@react-native-google-signin/google-signin"
     ],
+    "owner": "alicanarmttt",
     "extra": {
       "eas": {
-        "projectId": "2a63bc34-ac0f-45be-a353-256eb6b640e1"
+        "projectId": "50e121bd-f4d6-47c1-a6c3-994e93e969c9"
       }
-    },
-    "owner": "alicanarmttt"
+    }
   }
 }
