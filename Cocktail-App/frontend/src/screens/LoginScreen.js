@@ -30,18 +30,17 @@ import {
 } from "firebase/auth";
 
 // Redux
-// DEĞİŞİKLİK 1: loginAsGuest eklendi
 import {
   loginOrRegisterUser,
   getLoginStatus,
   loginAsGuest,
 } from "../features/userSlice";
 
-// Native Google Sign-In Imports
-// import {
-//   GoogleSignin,
-//   statusCodes,
-// } from "@react-native-google-signin/google-signin";
+// Native Google Sign-In Imports (AKTİF EDİLDİ)
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 import { useTranslation } from "react-i18next";
 import PremiumButton from "../ui/PremiumButton";
@@ -85,49 +84,59 @@ const LoginScreen = () => {
   // Ortam değişkenlerini al
   const webClientId = process.env.EXPO_PUBLIC_WEB_CLIENT_ID;
 
-  // // --- Google Sign-In Konfigürasyonu ---
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId: webClientId,
-  //     offlineAccess: true,
-  //     scopes: ["profile", "email"],
-  //   });
-  // }, [webClientId]);
+  // --- Google Sign-In Konfigürasyonu (AKTİF EDİLDİ) ---
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: webClientId,
+      offlineAccess: true,
+      scopes: ["profile", "email"],
+    });
+  }, [webClientId]);
 
-  // --- DEĞİŞİKLİK 2: Misafir Girişi Handler ---
+  // --- Misafir Girişi Handler ---
   const handleGuestLogin = () => {
-    // Redux aksiyonunu tetikler ve kullanıcıyı içeri alır
     dispatch(loginAsGuest());
   };
 
-  // --- Native Google Login İşlemi ---
-  // const onGoogleButtonPress = async () => {
-  //   if (googleLoading || isFirebaseLoading || loginStatus === "loading") return;
+  // --- Native Google Login İşlemi (AKTİF EDİLDİ) ---
+  const onGoogleButtonPress = async () => {
+    if (googleLoading || isFirebaseLoading || loginStatus === "loading") return;
 
-  //   setGoogleLoading(true);
-  //   try {
-  //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-  //     const userInfo = await GoogleSignin.signIn();
-  //     const idToken = userInfo.data?.idToken || userInfo.idToken;
+    setGoogleLoading(true);
+    try {
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+      const userInfo = await GoogleSignin.signIn();
+      const idToken = userInfo.data?.idToken || userInfo.idToken;
 
-  //     if (!idToken) throw new Error("Google ID Token alınamadı.");
+      if (!idToken) throw new Error("Google ID Token alınamadı.");
 
-  //     const googleCredential = GoogleAuthProvider.credential(idToken);
-  //     auth.languageCode = i18n.language;
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+      auth.languageCode = i18n.language;
 
-  //     const userCredential = await signInWithCredential(auth, googleCredential);
-  //     const user = userCredential.user;
+      const userCredential = await signInWithCredential(auth, googleCredential);
+      const user = userCredential.user;
 
-  //     await dispatch(
-  //       loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
-  //     ).unwrap();
-  //   } catch (error) {
-  //     // Hata yönetimi (aynen korundu)
-  //     console.error("Google Sign-In Hatası:", error);
-  //   } finally {
-  //     setGoogleLoading(false);
-  //   }
-  // };
+      await dispatch(
+        loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
+      ).unwrap();
+    } catch (error) {
+      // Hata yönetimi
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("Kullanıcı girişi iptal etti");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("Giriş işlemi zaten devam ediyor");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("Play Services güncel değil veya yok");
+      } else {
+        console.error("Google Sign-In Hatası:", error);
+        Alert.alert("Hata", "Google ile giriş yapılamadı.");
+      }
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   // --- Klasik Email/Şifre Kayıt İşlemleri ---
   const handleRegister = async () => {
@@ -229,7 +238,7 @@ const LoginScreen = () => {
           keyboardShouldPersistTaps="handled"
           bounces={false}
         >
-          {/* --- VIDEO ALANI (Dokunulmadı) --- */}
+          {/* --- VIDEO ALANI --- */}
           <View style={styles.videoWrapper}>
             <Video
               ref={video}
@@ -339,7 +348,7 @@ const LoginScreen = () => {
               <View style={styles.divider} />
             </View>
 
-            {/* DEĞİŞİKLİK 3: MİSAFİR GİRİŞİ BUTONU (Google'ın üstüne eklendi) */}
+            {/* Misafir Girişi Butonu */}
             <Pressable style={styles.guestButton} onPress={handleGuestLogin}>
               <Text style={styles.guestButtonText}>
                 {t("auth.continue_as_guest")}
@@ -352,8 +361,8 @@ const LoginScreen = () => {
               />
             </Pressable>
 
-            {/* --- GOOGLE BUTONU (Yorum Satırı Halinde Korundu) --- */}
-            {/* <Pressable
+            {/* --- GOOGLE BUTONU (AKTİF EDİLDİ) --- */}
+            <Pressable
               style={[
                 styles.googleButton,
                 (loginStatus === "loading" ||
@@ -381,7 +390,7 @@ const LoginScreen = () => {
                   </Text>
                 </>
               )}
-            </Pressable> */}
+            </Pressable>
 
             <View style={{ marginTop: 20, paddingHorizontal: 10 }}>
               <Text
@@ -507,13 +516,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textTransform: "uppercase",
   },
-  // DEĞİŞİKLİK 4: Misafir Buton Stilleri
   guestButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
-    marginBottom: 10, // Google butonu açıldığında üst üste binmesin
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: "#333",
     borderRadius: 12,
