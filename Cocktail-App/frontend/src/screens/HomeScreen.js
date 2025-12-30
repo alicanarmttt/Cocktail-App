@@ -260,7 +260,8 @@ const HomeScreen = ({ navigation }) => {
                       <Text
                         style={[styles.premiumTitle, { color: colors.text }]}
                         numberOfLines={1}
-                        adjustsFontSizeToFit
+                        adjustsFontSizeToFit={true}
+                        minimumFontScale={0.6}
                       >
                         {getName(item).toUpperCase()}
                       </Text>
@@ -550,11 +551,11 @@ const styles = StyleSheet.create({
     height: height * 0.58, // Hafif kıstık ki sığsın
   },
   premiumImageWrapper: {
-    width: "100%",
+    width: "85%", // GÜNCELLENDİ: %100'den %85'e düştü (Dikey yer açıldı)
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 10, // GÜNCELLENDİ: Biraz daha aşağı alındı
   },
   premiumImage: { width: "92%", height: "92%", borderRadius: 5 },
   premiumTextContainer: {
@@ -564,11 +565,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   premiumTitle: {
-    fontSize: 26,
+    fontSize: 22, // GÜNCELLENDİ: 26'dan 22'ye düştü
     fontWeight: "bold",
     fontFamily: "serif",
     textAlign: "center",
-    letterSpacing: 1.2,
+    letterSpacing: 0.5, // GÜNCELLENDİ: 1.2'den 0.5'e düştü (Sıkılaştı)
     marginBottom: 5,
   },
   badge: {

@@ -331,7 +331,7 @@ const ProfileScreen = () => {
         </View>
 
         {/* --- 2. BANNER ALANI (UPSELL VEYA LOGIN) --- */}
-        {/* Misafir ise: Giriş Yap Bannerı */}
+        {/* Misafir ise: Giriş Yap Bannerı, Değilse: HİÇBİR ŞEY (null) */}
         {isGuest ? (
           <Pressable
             style={styles.upsellContainer}
@@ -357,36 +357,7 @@ const ProfileScreen = () => {
               <Ionicons name="log-in-outline" size={32} color="#fff" />
             </LinearGradient>
           </Pressable>
-        ) : (
-          !isPro && (
-            // Üye ama Pro değilse: Pro Bannerı
-            <Pressable
-              style={styles.upsellContainer}
-              onPress={() => navigation.navigate("UpgradeToPro")}
-            >
-              <LinearGradient
-                colors={["#FFD700", "#B8860B"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.upsellGradient}
-              >
-                <View>
-                  <Text style={styles.upsellTitle}>
-                    {t("navigation.upgrade_pro")}
-                  </Text>
-                  <Text style={styles.upsellSubtitle}>
-                    {t("profile.unlock_all")}
-                  </Text>
-                </View>
-                <Ionicons
-                  name="arrow-forward-circle"
-                  size={32}
-                  color="#2A050A"
-                />
-              </LinearGradient>
-            </Pressable>
-          )
-        )}
+        ) : null}
 
         {/* --- 3. ACCOUNT ACTIONS --- */}
         <View style={styles.sectionHeader}>
