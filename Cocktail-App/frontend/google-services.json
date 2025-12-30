@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "441299631588",
+    "project_id": "cocktailapp-1cb64",
+    "storage_bucket": "cocktailapp-1cb64.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441299631588:android:861a16aeeeafb49f68dbf1",
+        "android_client_info": {
+          "package_name": "com.alican.barmenroulette"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASgf23d5qQnvNDe7LYzF5CcKAs3eVXGmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "441299631588-et88h77510u8k46b7pm34l56pkfs25a6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "441299631588-jc6kntkooirljpbtvndsv1qnt8no1p2v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alican.barmenroulette"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
