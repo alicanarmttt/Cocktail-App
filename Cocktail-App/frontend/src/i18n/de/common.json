@@ -44,11 +44,11 @@
     "google_login": "Weiter mit Google",
     "terms_privacy": "Durch das Fortfahren stimmst du unseren Nutzungsbedingungen und Datenschutzrichtlinien zu.",
     "errors": {
-      "empty_fields": "Bitte fülle alle Felder aus.",
-      
-      "logout_confirm_title": "Abmelden",
-      "logout_confirm_msg": "Möchtest du dich wirklich abmelden?"
-    }
+  "empty_fields": "Bitte alle Felder ausfüllen.",
+  "logout": "Abmelden",
+  "logout_confirm_title": "Abmelden",
+  "logout_confirm_msg": "Möchten Sie sich wirklich abmelden?"
+}
   },
   "home": {
     "quote": "\"Kunst versteckt sich im Glas...\"",
@@ -80,29 +80,34 @@
 
   },
   "assistant": {
-    "landing_title": "Barkeepers Ecke",
-    "landing_subtitle": "Wonach ist dir heute?",
-    "landing_desc": "Lass dich führen oder erkunde deine Hausbar selbst.",
-    "mode_wizard": "Führe mich",
-    "mode_wizard_desc": "Lass uns Schritt für Schritt das beste Rezept finden.",
-    "mode_manual": "Ich wähle selbst",
-    "mode_manual_desc": "Zeig mir die Liste, ich regel das.",
-    "manual_title": "Manuelle Auswahl",
-    "manual_subtitle": "Wähle Zutaten aus deiner Bar",
-    "search_placeholder": "Zutaten suchen...",
-    "tab_all": "Alle",
-    "show_recipes_btn": "Cocktails finden",
-    "error_title": "Fehler",
-    "not_found": "Zutat nicht gefunden.",
-    "wizard_thinking": "Hmm, ich checke den Keller...",
-    "wizard_step1_msg": "Willkommen! Was möchtest du heute als Basis trinken?",
-    "wizard_step2_msg": "Gute Wahl! Welche Flaschen hast du dazu?",
-    "wizard_step3_msg": "Zum Schluss: Frische Früchte oder Vorräte aus der Küche?",
-    "wizard_no_data": "Keine Optionen gefunden.",
-    "wizard_btn_next": "Weiter",
-    "wizard_btn_finish": "Cocktails finden",
-    "wizard_step1_hint": "Nächste Vorschläge basieren auf dieser Wahl..."
+  "landing_title": "Bar-Ecke",
+  "landing_subtitle": "Wie ist deine Stimmung heute?",
+  "landing_desc": "Lass dich von mir führen oder erkunde deinen Schrank selbst.",
+  
+  "mode_wizard": "Führe mich",
+  "mode_wizard_desc": "Lass uns Schritt für Schritt das beste Rezept finden.",
+  "mode_manual": "Ich wähle selbst",
+  "mode_manual_desc": "Zeig mir die Zutatenliste, ich mache das.",
+  
+  "manual_title": "Manuelle Auswahl",
+  "manual_subtitle": "Wähle Zutaten aus deinem Schrank",
+  "search_placeholder": "Zutaten suchen...",
+  "tab_all": "Alle",
+  "show_recipes_btn": "Cocktails finden",
+  "error_title": "Fehler",
+  "not_found": "Zutat nicht gefunden.",
+  
+  "wizard": {
+    "thinking": "Hmm, ich schaue in den Keller...",
+    "step1_msg": "Willkommen! Mit welcher Basis-Spirituose möchtest du starten?",
+    "step2_msg": "Super! Welche Mixer oder Liköre hast du zur Hand?",
+    "step3_msg": "Und zum Schluss: Hast du frische Früchte oder andere Zutaten?",
+    "no_data": "Keine Optionen gefunden.",
+    "btn_next": "Weiter",
+    "btn_finish": "Cocktails finden"
   },
+  "wizard_step1_hint": "Zum Auswählen tippen"
+},
   "results": {
   "title": "Passende Rezepte",
   "loading": "Suche nach den besten Rezepten...",

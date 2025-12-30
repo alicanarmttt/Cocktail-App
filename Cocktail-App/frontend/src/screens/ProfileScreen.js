@@ -136,34 +136,38 @@ const ProfileScreen = () => {
     }
 
     // Normal kullanıcı ise onay iste
-    Alert.alert(t("auth.logout_confirm_title"), t("auth.logout_confirm_msg"), [
-      { text: t("general.cancel"), style: "cancel" },
-      {
-        text: t("auth.logout"),
-        style: "destructive",
-        onPress: async () => {
-          try {
-            // 1. ÖNCE Google Native Oturumunu Kapat (Zombiyi öldür)
+    Alert.alert(
+      t("auth.errors.logout_confirm_title"),
+      t("auth.errors.logout_confirm_msg"),
+      [
+        { text: t("general.cancel"), style: "cancel" },
+        {
+          text: t("auth.errors.logout"),
+          style: "destructive",
+          onPress: async () => {
             try {
-              await GoogleSignin.signOut();
-            } catch (e) {
-              // Kullanıcı Google ile girmemiş olabilir, hatayı yut devam et
-              console.log("Google signout hatası (önemsiz):", e);
+              // 1. ÖNCE Google Native Oturumunu Kapat (Zombiyi öldür)
+              try {
+                await GoogleSignin.signOut();
+              } catch (e) {
+                // Kullanıcı Google ile girmemiş olabilir, hatayı yut devam et
+                console.log("Google signout hatası (önemsiz):", e);
+              }
+
+              // 2. SONRA Firebase'den Çık
+              await signOut(auth);
+
+              // 3. Redux Temizliği
+              dispatch(clearUser());
+              dispatch(clearSearchResults());
+              dispatch(clearDetail());
+            } catch (error) {
+              console.error("Logout Error:", error);
             }
-
-            // 2. SONRA Firebase'den Çık
-            await signOut(auth);
-
-            // 3. Redux Temizliği
-            dispatch(clearUser());
-            dispatch(clearSearchResults());
-            dispatch(clearDetail());
-          } catch (error) {
-            console.error("Logout Error:", error);
-          }
+          },
         },
-      },
-    ]);
+      ]
+    );
   };
 
   const handleDeleteAccount = () => {

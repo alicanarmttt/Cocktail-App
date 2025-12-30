@@ -44,11 +44,11 @@
     "google_login": "Continuar con Google",
     "terms_privacy": "Al continuar, aceptas nuestros Términos de Servicio y Política de Privacidad.",
     "errors": {
-      "empty_fields": "Por favor, rellena todos los campos.",
-      
-      "logout_confirm_title": "Cerrando Sesión",
-      "logout_confirm_msg": "¿Estás seguro de que quieres cerrar sesión?"
-    }
+  "empty_fields": "Por favor, rellene todos los campos.",
+  "logout": "Cerrar Sesión",
+  "logout_confirm_title": "Cerrando Sesión",
+  "logout_confirm_msg": "¿Estás seguro de que quieres cerrar sesión?"
+}
   },
   "home": {
     "quote": "\"El arte se esconde en una copa...\"",
@@ -79,29 +79,34 @@
     "login_required_msg": "Inicia sesión para ver ingredientes alternativos."
   },
   "assistant": {
-    "landing_title": "Rincón del Barman",
-    "landing_subtitle": "¿Qué te apetece hoy?",
-    "landing_desc": "Déjame guiarte o explora tu armario tú mismo.",
-    "mode_wizard": "Guíame",
-    "mode_wizard_desc": "Busquemos la mejor receta paso a paso.",
-    "mode_manual": "Yo Elijo",
-    "mode_manual_desc": "Muéstrame la lista completa, yo me encargo.",
-    "manual_title": "Selección Manual",
-    "manual_subtitle": "Selecciona ingredientes de tu armario",
-    "search_placeholder": "Buscar ingredientes...",
-    "tab_all": "Todos",
-    "show_recipes_btn": "Buscar Cócteles",
-    "error_title": "Error",
-    "not_found": "Ingrediente no encontrado.",
-    "wizard_thinking": "Hmm, revisando la bodega...",
-    "wizard_step1_msg": "¡Bienvenido! ¿Qué te gustaría beber como base hoy?",
-    "wizard_step2_msg": "¡Gran elección! ¿Qué botellas tienes para acompañarlo?",
-    "wizard_step3_msg": "¡Por último! ¿Tienes fruta fresca o básicos de despensa?",
-    "wizard_no_data": "No se encontraron opciones.",
-    "wizard_btn_next": "Continuar",
-    "wizard_btn_finish": "Buscar Cócteles",
-    "wizard_step1_hint": "Las siguientes sugerencias se filtrarán según esta elección..."
+  "landing_title": "El Rincón del Barman",
+  "landing_subtitle": "¿Cuál es tu estado de ánimo hoy?",
+  "landing_desc": "Déjame guiarte o explora tu armario tú mismo.",
+  
+  "mode_wizard": "Guíame",
+  "mode_wizard_desc": "Encontremos la mejor receta paso a paso.",
+  "mode_manual": "Yo elijo",
+  "mode_manual_desc": "Muéstrame la lista de ingredientes, yo me encargo.",
+  
+  "manual_title": "Selección Manual",
+  "manual_subtitle": "Selecciona ingredientes de tu armario",
+  "search_placeholder": "Buscar ingredientes...",
+  "tab_all": "Todos",
+  "show_recipes_btn": "Buscar Cócteles",
+  "error_title": "Error",
+  "not_found": "Ingrediente no encontrado.",
+  
+  "wizard": {
+    "thinking": "Hmm, revisando la bodega...",
+    "step1_msg": "¡Bienvenido! ¿Con qué licor base te gustaría empezar?",
+    "step2_msg": "¡Genial! ¿Qué mezcladores o licores tienes a mano?",
+    "step3_msg": "Por último, ¿tienes frutas frescas o ingredientes de despensa?",
+    "no_data": "No se encontraron opciones.",
+    "btn_next": "Continuar",
+    "btn_finish": "Buscar Cócteles"
   },
+  "wizard_step1_hint": "Toca para seleccionar"
+},
   "results": {
   "title": "Recetas Encontradas",
   "loading": "Buscando las mejores recetas...",

@@ -44,11 +44,11 @@
     "google_login": "Continuar com Google",
     "terms_privacy": "Ao continuar, você concorda com nossos Termos de Serviço e Política de Privacidade.",
     "errors": {
-      "empty_fields": "Por favor, preencha todos os campos.",
-      
-      "logout_confirm_title": "Saindo",
-      "logout_confirm_msg": "Tem certeza de que deseja sair?"
-    }
+  "empty_fields": "Por favor, preencha todos os campos.",
+  "logout": "Sair",
+  "logout_confirm_title": "Sair",
+  "logout_confirm_msg": "Tem certeza de que deseja sair?"
+}
   },
   "home": {
     "quote": "\"A arte está escondida em um copo...\"",
@@ -79,29 +79,34 @@
     "login_required_msg": "Faça login para ver ingredientes alternativos."
   },
   "assistant": {
-    "landing_title": "Canto do Barman",
-    "landing_subtitle": "Qual é o seu humor hoje?",
-    "landing_desc": "Deixe-me guiá-lo ou explore seu armário você mesmo.",
-    "mode_wizard": "Guie-me",
-    "mode_wizard_desc": "Vamos encontrar a melhor receita passo a passo.",
-    "mode_manual": "Eu Escolho",
-    "mode_manual_desc": "Mostre-me a lista completa, eu cuido disso.",
-    "manual_title": "Seleção Manual",
-    "manual_subtitle": "Selecione ingredientes do seu armário",
-    "search_placeholder": "Buscar ingredientes...",
-    "tab_all": "Todos",
-    "show_recipes_btn": "Encontrar Coquetéis",
-    "error_title": "Erro",
-    "not_found": "Ingrediente não encontrado.",
-    "wizard_thinking": "Hmm, verificando a adega...",
-    "wizard_step1_msg": "Bem-vindo! O que você gostaria de beber como base hoje?",
-    "wizard_step2_msg": "Ótima escolha! Quais garrafas você tem para acompanhar?",
-    "wizard_step3_msg": "Por fim, alguma fruta fresca ou itens da despensa?",
-    "wizard_no_data": "Nenhuma opção encontrada.",
-    "wizard_btn_next": "Continuar",
-    "wizard_btn_finish": "Encontrar Coquetéis",
-    "wizard_step1_hint": "As próximas sugestões serão filtradas com base nesta escolha..."
+  "landing_title": "Cantinho do Barman",
+  "landing_subtitle": "Qual é o seu humor hoje?",
+  "landing_desc": "Deixe-me guiá-lo ou explore o seu armário sozinho.",
+  
+  "mode_wizard": "Guia-me",
+  "mode_wizard_desc": "Vamos encontrar a melhor receita passo a passo.",
+  "mode_manual": "Eu escolho",
+  "mode_manual_desc": "Mostre-me a lista de ingredientes, eu trato disso.",
+  
+  "manual_title": "Seleção Manual",
+  "manual_subtitle": "Selecione ingredientes do seu armário",
+  "search_placeholder": "Pesquisar ingredientes...",
+  "tab_all": "Todos",
+  "show_recipes_btn": "Encontrar Coquetéis",
+  "error_title": "Erro",
+  "not_found": "Ingrediente não encontrado.",
+  
+  "wizard": {
+    "thinking": "Hmm, verificando a adega...",
+    "step1_msg": "Bem-vindo! Com que bebida base gostaria de começar?",
+    "step2_msg": "Ótimo! Que misturadores ou licores tem à mão?",
+    "step3_msg": "Por fim, tem frutas frescas ou ingredientes de despensa?",
+    "no_data": "Nenhuma opção encontrada.",
+    "btn_next": "Continuar",
+    "btn_finish": "Encontrar Coquetéis"
   },
+  "wizard_step1_hint": "Toque para selecionar"
+},
  "results": {
   "title": "Receitas Encontradas",
   "loading": "Procurando as melhores receitas...",

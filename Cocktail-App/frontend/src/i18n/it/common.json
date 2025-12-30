@@ -44,11 +44,11 @@
     "google_login": "Continua con Google",
     "terms_privacy": "Continuando, accetti i nostri Termini di Servizio e l'Informativa sulla Privacy.",
     "errors": {
-      "empty_fields": "Per favore compila tutti i campi.",
-      
-      "logout_confirm_title": "Disconnessione",
-      "logout_confirm_msg": "Sei sicuro di voler uscire?"
-    }
+  "empty_fields": "Si prega di compilare tutti i campi.",
+  "logout": "Disconnettersi",
+  "logout_confirm_title": "Disconnessione",
+  "logout_confirm_msg": "Sei sicuro di voler uscire?"
+}
   },
   "home": {
     "quote": "\"L'arte è nascosta in un bicchiere...\"",
@@ -79,29 +79,34 @@
     "login_required_msg": "Accedi per vedere gli ingredienti alternativi."
   },
   "assistant": {
-    "landing_title": "L'Angolo del Barman",
-    "landing_subtitle": "Di che umore sei oggi?",
-    "landing_desc": "Lasciati guidare da me o esplora tu stesso la dispensa.",
-    "mode_wizard": "Guidami",
-    "mode_wizard_desc": "Troviamo la ricetta migliore passo dopo passo.",
-    "mode_manual": "Scelgo io",
-    "mode_manual_desc": "Mostrami la lista completa, ci penso io.",
-    "manual_title": "Selezione Manuale",
-    "manual_subtitle": "Seleziona ingredienti dalla tua dispensa",
-    "search_placeholder": "Cerca ingredienti...",
-    "tab_all": "Tutti",
-    "show_recipes_btn": "Trova Cocktail",
-    "error_title": "Errore",
-    "not_found": "Ingrediente non trovato.",
-    "wizard_thinking": "Hmm, controllo in cantina...",
-    "wizard_step1_msg": "Benvenuto! Cosa ti piacerebbe bere come base oggi?",
-    "wizard_step2_msg": "Ottima scelta! Quali bottiglie hai per accompagnarlo?",
-    "wizard_step3_msg": "Per finire, hai frutta fresca o basi della dispensa?",
-    "wizard_no_data": "Nessuna opzione trovata.",
-    "wizard_btn_next": "Continua",
-    "wizard_btn_finish": "Trova Cocktail",
-    "wizard_step1_hint": "I prossimi suggerimenti saranno filtrati in base a questa scelta..."
+  "landing_title": "L'Angolo del Barman",
+  "landing_subtitle": "Di che umore sei oggi?",
+  "landing_desc": "Lasciati guidare o esplora la tua dispensa da solo.",
+  
+  "mode_wizard": "Guidami",
+  "mode_wizard_desc": "Troviamo la ricetta migliore passo dopo passo.",
+  "mode_manual": "Scelgo io",
+  "mode_manual_desc": "Mostrami la lista degli ingredienti, ci penso io.",
+  
+  "manual_title": "Selezione Manuale",
+  "manual_subtitle": "Seleziona gli ingredienti dalla tua dispensa",
+  "search_placeholder": "Cerca ingredienti...",
+  "tab_all": "Tutti",
+  "show_recipes_btn": "Trova Cocktail",
+  "error_title": "Errore",
+  "not_found": "Ingrediente non trovato.",
+  
+  "wizard": {
+    "thinking": "Hmm, controllo in cantina...",
+    "step1_msg": "Benvenuto! Con quale base alcolica vuoi iniziare?",
+    "step2_msg": "Ottimo! Quali mixer o liquori hai a portata di mano?",
+    "step3_msg": "Infine, hai frutta fresca o ingredienti dalla dispensa?",
+    "no_data": "Nessuna opzione trovata.",
+    "btn_next": "Continua",
+    "btn_finish": "Trova Cocktail"
   },
+  "wizard_step1_hint": "Tocca per selezionare"
+},
   "results": {
   "title": "Ricette Trovate",
   "loading": "Ricerca delle migliori ricette...",

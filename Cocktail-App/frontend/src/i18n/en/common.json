@@ -45,7 +45,8 @@
   "google_login": "Continue with Google",
   "terms_privacy": "By continuing, you agree to our Terms of Service and Privacy Policy.",
   "errors": {
-    "empty_fields": "Please fill in all fields.","logout": "Log Out",
+    "empty_fields": "Please fill in all fields.",
+    "logout": "Log Out",
     "logout_confirm_title": "Logging Out",
     "logout_confirm_msg": "Are you sure you want to log out?"
   }
@@ -97,14 +98,16 @@
     "error_title": "Error",
     "not_found": "Ingredient not found.",
     
-    "wizard_thinking": "Hmm, checking the cellar...",
-    "wizard_step1_msg": "Welcome! What would you like to drink as a base today?",
-    "wizard_step2_msg": "Great choice! Which bottles do you have to accompany it?",
-    "wizard_step3_msg": "Finally, any fresh fruit or pantry items in the kitchen?",
-    "wizard_no_data": "No options found.",
-    "wizard_btn_next": "Continue",
-    "wizard_btn_finish": "Find Cocktails",
-    "wizard_step1_hint": "Next suggestions will be filtered based on this choice..."
+    "wizard": {
+    "thinking": "Hmm, checking the cellar...",
+    "step1_msg": "Welcome! What base spirit would you like to start with?",
+    "step2_msg": "Great! What mixers or liqueurs do you have on hand?",
+    "step3_msg": "Finally, do you have any fresh fruits or pantry ingredients?",
+    "no_data": "No options found.",
+    "btn_next": "Continue",
+    "btn_finish": "Find Cocktails"
+  },
+  "wizard_step1_hint": "Tap to make a selection"
 },
   "results": {
   "title": "Matching Recipes",

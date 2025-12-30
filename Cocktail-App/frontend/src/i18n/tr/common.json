@@ -44,10 +44,11 @@
   "google_login": "Google ile Devam Et",
   "terms_privacy": "Devam ederek, Kullanım Koşulları ve Gizlilik Politikasını kabul etmiş olursunuz.",
   "errors": {
-    "empty_fields": "Lütfen tüm alanları doldurun."
-  },
+    "empty_fields": "Lütfen tüm alanları doldurun.",
+    "logout": "Çıkış Yap", 
     "logout_confirm_title": "Çıkış Yapılıyor",
     "logout_confirm_msg": "Çıkış yapmak istediğine emin misin?"
+  }
 },
   "home": {
     "quote": "\"Sanat, bir kadehte gizlidir...\"",
@@ -78,32 +79,34 @@
     "login_required_msg": "Alternatif malzemeleri görmek için lütfen giriş yapın."
   },
   "assistant": {
-    "landing_title": "Barmen'in Köşesi",
-    "landing_subtitle": "Bugün modun nasıl?",
-    "landing_desc": "İster sana rehberlik edeyim, ister dolabını kendin karıştır.",
-    
-    "mode_wizard": "Bana Rehberlik Et",
-    "mode_wizard_desc": "Adım adım sorularla en iyi tarifi bulalım.",
-    "mode_manual": "Kendim Seçerim",
-    "mode_manual_desc": "Tüm malzeme listesini göster, ben hallederim.",
-    
-    "manual_title": "Manuel Seçim",
-    "manual_subtitle": "Dolabındaki malzemeleri işaretle",
-    "search_placeholder": "Malzeme ara...",
-    "tab_all": "Tümü",
-    "show_recipes_btn": "Kokteylleri Bul",
-    "error_title": "Hata",
-    "not_found": "Malzeme bulunamadı.",
-    
-    "wizard_thinking": "Hımm, mahzene bakıyorum...",
-    "wizard_step1_msg": "Hoş geldin! Bugün temel olarak ne içmek istersin?",
-    "wizard_step2_msg": "Harika! Peki eşlikçi olarak elinde hangi şişeler var?",
-    "wizard_step3_msg": "Son olarak, dolapta taze meyve veya kiler malzemesi var mı?",
-    "wizard_no_data": "Seçenek bulunamadı.",
-    "wizard_btn_next": "Devam Et",
-    "wizard_btn_finish": "Kokteylleri Bul",
-    "wizard_step1_hint": "Sıradaki öneriler bu seçimine göre filtrelenecek..."
+  "landing_title": "Barmen Köşesi",
+  "landing_subtitle": "Bugün modun nasıl?",
+  "landing_desc": "Sana rehberlik edeyim veya dolabını kendin karıştır.",
+  
+  "mode_wizard": "Bana Rehberlik Et",
+  "mode_wizard_desc": "Adım adım sorularla en iyi tarifi bulalım.",
+  "mode_manual": "Ben Seçerim",
+  "mode_manual_desc": "Tüm malzeme listesini göster, ben hallederim.",
+  
+  "manual_title": "Manuel Seçim",
+  "manual_subtitle": "Dolabındaki malzemeleri seç",
+  "search_placeholder": "Malzeme ara...",
+  "tab_all": "Tümü",
+  "show_recipes_btn": "Kokteylleri Bul",
+  "error_title": "Hata",
+  "not_found": "Malzeme bulunamadı.",
+  
+  "wizard": {
+    "thinking": "Hımm, mahzene bakıyorum...",
+    "step1_msg": "Hoş geldin! Bugün temel olarak ne içmek istersin?",
+    "step2_msg": "Harika! Peki eşlikçi olarak elinde hangi şişeler var?",
+    "step3_msg": "Son olarak, dolapta taze meyve veya kiler malzemesi var mı?",
+    "no_data": "Seçenek bulunamadı.",
+    "btn_next": "Devam Et",
+    "btn_finish": "Kokteylleri Bul"
   },
+  "wizard_step1_hint": "Seçim yapmak için dokun"
+},
   "results": {
   "title": "Bulunan Tarifler",
   "loading": "En uygun tarifler aranıyor...",
