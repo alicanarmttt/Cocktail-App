@@ -98,26 +98,43 @@ const LoginScreen = () => {
     dispatch(loginAsGuest());
   };
 
-  // --- Native Google Login İşlemi (AKTİF EDİLDİ) ---
+  // --- Native Google Login İşlemi ---
   const onGoogleButtonPress = async () => {
+    // Zaten işlem yapılıyorsa durdur
     if (googleLoading || isFirebaseLoading || loginStatus === "loading") return;
 
     setGoogleLoading(true);
     try {
+      // 1. Play Services kontrolü
       await GoogleSignin.hasPlayServices({
         showPlayServicesUpdateDialog: true,
       });
+
+      // --- KRİTİK EKLEME BAŞLANGICI ---
+      // Eğer arkada kalmış eski bir oturum varsa onu zorla kapat.
+      // Bu sayede her seferinde "Hesap Seçin" penceresi açılır ve sonsuz döngü engellenir.
+      try {
+        await GoogleSignin.signOut();
+      } catch (e) {
+        // Eğer zaten çıkış yapılmışsa hata verebilir, bunu görmezden geliyoruz.
+        // Amacımız sadece temiz bir sayfa açmak.
+      }
+      // --- KRİTİK EKLEME BİTİŞİ ---
+
+      // 2. Şimdi tertemiz bir giriş başlat (Hesap seçtirme ekranı açılacak)
       const userInfo = await GoogleSignin.signIn();
       const idToken = userInfo.data?.idToken || userInfo.idToken;
 
       if (!idToken) throw new Error("Google ID Token alınamadı.");
 
+      // 3. Firebase ile giriş yap
       const googleCredential = GoogleAuthProvider.credential(idToken);
       auth.languageCode = i18n.language;
 
       const userCredential = await signInWithCredential(auth, googleCredential);
       const user = userCredential.user;
 
+      // 4. Backend'e kaydet / güncelle
       await dispatch(
         loginOrRegisterUser({ firebase_uid: user.uid, email: user.email })
       ).unwrap();

@@ -29,7 +29,7 @@ import {
 } from "../features/userSlice";
 import { auth } from "../api/firebaseConfig";
 import { signOut } from "firebase/auth";
-
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import {
   setLanguage,
   selectLanguage,
@@ -143,7 +143,18 @@ const ProfileScreen = () => {
         style: "destructive",
         onPress: async () => {
           try {
+            // 1. ÖNCE Google Native Oturumunu Kapat (Zombiyi öldür)
+            try {
+              await GoogleSignin.signOut();
+            } catch (e) {
+              // Kullanıcı Google ile girmemiş olabilir, hatayı yut devam et
+              console.log("Google signout hatası (önemsiz):", e);
+            }
+
+            // 2. SONRA Firebase'den Çık
             await signOut(auth);
+
+            // 3. Redux Temizliği
             dispatch(clearUser());
             dispatch(clearSearchResults());
             dispatch(clearDetail());
