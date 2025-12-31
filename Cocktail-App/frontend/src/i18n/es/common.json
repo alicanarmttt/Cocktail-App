@@ -69,7 +69,7 @@
     "legend_title": "Leyenda de Ingredientes:",
     "legend_required": "Requerido",
     "legend_garnish": "Decoración",
-    "pro_alt_title": "Alternativa PRO",
+    "pro_alt_title": "Alternativa",
     "pro_use_instead": "Usa esto en lugar de: {{ingredient}}",
     "pro_can_use": "puedes usar.",
     "pro_feature": "Función PRO",

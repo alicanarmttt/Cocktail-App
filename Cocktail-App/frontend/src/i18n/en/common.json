@@ -70,7 +70,7 @@
     "legend_title": "Ingredient Legend:",
     "legend_required": "Required",
     "legend_garnish": "Garnish",
-    "pro_alt_title": "PRO Alternative",
+    "pro_alt_title": "Alternative",
     "pro_use_instead": "Use this instead of: {{ingredient}}",
     "pro_can_use": "you can use.",
     "pro_feature": "PRO Feature",

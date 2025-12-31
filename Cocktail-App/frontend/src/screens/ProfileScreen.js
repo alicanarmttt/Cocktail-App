@@ -25,11 +25,14 @@ import {
   selectIsPro,
   clearUser,
   updateUserAvatar,
-  selectIsGuest, // DEĞİŞİKLİK 1: isGuest import edildi
+  selectIsGuest,
 } from "../features/userSlice";
 import { auth } from "../api/firebaseConfig";
 import { signOut } from "firebase/auth";
+
+// 🔥 GOOGLE IMPORT AÇILDI (Build Hazır)
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+
 import {
   setLanguage,
   selectLanguage,
@@ -74,7 +77,6 @@ const ProfileScreen = () => {
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
 
   const currentUser = useSelector(selectCurrentUser);
-  // DEĞİŞİKLİK 2: Misafir durumu
   const isGuest = useSelector(selectIsGuest);
   const isPro = useSelector(selectIsPro);
   const currentLang = useSelector(selectLanguage);
@@ -91,7 +93,6 @@ const ProfileScreen = () => {
   // --- ACTIONS ---
 
   const handleAvatarSelect = async (avatarId) => {
-    // Misafir kontrolü (Avatar değiştiremez)
     if (isGuest) return;
 
     if (avatarId === currentAvatarId) {
@@ -128,14 +129,11 @@ const ProfileScreen = () => {
   };
 
   const handleAuthAction = async () => {
-    // DEĞİŞİKLİK 3: Çıkış / Giriş Butonu Mantığı
     if (isGuest) {
-      // Misafir ise direkt çıkış yap (Login ekranına atar)
       dispatch(clearUser());
       return;
     }
 
-    // Normal kullanıcı ise onay iste
     Alert.alert(
       t("auth.errors.logout_confirm_title"),
       t("auth.errors.logout_confirm_msg"),
@@ -146,15 +144,14 @@ const ProfileScreen = () => {
           style: "destructive",
           onPress: async () => {
             try {
-              // 1. ÖNCE Google Native Oturumunu Kapat (Zombiyi öldür)
+              // 1. Google Native Oturumunu Kapat (AÇIK)
               try {
                 await GoogleSignin.signOut();
               } catch (e) {
-                // Kullanıcı Google ile girmemiş olabilir, hatayı yut devam et
-                console.log("Google signout hatası (önemsiz):", e);
+                // Kullanıcı Google ile girmemiş olabilir, sorun değil
               }
 
-              // 2. SONRA Firebase'den Çık
+              // 2. Firebase'den Çık
               await signOut(auth);
 
               // 3. Redux Temizliği
@@ -181,8 +178,20 @@ const ProfileScreen = () => {
           style: "destructive",
           onPress: async () => {
             try {
+              // 1. Backend'den kullanıcıyı sil
               await apiClient.delete("/users/me");
+
+              // 2. Google Native Oturumunu da Temizle (AÇIK)
+              try {
+                await GoogleSignin.signOut();
+              } catch (e) {
+                // Hata olsa da devam et
+              }
+
+              // 3. Firebase'den Çıkış
               await signOut(auth);
+
+              // 4. Redux Temizliği
               dispatch(clearUser());
               dispatch(clearDetail());
               dispatch(clearSearchResults());
@@ -196,7 +205,6 @@ const ProfileScreen = () => {
     );
   };
 
-  // DEĞİŞİKLİK 4: Favorilere Gitme (Misafir Koruması)
   const handleNavigateFavorites = () => {
     if (isGuest) {
       Alert.alert(
@@ -249,289 +257,296 @@ const ProfileScreen = () => {
   );
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: colors.background }]}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* --- 1. HEADER --- */}
-        <View style={styles.header}>
-          <Pressable
-            onPress={() => !isGuest && setModalVisible(true)} // Misafir açamaz
-            style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
-          >
-            <View
-              style={[
-                styles.avatarContainer,
-                { borderColor: isPro ? colors.gold : colors.border },
-              ]}
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* --- 1. HEADER --- */}
+          <View style={styles.header}>
+            <Pressable
+              onPress={() => !isGuest && setModalVisible(true)}
+              style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
             >
-              <Image
-                source={currentAvatarSource}
-                style={styles.avatarImage}
-                resizeMode="cover"
-              />
-              {/* Misafirde kalem ikonunu gizle */}
-              {!isGuest && (
-                <View
-                  style={[
-                    styles.editIconBadge,
-                    { backgroundColor: colors.primary },
-                  ]}
-                >
-                  <Ionicons name="pencil" size={12} color="#fff" />
-                </View>
-              )}
-            </View>
-          </Pressable>
+              <View
+                style={[
+                  styles.avatarContainer,
+                  { borderColor: isPro ? colors.gold : colors.border },
+                ]}
+              >
+                <Image
+                  source={currentAvatarSource}
+                  style={styles.avatarImage}
+                  resizeMode="cover"
+                />
+                {!isGuest && (
+                  <View
+                    style={[
+                      styles.editIconBadge,
+                      { backgroundColor: colors.primary },
+                    ]}
+                  >
+                    <Ionicons name="pencil" size={12} color="#fff" />
+                  </View>
+                )}
+              </View>
+            </Pressable>
 
-          <Text
-            style={[
-              styles.emailText,
-              { color: colors.text, fontFamily: fonts.families.serif },
-            ]}
-          >
-            {/* Misafir ise özel başlık */}
-            {isGuest
-              ? t("profile.guest_title", "Misafir Şef")
-              : currentUser?.email}
-          </Text>
-
-          <View
-            style={[
-              styles.badge,
-              {
-                backgroundColor: isPro ? colors.gold : colors.card,
-                borderColor: isPro ? colors.gold : colors.border,
-              },
-            ]}
-          >
-            <Ionicons
-              name={
-                isPro ? "star" : isGuest ? "person-outline" : "cube-outline"
-              }
-              size={14}
-              color={isPro ? "#000" : colors.textSecondary}
-            />
             <Text
               style={[
-                styles.badgeText,
-                { color: isPro ? "#000" : colors.textSecondary },
+                styles.emailText,
+                { color: colors.text, fontFamily: fonts.families.serif },
               ]}
             >
               {isGuest
-                ? t("profile.guest_badge", "Ziyaretçi")
-                : isPro
-                  ? t("profile.pro_member")
-                  : t("profile.free_member")}
+                ? t("profile.guest_title", "Misafir Şef")
+                : currentUser?.email}
+            </Text>
+
+            <View
+              style={[
+                styles.badge,
+                {
+                  backgroundColor: isPro ? colors.gold : colors.card,
+                  borderColor: isPro ? colors.gold : colors.border,
+                },
+              ]}
+            >
+              <Ionicons
+                name={
+                  isPro ? "star" : isGuest ? "person-outline" : "cube-outline"
+                }
+                size={14}
+                color={isPro ? "#000" : colors.textSecondary}
+              />
+              <Text
+                style={[
+                  styles.badgeText,
+                  { color: isPro ? "#000" : colors.textSecondary },
+                ]}
+              >
+                {isGuest
+                  ? t("profile.guest_badge", "Ziyaretçi")
+                  : isPro
+                    ? t("profile.pro_member")
+                    : t("profile.free_member")}
+              </Text>
+            </View>
+          </View>
+
+          {/* --- 2. BANNER --- */}
+          {isGuest ? (
+            <Pressable
+              style={styles.upsellContainer}
+              onPress={() => dispatch(clearUser())}
+            >
+              <LinearGradient
+                colors={[colors.primary, "#800020"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.upsellGradient}
+              >
+                <View>
+                  <Text style={[styles.upsellTitle, { color: "#fff" }]}>
+                    {t("profile.sign_in_banner_title", "Kulübe Katıl")}
+                  </Text>
+                  <Text style={[styles.upsellSubtitle, { color: "#eee" }]}>
+                    {t(
+                      "profile.sign_in_banner_subtitle",
+                      "Favorileri kaydet & Pro özellikleri aç"
+                    )}
+                  </Text>
+                </View>
+                <Ionicons name="log-in-outline" size={32} color="#fff" />
+              </LinearGradient>
+            </Pressable>
+          ) : null}
+
+          {/* --- 3. ACCOUNT ACTIONS --- */}
+          <View style={styles.sectionHeader}>
+            <Text
+              style={[styles.sectionTitle, { color: colors.textSecondary }]}
+            >
+              {t("profile.account_actions")}
             </Text>
           </View>
-        </View>
-
-        {/* --- 2. BANNER ALANI (UPSELL VEYA LOGIN) --- */}
-        {/* Misafir ise: Giriş Yap Bannerı, Değilse: HİÇBİR ŞEY (null) */}
-        {isGuest ? (
-          <Pressable
-            style={styles.upsellContainer}
-            onPress={() => dispatch(clearUser())} // Login'e atar
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors.subCard || "#1A1A1A" },
+            ]}
           >
-            <LinearGradient
-              colors={[colors.primary, "#800020"]} // Merlot kırmızısı
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.upsellGradient}
-            >
-              <View>
-                <Text style={[styles.upsellTitle, { color: "#fff" }]}>
-                  {t("profile.sign_in_banner_title", "Kulübe Katıl")}
-                </Text>
-                <Text style={[styles.upsellSubtitle, { color: "#eee" }]}>
-                  {t(
-                    "profile.sign_in_banner_subtitle",
-                    "Favorileri kaydet & Pro özellikleri aç"
-                  )}
-                </Text>
-              </View>
-              <Ionicons name="log-in-outline" size={32} color="#fff" />
-            </LinearGradient>
-          </Pressable>
-        ) : null}
-
-        {/* --- 3. ACCOUNT ACTIONS --- */}
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
-            {t("profile.account_actions")}
-          </Text>
-        </View>
-        <View
-          style={[
-            styles.card,
-            { backgroundColor: colors.subCard || "#1A1A1A" },
-          ]}
-        >
-          <SettingRow
-            icon="heart"
-            title={t("profile.my_favorites")}
-            onPress={handleNavigateFavorites} // Güncellendi
-            rightElement={
-              <Ionicons
-                name="chevron-forward"
-                size={16}
-                color={colors.textSecondary}
-              />
-            }
-          />
-        </View>
-
-        {/* --- 4. APP SETTINGS GROUP --- */}
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
-            {t("profile.app_settings")}
-          </Text>
-        </View>
-        <View
-          style={[
-            styles.card,
-            { backgroundColor: colors.subCard || "#1A1A1A" },
-          ]}
-        >
-          <SettingRow
-            icon="language-outline"
-            title={t("profile.language")}
-            rightElement={
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Text style={{ color: colors.textSecondary, marginRight: 5 }}>
-                  {currentLangLabel}
-                </Text>
+            <SettingRow
+              icon="heart"
+              title={t("profile.my_favorites")}
+              onPress={handleNavigateFavorites}
+              rightElement={
                 <Ionicons
                   name="chevron-forward"
                   size={16}
                   color={colors.textSecondary}
                 />
-              </View>
-            }
-            onPress={() => setLanguageModalVisible(true)}
-          />
+              }
+            />
+          </View>
 
-          <SettingRow
-            icon={currentTheme === "dark" ? "moon" : "sunny"}
-            title={t("profile.appearance")}
-            isLast={true}
-            rightElement={
-              <Switch
-                value={currentTheme === "dark"}
-                onValueChange={handleThemeToggle}
-                trackColor={{ false: "#767577", true: colors.primary }}
-                thumbColor={colors.text}
-              />
-            }
-          />
-        </View>
-
-        {/* --- 5. INFO GROUP --- */}
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
-            {t("profile.info")}
-          </Text>
-        </View>
-        <View
-          style={[
-            styles.card,
-            { backgroundColor: colors.subCard || "#1A1A1A" },
-          ]}
-        >
-          <SettingRow
-            icon="shield-checkmark-outline"
-            title={t("profile.privacy_policy")}
-            onPress={() =>
-              Linking.openURL(
-                "https://gist.github.com/alicanarmttt/90cca882230f8bfd23b101b1f63682e1"
-              )
-            }
-            rightElement={
-              <Ionicons
-                name="open-outline"
-                size={16}
-                color={colors.textSecondary}
-              />
-            }
-          />
-          <SettingRow
-            icon="information-circle-outline"
-            title={t("profile.version")}
-            isLast={true}
-            rightElement={
-              <Text style={{ color: colors.textSecondary, fontSize: 12 }}>
-                v1.0.0
-              </Text>
-            }
-          />
-        </View>
-
-        {/* --- 6. LOGOUT / LOGIN BUTTON --- */}
-        <View style={styles.actionContainer}>
-          <PremiumButton
-            title={
-              isGuest ? t("auth.login_button", "Giriş Yap") : t("auth.logout")
-            }
-            onPress={handleAuthAction}
-            variant={isGuest ? "gold" : "primary"} // Misafire Gold (Teşvik), Üyeye Normal
-            style={{ width: "100%" }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons
-                name={isGuest ? "log-in-outline" : "log-out-outline"}
-                size={20}
-                color={isGuest ? "#000" : "#fff"}
-                style={{ marginRight: 8 }}
-              />
-              <Text
-                style={{ fontWeight: "bold", color: isGuest ? "#000" : "#fff" }}
-              >
-                {isGuest
-                  ? t("auth.login_button", "Giriş Yap")
-                  : t("auth.logout")}
-              </Text>
-            </View>
-          </PremiumButton>
-        </View>
-
-        {/* --- 7. DANGER ZONE (Sadece Üyeler İçin) --- */}
-        {!isGuest && (
-          <View style={styles.dangerZone}>
-            <Pressable
-              onPress={handleDeleteAccount}
-              style={({ pressed }) => [
-                { opacity: pressed ? 0.5 : 1, padding: 10 },
-              ]}
-            >
-              <Text
-                style={{
-                  color: colors.notification,
-                  fontSize: 13,
-                  textDecorationLine: "underline",
-                  textAlign: "center",
-                }}
-              >
-                {t("general.delete_my_account")}
-              </Text>
-            </Pressable>
+          {/* --- 4. APP SETTINGS --- */}
+          <View style={styles.sectionHeader}>
             <Text
-              style={{
-                color: colors.textSecondary,
-                fontSize: 10,
-                marginTop: 5,
-              }}
+              style={[styles.sectionTitle, { color: colors.textSecondary }]}
             >
-              ID: {currentUser?.firebase_uid?.substring(0, 8)}...
+              {t("profile.app_settings")}
             </Text>
           </View>
-        )}
-      </ScrollView>
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors.subCard || "#1A1A1A" },
+            ]}
+          >
+            <SettingRow
+              icon="language-outline"
+              title={t("profile.language")}
+              rightElement={
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text style={{ color: colors.textSecondary, marginRight: 5 }}>
+                    {currentLangLabel}
+                  </Text>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={16}
+                    color={colors.textSecondary}
+                  />
+                </View>
+              }
+              onPress={() => setLanguageModalVisible(true)}
+            />
 
-      {/* --- MODAL 1: AVATAR SEÇİM --- */}
+            <SettingRow
+              icon={currentTheme === "dark" ? "moon" : "sunny"}
+              title={t("profile.appearance")}
+              isLast={true}
+              rightElement={
+                <Switch
+                  value={currentTheme === "dark"}
+                  onValueChange={handleThemeToggle}
+                  trackColor={{ false: "#767577", true: colors.primary }}
+                  thumbColor={colors.text}
+                />
+              }
+            />
+          </View>
+
+          {/* --- 5. INFO --- */}
+          <View style={styles.sectionHeader}>
+            <Text
+              style={[styles.sectionTitle, { color: colors.textSecondary }]}
+            >
+              {t("profile.info")}
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.card,
+              { backgroundColor: colors.subCard || "#1A1A1A" },
+            ]}
+          >
+            <SettingRow
+              icon="shield-checkmark-outline"
+              title={t("profile.privacy_policy")}
+              onPress={() =>
+                Linking.openURL(
+                  "https://gist.github.com/alicanarmttt/90cca882230f8bfd23b101b1f63682e1"
+                )
+              }
+              rightElement={
+                <Ionicons
+                  name="open-outline"
+                  size={16}
+                  color={colors.textSecondary}
+                />
+              }
+            />
+            <SettingRow
+              icon="information-circle-outline"
+              title={t("profile.version")}
+              isLast={true}
+              rightElement={
+                <Text style={{ color: colors.textSecondary, fontSize: 12 }}>
+                  v1.0.0
+                </Text>
+              }
+            />
+          </View>
+
+          {/* --- 6. LOGOUT BUTTON --- */}
+          <View style={styles.actionContainer}>
+            <PremiumButton
+              title={
+                isGuest ? t("auth.login_button", "Giriş Yap") : t("auth.logout")
+              }
+              onPress={handleAuthAction}
+              variant={isGuest ? "gold" : "primary"}
+              style={{ width: "100%" }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Ionicons
+                  name={isGuest ? "log-in-outline" : "log-out-outline"}
+                  size={20}
+                  color={isGuest ? "#000" : "#fff"}
+                  style={{ marginRight: 8 }}
+                />
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    color: isGuest ? "#000" : "#fff",
+                  }}
+                >
+                  {isGuest
+                    ? t("auth.login_button", "Giriş Yap")
+                    : t("auth.logout")}
+                </Text>
+              </View>
+            </PremiumButton>
+          </View>
+
+          {/* --- 7. DELETE ACCOUNT --- */}
+          {!isGuest && (
+            <View style={styles.dangerZone}>
+              <Pressable
+                onPress={handleDeleteAccount}
+                style={({ pressed }) => [
+                  { opacity: pressed ? 0.5 : 1, padding: 10 },
+                ]}
+              >
+                <Text
+                  style={{
+                    color: colors.notification,
+                    fontSize: 13,
+                    textDecorationLine: "underline",
+                    textAlign: "center",
+                  }}
+                >
+                  {t("general.delete_my_account")}
+                </Text>
+              </Pressable>
+              <Text
+                style={{
+                  color: colors.textSecondary,
+                  fontSize: 10,
+                  marginTop: 5,
+                }}
+              >
+                ID: {currentUser?.firebase_uid?.substring(0, 8)}...
+              </Text>
+            </View>
+          )}
+        </ScrollView>
+      </View>
+
+      {/* --- MODALS --- */}
+      {/* ... AVATAR MODAL ... */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -588,7 +603,7 @@ const ProfileScreen = () => {
         </View>
       </Modal>
 
-      {/* --- MODAL 2: DİL SEÇİM --- */}
+      {/* ... LANGUAGE MODAL ... */}
       <Modal
         animationType="slide"
         transparent={true}
